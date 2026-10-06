@@ -129,7 +129,7 @@ async function operatemenu() {
     }
     menu.style.visibility = "hidden";
     mobileHeader.style.background = "#FFFFFFEF";
-    if(pathname.includes("index.html") || pathname === '/'){
+    if(pathname.includes("index.html") || pathname === '/' || pathname === '/yachielab-preview/'){
       imgInHeader.style.opacity = 0.0;
     }else{
       imgInHeader.style.display = "block";
