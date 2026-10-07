@@ -105,6 +105,29 @@
   width: 100%;
 }
 
+/* Explicit CMS image widths reserve space in the paper row. Unspecified rows
+   retain the original 80/20 (mobile 75/25) text and thumbnail columns. */
+.paper[data-sheet-image-width] {
+  --paper-image-gap: 20px;
+}
+
+.paper[data-sheet-image-width] > .paper_txt_w_photo {
+  flex: 1 1 0%;
+  width: auto;
+  min-width: 0;
+}
+
+.paper[data-sheet-image-width] > .paper_photo {
+  flex: 0 0 auto;
+  max-width: calc(100% - var(--paper-image-gap));
+}
+
+.paper[data-sheet-image-width] > .paper_photo img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
 @media screen and (max-width: 600px){
   .paper{
     font-size: clamp(calc(1.2 * 6pt) , calc(1.2 * 1.0vw) , calc(1.2 * 12pt));
@@ -123,5 +146,8 @@
     width: calc(25% - 10px);
     margin-left: 10px;
   }
-}
 
+  .paper[data-sheet-image-width] {
+    --paper-image-gap: 10px;
+  }
+}

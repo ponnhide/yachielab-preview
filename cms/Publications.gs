@@ -89,13 +89,27 @@ function publicationRelated_(value) {
   return '\n' + rendererMarkdown_(text).replace('<p>', "<p class='supinfo'>");
 }
 
+function publicationImageLayout_(imageStyle) {
+  var widthStyle = '', imageOnlyStyle = '';
+  sheetDeclarations_(imageStyle || '').forEach(function (declaration) {
+    var css = declaration.property + ': ' + declaration.value + ';';
+    // Percentages and clamp() widths are relative to the entire paper row,
+    // rather than to the default 20% thumbnail column inside that row.
+    if (declaration.property === 'width') widthStyle += css;
+    else imageOnlyStyle += css;
+  });
+  return { widthStyle: widthStyle, imageStyle: imageOnlyStyle };
+}
+
 function publicationWrap_(body, image, style, equal, corresponding, related, affil, lang, id, imageStyle) {
   if (equal.length) body += '\n<p class="info">+Equally contributed</p>';
   if (corresponding.length) body += '\n<p class="info">*Corresponding authors</p>';
   body += publicationRelated_(related);
-  var html = '<section class="paper ' + sheetAttribute_(affil + ' ' + lang) + '" id="' + sheetAttribute_(id) + '"' + sheetStyleAttributes_(style) + '>\n';
+  var imageLayout = publicationImageLayout_(imageStyle);
+  var html = '<section class="paper ' + sheetAttribute_(affil + ' ' + lang) + '" id="' + sheetAttribute_(id) + '"' +
+    (image && imageLayout.widthStyle ? ' data-sheet-image-width="true"' : '') + sheetStyleAttributes_(style) + '>\n';
   html += '<section class="paper_txt_' + (image ? 'w' : 'wo') + '_photo">' + body + '\n</section>\n';
-  if (image) html += '<section class="paper_photo">\n<img class="personal_img" src="' + sheetAttribute_(image) + '" alt="paper_img"' + sheetStyleAttributes_(imageStyle || '') + '>\n</section>\n';
+  if (image) html += '<section class="paper_photo"' + sheetStyleAttributes_(imageLayout.widthStyle) + '>\n<img class="personal_img" src="' + sheetAttribute_(image) + '" alt="paper_img"' + sheetStyleAttributes_(imageLayout.imageStyle) + '>\n</section>\n';
   return html + '</section>\n';
 }
 

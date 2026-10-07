@@ -164,8 +164,46 @@ check('Publication image params, default members, journal names and optional ema
   const html = r.appendPublication({ Lab: 'All', Language: 'Common', '/* Pubmed ID': 123, '/* img url': 'https://example.org/article.png', '/* img width': '50%', '/* img height': '/* img height' });
   assert(html.includes('<a class="JT" href="https://pubmed.ncbi.nlm.nih.gov/123/">Journal</a>'));
   assert(html.includes('<span class="member">Lab A</span>'));
-  assert(html.includes('alt="paper_img" style="width: 50% !important;" data-sheet-style="width"'));
+  assert(html.includes('data-sheet-image-width="true"'));
+  assert(html.includes('<section class="paper_photo" style="width: 50% !important;" data-sheet-style="width">'));
+  assert(html.includes('alt="paper_img">'));
   assert(calls[0].url.includes('email=test%40example.org'));
+});
+check('Publication clamp width sizes the image column against the paper row; height stays on the image', () => {
+  const { runtime: r } = setup();
+  const html = r.appendCustomPublication({ Lab: 'All', Language: 'Common', '/* Title': 'Title', '/* Authors': 'Author A',
+    '/* img url': 'https://example.org/article.png', '/* img width': 'clamp(60px, 50%, 480px)', '/* img height': 200 });
+  assert(html.includes('<section class="paper_photo" style="width: clamp(60px, 50%, 480px) !important;" data-sheet-style="width">'));
+  assert(html.includes('alt="paper_img" style="height: 200px !important;" data-sheet-style="height"'));
+  assert(!/<img[^>]*style="[^"]*width:/.test(html));
+  const css = fs.readFileSync(path.join(root, 'css/pages/publications.css'), 'utf8');
+  assert(/\.paper\[data-sheet-image-width\] > \.paper_photo\s*\{[^}]*flex: 0 0 auto;[^}]*max-width: calc\(100% - var\(--paper-image-gap\)\);/.test(css));
+  assert(/\.paper\[data-sheet-image-width\] > \.paper_txt_w_photo\s*\{[^}]*flex: 1 1 0%;[^}]*width: auto;[^}]*min-width: 0;/.test(css));
+});
+check('Placeholder image dimensions retain the default publication DOM and layout', () => {
+  const { runtime: r } = setup();
+  const html = r.appendPublication({ Lab: 'All', Language: 'Common', '/* Pubmed ID': 123, '/* img url': 'https://example.org/article.png',
+    '/* img width': '/* img width (Optional)', '/* img height': '/* img height (Optional)' });
+  assert(!html.includes('data-sheet-image-width'));
+  assert(html.includes('<section class="paper_photo">'));
+  assert(html.includes('alt="paper_img">'));
+  const noImage = r.appendCustomPublication({ Lab: 'All', Language: 'Common', '/* Title': 'Title', '/* img width': '50%' });
+  assert(!noImage.includes('data-sheet-image-width'));
+  assert(noImage.includes('class="paper_txt_wo_photo"'));
+});
+check('Height-only publication styling keeps the standard column width', () => {
+  const { runtime: r } = setup();
+  const html = r.appendCustomPublication({ Lab: 'All', Language: 'Common', '/* Title': 'Title', '/* img url': 'https://example.org/article.png', '/* img height': '150px' });
+  assert(!html.includes('data-sheet-image-width'));
+  assert(html.includes('<section class="paper_photo">'));
+  assert(html.includes('alt="paper_img" style="height: 150px !important;" data-sheet-style="height"'));
+});
+check('bioRxiv and numeric publication widths use the same column sizing contract', () => {
+  const { runtime: r } = setup();
+  const html = r.biorxiv_html({ AU: ['Author A'], TI: 'Title' }, [], '10.1101/2026.01.01.000001', 'https://example.org/doi', '', './img/article.png', '', [], [], '', 'All', 'Common', 'doi', 'width: 240px;');
+  assert(html.includes('<section class="paper_photo" style="width: 240px !important;" data-sheet-style="width">'));
+  assert(html.includes('data-sheet-image-width="true"'));
+  assert(!/<img[^>]*style="[^"]*width:/.test(html));
 });
 check('Custom publication accepts blank highlighted authors, missing citation fields and one author', () => {
   const { runtime: r } = setup();

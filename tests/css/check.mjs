@@ -49,6 +49,44 @@ assert(compact.includes('#frontlogo.logo-stack,#backlogo.logo-stack,#frontlogo2.
 assert(compact.includes('object-fit:cover;object-position:top;'));
 assert(compact.includes('width:clamp(35px,calc(25vw-clamp(5px,4vw,4vw)),400px);'));
 assert(compact.includes('#backlogo,#backlogo2{width:100%;margin-top:0;position:absolute;z-index:1;'));
+// Read the actual CSS geometry: increasing the artwork gap must move Osaka
+// and grow the canvas without scaling either SVG or changing horizontal layout.
+const stackRule = common.match(/^\.logo-stack\s*\{([^}]+)\}/m)[1];
+const extraGap = Number(stackRule.match(/--header-logo-extra-gap:\s*([\d.]+)\s*;/)[1]);
+const canvasRule = common.match(/\.logo-stack\s+\.logo-canvas\s*\{([^}]+)\}/)[1];
+const osakaRule = common.match(/#normal_header\s+\.logo-stack\s+\.logo-canvas\s+\.logo-osaka\s*\{([^}]+)\}/)[1];
+const paddingExpression = canvasRule.match(/padding-bottom:\s*([^;]+);/)[1];
+const topExpression = osakaRule.match(/top:\s*([^;]+);/)[1];
+function calculateGeometry(expression, percentBase) {
+  const numeric = expression
+    .replace(/var\(--header-logo-extra-gap\)/g, String(extraGap))
+    .replace(/calc\(/g, '(')
+    .replace(/100%/g, String(percentBase));
+  assert(/^[\d.\s()+*/-]+$/.test(numeric), `Unexpected logo geometry expression: ${expression}`);
+  return Function(`"use strict"; return (${numeric});`)();
+}
+function nearlyEqual(actual, expected, message) {
+  assert(Math.abs(actual - expected) < 1e-9, `${message}: ${actual} != ${expected}`);
+}
+const originalGap = 185.0048 - 128.1763;
+nearlyEqual(extraGap, originalGap / 2, 'Extra gap uses half the original drawn-artwork gap');
+for (const width of [35, 268.8, 400]) {
+  const canvasHeight = calculateGeometry(paddingExpression, width);
+  const osakaTop = calculateGeometry(topExpression, canvasHeight);
+  nearlyEqual(canvasHeight, width * 343.41425 / 772, 'Canvas grows at its original width');
+  nearlyEqual(osakaTop, width * 213.41425 / 772, 'Only the Osaka vertical offset changes');
+  const upperDrawnBottom = 128.1763 * width / 772;
+  const lowerDrawnTop = osakaTop + (185.0048 - 185) * width / 772;
+  nearlyEqual(lowerDrawnTop - upperDrawnBottom, 1.5 * originalGap * width / 772, 'Drawn gap is exactly 1.5 times the original');
+}
+assert(compact.includes('#normal_header.logo-stack.logo-canvasimg{display:block;position:absolute;width:100%;height:auto;'), 'Both SVGs retain their original dimensions');
+for (const [filename, viewBox] of [
+  ['header-ubc-white.svg', '0 0 772 129'], ['header-ubc-teal.svg', '0 0 772 129'],
+  ['header-osaka-white.svg', '0 185 772 130'], ['header-osaka-teal.svg', '0 185 772 130']
+]) {
+  assert(fs.readFileSync(path.join(root, 'img', filename), 'utf8').includes(`viewBox="${viewBox}"`), `Gap tuning must not change SVG coordinates: ${filename}`);
+}
+
 assert(common.includes('@media screen and (max-width: 600px)'));
 assert(compact.includes('#normal_header{display:none;}'));
 assert(compact.includes('#foot-snslogo{height:20%!important;'));

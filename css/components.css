@@ -135,9 +135,10 @@
   left: 0; 
 }
 
-/* Each lab has its own SVG. Crop the shared layer, keeping the artwork's
-   original 772 x 315 canvas and inter-logo gap independent of crop height. */
+/* Keep SVG sizes unchanged. Add half the original artwork gap (56.8285 / 2)
+   in the 772-unit coordinate system; both color layers share this adjustment. */
 .logo-stack {
+  --header-logo-extra-gap: 28.41425;
   display: inline-block;
   overflow: hidden;
   vertical-align: baseline;
@@ -146,7 +147,7 @@
   display: block;
   position: relative;
   height: 0;
-  padding-bottom: calc(100% * 315 / 772);
+  padding-bottom: calc(100% * (315 + var(--header-logo-extra-gap)) / 772);
 }
 #normal_header .logo-stack .logo-canvas img {
   display: block;
@@ -160,7 +161,7 @@
   top: 0;
 }
 #normal_header .logo-stack .logo-canvas .logo-osaka {
-  top: calc(100% * 185 / 315);
+  top: calc(100% * (185 + var(--header-logo-extra-gap)) / (315 + var(--header-logo-extra-gap)));
 }
 
 #backlogo,
