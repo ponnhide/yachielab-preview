@@ -45,7 +45,7 @@ function cmsRun_(work, command) {
       pagesChanged: result.pages || 0, assetsChanged: result.assets || 0,
       assetsChecked: assetStats.checked || 0, assetsDownloaded: assetStats.downloaded || 0,
       assetsNotModified: assetStats.notModified || 0, assetRegistryErrors: assetStats.registryErrors || 0,
-      publisherPdfsPreserved: (context.assetWarnings || []).length,
+      pdfLinksPreserved: (context.assetWarnings || []).length,
       cacheReadErrors: stats.cacheReadErrors || 0, cacheWriteErrors: stats.cacheWriteErrors || 0,
       elapsedMs: Date.now() - started
     };
@@ -54,7 +54,7 @@ function cmsRun_(work, command) {
     var status = result.changed ? 'Preview updated: ' + (result.pages || 0) + ' page(s).' : 'No changes to publish.';
     if (result.cacheSaved === false) status += ' Cache save failed; next update will regenerate.';
     if (result.assetsSaved === false) status += ' Asset registry save failed; next update will check sources again.';
-    if (metrics.publisherPdfsPreserved) status += ' ' + metrics.publisherPdfsPreserved + ' publisher PDF link(s) kept; not re-fetched.';
+    if (metrics.pdfLinksPreserved) status += ' ' + metrics.pdfLinksPreserved + ' PDF link(s) kept; not re-fetched.';
     var summary = ' Generated ' + metrics.rowsRendered + ', reused ' + metrics.rowsReused + ' rows; skipped ' + metrics.pagesSkipped + ' pages; ' + (metrics.elapsedMs / 1000).toFixed(1) + 's.';
     // A UI notification failure must not turn a successful publication into a failure.
     try { context.spreadsheet.toast(status + summary, 'Website CMS', 8); }

@@ -39,14 +39,18 @@ function fixture() {
       Utilities:{newBlob:blob,base64Encode:value=>Buffer.from(bytes(value)).toString('base64'),base64Decode:value=>[...Buffer.from(value,'base64')]},
       previewFetch_(url,options) {
         state.fetches.push({url,options});const server=state.servers.get(url);assert(server,'Missing mock server '+url);
-        let status=server.status || 200;
-        if (status===200 && !server.ignoreConditional && ((server.etag && options.headers['If-None-Match']===server.etag)||(!server.etag && server.modified && options.headers['If-Modified-Since']===server.modified))) status=304;
+        assert(['get','delete','patch','post','put'].includes(options.method || 'get'),'Mock must enforce the actual Apps Script HTTP method enum');
+        const partial = options.headers.Range === 'bytes=0-0';
+        if (partial && server.rangeError) throw new Error('Range probe failed');
+        let status=(partial ? server.rangeStatus : server.status) || 200;
+        if ((status===200 || status===206) && !server.ignoreConditional && ((server.etag && options.headers['If-None-Match']===server.etag)||(!server.etag && server.modified && options.headers['If-Modified-Since']===server.modified))) status=304;
         const headers={};if(server.etag)headers.ETag=server.etag;if(server.modified)headers['Last-Modified']=server.modified;
-        return {getResponseCode:()=>status,getAllHeaders:()=>headers,getBlob:()=>{assert.notEqual(status,304,'304 must never read body');return blob(server.body);}};
+        if (partial && server.rangeLength !== undefined) headers[status===206 ? 'Content-Range' : 'Content-Length']=status===206 ? 'bytes 0-0/'+server.rangeLength : String(server.rangeLength);
+        return {getResponseCode:()=>status,getAllHeaders:()=>headers,getBlob:()=>{assert.notEqual(status,304,'304 must never read body');return blob(status===206 ? server.body.subarray(0,1) : server.body);}};
       },
       DriveApp:{getFileById(id) {
         state.metadataReads++;const file=state.drives.get(id);if(!file)throw new Error('Drive unavailable');
-        return {getName:()=>file.name,getLastUpdated:()=>new Clock(file.modified),getBlob:()=>{state.blobReads++;return blob(file.body);}};
+        return {getName:()=>file.name,getLastUpdated:()=>new Clock(file.modified),getSize:()=>file.size === undefined ? file.body.length : file.size,getBlob:()=>{state.blobReads++;return blob(file.body);}};
       }}
     };
     vm.createContext(sandbox);
@@ -71,6 +75,12 @@ test('source identities preserve authorization queries and normalize only Dropbo
   assert.notEqual(a.identity,r.cmsAssetSource_(remote.replace('private-key','other-key')).identity);
   assert.notEqual(r.cmsAssetSource_('https://example.org/x.jpg?dl=0').identity,r.cmsAssetSource_('https://example.org/x.jpg?dl=1').identity);
   assert.equal(r.cmsAssetSource_('https://drive.google.com/file/d/abc/view?usp=sharing').identity,r.cmsAssetSource_('https://drive.google.com/file/d/abc/edit').identity);
+});
+
+test('malformed HTTP validators cannot become formulas in the private registry',()=>{
+  const s=fixture();s.http(remote,jpegA,{etag:'=IMPORTDATA("https://untrusted.example")',modified:' =1+1'});
+  s.run.sandbox.uploadImg(remote);s.publish();
+  assert.equal(s.grid[1][5],'');assert.equal(s.grid[1][6],'');
 });
 
 test('initial sync uses a source-owned filename, keeps legacy assets and only writes private registry after publish',()=>{
@@ -200,9 +210,76 @@ test('Dropbox PDFs remain managed assets and save only after validated publicati
   assert.equal(s.run.context.assetWarnings,undefined);assert.equal(s.run.context.pendingAssets.length,1);assert.equal(s.publish().assetsSaved,true);
 });
 
+test('supported GET Range detects oversized Dropbox PDF without full-body download or fresh registry',()=>{
+  for (const force of [false,true]) {
+    const s=fixture(),url='https://www.dropbox.com/x/large.pdf?rlkey=private-key&dl=0';
+    s.http(url,Buffer.from('%PDF-small'),{rangeStatus:206,rangeLength:16*1024*1024+1});s.entries['pdf/large.pdf']={type:'blob',sha:gitSha('%PDF-old')};
+    s.newRun({refreshAssets:force});const output=s.run.sandbox.uploadImg(url);
+    assert.equal(output,'./pdf/large.pdf?v='+gitSha('%PDF-old').slice(0,12));assert.equal(s.fetches.length,1);assert.equal(s.fetches[0].options.method,'get');assert.equal(s.fetches[0].options.headers.Range,'bytes=0-0');
+    assert.equal(s.run.context.pendingAssets.length,0);assert.equal(Object.keys(s.run.context.assetRegistry.staged).length,0);
+    assert.deepEqual([...s.run.context.assetWarnings],['oversized-pdf-kept']);s.run.sandbox.uploadImg(url);assert.equal(s.run.context.assetWarnings.length,1);
+    s.publish();assert.equal(s.grid,null,'Retained PDF must not receive a fresh registry entry');
+  }
+});
+
+test('oversized PDF keeps an actual source-owned published link, preserves its old verification, and a missing link stays external',()=>{
+  const s=fixture(),url='https://www.dropbox.com/x/large.pdf?rlkey=private-key&dl=0';const endpoint=s.http(url,Buffer.from('%PDF-small'),{rangeStatus:206,rangeLength:10,etag:'"old"'});
+  const owned=s.run.sandbox.uploadImg(url);s.publish();const record=JSON.stringify(s.grid);
+  s.servers.set(endpoint,{body:Buffer.from('%PDF-new'),rangeStatus:206,rangeLength:20*1024*1024,etag:'"new"'});s.now+=1000;s.newRun();
+  assert.equal(s.run.sandbox.uploadImg(url),owned);assert.equal(Object.keys(s.run.context.assetRegistry.staged).length,0);s.publish();assert.equal(JSON.stringify(s.grid),record);
+  const absent=fixture();absent.http(url,Buffer.from('%PDF-unused'),{rangeStatus:206,rangeLength:20*1024*1024});assert.equal(absent.run.sandbox.uploadImg(url),url);
+  assert.equal(absent.run.context.pendingAssets.length,0);assert.equal(absent.fetches.length,1);assert.deepEqual([...absent.run.context.assetWarnings],['oversized-pdf-kept']);
+});
+
+test('an ignored Range response is reused once and an actual oversized PDF body retains the old link',()=>{
+  const size=16*1024*1024+1,body=Buffer.alloc(size);body.write('%PDF-1.7');
+  for(const options of [{rangeLength:size},{}]) {
+    const s=fixture(),url='https://www.dropbox.com/x/large.pdf?dl=0';s.http(url,body,options);s.entries['pdf/large.pdf']={type:'blob',sha:gitSha('%PDF-old')};
+    const output=s.run.sandbox.uploadImg(url);assert.match(output,/^\.\/pdf\/large\.pdf\?v=/);assert.equal(s.fetches.length,1);
+    assert.equal(s.fetches[0].options.headers.Range,'bytes=0-0');assert.equal(s.run.context.pendingAssets.length,0);assert.equal(Object.keys(s.run.context.assetRegistry.staged).length,0);
+    assert.deepEqual([...s.run.context.assetWarnings],['oversized-pdf-kept']);
+  }
+});
+
+test('small 206 probes fetch the complete PDF while a trusted 304 probe avoids a second GET',()=>{
+  const s=fixture(),url='https://www.dropbox.com/x/paper.pdf?dl=0',body=Buffer.from('%PDF-1.7\nsmall');
+  s.http(url,body,{rangeStatus:206,rangeLength:body.length,etag:'"PDF"'});const output=s.run.sandbox.uploadImg(url);
+  assert.match(output,/paper--[a-f0-9]{12}\.pdf\?v=/);assert.equal(s.fetches.length,2);assert.equal(s.fetches[0].options.headers.Range,'bytes=0-0');assert.equal(s.fetches[1].options.headers.Range,undefined);
+  s.publish();s.fetches=[];s.newRun();assert.equal(s.run.sandbox.uploadImg(url),output);assert.equal(s.fetches.length,1);
+  assert.equal(s.fetches[0].options.headers['If-None-Match'],'"PDF"');assert.equal(s.run.context.assetStats.downloaded,0);assert.equal(s.run.context.assetStats.notModified,1);
+});
+
+test('a small complete 200 Range response is reused and PDF metadata errors retain links with explicit non-fresh warnings',()=>{
+  const url='https://www.dropbox.com/x/paper.pdf?dl=0',body=Buffer.from('%PDF-1.7\nsmall');
+  const complete=fixture();complete.http(url,body,{rangeLength:body.length});complete.run.sandbox.uploadImg(url);assert.equal(complete.fetches.length,1);assert.equal(complete.run.context.pendingAssets.length,1);
+  for(const options of [{rangeStatus:403},{rangeError:true},{rangeStatus:206}, {rangeStatus:304}]) {
+    for(const existing of [false,true]) {
+      const s=fixture();s.http(url,body,options);if(existing)s.entries['pdf/paper.pdf']={type:'blob',sha:gitSha('%PDF-old')};
+      const output=s.run.sandbox.uploadImg(url);assert(existing ? /^\.\/pdf\/paper\.pdf\?v=/.test(output) : output===url);
+      assert.deepEqual([...s.run.context.assetWarnings],['pdf-metadata-unavailable']);assert.equal(s.run.context.pendingAssets.length,0);assert.equal(Object.keys(s.run.context.assetRegistry.staged).length,0);assert.equal(s.fetches.length,1);
+    }
+  }
+});
+
+test('Drive PDF size metadata avoids oversized blob download while image size overflow still aborts',()=>{
+  const s=fixture(),url='https://drive.google.com/file/d/document/view';
+  s.drives.set('document',{name:'large.pdf',body:Buffer.from('%PDF-unused'),size:20*1024*1024,modified:s.now});
+  s.entries['pdf/large.pdf']={type:'blob',sha:gitSha('%PDF-old')};assert.match(s.run.sandbox.uploadImg(url),/^\.\/pdf\/large\.pdf\?v=/);
+  assert.equal(s.blobReads,0);assert.equal(s.run.context.pendingAssets.length,0);assert.deepEqual([...s.run.context.assetWarnings],['oversized-pdf-kept']);
+  const image=fixture(),body=Buffer.alloc(16*1024*1024+1);body[0]=255;body[1]=216;image.http(remote,body);
+  assert.throws(()=>image.run.sandbox.uploadImg(remote),/16 MiB/);assert.equal(image.run.context.pendingAssets.length,0);assert.equal(image.run.context.assetWarnings,undefined);
+});
+
 test('byte validation covers images/PDFs, rejects mislabeled files and enforces the size limit',()=>{
   const r=fixture().run.sandbox;
   assert.doesNotThrow(()=>r.cmsValidateAsset_('paper.pdf',bytes('%PDF-1.7\nbody')));assert.doesNotThrow(()=>r.cmsValidateAsset_('photo.jpg',bytes(jpegA)));
   assert.throws(()=>r.cmsValidateAsset_('photo.png',bytes(jpegA)),/match/);assert.throws(()=>r.cmsValidateAsset_('photo.jpg',[]),/empty/);
   assert.throws(()=>r.cmsValidateAsset_('photo.jpg',new Array(16*1024*1024+1)),/16 MiB/);
+});
+
+test('unsafe HTTP validator formula prefixes are never stored or reused as request headers',()=>{
+  for(const etag of ['=IMPORTXML("https://bad","x")',' +formula','@value','-value']) {
+    const s=fixture();s.http(remote,jpegA,{etag});s.run.sandbox.uploadImg(remote);s.publish();assert.equal(s.grid[1][5],'');
+    s.newRun();s.run.sandbox.uploadImg(remote);assert.deepEqual({...s.fetches.at(-1).options.headers},{});
+  }
 });

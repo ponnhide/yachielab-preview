@@ -38,7 +38,7 @@
 | `Update the current page` | 選択した登録ページの本文。共通部品タブを選択している場合は、その部品を21ページへ反映。 |
 | `Update shared components` | header / footer / sidebar / mobile menu を、index を含む21ページへ1コミットで反映。各ページの本文は維持。 |
 | `Update all registered pages` | 登録された20ページの本文を1コミットで更新。index の共通部品には上のメニューを使用。 |
-| `Refresh linked assets on current page` | 選択ページが参照する外部・Drive 資産を強制的に取得し直します。通常更新でも変更を確認します。形式と1ファイル16 MiB上限を検査。 |
+| `Refresh linked assets on current page` | 選択ページが参照する外部・Drive 資産を強制的に取得し直します。通常更新でも変更を確認します。形式と16 MiB上限を検査し、対象外・上限超過の PDF はリンクを維持して件数を通知します。 |
 
 独立ページでは空の Lab が本文の終了ですが、共通部品の空の Lab は意図したラッパー行として使います。共通部品の行をそこで打ち切ったり、整理の際に削除したりしないでください。論文著者の強調は `Member` 行の別名だけを対象とし、`Alumni` 行を自動で対象に加えません。
 
@@ -46,7 +46,7 @@ HTML の生成処理を直す場合は `cms/`、表示の共通ルールは `css
 
 画像の取得元と公開先の対応は、専用 Sheet の自動管理タブ `_cms_assets` で保持します。同名でも異なる取得元は、元の識別子から生成したハッシュをファイル名に加えて区別します。公開する `asset-versions.json` はローカルパスと画像・PDFの SHA だけを持ち、取得元 URL を含みません。ブラウザはこの情報を使って画像 URL の `?v=` を更新します。元の公開パスは残し、参照未確認の画像や重複ファイルの削除とは別に管理します。
 
-出版社などの外部 HTTP PDF は自動同期の対象外です。既存のローカル PDF があればそれを維持し、なければ元の外部リンクを使います。Drive / Dropbox の PDF は同期します。詳細は [資産の運用](docs/maintenance.md#資産の取り扱い) を参照してください。
+出版社などの外部 HTTP PDF と、16 MiBを超える Drive / Dropbox PDF は自動同期を省略します。検証済みの既存ローカル PDF があればそれを維持し、なければ元の外部リンクを使い、省略した件数を通知します。上限内の Drive / Dropbox PDF は同期します。大きな PDF だけを理由に画像やページの更新を止めません。詳細は [資産の運用](docs/maintenance.md#資産の取り扱い) を参照してください。
 
 GitHub 認証には、この検証リポジトリだけに Contents の書き込みを許可したトークンを使います。専用 GAS の Script Properties に `PREVIEW_GITHUB_TOKEN` として保存します。トークンをソース、Sheet、コミット、ログに入れません。`cms/PreviewIsolation.gs` がコピーした Sheet・リポジトリ・ブランチ・書き込みパスを確認します。GAS にソースを反映するときは、この保護コードも一緒に維持してください。
 

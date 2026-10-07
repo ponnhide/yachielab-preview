@@ -29,7 +29,24 @@ function cmsAssetHeader_(response, name) {
   var key = Object.keys(headers).filter(function(key) { return key.toLowerCase() === name.toLowerCase(); })[0];
   var value = key ? headers[key] : '';
   value = String(Array.isArray(value) ? value[0] : value || '');
-  return value.length < 40000 && !/[\r\n]/.test(value) ? value : '';
+  // Validators are untrusted HTTP text and will be written into private cells.
+  // Never let a malformed header become a spreadsheet formula.
+  return value.length < 40000 && !/[\r\n]/.test(value) && !/^\s*[=+@-]/.test(value) ? value : '';
+}
+
+function cmsAssetPdfFallback_(value, source, key, name, path, store, reason) {
+  var context = cmsContext_(), entries = cmsGithubSnapshot_().entries;
+  var owner = store.records[key], owned = entries[path];
+  var legacyPath = 'pdf/' + name, legacy = entries[legacyPath];
+  context.assetWarnings = context.assetWarnings || [];
+  context.assetWarnings.push(reason || 'oversized-pdf-kept');
+  var savedPath = owner && owner.identity === source.identity && owner.path === path && owned && owned.type === 'blob' ? path :
+    legacy && legacy.type === 'blob' ? legacyPath : '';
+  var saved = savedPath && entries[savedPath];
+  // This result describes the old published link, not successfully fetched
+  // source bytes. Do not stage validators or a fresh ownership record.
+  return context.preparedAssets[key] = saved ? {key: 'local:' + savedPath, path: savedPath, sha: saved.sha, url: cmsAssetUrl_(savedPath, saved.sha)} :
+    {key: key, path: '', sha: '', url: value};
 }
 
 function cmsAssetPrepare_(value) {
@@ -64,7 +81,36 @@ function cmsAssetPrepare_(value) {
   var old = store.records[key], actual = cmsGithubSnapshot_().entries[path];
   var published = old && old.path === path && actual && actual.type === 'blob' && actual.sha === old.sha;
   var record = {key: key, identity: source.identity, sourceUrl: source.sourceUrl, path: path, sha: '', etag: '', lastModified: '', sourceModifiedAt: '', checkedAt: new Date().toISOString()};
-  var bytes, unchanged = false; stats.checked++;
+  var bytes, unchanged = false, pdf = /\.pdf$/i.test(name), maximum = 16 * 1024 * 1024, pdfResponse; stats.checked++;
+  if (pdf && file && typeof file.getSize === 'function') {
+    var size = 0;
+    try { size = Number(file.getSize()); } catch (sizeError) { /* Fall through to the blob when size metadata is unavailable. */ }
+    if (Number.isFinite(size) && size > maximum) return cmsAssetPdfFallback_(value, source, key, name, path, store);
+  } else if (pdf && !file) {
+    // UrlFetchApp supports GET, but not HEAD. A one-byte Range response exposes
+    // total size without downloading the whole PDF when the server supports it.
+    var rangeHeaders = {Range: 'bytes=0-0'};
+    if (!context.refreshAssets && published) {
+      if (old.etag) rangeHeaders['If-None-Match'] = old.etag;
+      else if (old.lastModified) rangeHeaders['If-Modified-Since'] = old.lastModified;
+    }
+    try {
+      var probe = previewFetch_(source.downloadUrl, {method: 'get', muteHttpExceptions: true, followRedirects: true, headers: rangeHeaders});
+      var probeStatus = probe.getResponseCode();
+      if (probeStatus === 304 && published && !context.refreshAssets && (old.etag || old.lastModified)) pdfResponse = probe;
+      else if (probeStatus === 206) {
+        var range = cmsAssetHeader_(probe, 'Content-Range').match(/^bytes\s+0-0\/(\d+)$/i);
+        if (!range || !Number.isFinite(Number(range[1])) || Number(range[1]) < 1) return cmsAssetPdfFallback_(value, source, key, name, path, store, 'pdf-metadata-unavailable');
+        if (Number(range[1]) > maximum) return cmsAssetPdfFallback_(value, source, key, name, path, store);
+        // Small partial response: the established full GET below retrieves and
+        // validates the complete PDF rather than treating a single byte as data.
+      } else if (probeStatus === 200) {
+        var length = cmsAssetHeader_(probe, 'Content-Length');
+        if (/^\d+$/.test(length) && Number(length) > maximum) return cmsAssetPdfFallback_(value, source, key, name, path, store);
+        pdfResponse = probe; // Range ignored: reuse this complete response once.
+      } else return cmsAssetPdfFallback_(value, source, key, name, path, store, 'pdf-metadata-unavailable');
+    } catch (probeError) { return cmsAssetPdfFallback_(value, source, key, name, path, store, 'pdf-metadata-unavailable'); }
+  }
   if (file) {
     if (typeof file.getLastUpdated === 'function') {
       var modified = file.getLastUpdated();
@@ -78,7 +124,7 @@ function cmsAssetPrepare_(value) {
       if (old.etag) headers['If-None-Match'] = old.etag;
       else if (old.lastModified) headers['If-Modified-Since'] = old.lastModified;
     }
-    var response = previewFetch_(source.downloadUrl, {muteHttpExceptions: true, followRedirects: true, headers: headers});
+    var response = pdfResponse || previewFetch_(source.downloadUrl, {muteHttpExceptions: true, followRedirects: true, headers: headers});
     var status = response.getResponseCode();
     // A 304 is usable only when the exact validated bytes still exist in GitHub.
     if (status === 304 && (!published || !Object.keys(headers).length)) {
@@ -93,6 +139,7 @@ function cmsAssetPrepare_(value) {
   }
   if (unchanged) { record.sha = old.sha; stats.notModified++; }
   else {
+    if (pdf && bytes.length > maximum) return cmsAssetPdfFallback_(value, source, key, name, path, store);
     cmsValidateAsset_(name, bytes); record.sha = cmsGitBlobSha_(bytes);
     if (!actual || actual.type !== 'blob' || actual.sha !== record.sha) cmsQueueAsset_(path, Utilities.base64Encode(bytes));
   }
