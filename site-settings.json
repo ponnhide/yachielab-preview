@@ -1,5 +1,5 @@
 {
   "logoActiveOpacity": 1,
-  "logoInactiveOpacity": 0.25,
-  "logoTransitionMs": 900
+  "logoInactiveOpacity": 0.5,
+  "logoTransitionMs": 300
 }
