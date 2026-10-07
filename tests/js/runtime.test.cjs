@@ -209,14 +209,14 @@ test('homepage hover uses correct matching assets and pauses/restores animation 
   const image = browser.element('main_research_img');
   control.dispatch('mouseenter');
   control.dispatch('mouseenter');
-  assert.match(image.src, /H_2r\.png$/);
+  assert.match(new URL(image.src).pathname, /H_2r\.png$/);
   assert.equal(image.style.animationPlayState, 'paused');
   assert.equal(browser.document.querySelector('footer').style.zIndex, '22');
   control.dispatch('mouseleave');
-  assert.match(image.src, /H_1r\.png$/);
+  assert.match(new URL(image.src).pathname, /H_1r\.png$/);
   assert.equal(image.style.animationPlayState, 'running');
   assert.equal(browser.document.querySelector('footer').style.zIndex, '18');
-  assert.ok(browser.preloadSources.some(source => source.endsWith('/H_2r.png')));
+  assert.ok(browser.preloadSources.some(source => new URL(source).pathname.endsWith('/H_2r.png')));
   assert.ok(!browser.preloadSources.some(source => source.includes('/HH_2r.png')));
 });
 

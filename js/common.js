@@ -29,6 +29,7 @@
   });
 
   function isMobile() { return window.innerWidth <= mobileWidth; }
+  function assetUrl(value) { return window.YachieAssets ? window.YachieAssets.versionUrl(value) : value; }
   function getState() { return Object.assign({}, state); }
   function subscribe(callback) {
     subscribers.add(callback);
@@ -169,7 +170,7 @@
     canvas.classList.add('logo-canvas');
     ['UBC', 'Osaka'].forEach(function (affiliation) {
       const image = document.createElement('img');
-      image.src = './img/header-' + affiliation.toLowerCase() + '-' + color + '.svg';
+      image.src = assetUrl('./img/header-' + affiliation.toLowerCase() + '-' + color + '.svg');
       image.alt = affiliation === 'UBC' ? 'Yachie Laboratory at UBC' : 'Yachie Laboratory at The University of Osaka';
       canvas.appendChild(makeLogoButton(affiliation, image));
     });
@@ -228,7 +229,7 @@
       group.classList.add('mobile-lab-switch');
       ['UBC', 'Osaka'].forEach(function (affiliation) {
         const image = document.createElement('img');
-        image.src = './img/header-' + affiliation.toLowerCase() + '-white.svg';
+        image.src = assetUrl('./img/header-' + affiliation.toLowerCase() + '-white.svg');
         image.alt = affiliation === 'UBC' ? 'Yachie Laboratory at UBC' : 'Yachie Laboratory at The University of Osaka';
         const control = makeLogoButton(affiliation, image);
         control.setAttribute('id', affiliation === 'UBC' ? 'mobile-ubc-lab' : 'mobile-osaka-lab');
@@ -467,6 +468,7 @@
     isHomePage: homePage, isMobile: isMobile, getState: getState,
     setLanguage: setLanguage, setAffiliation: setAffiliation,
     subscribe: subscribe, updateLink: updateLink, bindButton: bindButton,
+    assetUrl: assetUrl,
     requestLayout: requestLayout, calculateInteriorGeometry: calculateInteriorGeometry
   });
 

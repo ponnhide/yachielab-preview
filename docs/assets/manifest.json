@@ -6,8 +6,8 @@
       "img_new",
       "pdf"
     ],
-    "source_files": 79,
-    "secret_text_files": 86,
+    "source_files": 85,
+    "secret_text_files": 93,
     "html_pages": 24,
     "sheet_sources_supplied": 1,
     "sheet_tabs_supplied": 38,
@@ -17,12 +17,43 @@
     "asset_files": 480,
     "asset_bytes": 607484828,
     "referenced_assets": 211,
+    "published_reference_assets": 178,
+    "source_only_reference_assets": 33,
     "review_candidates": 269,
     "review_candidate_bytes": 226562923,
     "duplicate_groups": 64,
     "errors": 0,
-    "warnings": 3
+    "warnings": 2
   },
+  "asset_directory_summary": [
+    {
+      "directory": "img",
+      "files": 360,
+      "referenced": 150,
+      "review_candidates": 210,
+      "image_files": 357,
+      "image_referenced": 150,
+      "image_review_candidates": 207
+    },
+    {
+      "directory": "img_new",
+      "files": 49,
+      "referenced": 4,
+      "review_candidates": 45,
+      "image_files": 49,
+      "image_referenced": 4,
+      "image_review_candidates": 45
+    },
+    {
+      "directory": "pdf",
+      "files": 71,
+      "referenced": 57,
+      "review_candidates": 14,
+      "image_files": 0,
+      "image_referenced": 0,
+      "image_review_candidates": 0
+    }
+  ],
   "errors": [],
   "warnings": [
     {
@@ -36,12 +67,6 @@
       "detected": "html",
       "expected": "svg",
       "source": "img/navy_yachielablogo2.svg"
-    },
-    {
-      "code": "duplicate-id",
-      "count": 2,
-      "id": "mobile-addgennelogo",
-      "source": "yuka.html"
     }
   ],
   "assets": [
@@ -55,6 +80,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "people.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -70,6 +99,12 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "alumni.html:src",
+        "intern_recruit.html:src",
+        "internexp.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -81,6 +116,8 @@
       "reference_evidence": [
         "sheet:filename-match"
       ],
+      "published_reference_evidence": [],
+      "reference_class": "source-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -93,6 +130,10 @@
         "publications.html:src",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "publications.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -106,6 +147,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "jikkenigaku2.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -119,6 +164,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "jikkenigaku.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -128,8 +177,13 @@
       "sha256": "102f2d0949e7b8767415f4ed341587bfefa7ac235fca9315bec56b4cf545f3f9",
       "kind": "png",
       "reference_evidence": [
+        "js/common.js:dynamic-png-stem",
         "source:dynamic-png-stem"
       ],
+      "published_reference_evidence": [
+        "js/common.js:dynamic-png-stem"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -139,6 +193,8 @@
       "sha256": "45a5ee2efb0bd34e3f21bcdd639b30693d0266f3794f5fe97ad81dd5286fe2ed",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -148,6 +204,8 @@
       "sha256": "2480ff290520c951fd5f68c2955219d3bcdaf99ce03e392c59b4f379c878a5ab",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -157,6 +215,8 @@
       "sha256": "7c0c1d043cd0e4ba7f1bc9cafc246c875fe726dde0f60bdddffd740166972872",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -169,6 +229,10 @@
         "css/layout.css:css-url",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "css/layout.css:css-url"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -181,6 +245,10 @@
         "css/layout.css:css-url",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "css/layout.css:css-url"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -190,6 +258,8 @@
       "sha256": "f1d52d72397d00ffe3010a938efd7a7e4761af61ee9d93ba392eeaec7e1b9119",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -199,6 +269,8 @@
       "sha256": "f66172cbef0ae64af11e01cee9c0cf14f809ca96e94b32eda6c3ca7d192c3e76",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -211,6 +283,10 @@
         "index.html:src",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "index.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -223,6 +299,10 @@
         "people.html:src",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "people.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -232,6 +312,8 @@
       "sha256": "1e09275cff68aa540ae51d65f7847a0b1a104c0fda4c63fe1866dbb464c62d0b",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -241,6 +323,8 @@
       "sha256": "87996fd9eaf51a5e9b688921ee4f9bb1a102735573e47a9f9d34d6171d7e47dd",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -250,6 +334,8 @@
       "sha256": "e6eaec5cae41faff9c695bfdd36342768f0f8d17dbf1028570a5dfed010ef789",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -259,6 +345,8 @@
       "sha256": "207fbc0b53527eb3a89b7f7357c55a795eaf0f4b45171c766ce19fc338881fde",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -271,6 +359,10 @@
         "index.html:src",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "index.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -283,6 +375,10 @@
         "index.html:src",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "index.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -292,6 +388,8 @@
       "sha256": "ec13d869468453863d5997109c21d715a438759a8fa30f53f57dc7c4ae648efb",
       "kind": "jpeg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -303,6 +401,8 @@
       "reference_evidence": [
         "source:dynamic-png-stem"
       ],
+      "published_reference_evidence": [],
+      "reference_class": "source-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -312,6 +412,8 @@
       "sha256": "142efb5e9582015456830c201ec8808f3c180ee418264033a8bae14f638a0f2d",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -321,6 +423,8 @@
       "sha256": "a611a92b0cb5807a2aabc7f112a24feadd7f22b878d3e282bcbb97fac8777295",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -330,6 +434,8 @@
       "sha256": "cb3fe0e293ee4d2d2f94f3d89d555749e21766b5efa4451dae20097ce9451b70",
       "kind": "jpeg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -339,6 +445,8 @@
       "sha256": "dbef9a573125c142e4c7b3e668748736d302fefd917875e6c4ccdb51339022ef",
       "kind": "jpeg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -352,6 +460,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "people.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -364,6 +476,10 @@
         "index.html:src",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "index.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -373,6 +489,8 @@
       "sha256": "3368582931d8c9640fde537df3f7af4aeed919c0517b0b2b6a1922be7289dbe2",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -382,6 +500,8 @@
       "sha256": "fb04fa610fd37fb27c86d0cc0742702c8c3aaa17512a659759e85c3cd99352c4",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -391,6 +511,8 @@
       "sha256": "5b251809aee1235ffd16a1d34e9ed5a64f5781b024dc8f0ab936dada160824f7",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -400,6 +522,8 @@
       "sha256": "997f29241bd0dc763b2f587959555ca8148dfbd6101e0de13eaa747767f22913",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -411,6 +535,10 @@
       "reference_evidence": [
         "research.html:src"
       ],
+      "published_reference_evidence": [
+        "research.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -424,6 +552,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "people.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -433,6 +565,8 @@
       "sha256": "88102eb56f8540128bb7c1b7202cb7187d78fd0513615a8433b9d473ecbf1f3a",
       "kind": "jpeg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -442,6 +576,8 @@
       "sha256": "9b403ed99a5cd90e423855c6e63fc5e5820c35bd5e5b05da852a9426dbb74b7c",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -452,9 +588,15 @@
       "kind": "png",
       "reference_evidence": [
         "index.html:src",
+        "js/index.js:dynamic-png-stem",
         "source:dynamic-png-stem",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "index.html:src",
+        "js/index.js:dynamic-png-stem"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -464,6 +606,8 @@
       "sha256": "b0c3d736a36c083024f8d7593a0a2b884cc996abbcb6b6d86f8f9e100838fbbd",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -473,8 +617,13 @@
       "sha256": "fbe4720b19bb49ebb68863914b1f4bd87e319629fb1412a1a3f8815e1242cc46",
       "kind": "png",
       "reference_evidence": [
+        "js/index.js:dynamic-png-stem",
         "source:dynamic-png-stem"
       ],
+      "published_reference_evidence": [
+        "js/index.js:dynamic-png-stem"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -486,6 +635,8 @@
       "reference_evidence": [
         "sheet:filename-match"
       ],
+      "published_reference_evidence": [],
+      "reference_class": "source-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -499,6 +650,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "people.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -510,6 +665,8 @@
       "reference_evidence": [
         "source:dynamic-png-stem"
       ],
+      "published_reference_evidence": [],
+      "reference_class": "source-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -519,6 +676,8 @@
       "sha256": "b80f44f799cea94857c66a33df5e468beaec8e4173492ba7a2204f964b653b06",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -528,6 +687,8 @@
       "sha256": "28ae19761d0b2360efc1a3254c3c887a296303b9837e8f4d1b04af09629085d3",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -539,6 +700,8 @@
       "reference_evidence": [
         "sheet:filename-match"
       ],
+      "published_reference_evidence": [],
+      "reference_class": "source-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -551,6 +714,10 @@
         "index.html:src",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "index.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -560,6 +727,8 @@
       "sha256": "c6a92424a3a104b8c283d0b5695490e4872d6cd44f4fe564afa7b49e77f54d2f",
       "kind": "jpeg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -569,6 +738,8 @@
       "sha256": "70a2e777e105324b3f02b7e313584ac25082a8b6d757fdfbbf579190f61ff5d3",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -581,6 +752,10 @@
         "css/pages/index.css:css-url",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "css/pages/index.css:css-url"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -590,6 +765,8 @@
       "sha256": "c29670615482f97a6c75fc9b9f74f81ecadc396b54f53c53bae1ceac8f49e15b",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -599,6 +776,8 @@
       "sha256": "5dd86a6626ca0a996b6e83a822a43fead6fd7687e6ee313a19b345df84ab55e3",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -611,6 +790,10 @@
         "css/pages/index.css:css-url",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "css/pages/index.css:css-url"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -620,6 +803,8 @@
       "sha256": "9e6dc36d4a230afed2307f252362923dc6b74806698cf72107e33a937a49a09c",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -632,6 +817,10 @@
         "publications.html:src",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "publications.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -641,6 +830,8 @@
       "sha256": "19b9a71ca0a98caef508b7ab209bf7d1c18f285dda1b4bef43028fa0534fef4f",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -651,9 +842,15 @@
       "kind": "png",
       "reference_evidence": [
         "index.html:src",
+        "js/index.js:dynamic-png-stem",
         "source:dynamic-png-stem",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "index.html:src",
+        "js/index.js:dynamic-png-stem"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -663,6 +860,8 @@
       "sha256": "e5848f670e0fdde85af769fe897bf99c50a7cb93a92eecd4b29053b7b9977075",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -672,8 +871,13 @@
       "sha256": "9b822a5ab2077ffe84e2530c1095635e66045d20a1174acdc6cfdf469a210c91",
       "kind": "png",
       "reference_evidence": [
+        "js/index.js:dynamic-png-stem",
         "source:dynamic-png-stem"
       ],
+      "published_reference_evidence": [
+        "js/index.js:dynamic-png-stem"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -683,6 +887,8 @@
       "sha256": "bfb8292e737430347f5f3651011415d8a8923ff551f8f01af706cb9db934f948",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -692,6 +898,8 @@
       "sha256": "b3aacde038573a6208aa563fcd4dd56a477d70c31abf9a0f8c03dc6a4b4a3ae0",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -701,6 +909,8 @@
       "sha256": "7d51a7d1baa1c816177933223da98bd75517ec07072aebabb147549d32b25b63",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -713,6 +923,10 @@
         "index.html:src",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "index.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -725,6 +939,10 @@
         "publications.html:src",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "publications.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -738,6 +956,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "publications.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -747,6 +969,8 @@
       "sha256": "53edc5438b15814c7894328c6c829a8a8a57111a848bbddca230e91625ae628a",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -756,6 +980,8 @@
       "sha256": "0b17859d4e350ec4231fc1e73c166bde41e23e6100cf18918d9af23d46a0b3ff",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -765,6 +991,8 @@
       "sha256": "cddb788604ebcd7c1865500dd8220007e34dc588780ef92213e1c39c543092e0",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -774,6 +1002,8 @@
       "sha256": "5689c927e2e2f316fed54f1fd3b0fe28b9e461a28a505b3268b63eb87f43e25f",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -783,6 +1013,8 @@
       "sha256": "4125f510dbccbaa82054a43c912837f343be564331ba9cc5e8fb25b6f3a8aa8b",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -793,9 +1025,15 @@
       "kind": "png",
       "reference_evidence": [
         "index.html:src",
+        "js/index.js:dynamic-png-stem",
         "source:dynamic-png-stem",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "index.html:src",
+        "js/index.js:dynamic-png-stem"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -805,6 +1043,8 @@
       "sha256": "d3f8342b6d3be761dc9e3a9ff9c171b65d78283a9e78ac57a65c2a62d5908169",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -814,8 +1054,13 @@
       "sha256": "25950cab4c8eeb4a78df739a11f634e50c9c4a7a46df040406072ec7640478c4",
       "kind": "png",
       "reference_evidence": [
+        "js/index.js:dynamic-png-stem",
         "source:dynamic-png-stem"
       ],
+      "published_reference_evidence": [
+        "js/index.js:dynamic-png-stem"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -825,6 +1070,8 @@
       "sha256": "a3e4e6d4d110765bd72d2d5cbcb7e88abda4373773e6afa9503c75dd00b18a2b",
       "kind": "jpeg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -836,6 +1083,8 @@
       "reference_evidence": [
         "sheet:filename-match"
       ],
+      "published_reference_evidence": [],
+      "reference_class": "source-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -847,6 +1096,8 @@
       "reference_evidence": [
         "sheet:filename-match"
       ],
+      "published_reference_evidence": [],
+      "reference_class": "source-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -860,6 +1111,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "people.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -869,6 +1124,8 @@
       "sha256": "9422ad54ecd826ba7ab5d3bc0ef35bf6ba4c605135ca434ea272884e9266d17e",
       "kind": "jpeg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -878,6 +1135,8 @@
       "sha256": "d99f94f00166c1988b62af01cdecb421e715cbeffab72c3be304d080b72a81db",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -887,6 +1146,8 @@
       "sha256": "f629d46b9abad5fdbbb610bec2197c61af37c76b534520ef1ccd64603717b0f8",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -896,6 +1157,8 @@
       "sha256": "ca683f83eb164f3a4ff45addc486eefd88b1b3764cd0b418e69028c7282555cb",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -909,6 +1172,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "people.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -918,6 +1185,8 @@
       "sha256": "86222004a4dab823e7376097c9ffee5cd9e6f244b1676d56e0725fa7a42c03e8",
       "kind": "heic",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": true
     },
@@ -927,6 +1196,8 @@
       "sha256": "b12432122bd71b87667e6ebaffd5ea0bac84e081b8ce124c1705467418bea91a",
       "kind": "jpeg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -940,6 +1211,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "people.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -953,6 +1228,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "people.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -966,6 +1245,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "people.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -979,6 +1262,11 @@
         "software.html:src",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "resources.html:src",
+        "software.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -991,6 +1279,10 @@
         "index.html:src",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "index.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -1000,6 +1292,8 @@
       "sha256": "4fe654a0ea0438f6e3a4a8d2c9c55842731f65bfa2eca7e991c1caab0a38adf4",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -1009,6 +1303,8 @@
       "sha256": "230b9b255459c91da17aa9285e3beffd31a2fc60ef1d3746afe7d7c2a400a5a0",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -1018,6 +1314,8 @@
       "sha256": "e2d218e2fae25a192341bebeb6e6132e505059ebe5780f86459806bf996dea7e",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -1027,6 +1325,8 @@
       "sha256": "c99f1ab0c1cc3a42119f62596f4b38574b1dfe7b8938e1aad6ee3f3e2d4ed9c3",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -1036,6 +1336,8 @@
       "sha256": "1f30b709cc25b6439aa7dc82e79332d75ac19bfb86e396d3d202f02167700650",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -1046,9 +1348,15 @@
       "kind": "png",
       "reference_evidence": [
         "index.html:src",
+        "js/index.js:dynamic-png-stem",
         "source:dynamic-png-stem",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "index.html:src",
+        "js/index.js:dynamic-png-stem"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -1058,6 +1366,8 @@
       "sha256": "8dd6cefdeed1b1e699b14f6cd598c96e0b787c1c0e1d796f9a4973efaf5676cf",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -1067,8 +1377,13 @@
       "sha256": "dbb02016535e962293b5245c261d2b3c3ad8565924a59085d9b4668f54229e23",
       "kind": "png",
       "reference_evidence": [
+        "js/index.js:dynamic-png-stem",
         "source:dynamic-png-stem"
       ],
+      "published_reference_evidence": [
+        "js/index.js:dynamic-png-stem"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -1080,6 +1395,8 @@
       "reference_evidence": [
         "sheet:filename-match"
       ],
+      "published_reference_evidence": [],
+      "reference_class": "source-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -1091,6 +1408,8 @@
       "reference_evidence": [
         "sheet:filename-match"
       ],
+      "published_reference_evidence": [],
+      "reference_class": "source-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -1102,6 +1421,8 @@
       "reference_evidence": [
         "source:dynamic-png-stem"
       ],
+      "published_reference_evidence": [],
+      "reference_class": "source-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -1111,6 +1432,8 @@
       "sha256": "20606a2c87de9894b1821de9a6f9809da74d47d447ab2f2d5b2953dbd5f6db83",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -1120,6 +1443,8 @@
       "sha256": "ff6a8b0eadb20b61cbba779dc75c3c6987bdbd816484361e99dd7876d966f50c",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -1133,6 +1458,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "people.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -1145,6 +1474,10 @@
         "index.html:src",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "index.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -1154,6 +1487,8 @@
       "sha256": "3111240812f9fb8582fce62c0ece41054682851f8f86caed50a9a4b42d909320",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -1163,6 +1498,8 @@
       "sha256": "97ed3336acd4703340e09c335a59c8123db0781bc473292d2e734a1c8d6ef6a2",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -1172,6 +1509,8 @@
       "sha256": "c3f8670992720b2a1e4870e45ec4655e07747db57bd70a4462be40012bf89be2",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -1181,6 +1520,8 @@
       "sha256": "f17b6dff8fe37ee0b6a6b315fb212d8b48e05a29704dee0c91c7516e182fad86",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -1190,6 +1531,8 @@
       "sha256": "672fb3705369340532348938eb0c2c5aa3cb8324145901d2608f0d3615358e93",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -1200,9 +1543,15 @@
       "kind": "png",
       "reference_evidence": [
         "index.html:src",
+        "js/index.js:dynamic-png-stem",
         "source:dynamic-png-stem",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "index.html:src",
+        "js/index.js:dynamic-png-stem"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -1212,6 +1561,8 @@
       "sha256": "4a8bef7a0f5f3895550674b1ee694aaa2aff293b13788b8afb255da66fcb849c",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -1221,8 +1572,13 @@
       "sha256": "0ee3a766828cec63d369349dcad3247b573ea8155f5aaca22eef9fa9818e55b1",
       "kind": "png",
       "reference_evidence": [
+        "js/index.js:dynamic-png-stem",
         "source:dynamic-png-stem"
       ],
+      "published_reference_evidence": [
+        "js/index.js:dynamic-png-stem"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -1236,6 +1592,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "people.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -1245,6 +1605,8 @@
       "sha256": "bbc6e61c81e1098ef2ca7acd6fcf5f478bc86856e39956a57d06891616328b32",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -1254,6 +1616,8 @@
       "sha256": "6f0f114d66960431c2f8ba1c403a446bbdd8c7483ce77e1662ba7d091a391bfb",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -1263,6 +1627,8 @@
       "sha256": "c289fbd01c213d21100ccae2999b7b6d54ce5486bf99232a80d33be204bb60fd",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -1272,6 +1638,8 @@
       "sha256": "2c1c77dc37f0f11d1ea1bbb7c971f0de381b869520784ac71c165f0285a4bd86",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -1281,6 +1649,8 @@
       "sha256": "56563b980d4985c4a19b22684731ee70d91f3961c36ffbc4413d1674c58b0528",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -1291,9 +1661,15 @@
       "kind": "png",
       "reference_evidence": [
         "index.html:src",
+        "js/index.js:dynamic-png-stem",
         "source:dynamic-png-stem",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "index.html:src",
+        "js/index.js:dynamic-png-stem"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -1303,6 +1679,8 @@
       "sha256": "e22deaeb0a18b4625aee93f682009fa601fb6c9df7d86d5089fe98a63026c032",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -1312,8 +1690,13 @@
       "sha256": "a36dc0c728c2a17b8dbe7427de423c8d80bda4195c1e0d40d397d68d7b868975",
       "kind": "png",
       "reference_evidence": [
+        "js/index.js:dynamic-png-stem",
         "source:dynamic-png-stem"
       ],
+      "published_reference_evidence": [
+        "js/index.js:dynamic-png-stem"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -1323,6 +1706,8 @@
       "sha256": "e409e6082c5a9899e7df277c8aed914200bbc775d1f27c136fb46a8a2fb96ce4",
       "kind": "jpeg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -1335,6 +1720,10 @@
         "publications.html:src",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "publications.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -1344,6 +1733,8 @@
       "sha256": "a5bbf8e32e1077c3c7fd3aa3be04489ae93150d5861351f9c458b870972deae2",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -1353,6 +1744,8 @@
       "sha256": "c49fdf57887b030c755911afb42a71be4fbffb4d4421f3a58b9ddf0106fbd0f1",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -1362,6 +1755,8 @@
       "sha256": "32489ec1ea4e125b3dbd7d76352981781ea25a9b1737c613a4f4f4277974c2dd",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -1371,6 +1766,8 @@
       "sha256": "698f40c822efa0ed8698e48b8eb8c58a63a5c6568d0069e03bee51bcff3d8bc9",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -1380,6 +1777,8 @@
       "sha256": "2ef85c9b8c27acd65c06d2ba52dfb553f3f31eb698acebbc79b4bc4fd0f84ec7",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -1390,9 +1789,15 @@
       "kind": "png",
       "reference_evidence": [
         "index.html:src",
+        "js/index.js:dynamic-png-stem",
         "source:dynamic-png-stem",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "index.html:src",
+        "js/index.js:dynamic-png-stem"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -1402,6 +1807,8 @@
       "sha256": "5ab3e140aec89bb32a09a54a013e0381693df7c20b461cb9768114ca02825b2b",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -1411,8 +1818,13 @@
       "sha256": "4be741b2be184cc8204b2c96ce286aca382c0690d7424064cec1b52d05b30df2",
       "kind": "png",
       "reference_evidence": [
+        "js/index.js:dynamic-png-stem",
         "source:dynamic-png-stem"
       ],
+      "published_reference_evidence": [
+        "js/index.js:dynamic-png-stem"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -1426,6 +1838,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "people.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -1435,6 +1851,8 @@
       "sha256": "156788b6a94d33c7e509d0fe18256452aa9927ea1218c3fceee6a07ce28fe810",
       "kind": "jpeg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -1444,6 +1862,8 @@
       "sha256": "dd90b3bff9ad85ae31d99e4c990fb883a1f79cec9db00566e6aeb42035214f06",
       "kind": "jpeg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -1457,6 +1877,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "nzmyachie.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -1466,6 +1890,8 @@
       "sha256": "90fa924b695fe1c5a45b31365a7d2de7fe5709ca5b7a9c3beed383bc2f5f8fcf",
       "kind": "jpeg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -1479,6 +1905,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "people.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -1488,6 +1918,8 @@
       "sha256": "b3554f44088fea36d1f44700f16ccbd2d1c5701c5e0e744fdfe51eacece3d193",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -1497,6 +1929,8 @@
       "sha256": "b8e3b1aac76b7c1956e8ac928e0a745a701f64db23105403301b847e623a828e",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -1506,6 +1940,8 @@
       "sha256": "725226ee413f94397512dfcd3a2c53e8a72dabb2abd16e5355573223be8514a3",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -1515,6 +1951,8 @@
       "sha256": "00fa749d79a5fb8d4cf3472b28a575d61640696d30e957649b2fed5e5a109efb",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -1524,6 +1962,8 @@
       "sha256": "56afab56c85a5533908b3f3e6c5ed88acebcb92b0db16cb6957509ba72a305be",
       "kind": "svg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -1533,6 +1973,8 @@
       "sha256": "aa5c7ffe98b8ce77b613f311336a08139ad36679f90059156be391ddaa5dc630",
       "kind": "jpeg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -1542,6 +1984,8 @@
       "sha256": "7b59dfdb37f0dac6d28fbea93c36bc66b7452d378f968b74231824a3fa364872",
       "kind": "jpeg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -1551,6 +1995,8 @@
       "sha256": "1892db0bf7efc1af3388244e60876249f23fb552fd20c133474ee40f2dbe20f0",
       "kind": "jpeg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -1560,6 +2006,8 @@
       "sha256": "29cef4a51ea32ed73eb79760a23968dea101ad6eb62b54eb031ba8263be8f0cc",
       "kind": "html",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -1573,6 +2021,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "people.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -1582,6 +2034,8 @@
       "sha256": "3a880ab0a7eeaca5341dc05294f2bc286875c08dffcf07fc40d672f40fd4d5d6",
       "kind": "jpeg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -1595,6 +2049,11 @@
         "software.html:src",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "resources.html:src",
+        "software.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -1607,6 +2066,10 @@
         "people.html:src",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "people.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -1616,6 +2079,8 @@
       "sha256": "c4a077ef6ab32baa8b4ce0ce74d57a0402a374e109cbbf5b6d028bf941f3565e",
       "kind": "jpeg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -1625,6 +2090,8 @@
       "sha256": "344ee6ffe44fa5667bb640030d4e04ee3be781a70a73df3e6412291ced9a9196",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -1634,6 +2101,8 @@
       "sha256": "1da2ca8318ce959b6b6e86d62d676f696bf73fd87d82231b186553b6f2164c30",
       "kind": "svg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -1643,6 +2112,8 @@
       "sha256": "ee1be607d51dd488b554c91ce1d0b28d6c9160f333b8cab664cee2d962aa30ac",
       "kind": "jpeg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -1652,6 +2123,8 @@
       "sha256": "d3c261d37dc93562a5254d55478340349726945124d23d53dca3d6c82ac4fb35",
       "kind": "jpeg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -1664,6 +2137,10 @@
         "people.html:src",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "people.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -1678,6 +2155,11 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "news.html:src",
+        "people.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -1689,6 +2171,8 @@
       "reference_evidence": [
         "sheet:filename-match"
       ],
+      "published_reference_evidence": [],
+      "reference_class": "source-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -1698,6 +2182,8 @@
       "sha256": "b8ca92adfa8cf7a7aee4278f18d6f564d17c0b1c155e0dac56911ce5cfbb0706",
       "kind": "jpeg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -1711,6 +2197,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "people.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -1720,6 +2210,8 @@
       "sha256": "c7975a34ef1b22e6be3038e22591ad32e873be706ae27bb2da959d2f5ee9036b",
       "kind": "jpeg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -1731,6 +2223,8 @@
       "reference_evidence": [
         "sheet:filename-match"
       ],
+      "published_reference_evidence": [],
+      "reference_class": "source-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -1742,6 +2236,8 @@
       "reference_evidence": [
         "sheet:filename-match"
       ],
+      "published_reference_evidence": [],
+      "reference_class": "source-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -1751,6 +2247,8 @@
       "sha256": "8041ff21246812369f9f548b72f504b884718af1c22e6a15a3f96fe2ebb19bbd",
       "kind": "jpeg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -1763,6 +2261,10 @@
         "people.html:src",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "people.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -1772,6 +2274,8 @@
       "sha256": "6a307e5bbf32e6a9d66be3665ef89446b921f4080c9efccc8565e865f58949cd",
       "kind": "jpeg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -1781,6 +2285,8 @@
       "sha256": "6a307e5bbf32e6a9d66be3665ef89446b921f4080c9efccc8565e865f58949cd",
       "kind": "jpeg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -1794,6 +2300,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "intern_recruit.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -1807,6 +2317,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "news.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -1820,6 +2334,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "people.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -1833,6 +2351,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "alumni.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -1842,6 +2364,8 @@
       "sha256": "97f18b77bb8d9f8772b36ac884ba43b79ff442fcc2c214b01e610c78e18a286f",
       "kind": "jpeg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -1855,6 +2379,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "alumni.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -1864,6 +2392,8 @@
       "sha256": "fbd7be9b39d4abaf30804bc488c9911684c4ab32a2bde38aeb065b6c73a62800",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -1873,6 +2403,8 @@
       "sha256": "39fa6c00d50279c89cff04668703de24c397a31121f895d7dc3e9bec7a001b38",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -1882,6 +2414,8 @@
       "sha256": "7e13476c9681d4fa866b450225979b9ce85c81c8cbb6893d6d280bbac75ff23a",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -1891,6 +2425,8 @@
       "sha256": "464171363947944a0283bdc15f914afabf2a96dfbb1ee73e127bca57dc997ce0",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -1900,6 +2436,8 @@
       "sha256": "75d572e80c1ed1b9dddfdf4535ea33f1fef57639dd7bfa1ad7667c205f873f38",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -1909,6 +2447,8 @@
       "sha256": "e74bbe95abebbd3bdfe138fb77ee381fa8dfd225a61d976f397875123f379dc6",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -1920,6 +2460,8 @@
       "reference_evidence": [
         "sheet:filename-match"
       ],
+      "published_reference_evidence": [],
+      "reference_class": "source-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -1931,6 +2473,8 @@
       "reference_evidence": [
         "sheet:filename-match"
       ],
+      "published_reference_evidence": [],
+      "reference_class": "source-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -1952,6 +2496,18 @@
         "tech_recruit.html:src",
         "yuka.html:src"
       ],
+      "published_reference_evidence": [
+        "contact.html:src",
+        "hideto.html:src",
+        "intern_recruit.html:src",
+        "joinus.html:src",
+        "nzmyachie.html:src",
+        "pd_recruit.html:src",
+        "people.html:src",
+        "tech_recruit.html:src",
+        "yuka.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -1961,6 +2517,8 @@
       "sha256": "ede7987dff939319361fe9009634804b1a2637b0b9688e1fc8dc84df7803895d",
       "kind": "jpeg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -1970,6 +2528,8 @@
       "sha256": "e33ec92af49f16a924e375fd654d61a6f5d1274ce14f32591b033422e36240ca",
       "kind": "jpeg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -1979,6 +2539,8 @@
       "sha256": "0cfc423199418e6dd3490da159154e641f56bf7ea8d6ff6857868350d5d0939c",
       "kind": "jpeg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -1990,6 +2552,8 @@
       "reference_evidence": [
         "source:dynamic-png-stem"
       ],
+      "published_reference_evidence": [],
+      "reference_class": "source-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -2004,6 +2568,11 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "intern_recruit.html:src",
+        "internexp.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -2013,6 +2582,8 @@
       "sha256": "aeac6a2edec4ea76e925f957bbc7f8f31b1336b6e319551880ae15ed8fd87ab4",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -2025,6 +2596,10 @@
         "index.html:src",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "index.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -2052,6 +2627,24 @@
         "source:filename-match",
         "summercamp_2026.html:src"
       ],
+      "published_reference_evidence": [
+        "blank.html:src",
+        "contact.html:src",
+        "download.html:src",
+        "index.html:src",
+        "internexp.html:src",
+        "jikkenigaku.html:src",
+        "jikkenigaku2.html:src",
+        "joinus.html:src",
+        "news.html:src",
+        "people.html:src",
+        "publications.html:src",
+        "research.html:src",
+        "resources.html:src",
+        "software.html:src",
+        "summercamp_2026.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -2065,6 +2658,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "publications.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -2078,6 +2675,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "research.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -2087,6 +2688,8 @@
       "sha256": "2b16067f871626554848e77524e67b2713fa1d010ba18d47aadd0cd0d0939e4e",
       "kind": "jpeg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -2096,6 +2699,8 @@
       "sha256": "cdafc0ef57e47ce2ab4c396f09f884338f9d9d30105df5b8311602557d4fd42c",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -2105,6 +2710,8 @@
       "sha256": "47132c9c235c52b4c771c01a11fce0c405409935ebe77f01dd26765d0aae0160",
       "kind": "jpeg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -2114,6 +2721,8 @@
       "sha256": "3d0bce541d8c5d2f0a16b43aa8d38519212825bc0cebfeb04e4453903762dd65",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -2123,6 +2732,8 @@
       "sha256": "7096d95c9db0a375a3d941dca9bc539c0271afc06a8de98f16af3318bd418b4b",
       "kind": "jpeg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -2132,6 +2743,8 @@
       "sha256": "403e14e6629779a6d501100c3d48b8ac73dc7245cb4aca8c3ed47f7573073cb4",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -2141,6 +2754,8 @@
       "sha256": "f11eed7142f7b57aa3ffe3e2343a972736b3a4949012fcf64246dbec9b170d53",
       "kind": "jpeg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -2154,6 +2769,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "joinus.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -2163,6 +2782,8 @@
       "sha256": "6b12393c2fbd00f0ca893bc2d25232717d9fc23e7fb40f370c4d2fcab96ced85",
       "kind": "jpeg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -2176,6 +2797,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "people.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -2189,6 +2814,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "people.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -2203,6 +2832,11 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "news.html:src",
+        "people.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -2237,6 +2871,32 @@
         "tech_recruit.html:href",
         "yuka.html:href"
       ],
+      "published_reference_evidence": [
+        "alumni.html:href",
+        "blank.html:href",
+        "collab.html:href",
+        "contact.html:href",
+        "download.html:href",
+        "hideto.html:href",
+        "index.html:href",
+        "intern_recruit.html:href",
+        "internexp.html:href",
+        "jikkenigaku.html:href",
+        "jikkenigaku2.html:href",
+        "joinus.html:href",
+        "news.html:href",
+        "nzmyachie.html:href",
+        "pd_recruit.html:href",
+        "people.html:href",
+        "publications.html:href",
+        "research.html:href",
+        "resources.html:href",
+        "software.html:href",
+        "summercamp_2026.html:href",
+        "tech_recruit.html:href",
+        "yuka.html:href"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -2246,6 +2906,8 @@
       "sha256": "e37e5819d477983778d95cd5895973e081bc8f49e4427e9ee94f4adf9bd1c515",
       "kind": "jpeg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -2259,6 +2921,11 @@
         "software.html:src",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "resources.html:src",
+        "software.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -2271,6 +2938,10 @@
         "research.html:src",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "research.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -2284,6 +2955,11 @@
         "software.html:src",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "resources.html:src",
+        "software.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -2293,6 +2969,8 @@
       "sha256": "237532a641f466aa45b583c82bb0b99e618fdaff9ecabcb024927c90bc016992",
       "kind": "svg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -2302,6 +2980,8 @@
       "sha256": "2bfcbb54026e8170631c2e8ab2a392041827d0b617c92ca63facc23e6c691be6",
       "kind": "svg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -2311,6 +2991,8 @@
       "sha256": "fd825e87eb9c1766aa1a2aa5fa48ea3fafabb831aac0f2f46ec3cbe287bd721c",
       "kind": "unknown",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": true
     },
@@ -2320,6 +3002,8 @@
       "sha256": "d078bd2d46452a5058265e6d90fcf0d2a043a9c608f80f1deb627571579bdf09",
       "kind": "svg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -2355,6 +3039,32 @@
         "summercamp_2026.html:src",
         "tech_recruit.html:src"
       ],
+      "published_reference_evidence": [
+        "alumni.html:src",
+        "blank.html:src",
+        "collab.html:src",
+        "contact.html:src",
+        "download.html:src",
+        "hideto.html:src",
+        "index.html:src",
+        "intern_recruit.html:src",
+        "internexp.html:src",
+        "jikkenigaku.html:src",
+        "jikkenigaku2.html:src",
+        "joinus.html:src",
+        "js/common.js:code-header-svg-family",
+        "news.html:src",
+        "nzmyachie.html:src",
+        "pd_recruit.html:src",
+        "people.html:src",
+        "publications.html:src",
+        "research.html:src",
+        "resources.html:src",
+        "software.html:src",
+        "summercamp_2026.html:src",
+        "tech_recruit.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -2391,6 +3101,32 @@
         "summercamp_2026.html:src",
         "tech_recruit.html:src"
       ],
+      "published_reference_evidence": [
+        "alumni.html:src",
+        "blank.html:src",
+        "collab.html:src",
+        "contact.html:src",
+        "download.html:src",
+        "hideto.html:src",
+        "index.html:src",
+        "intern_recruit.html:src",
+        "internexp.html:src",
+        "jikkenigaku.html:src",
+        "jikkenigaku2.html:src",
+        "joinus.html:src",
+        "js/common.js:code-header-svg-family",
+        "news.html:src",
+        "nzmyachie.html:src",
+        "pd_recruit.html:src",
+        "people.html:src",
+        "publications.html:src",
+        "research.html:src",
+        "resources.html:src",
+        "software.html:src",
+        "summercamp_2026.html:src",
+        "tech_recruit.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -2426,6 +3162,32 @@
         "summercamp_2026.html:src",
         "tech_recruit.html:src"
       ],
+      "published_reference_evidence": [
+        "alumni.html:src",
+        "blank.html:src",
+        "collab.html:src",
+        "contact.html:src",
+        "download.html:src",
+        "hideto.html:src",
+        "index.html:src",
+        "intern_recruit.html:src",
+        "internexp.html:src",
+        "jikkenigaku.html:src",
+        "jikkenigaku2.html:src",
+        "joinus.html:src",
+        "js/common.js:code-header-svg-family",
+        "news.html:src",
+        "nzmyachie.html:src",
+        "pd_recruit.html:src",
+        "people.html:src",
+        "publications.html:src",
+        "research.html:src",
+        "resources.html:src",
+        "software.html:src",
+        "summercamp_2026.html:src",
+        "tech_recruit.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -2462,6 +3224,32 @@
         "summercamp_2026.html:src",
         "tech_recruit.html:src"
       ],
+      "published_reference_evidence": [
+        "alumni.html:src",
+        "blank.html:src",
+        "collab.html:src",
+        "contact.html:src",
+        "download.html:src",
+        "hideto.html:src",
+        "index.html:src",
+        "intern_recruit.html:src",
+        "internexp.html:src",
+        "jikkenigaku.html:src",
+        "jikkenigaku2.html:src",
+        "joinus.html:src",
+        "js/common.js:code-header-svg-family",
+        "news.html:src",
+        "nzmyachie.html:src",
+        "pd_recruit.html:src",
+        "people.html:src",
+        "publications.html:src",
+        "research.html:src",
+        "resources.html:src",
+        "software.html:src",
+        "summercamp_2026.html:src",
+        "tech_recruit.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -2475,6 +3263,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "people.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -2488,6 +3280,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "people.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -2502,6 +3298,11 @@
         "source:filename-match",
         "yuka.html:src"
       ],
+      "published_reference_evidence": [
+        "hideto.html:src",
+        "yuka.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -2517,6 +3318,12 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "alumni.html:src",
+        "intern_recruit.html:src",
+        "internexp.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -2526,6 +3333,8 @@
       "sha256": "309fd143b691704c9e9d41e1f43cecae2e67a4229e91bdeeab6f04e5f0d9c3d1",
       "kind": "jpeg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -2535,6 +3344,8 @@
       "sha256": "17179f09c135b7e3470198d5336997e35678c5861a2bd4360eda3798a8590ef9",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -2549,6 +3360,11 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "news.html:src",
+        "people.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -2562,6 +3378,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "people.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -2575,6 +3395,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "people.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -2590,6 +3414,12 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "download.html:href",
+        "news.html:src",
+        "resources.html:href"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -2603,6 +3433,11 @@
         "resources.html:src",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "download.html:src",
+        "resources.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -2615,6 +3450,10 @@
         "joinus.html:src",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "joinus.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -2624,6 +3463,8 @@
       "sha256": "183c1904f2945eb8b273c5effd8758768ec07cf64fcc4a2375c480dfbea43138",
       "kind": "svg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -2633,6 +3474,8 @@
       "sha256": "56c9298e6e289829665b10fc3635cdde7fab136073490a9d9d602ffcbf09e511",
       "kind": "svg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -2642,6 +3485,8 @@
       "sha256": "f6b86ed38e40c06f2696ea7b8834301b2e1efadf259e711fa96ccde53ce8fd87",
       "kind": "svg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -2651,6 +3496,8 @@
       "sha256": "f6b86ed38e40c06f2696ea7b8834301b2e1efadf259e711fa96ccde53ce8fd87",
       "kind": "svg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -2685,6 +3532,31 @@
         "summercamp_2026.html:src",
         "tech_recruit.html:src"
       ],
+      "published_reference_evidence": [
+        "alumni.html:src",
+        "blank.html:src",
+        "collab.html:src",
+        "contact.html:src",
+        "download.html:src",
+        "hideto.html:src",
+        "index.html:src",
+        "intern_recruit.html:src",
+        "internexp.html:src",
+        "jikkenigaku.html:src",
+        "jikkenigaku2.html:src",
+        "joinus.html:src",
+        "news.html:src",
+        "nzmyachie.html:src",
+        "pd_recruit.html:src",
+        "people.html:src",
+        "publications.html:src",
+        "research.html:src",
+        "resources.html:src",
+        "software.html:src",
+        "summercamp_2026.html:src",
+        "tech_recruit.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -2694,6 +3566,8 @@
       "sha256": "b83299727c0702ebb7bb76c9249ffbe2ec95a5e85fe80ef072a23ace473976ba",
       "kind": "svg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -2703,6 +3577,8 @@
       "sha256": "9a949ed19adcd0fa5d5d3bd8a992cd47619fba175ab828eda60d2fd9c886f476",
       "kind": "svg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -2712,6 +3588,8 @@
       "sha256": "f1190d4d21879fb37995fbe575d697ccd17c78653cdb7c0ffeacb854d59e0d82",
       "kind": "svg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -2721,6 +3599,8 @@
       "sha256": "f1190d4d21879fb37995fbe575d697ccd17c78653cdb7c0ffeacb854d59e0d82",
       "kind": "svg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -2755,6 +3635,31 @@
         "summercamp_2026.html:src",
         "tech_recruit.html:src"
       ],
+      "published_reference_evidence": [
+        "alumni.html:src",
+        "blank.html:src",
+        "collab.html:src",
+        "contact.html:src",
+        "download.html:src",
+        "hideto.html:src",
+        "index.html:src",
+        "intern_recruit.html:src",
+        "internexp.html:src",
+        "jikkenigaku.html:src",
+        "jikkenigaku2.html:src",
+        "joinus.html:src",
+        "news.html:src",
+        "nzmyachie.html:src",
+        "pd_recruit.html:src",
+        "people.html:src",
+        "publications.html:src",
+        "research.html:src",
+        "resources.html:src",
+        "software.html:src",
+        "summercamp_2026.html:src",
+        "tech_recruit.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -2768,6 +3673,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "publications.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -2781,6 +3690,10 @@
         "source:dynamic-png-stem",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "index.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -2790,6 +3703,8 @@
       "sha256": "849791ab2b5fb933e24d4ebf09e876d08f56238f7025d109ef3140de5d31fdb9",
       "kind": "svg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -2799,6 +3714,8 @@
       "sha256": "c86c85564f2c957ba5171c5c5a8f7bce4c762cbae47685b1bdd5551827436dcf",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -2808,6 +3725,8 @@
       "sha256": "f5efd68489c56ea7db43a0a21fe9b68cbbffe16d6682f5ef21b3f89b6c2e9c7a",
       "kind": "svg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -2821,6 +3740,10 @@
         "source:dynamic-png-stem",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "index.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -2830,6 +3753,8 @@
       "sha256": "de39369507801cafd12e582a27dfcaf660aebab613fb82bf28897ded88c1fd19",
       "kind": "svg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -2839,6 +3764,8 @@
       "sha256": "4fa6b7470adf984abbd73038cf85d2ecf85db7fb0eea3ee9ceffec61ea5bea69",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -2848,6 +3775,8 @@
       "sha256": "7376b6f06666bc6081e07c97099de19b1fad07baa887c55d0e88e767db793987",
       "kind": "svg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -2860,6 +3789,10 @@
         "index.html:src",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "index.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -2869,6 +3802,8 @@
       "sha256": "fdd98c573d2360df0603b9dde5bcf4fcde4b510a7f1cf8dd45fddbe9cde6493e",
       "kind": "svg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -2878,6 +3813,8 @@
       "sha256": "4004a5742a96d1aafb748fea95dc54bf151eab92fbba715749a0d386dbcd0424",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -2887,6 +3824,8 @@
       "sha256": "0503c7092950d29803ccc33f8ae62bde41df1ba87ca24efe9f9bfb362464ffb3",
       "kind": "svg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -2899,6 +3838,10 @@
         "index.html:src",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "index.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -2908,6 +3851,8 @@
       "sha256": "57b7995163375ed3b8131472e18730c9c4c4a760fc861b046f66726e3e7e789e",
       "kind": "svg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -2917,6 +3862,8 @@
       "sha256": "07070d92cc78aacac4733f6d7e1461f8125ca6eae4bd79b70d08d4d21c777fcb",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -2926,6 +3873,8 @@
       "sha256": "72063716e2321c8c8df62465f9eb0b6c9285bf41df1ddf20af3b86085cc1e21f",
       "kind": "svg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -2939,6 +3888,10 @@
         "source:dynamic-png-stem",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "index.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -2948,6 +3901,8 @@
       "sha256": "da5767c7f3ea38e2d09b9d0304bedc818bb6de0a71bfcab7849ac372c37611ba",
       "kind": "svg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -2957,6 +3912,8 @@
       "sha256": "10581e38aa575ecedb5cb86b8a6a4588c64727cc43af6a363369315c6c2008b0",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -2966,6 +3923,8 @@
       "sha256": "89541cab8ab9d121f9ce41f9d450961513b5e39ea5f29d10df188785a3080235",
       "kind": "svg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -2979,6 +3938,10 @@
         "source:dynamic-png-stem",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "index.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -2988,6 +3951,8 @@
       "sha256": "e3226300d62680cd05ddd12938af274e255a6752e74d4b71086566540bbecf06",
       "kind": "svg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -2997,6 +3962,8 @@
       "sha256": "622e6d8a286ca79598d3dfb400d227d1666d32748037b844f8dede0d08c023e5",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -3006,6 +3973,8 @@
       "sha256": "5c88d9dcc5e4fee0d527d3e7d79c2ee24808996fd8d9403153d631b7b30b0124",
       "kind": "unknown",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": true
     },
@@ -3015,6 +3984,8 @@
       "sha256": "94fc08066308baa3a7a006504d7505773d88570283719373b46a756e910528c6",
       "kind": "svg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -3028,6 +3999,10 @@
         "source:dynamic-png-stem",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "index.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -3037,6 +4012,8 @@
       "sha256": "a171292466e3ace1c11cce2db41c050a57aeeb37d9b3985dfeddc363d2a4a904",
       "kind": "svg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -3046,6 +4023,8 @@
       "sha256": "0f35d604229a7304e899a9a9523c9f01706cbc35d3e25422c2c26711cbd9530a",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -3055,6 +4034,8 @@
       "sha256": "2f20084235bb315499ccb610120811ca86b83513c42f237e12a54abad47518b7",
       "kind": "svg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -3066,6 +4047,8 @@
       "reference_evidence": [
         "sheet:filename-match"
       ],
+      "published_reference_evidence": [],
+      "reference_class": "source-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -3075,6 +4058,8 @@
       "sha256": "6659c017fbfcaa87c0604d36a4fca76e130af2f4a2f917368e2ee68ab23d5c97",
       "kind": "svg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -3086,6 +4071,8 @@
       "reference_evidence": [
         "sheet:filename-match"
       ],
+      "published_reference_evidence": [],
+      "reference_class": "source-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -3097,6 +4084,8 @@
       "reference_evidence": [
         "sheet:filename-match"
       ],
+      "published_reference_evidence": [],
+      "reference_class": "source-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -3108,6 +4097,8 @@
       "reference_evidence": [
         "sheet:filename-match"
       ],
+      "published_reference_evidence": [],
+      "reference_class": "source-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -3117,6 +4108,8 @@
       "sha256": "db4c42d569193b3b0ce299c28afb22ce93060b0612d31854edfbd3828049257c",
       "kind": "svg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -3126,6 +4119,8 @@
       "sha256": "939453ab903b462479cef0e1f2d509b7f2772e7a5a1f0386c6e1f91964670ee0",
       "kind": "svg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -3135,6 +4130,8 @@
       "sha256": "a99bec1189ffa75406fb3d9f9ded52cf205cd1b361bdbe2475de95f37e24ea53",
       "kind": "svg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -3146,6 +4143,8 @@
       "reference_evidence": [
         "sheet:filename-match"
       ],
+      "published_reference_evidence": [],
+      "reference_class": "source-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -3155,6 +4154,8 @@
       "sha256": "be1a3b66819f71381380ffeaa090e669da0c886fbdca4fabd500df506d86a45b",
       "kind": "svg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -3164,6 +4165,8 @@
       "sha256": "be1a3b66819f71381380ffeaa090e669da0c886fbdca4fabd500df506d86a45b",
       "kind": "svg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -3175,6 +4178,8 @@
       "reference_evidence": [
         "sheet:filename-match"
       ],
+      "published_reference_evidence": [],
+      "reference_class": "source-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -3186,6 +4191,8 @@
       "reference_evidence": [
         "sheet:filename-match"
       ],
+      "published_reference_evidence": [],
+      "reference_class": "source-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -3195,6 +4202,8 @@
       "sha256": "1257df4a4053487df6bc04aa67dfed80f541ad859ab2f90490179943ac135e6d",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -3206,6 +4215,8 @@
       "reference_evidence": [
         "sheet:filename-match"
       ],
+      "published_reference_evidence": [],
+      "reference_class": "source-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -3217,6 +4228,8 @@
       "reference_evidence": [
         "source:filename-match"
       ],
+      "published_reference_evidence": [],
+      "reference_class": "source-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -3226,6 +4239,8 @@
       "sha256": "5d55d8dfa708e8791c137351b4929409457f967d3b636c819558e7a91f1c9342",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -3241,6 +4256,12 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "alumni.html:src",
+        "news.html:src",
+        "people.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -3250,6 +4271,8 @@
       "sha256": "fa4ce9e82878d8a1477ba3b4b44a2e7114ac02594adff131e617f1730d9c1c49",
       "kind": "jpeg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -3259,6 +4282,8 @@
       "sha256": "e81f6fde079e124123fffac702bc532ee55e78e4706cff51f9769559652d9743",
       "kind": "jpeg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -3272,6 +4297,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "jikkenigaku2.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -3281,6 +4310,8 @@
       "sha256": "b4d6cff6c67a2e470f4f107de67954263ea8666ffc9eda6d8683ebf826bf947a",
       "kind": "jpeg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -3294,6 +4325,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "joinus.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -3303,6 +4338,8 @@
       "sha256": "3e81ea09f73b78b3cf469856b180dbdc66f88c038a2bcaaee44315e2a9116a85",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -3312,6 +4349,8 @@
       "sha256": "5479e1cc9c91f00db20991939cde293098f4c765f3b22627e09a5412f5b8cad6",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -3325,6 +4364,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "people.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -3334,6 +4377,8 @@
       "sha256": "47dccb45615b963d0e1242ca080fed164f7d109b6c4682e66e85fd41ea048c5a",
       "kind": "jpeg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -3343,6 +4388,8 @@
       "sha256": "15ccd70aa6b64064250f7822a709824f593f3b3c88f5adccefcc4ae233d81e6b",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -3352,6 +4399,8 @@
       "sha256": "956ef87a1821f3b053c7a104d6e05e276fd130fe8e9b5f64b678f83108b4910f",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -3361,6 +4410,8 @@
       "sha256": "9555bb57df36ddfa468086149fcff9961b94e6720a54b50e69ffb29910ea1bae",
       "kind": "jpeg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -3374,6 +4425,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "people.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -3386,6 +4441,10 @@
         "publications.html:src",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "publications.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -3399,6 +4458,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "news.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -3408,6 +4471,8 @@
       "sha256": "5b87126e5623a495b9c8d6277a42fd382881c56b3567850f454cfa7ac472c6a0",
       "kind": "jpeg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -3417,6 +4482,8 @@
       "sha256": "1939547f452c656641988802d17162506a480ef55abebc7d37c4ca220a92f380",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -3426,6 +4493,8 @@
       "sha256": "e656ee3a4257eeb8e5edb2a00f27070ad5f332eecd697547afdc5c25cdb32d13",
       "kind": "svg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -3435,6 +4504,8 @@
       "sha256": "64706bc8491022a35700e3db02f88791ce6060bc5254a5afa860b23e0751a13b",
       "kind": "svg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -3470,6 +4541,32 @@
         "tech_recruit.html:src",
         "yuka.html:src"
       ],
+      "published_reference_evidence": [
+        "alumni.html:src",
+        "blank.html:src",
+        "collab.html:src",
+        "contact.html:src",
+        "download.html:src",
+        "hideto.html:src",
+        "index.html:src",
+        "intern_recruit.html:src",
+        "internexp.html:src",
+        "jikkenigaku.html:src",
+        "jikkenigaku2.html:src",
+        "joinus.html:src",
+        "news.html:src",
+        "nzmyachie.html:src",
+        "pd_recruit.html:src",
+        "people.html:src",
+        "publications.html:src",
+        "research.html:src",
+        "resources.html:src",
+        "software.html:src",
+        "summercamp_2026.html:src",
+        "tech_recruit.html:src",
+        "yuka.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -3481,6 +4578,8 @@
       "reference_evidence": [
         "sheet:filename-match"
       ],
+      "published_reference_evidence": [],
+      "reference_class": "source-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -3495,6 +4594,11 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "intern_recruit.html:src",
+        "internexp.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -3514,6 +4618,17 @@
         "tech_recruit.html:src",
         "yuka.html:src"
       ],
+      "published_reference_evidence": [
+        "alumni.html:src",
+        "collab.html:src",
+        "hideto.html:src",
+        "intern_recruit.html:src",
+        "nzmyachie.html:src",
+        "pd_recruit.html:src",
+        "tech_recruit.html:src",
+        "yuka.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -3525,6 +4640,8 @@
       "reference_evidence": [
         "source:filename-match"
       ],
+      "published_reference_evidence": [],
+      "reference_class": "source-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -3534,6 +4651,8 @@
       "sha256": "f25ac392d773c89a93aba434ff8be7237f7c4e2e023201ec08847c4abb9af81e",
       "kind": "jpeg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -3543,6 +4662,8 @@
       "sha256": "035d4103e5693867a1baf61cc89ae3a3e06e155962e8a84237d5f2279a5e8f87",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -3552,6 +4673,8 @@
       "sha256": "7da4da21c8d8459b25f95f78f9ff598df8ab180b768f7e39170cf3a74cf6abd0",
       "kind": "jpeg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -3561,6 +4684,8 @@
       "sha256": "84eb06d7222bd85807f63db6041a0954bb0abe59bd4af7927541cb1b28b07e3f",
       "kind": "jpeg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -3570,6 +4695,8 @@
       "sha256": "51b1c40e00e166f073c9d5b1c98804cebee1f351b7630b7fa57be0fc365498e6",
       "kind": "jpeg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -3579,6 +4706,8 @@
       "sha256": "ca9737456e3c1242518457eef2bc8eedb9a64de0083d4a407f613749b4c21dcf",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -3588,6 +4717,8 @@
       "sha256": "aeac6a2edec4ea76e925f957bbc7f8f31b1336b6e319551880ae15ed8fd87ab4",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -3597,6 +4728,8 @@
       "sha256": "43756efb98b1ced63fbe454cfc2191bcde0e01a9ea79940b872a52906a6ba592",
       "kind": "svg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -3609,6 +4742,8 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [],
+      "reference_class": "source-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -3618,6 +4753,8 @@
       "sha256": "991d0f56dc6db0b63b7e61e1801b90be078ea5f276923b65fe485db36ea6e804",
       "kind": "svg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -3627,6 +4764,8 @@
       "sha256": "3bb3ab0b6e5051ad90e6797e490275cd082d8b591536a031a8519bc94bad4381",
       "kind": "svg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -3636,6 +4775,8 @@
       "sha256": "c7eb4b398a9231639c08ad1dc8a6691e8bdf2d9efd339cbb3099cfc7af3dbf39",
       "kind": "svg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -3648,6 +4789,8 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [],
+      "reference_class": "source-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -3683,6 +4826,32 @@
         "tech_recruit.html:src",
         "yuka.html:src"
       ],
+      "published_reference_evidence": [
+        "alumni.html:src",
+        "blank.html:src",
+        "collab.html:src",
+        "contact.html:src",
+        "download.html:src",
+        "hideto.html:src",
+        "index.html:src",
+        "intern_recruit.html:src",
+        "internexp.html:src",
+        "jikkenigaku.html:src",
+        "jikkenigaku2.html:src",
+        "joinus.html:src",
+        "news.html:src",
+        "nzmyachie.html:src",
+        "pd_recruit.html:src",
+        "people.html:src",
+        "publications.html:src",
+        "research.html:src",
+        "resources.html:src",
+        "software.html:src",
+        "summercamp_2026.html:src",
+        "tech_recruit.html:src",
+        "yuka.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -3692,6 +4861,8 @@
       "sha256": "786597d96249851d7aab2aa8e05464d90db0b6b13e5152a5b5e95cd0c6a2335c",
       "kind": "svg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -3701,6 +4872,8 @@
       "sha256": "cd58e6d37ad3c9b18d339c4822ef9e65bb7d8e6cb9badbd8c816705948ac1883",
       "kind": "svg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -3710,6 +4883,8 @@
       "sha256": "607c34e6455e3d1d435b8b56f3b340a7bcbee32455906f82c16e9e1471aa088d",
       "kind": "svg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -3719,6 +4894,8 @@
       "sha256": "5e9ec5ea91943572390013f30c52db65f72a6bb488c7ea90c78c5a1bd7e76bda",
       "kind": "svg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -3728,6 +4905,8 @@
       "sha256": "8b8e1ca0abfa82130608cf7bd436cf63b27185ac25b5bcab6c969ba1e2dee004",
       "kind": "svg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -3763,6 +4942,32 @@
         "tech_recruit.html:src",
         "yuka.html:src"
       ],
+      "published_reference_evidence": [
+        "alumni.html:src",
+        "blank.html:src",
+        "collab.html:src",
+        "contact.html:src",
+        "download.html:src",
+        "hideto.html:src",
+        "index.html:src",
+        "intern_recruit.html:src",
+        "internexp.html:src",
+        "jikkenigaku.html:src",
+        "jikkenigaku2.html:src",
+        "joinus.html:src",
+        "news.html:src",
+        "nzmyachie.html:src",
+        "pd_recruit.html:src",
+        "people.html:src",
+        "publications.html:src",
+        "research.html:src",
+        "resources.html:src",
+        "software.html:src",
+        "summercamp_2026.html:src",
+        "tech_recruit.html:src",
+        "yuka.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -3798,6 +5003,32 @@
         "tech_recruit.html:src",
         "yuka.html:src"
       ],
+      "published_reference_evidence": [
+        "alumni.html:src",
+        "blank.html:src",
+        "collab.html:src",
+        "contact.html:src",
+        "download.html:src",
+        "hideto.html:src",
+        "index.html:src",
+        "intern_recruit.html:src",
+        "internexp.html:src",
+        "jikkenigaku.html:src",
+        "jikkenigaku2.html:src",
+        "joinus.html:src",
+        "news.html:src",
+        "nzmyachie.html:src",
+        "pd_recruit.html:src",
+        "people.html:src",
+        "publications.html:src",
+        "research.html:src",
+        "resources.html:src",
+        "software.html:src",
+        "summercamp_2026.html:src",
+        "tech_recruit.html:src",
+        "yuka.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -3807,6 +5038,8 @@
       "sha256": "19b72bab52223adaea8111f67d5da292bc3f15f6f4cf30a8faa7e1f9cbe59361",
       "kind": "svg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -3816,6 +5049,8 @@
       "sha256": "b3f6d2739e28bbae5966472835a942da3ff89f6bdd0fb30564e44a2afea98b1f",
       "kind": "svg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -3825,6 +5060,8 @@
       "sha256": "d2a752a59d91e41d48e77d154320ced470e9ff411ede010b9d35c6c1d9a352f8",
       "kind": "svg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -3834,6 +5071,8 @@
       "sha256": "657e5694c120773ebcb8792dd0e9bdb1a2730cf9c6b4a8cbbf5663bbcf7017eb",
       "kind": "svg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -3846,6 +5085,10 @@
         "source:filename-match",
         "yuka.html:src"
       ],
+      "published_reference_evidence": [
+        "yuka.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -3881,6 +5124,32 @@
         "tech_recruit.html:src",
         "yuka.html:src"
       ],
+      "published_reference_evidence": [
+        "alumni.html:src",
+        "blank.html:src",
+        "collab.html:src",
+        "contact.html:src",
+        "download.html:src",
+        "hideto.html:src",
+        "index.html:src",
+        "intern_recruit.html:src",
+        "internexp.html:src",
+        "jikkenigaku.html:src",
+        "jikkenigaku2.html:src",
+        "joinus.html:src",
+        "news.html:src",
+        "nzmyachie.html:src",
+        "pd_recruit.html:src",
+        "people.html:src",
+        "publications.html:src",
+        "research.html:src",
+        "resources.html:src",
+        "software.html:src",
+        "summercamp_2026.html:src",
+        "tech_recruit.html:src",
+        "yuka.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -3890,6 +5159,8 @@
       "sha256": "3834d6a536bd4bea4505837cf4a113b6626f6ba1087818bc6eb165a3edcff03b",
       "kind": "svg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -3899,6 +5170,8 @@
       "sha256": "f4113d0ce84791797a921578f477de77b64859c0ecaff9f807e20415155cc8a6",
       "kind": "svg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -3908,6 +5181,8 @@
       "sha256": "7bf080d7ee023d8b25095dba9e008a963b8ce69f726e512a0106de17e6184f7a",
       "kind": "svg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -3943,6 +5218,32 @@
         "tech_recruit.html:src",
         "yuka.html:src"
       ],
+      "published_reference_evidence": [
+        "alumni.html:src",
+        "blank.html:src",
+        "collab.html:src",
+        "contact.html:src",
+        "download.html:src",
+        "hideto.html:src",
+        "index.html:src",
+        "intern_recruit.html:src",
+        "internexp.html:src",
+        "jikkenigaku.html:src",
+        "jikkenigaku2.html:src",
+        "joinus.html:src",
+        "news.html:src",
+        "nzmyachie.html:src",
+        "pd_recruit.html:src",
+        "people.html:src",
+        "publications.html:src",
+        "research.html:src",
+        "resources.html:src",
+        "software.html:src",
+        "summercamp_2026.html:src",
+        "tech_recruit.html:src",
+        "yuka.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -3952,6 +5253,8 @@
       "sha256": "f651854ea83550bbc8e003fcc046daf8448039d444fcdc60502edacceba6be40",
       "kind": "svg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -3987,6 +5290,32 @@
         "tech_recruit.html:src",
         "yuka.html:src"
       ],
+      "published_reference_evidence": [
+        "alumni.html:src",
+        "blank.html:src",
+        "collab.html:src",
+        "contact.html:src",
+        "download.html:src",
+        "hideto.html:src",
+        "index.html:src",
+        "intern_recruit.html:src",
+        "internexp.html:src",
+        "jikkenigaku.html:src",
+        "jikkenigaku2.html:src",
+        "joinus.html:src",
+        "news.html:src",
+        "nzmyachie.html:src",
+        "pd_recruit.html:src",
+        "people.html:src",
+        "publications.html:src",
+        "research.html:src",
+        "resources.html:src",
+        "software.html:src",
+        "summercamp_2026.html:src",
+        "tech_recruit.html:src",
+        "yuka.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -4022,6 +5351,32 @@
         "tech_recruit.html:src",
         "yuka.html:src"
       ],
+      "published_reference_evidence": [
+        "alumni.html:src",
+        "blank.html:src",
+        "collab.html:src",
+        "contact.html:src",
+        "download.html:src",
+        "hideto.html:src",
+        "index.html:src",
+        "intern_recruit.html:src",
+        "internexp.html:src",
+        "jikkenigaku.html:src",
+        "jikkenigaku2.html:src",
+        "joinus.html:src",
+        "news.html:src",
+        "nzmyachie.html:src",
+        "pd_recruit.html:src",
+        "people.html:src",
+        "publications.html:src",
+        "research.html:src",
+        "resources.html:src",
+        "software.html:src",
+        "summercamp_2026.html:src",
+        "tech_recruit.html:src",
+        "yuka.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -4031,6 +5386,8 @@
       "sha256": "4e04da7dca1dd29c93543e419c5ed75e74415b75194defca4591b3748a12ac66",
       "kind": "svg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4045,6 +5402,11 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "intern_recruit.html:src",
+        "internexp.html:src"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -4054,6 +5416,8 @@
       "sha256": "7da4da21c8d8459b25f95f78f9ff598df8ab180b768f7e39170cf3a74cf6abd0",
       "kind": "jpeg",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4063,6 +5427,8 @@
       "sha256": "d9cad9b66958b2d6a3e43303aa20f0c02babb8f8ae7ff9c557adaca272524e2c",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4072,6 +5438,8 @@
       "sha256": "902397295706dda5d50f86e946edb3232203e98faa37b7833e2830fb1c0a40a1",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4081,6 +5449,8 @@
       "sha256": "9b75308f2d127a24e8f76389a6f31e42befc8146c28a2e9707cbc00ff57607fe",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4090,6 +5460,8 @@
       "sha256": "13782e5f8ef0f8d63119ecc3755ffefd1bb923da70b4c5dc1583514b723c00d2",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4099,6 +5471,8 @@
       "sha256": "39cc5fbe476433278445a34f15661826645987def4d02a1a081aa4913d6b36dc",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4108,6 +5482,8 @@
       "sha256": "7cd176325e3cfd59749f0f9a7f37c03690d126cd12f95941d5ce9f75c7ed2b21",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4117,6 +5493,8 @@
       "sha256": "f09c268f22fa89ede3bd399e069ecf7386b7d7e1904075d22f86ee125dda3843",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4126,6 +5504,8 @@
       "sha256": "2cf22685dea0cbdebc3f97274605ac7b242edabbe450600ccdbd5cab7543341b",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4135,6 +5515,8 @@
       "sha256": "9bd73a5b91def3a12d4397156da234ef1a8e68d768d673ec9a02010d28c9a41f",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4144,6 +5526,8 @@
       "sha256": "5a28dca1188b2be87fc3dfa6ff45dd472da25022745c53d38c89604722f6576b",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4153,6 +5537,8 @@
       "sha256": "ad2d662caa29d5410043bdae77b519d52e4c0a388edb52704fa1aa56eebef0b7",
       "kind": "pdf",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4162,8 +5548,13 @@
       "sha256": "102f2d0949e7b8767415f4ed341587bfefa7ac235fca9315bec56b4cf545f3f9",
       "kind": "png",
       "reference_evidence": [
+        "js/common.js:dynamic-png-stem",
         "source:dynamic-png-stem"
       ],
+      "published_reference_evidence": [
+        "js/common.js:dynamic-png-stem"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -4173,6 +5564,8 @@
       "sha256": "45a5ee2efb0bd34e3f21bcdd639b30693d0266f3794f5fe97ad81dd5286fe2ed",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4182,6 +5575,8 @@
       "sha256": "1e09275cff68aa540ae51d65f7847a0b1a104c0fda4c63fe1866dbb464c62d0b",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4191,6 +5586,8 @@
       "sha256": "87996fd9eaf51a5e9b688921ee4f9bb1a102735573e47a9f9d34d6171d7e47dd",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4202,6 +5599,8 @@
       "reference_evidence": [
         "source:dynamic-png-stem"
       ],
+      "published_reference_evidence": [],
+      "reference_class": "source-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -4211,6 +5610,8 @@
       "sha256": "142efb5e9582015456830c201ec8808f3c180ee418264033a8bae14f638a0f2d",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4220,6 +5621,8 @@
       "sha256": "3368582931d8c9640fde537df3f7af4aeed919c0517b0b2b6a1922be7289dbe2",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4229,6 +5632,8 @@
       "sha256": "5b251809aee1235ffd16a1d34e9ed5a64f5781b024dc8f0ab936dada160824f7",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4238,6 +5643,8 @@
       "sha256": "9b403ed99a5cd90e423855c6e63fc5e5820c35bd5e5b05da852a9426dbb74b7c",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4247,6 +5654,8 @@
       "sha256": "b0c3d736a36c083024f8d7593a0a2b884cc996abbcb6b6d86f8f9e100838fbbd",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4258,6 +5667,8 @@
       "reference_evidence": [
         "source:dynamic-png-stem"
       ],
+      "published_reference_evidence": [],
+      "reference_class": "source-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -4267,6 +5678,8 @@
       "sha256": "b80f44f799cea94857c66a33df5e468beaec8e4173492ba7a2204f964b653b06",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4276,6 +5689,8 @@
       "sha256": "70a2e777e105324b3f02b7e313584ac25082a8b6d757fdfbbf579190f61ff5d3",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4285,6 +5700,8 @@
       "sha256": "5dd86a6626ca0a996b6e83a822a43fead6fd7687e6ee313a19b345df84ab55e3",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4294,6 +5711,8 @@
       "sha256": "19b9a71ca0a98caef508b7ab209bf7d1c18f285dda1b4bef43028fa0534fef4f",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4303,6 +5722,8 @@
       "sha256": "e5848f670e0fdde85af769fe897bf99c50a7cb93a92eecd4b29053b7b9977075",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4312,6 +5733,8 @@
       "sha256": "bfb8292e737430347f5f3651011415d8a8923ff551f8f01af706cb9db934f948",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4321,6 +5744,8 @@
       "sha256": "b3aacde038573a6208aa563fcd4dd56a477d70c31abf9a0f8c03dc6a4b4a3ae0",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4330,6 +5755,8 @@
       "sha256": "53edc5438b15814c7894328c6c829a8a8a57111a848bbddca230e91625ae628a",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4339,6 +5766,8 @@
       "sha256": "cddb788604ebcd7c1865500dd8220007e34dc588780ef92213e1c39c543092e0",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4348,6 +5777,8 @@
       "sha256": "4125f510dbccbaa82054a43c912837f343be564331ba9cc5e8fb25b6f3a8aa8b",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4357,6 +5788,8 @@
       "sha256": "d3f8342b6d3be761dc9e3a9ff9c171b65d78283a9e78ac57a65c2a62d5908169",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4366,6 +5799,8 @@
       "sha256": "d99f94f00166c1988b62af01cdecb421e715cbeffab72c3be304d080b72a81db",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4375,6 +5810,8 @@
       "sha256": "f629d46b9abad5fdbbb610bec2197c61af37c76b534520ef1ccd64603717b0f8",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4384,6 +5821,8 @@
       "sha256": "4fe654a0ea0438f6e3a4a8d2c9c55842731f65bfa2eca7e991c1caab0a38adf4",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4393,6 +5832,8 @@
       "sha256": "e2d218e2fae25a192341bebeb6e6132e505059ebe5780f86459806bf996dea7e",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4402,6 +5843,8 @@
       "sha256": "1f30b709cc25b6439aa7dc82e79332d75ac19bfb86e396d3d202f02167700650",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4411,6 +5854,8 @@
       "sha256": "8dd6cefdeed1b1e699b14f6cd598c96e0b787c1c0e1d796f9a4973efaf5676cf",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4422,6 +5867,8 @@
       "reference_evidence": [
         "source:dynamic-png-stem"
       ],
+      "published_reference_evidence": [],
+      "reference_class": "source-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -4431,6 +5878,8 @@
       "sha256": "20606a2c87de9894b1821de9a6f9809da74d47d447ab2f2d5b2953dbd5f6db83",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4440,6 +5889,8 @@
       "sha256": "3111240812f9fb8582fce62c0ece41054682851f8f86caed50a9a4b42d909320",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4449,6 +5900,8 @@
       "sha256": "c3f8670992720b2a1e4870e45ec4655e07747db57bd70a4462be40012bf89be2",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4458,6 +5911,8 @@
       "sha256": "672fb3705369340532348938eb0c2c5aa3cb8324145901d2608f0d3615358e93",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4467,6 +5922,8 @@
       "sha256": "4a8bef7a0f5f3895550674b1ee694aaa2aff293b13788b8afb255da66fcb849c",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4476,6 +5933,8 @@
       "sha256": "bbc6e61c81e1098ef2ca7acd6fcf5f478bc86856e39956a57d06891616328b32",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4485,6 +5944,8 @@
       "sha256": "c289fbd01c213d21100ccae2999b7b6d54ce5486bf99232a80d33be204bb60fd",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4494,6 +5955,8 @@
       "sha256": "56563b980d4985c4a19b22684731ee70d91f3961c36ffbc4413d1674c58b0528",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4503,6 +5966,8 @@
       "sha256": "e22deaeb0a18b4625aee93f682009fa601fb6c9df7d86d5089fe98a63026c032",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4512,6 +5977,8 @@
       "sha256": "a5bbf8e32e1077c3c7fd3aa3be04489ae93150d5861351f9c458b870972deae2",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4521,6 +5988,8 @@
       "sha256": "32489ec1ea4e125b3dbd7d76352981781ea25a9b1737c613a4f4f4277974c2dd",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4530,6 +5999,8 @@
       "sha256": "2ef85c9b8c27acd65c06d2ba52dfb553f3f31eb698acebbc79b4bc4fd0f84ec7",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4539,6 +6010,8 @@
       "sha256": "5ab3e140aec89bb32a09a54a013e0381693df7c20b461cb9768114ca02825b2b",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4548,6 +6021,8 @@
       "sha256": "b3554f44088fea36d1f44700f16ccbd2d1c5701c5e0e744fdfe51eacece3d193",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4557,6 +6032,8 @@
       "sha256": "b8e3b1aac76b7c1956e8ac928e0a745a701f64db23105403301b847e623a828e",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4566,6 +6043,8 @@
       "sha256": "61bcb6ec902508f34a1b702cd5b70997b3e44526e2521003bbb9ae4f53c2ec0f",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4575,6 +6054,8 @@
       "sha256": "fbd7be9b39d4abaf30804bc488c9911684c4ab32a2bde38aeb065b6c73a62800",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4584,6 +6065,8 @@
       "sha256": "7e13476c9681d4fa866b450225979b9ce85c81c8cbb6893d6d280bbac75ff23a",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4593,6 +6076,8 @@
       "sha256": "75d572e80c1ed1b9dddfdf4535ea33f1fef57639dd7bfa1ad7667c205f873f38",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4602,6 +6087,8 @@
       "sha256": "9bd73a5b91def3a12d4397156da234ef1a8e68d768d673ec9a02010d28c9a41f",
       "kind": "png",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4615,6 +6102,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "publications.html:href"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -4628,6 +6119,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "publications.html:href"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -4641,6 +6136,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "publications.html:href"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -4650,6 +6149,8 @@
       "sha256": "4e9c2cabb1b4f7797d0fcab50d2296ae6b27b7d7bee66210ed38c610f830c6c1",
       "kind": "pdf",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4659,6 +6160,8 @@
       "sha256": "3ef21587b5999a6d8ed311120d115f94db0da0cc5318eb1ff130f385366df7e7",
       "kind": "pdf",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4672,6 +6175,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "research.html:href"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -4681,6 +6188,8 @@
       "sha256": "7b8dcfefef388291ab96c61583b818aeacbe361aef23a0d44e7f3020c1ebae64",
       "kind": "pdf",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4690,6 +6199,8 @@
       "sha256": "332f8ac87a580fa65ec90778f31763195945ec984a4680623007408db2effe45",
       "kind": "pdf",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4703,6 +6214,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "publications.html:href"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -4716,6 +6231,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "publications.html:href"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -4725,6 +6244,8 @@
       "sha256": "c49246f8996c8d47949573b837ca73bd764bd7f0852193d0c181f86b4994dc7b",
       "kind": "pdf",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4738,6 +6259,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "publications.html:href"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -4747,6 +6272,8 @@
       "sha256": "0bd1fec8cc692eef6682d7b6b2e6ba8fd3a8303d979ffa08161f2452a5f021d0",
       "kind": "pdf",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4756,6 +6283,8 @@
       "sha256": "5c2dd8d00b2fecef01a260d5ce1e61e8909341fea9126dce1cd4c967890037bc",
       "kind": "pdf",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4770,6 +6299,11 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "download.html:href",
+        "resources.html:href"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -4783,6 +6317,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "people.html:href"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -4796,6 +6334,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "publications.html:href"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -4809,6 +6351,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "publications.html:href"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -4822,6 +6368,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "publications.html:href"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -4834,6 +6384,10 @@
         "publications.html:href",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "publications.html:href"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -4843,6 +6397,8 @@
       "sha256": "2be6b17e9ae690437b255433d165f303dc2d86a870e0a9c5fc04ec683c6f2548",
       "kind": "pdf",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4858,6 +6414,12 @@
         "source:filename-match",
         "yuka.html:href"
       ],
+      "published_reference_evidence": [
+        "hideto.html:href",
+        "people.html:href",
+        "yuka.html:href"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -4872,6 +6434,11 @@
         "source:filename-match",
         "yuka.html:href"
       ],
+      "published_reference_evidence": [
+        "hideto.html:href",
+        "yuka.html:href"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -4885,6 +6452,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "publications.html:href"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -4898,6 +6469,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "publications.html:href"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -4911,6 +6486,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "publications.html:href"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -4924,6 +6503,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "publications.html:href"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -4938,6 +6521,11 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "publications.html:href",
+        "research.html:href"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -4947,6 +6535,8 @@
       "sha256": "e40baddccbfe269d7951f74fdba64810215d1ec87e00c26269ba19c4945a7c65",
       "kind": "pdf",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -4960,6 +6550,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "publications.html:href"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -4973,6 +6567,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "publications.html:href"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -4986,6 +6584,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "publications.html:href"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -4999,6 +6601,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "publications.html:href"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -5012,6 +6618,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "publications.html:href"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -5026,6 +6636,11 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "publications.html:href",
+        "research.html:href"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -5039,6 +6654,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "publications.html:href"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -5052,6 +6671,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "publications.html:href"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -5065,6 +6688,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "publications.html:href"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -5078,6 +6705,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "publications.html:href"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -5091,6 +6722,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "publications.html:href"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -5104,6 +6739,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "publications.html:href"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -5113,6 +6752,8 @@
       "sha256": "57439f065325277311324309f983bb2f415d2f794282f84f844cd5ffd4a0e4c3",
       "kind": "pdf",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -5122,6 +6763,8 @@
       "sha256": "813b07a66a74cae2bc2c9bff5bed3939c040d1d0091708859dd0886a19bb8d56",
       "kind": "pdf",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -5135,6 +6778,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "people.html:href"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -5149,6 +6796,11 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "jikkenigaku.html:href",
+        "publications.html:href"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -5163,6 +6815,11 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "jikkenigaku.html:href",
+        "publications.html:href"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -5177,6 +6834,11 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "jikkenigaku.html:href",
+        "publications.html:href"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -5190,6 +6852,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "publications.html:href"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -5201,6 +6867,8 @@
       "reference_evidence": [
         "source:filename-match"
       ],
+      "published_reference_evidence": [],
+      "reference_class": "source-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -5219,6 +6887,15 @@
         "source:filename-match",
         "yuka.html:href"
       ],
+      "published_reference_evidence": [
+        "hideto.html:href",
+        "publications.html:href",
+        "research.html:href",
+        "resources.html:href",
+        "software.html:href",
+        "yuka.html:href"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -5233,6 +6910,11 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "download.html:href",
+        "resources.html:href"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -5247,6 +6929,11 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "download.html:href",
+        "resources.html:href"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -5260,6 +6947,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "publications.html:href"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -5278,6 +6969,15 @@
         "source:filename-match",
         "yuka.html:href"
       ],
+      "published_reference_evidence": [
+        "hideto.html:href",
+        "publications.html:href",
+        "research.html:href",
+        "resources.html:href",
+        "software.html:href",
+        "yuka.html:href"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -5291,6 +6991,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "publications.html:href"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -5309,6 +7013,15 @@
         "source:filename-match",
         "yuka.html:href"
       ],
+      "published_reference_evidence": [
+        "hideto.html:href",
+        "publications.html:href",
+        "research.html:href",
+        "resources.html:href",
+        "software.html:href",
+        "yuka.html:href"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -5323,6 +7036,11 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "publications.html:href",
+        "research.html:href"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -5337,6 +7055,11 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "publications.html:href",
+        "research.html:href"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -5350,6 +7073,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "publications.html:href"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -5363,6 +7090,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "publications.html:href"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -5377,6 +7108,11 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "publications.html:href",
+        "research.html:href"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -5391,6 +7127,11 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "publications.html:href",
+        "research.html:href"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -5404,6 +7145,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "publications.html:href"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -5418,6 +7163,11 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "publications.html:href",
+        "research.html:href"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -5432,6 +7182,11 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "publications.html:href",
+        "research.html:href"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -5441,6 +7196,8 @@
       "sha256": "fc8b38507e2bf11b30d9d6ad6e11f417d71bb8ef92e1a5b9fbb1bbf4a148077f",
       "kind": "pdf",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -5454,6 +7211,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "people.html:href"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -5463,6 +7224,8 @@
       "sha256": "ebefe0ef2aa2346ed74972988abd5631e10946f28df88591711d527e9969ecd1",
       "kind": "pdf",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -5472,6 +7235,8 @@
       "sha256": "3e4942126a9eee7615fcd5f80daaed42d95fb85f8426a6dc3f231a5dbc992e2c",
       "kind": "pdf",
       "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
       "status": "review-candidate",
       "source_asset": false
     },
@@ -5486,6 +7251,11 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "nzmyachie.html:href",
+        "people.html:href"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -5499,6 +7269,10 @@
         "sheet:filename-match",
         "source:filename-match"
       ],
+      "published_reference_evidence": [
+        "publications.html:href"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     }

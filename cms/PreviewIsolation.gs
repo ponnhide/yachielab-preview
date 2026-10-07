@@ -11,7 +11,19 @@ const PDF_PATH = 'pdf';
 const GITHUB_TOKEN = PropertiesService.getScriptProperties().getProperty('PREVIEW_GITHUB_TOKEN') || '';
 
 function previewWritablePath_(path) {
-  return typeof path === 'string' && !/(?:^|\/)\.\.(?:\/|$)|[\\?%\x00-\x1f]/.test(path) && /^(?:site-settings\.json|[a-zA-Z0-9_-]+\.html|(?:img|pdf)\/[^/]+)$/.test(path);
+  return typeof path === 'string' && !/(?:^|\/)\.\.(?:\/|$)|[\\?%\x00-\x1f]/.test(path) && /^(?:(?:site-settings|asset-versions)\.json|[a-zA-Z0-9_-]+\.html|(?:img|pdf)\/[^/]+)$/.test(path);
+}
+
+function previewAssetVersionsContent_(content) {
+  var manifest;
+  try { manifest = JSON.parse(content); } catch (error) { return false; }
+  if (!manifest || typeof manifest !== 'object' || Array.isArray(manifest) || manifest.version !== 1 ||
+      Object.keys(manifest).sort().join(',') !== 'assets,version' || !manifest.assets || typeof manifest.assets !== 'object' || Array.isArray(manifest.assets)) return false;
+  var paths = Object.keys(manifest.assets);
+  return paths.length <= 10000 && paths.every(function(path) {
+    return /^(?:img|img_new|pdf)\/.+/.test(path) && !/[\\?#\x00-\x1f\x7f]/.test(path) &&
+      !/(?:^|\/)\.{1,2}(?:\/|$)|\/\/|\/$/.test(path) && typeof manifest.assets[path] === 'string' && /^[a-f0-9]{40}$/.test(manifest.assets[path]);
+  });
 }
 
 function previewSiteSettingsContent_(content) {
@@ -39,6 +51,9 @@ function previewPrepareHtml_(html) {
   // index now uses the shared runtime before its homepage-only controller.
   if (/src=["']\.\/js\/index\.js/.test(html) && !/src=["']\.\/js\/common\.js/.test(html)) {
     html = html.replace(/(<script\b[^>]*src=["']\.\/js\/index\.js["'][^>]*>)/i, '<script src="./js/common.js" defer></script>\n  $1');
+  }
+  if (/src=["']\.\/js\/common\.js/.test(html) && !/src=["']\.\/js\/assets\.js/.test(html)) {
+    html = html.replace(/(<script\b[^>]*src=["']\.\/js\/common\.js(?:\?[^"']*)?["'][^>]*>)/i, '<script src="./js/assets.js" defer></script>\n  $1');
   }
   if (!/<meta\s+name=["']robots["']/i.test(html)) {
     html = html.replace(/<head>/i, '<head>\n  <meta name="robots" content="noindex, nofollow">');
@@ -81,7 +96,7 @@ function previewFetch_(url, options) {
   } else if (method === 'post' && endpoint === 'git/trees') {
     allowed = !!payload && /^[a-f0-9]{40}$/.test(payload.base_tree) && Array.isArray(payload.tree) && payload.tree.every(function(entry) {
       return previewWritablePath_(entry.path) && entry.mode === '100644' && entry.type === 'blob' &&
-        ((typeof entry.content === 'string' && entry.sha === undefined && (/\.html$/.test(entry.path) || (entry.path === 'site-settings.json' && previewSiteSettingsContent_(entry.content)))) || (/^[a-f0-9]{40}$/.test(entry.sha) && /^(?:img|pdf)\//.test(entry.path) && entry.content === undefined));
+        ((typeof entry.content === 'string' && entry.sha === undefined && (/\.html$/.test(entry.path) || (entry.path === 'site-settings.json' && previewSiteSettingsContent_(entry.content)) || (entry.path === 'asset-versions.json' && previewAssetVersionsContent_(entry.content)))) || (/^[a-f0-9]{40}$/.test(entry.sha) && /^(?:img|pdf)\//.test(entry.path) && entry.content === undefined));
     });
     if (allowed) payload.tree.forEach(function(entry) { if (entry.content !== undefined && /\.html$/.test(entry.path)) entry.content = previewPrepareHtml_(entry.content); });
   } else if (method === 'post' && endpoint === 'git/blobs') {
@@ -96,6 +111,9 @@ function previewFetch_(url, options) {
     if (allowed && /\.html$/.test(path)) payload.content = Utilities.base64Encode(previewPrepareHtml_(Utilities.newBlob(Utilities.base64Decode(payload.content)).getDataAsString('UTF-8')), Utilities.Charset.UTF_8);
     if (allowed && path === 'site-settings.json') {
       allowed = typeof payload.content === 'string' && previewSiteSettingsContent_(Utilities.newBlob(Utilities.base64Decode(payload.content)).getDataAsString('UTF-8'));
+    }
+    if (allowed && path === 'asset-versions.json') {
+      allowed = typeof payload.content === 'string' && previewAssetVersionsContent_(Utilities.newBlob(Utilities.base64Decode(payload.content)).getDataAsString('UTF-8'));
     }
   }
   if (!allowed) throw new Error('Preview CMS: unsupported repository operation; request blocked.');

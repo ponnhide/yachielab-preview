@@ -16,16 +16,17 @@ import json
 from pathlib import Path
 import re
 import sys
-from urllib.parse import unquote, urlsplit
+from urllib.parse import quote, unquote, urlsplit
 
 PREVIEW_PREFIX = "/yachielab-preview"
 ASSET_DIRS = ("img", "img_new", "pdf")
+IMAGE_SUFFIXES = {".png", ".jpg", ".jpeg", ".gif", ".webp", ".svg", ".ico", ".heic", ".avif", ".bmp", ".tif", ".tiff"}
 SOURCE_SUFFIXES = {".html", ".css", ".js", ".gs", ".json"}
 TOKEN_PATTERN = re.compile(r"(?:gh[pousr]_[A-Za-z0-9_]{20,}|github_pat_[A-Za-z0-9_]{20,})")
 PRODUCTION_URL = re.compile(r"https?://(?:www\.)?yachie-lab\.org(?=[/\s\"'<>)]|$)", re.I)
 CSS_URL = re.compile(r"url\(\s*(['\"]?)(.*?)\1\s*\)", re.I)
 CSS_IMPORT = re.compile(r"@import\s+(['\"])(.*?)\1", re.I)
-QUOTED = re.compile(r"(['\"`])((?:\\.|(?!\1).)*?)\1", re.S)
+QUOTED = re.compile(r"(['\"`])((?:\\.|(?!\1|\\).)*?)\1", re.S)
 DYNAMIC_CODE_PATH = re.compile(r"\$(?:[1-9]|\{)")
 CONCAT_AFTER_LITERAL = re.compile(r"(?:\s|/\*[\s\S]*?\*/|//[^\n]*(?:\n|$))*\+")
 HEADER_SVG_FAMILY = tuple(
@@ -237,6 +238,20 @@ def audit(root: Path, sheet_sources: list[Path]) -> dict:
         elif fragment and target in pages and fragment not in pages[target].ids:
             warnings.append({"code": "missing-local-fragment", "source": source, "line": line, "url": value})
 
+    # Follow only local stylesheet/script links reachable from published pages.
+    # A reference in an unused stylesheet or legacy generator is still retained
+    # as evidence below, but is not labelled a published-page dependency.
+    source_names = {name for name, _, _ in sources}
+    published_sources = set(pages)
+    while True:
+        reachable = {target for source, _, target, _, _ in checked_links
+                     if source in published_sources and target in source_names
+                     and Path(target).suffix in {".css", ".js"}}
+        additions = reachable - published_sources
+        if not additions:
+            break
+        published_sources.update(additions)
+
     sheet_texts: list[str] = []
     sheet_tabs: set[str] = set()
     for path in sheet_sources:
@@ -247,7 +262,9 @@ def audit(root: Path, sheet_sources: list[Path]) -> dict:
             for tab in sheet_data["sheets"]:
                 if isinstance(tab, dict) and isinstance(tab.get("title"), str):
                     sheet_tabs.add(tab["title"])
-    static_text = "\n".join(content for _, _, content in sources)
+    # The public version map lists every asset for lookup. A listed filename
+    # does not mean a page uses that asset. Keep it in the secret scan above.
+    static_text = "\n".join(content for name, _, content in sources if name != "asset-versions.json")
     sheet_text = "\n".join(sheet_texts)
     records: list[dict] = []
     groups: dict[str, list[str]] = defaultdict(list)
@@ -262,6 +279,9 @@ def audit(root: Path, sheet_sources: list[Path]) -> dict:
             evidence.add("source:filename-match")
         if path.suffix.lower() == ".png" and re.search(r"['\"]" + re.escape(path.stem) + r"['\"]", static_text):
             evidence.add("source:dynamic-png-stem")
+            for source_name, source_path, text in sources:
+                if source_name in published_sources and source_path.suffix == ".js" and re.search(r"['\"]" + re.escape(path.stem) + r"['\"]", text):
+                    evidence.add(source_name + ":dynamic-png-stem")
         if path.name in sheet_text or name in sheet_text:
             evidence.add("sheet:filename-match")
         kind = file_kind(path)
@@ -272,7 +292,9 @@ def audit(root: Path, sheet_sources: list[Path]) -> dict:
             warnings.append({"code": "asset-type-mismatch", "source": name, "expected": expected, "detected": kind})
         if expected and kind == "html" and refs.get(name):
             errors.append({"code": "html-in-media-file", "source": name})
-        records.append({"path": name, "bytes": path.stat().st_size, "sha256": sha, "kind": kind, "reference_evidence": sorted(evidence), "status": "referenced" if evidence else "review-candidate", "source_asset": path.suffix.lower() in {".afdesign", ".heic"}})
+        published_evidence = sorted(item for item in evidence if item.rsplit(":", 1)[0] in published_sources)
+        reference_class = "published-reference" if published_evidence else "source-reference" if evidence else "review-candidate"
+        records.append({"path": name, "bytes": path.stat().st_size, "sha256": sha, "kind": kind, "reference_evidence": sorted(evidence), "published_reference_evidence": published_evidence, "reference_class": reference_class, "status": "referenced" if evidence else "review-candidate", "source_asset": path.suffix.lower() in {".afdesign", ".heic"}})
 
     duplicate_groups = [{"sha256": sha, "paths": paths, "bytes_each": (root / paths[0]).stat().st_size} for sha, paths in sorted(groups.items()) if len(paths) > 1]
     # Deduplicate repeated link failures without concealing separate sources.
@@ -293,12 +315,26 @@ def audit(root: Path, sheet_sources: list[Path]) -> dict:
             "asset_files": len(records),
             "asset_bytes": sum(r["bytes"] for r in records),
             "referenced_assets": sum(r["status"] == "referenced" for r in records),
+            "published_reference_assets": sum(r["reference_class"] == "published-reference" for r in records),
+            "source_only_reference_assets": sum(r["reference_class"] == "source-reference" for r in records),
             "review_candidates": sum(r["status"] == "review-candidate" for r in records),
             "review_candidate_bytes": sum(r["bytes"] for r in records if r["status"] == "review-candidate"),
             "duplicate_groups": len(duplicate_groups),
             "errors": len(errors),
             "warnings": len(warnings),
         },
+        "asset_directory_summary": [
+            {
+                "directory": directory,
+                "files": sum(r["path"].startswith(directory + "/") for r in records),
+                "referenced": sum(r["path"].startswith(directory + "/") and r["status"] == "referenced" for r in records),
+                "review_candidates": sum(r["path"].startswith(directory + "/") and r["status"] == "review-candidate" for r in records),
+                "image_files": sum(r["path"].startswith(directory + "/") and Path(r["path"]).suffix.lower() in IMAGE_SUFFIXES for r in records),
+                "image_referenced": sum(r["path"].startswith(directory + "/") and Path(r["path"]).suffix.lower() in IMAGE_SUFFIXES and r["status"] == "referenced" for r in records),
+                "image_review_candidates": sum(r["path"].startswith(directory + "/") and Path(r["path"]).suffix.lower() in IMAGE_SUFFIXES and r["status"] == "review-candidate" for r in records),
+            }
+            for directory in ASSET_DIRS
+        ],
         "errors": errors,
         "warnings": warnings,
         "assets": records,
@@ -314,20 +350,29 @@ def markdown_report(report: dict) -> str:
     summary = report["summary"]
     rows = [
         "# 画像・PDF の資産監査", "",
-        "このファイルは `scripts/site_audit.py --markdown docs/assets/README.md` で生成します。個別のパス・SHA-256・参照証拠・重複は [manifest.json](manifest.json) に保存しています。", "",
+        "このファイルは `scripts/site_audit.py --markdown docs/assets/README.md` で生成します。個別のパス・SHA-256・参照証拠・重複は [manifest.json](manifest.json)、用途別の全件一覧は [catalogue.md](catalogue.md) に保存しています。", "",
         "## 範囲と結果", "",
         "HTML / CSS / JS / GAS のローカルソースを確認しました。ファイル名の動的組み立てやコメントも保守的に参照証拠へ含めるため、参照数は実行時の使用数とは一致しません。外部からの直接リンクは確認できていません。", "",
         "| 項目 | 結果 |", "| --- | --- |",
         f"| 画像・PDF のファイル | {summary['asset_files']} |",
         f"| 総容量 | {summary['asset_bytes'] / 1024 / 1024:.1f} MiB |",
         f"| 参照証拠あり | {summary['referenced_assets']} |",
+        f"| 公開ページから辿れる参照 | {summary['published_reference_assets']} |",
+        f"| 入力・ソースだけの参照 | {summary['source_only_reference_assets']} |",
         f"| 参照証拠なしの確認候補 | {summary['review_candidates']} |",
         f"| 候補の容量 | {summary['review_candidate_bytes'] / 1024 / 1024:.1f} MiB |",
         f"| SHA-256 が同一のグループ | {summary['duplicate_groups']} |",
         f"| Sheet JSON の入力ファイル | {report['scope']['sheet_sources_supplied']} |",
         f"| 入力された Sheet のタブ | {report['scope']['sheet_tabs_supplied']} |",
         f"| 具体的な検査エラー | {summary['errors']} |", "",
-        "**確認候補は削除候補の確定ではありません。** Sheet、生成処理、組み立てた URL、過去の公開資料、外部リンクの確認が必要です。この整理では既存の画像・PDF を削除・移動していません。", "",
+        "**確認候補は削除候補の確定ではありません。** Sheet、生成処理、組み立てた URL、過去の公開資料、外部リンクの確認が必要です。この整理では既存の画像・PDF を削除・移動していません。公開ページから辿れる参照も、画面上での表示や利用回数を測定したものではありません。Sheet は指定された書き出し時点の内容だけを確認しています。", "",
+        "## ディレクトリ別の画像数", "",
+        "画像数は拡張子を基準とし、HEIC や形式不一致のファイルも含みます。PDF や作業元を含む全ファイル数と区別します。", "",
+        "| ディレクトリ | 全ファイル | 画像拡張子 | 画像の参照証拠あり | 画像の参照未確認 |", "| --- | ---: | ---: | ---: | ---: |",
+    ]
+    for item in report["asset_directory_summary"]:
+        rows.append(f"| `{item['directory']}/` | {item['files']} | {item['image_files']} | {item['image_referenced']} | {item['image_review_candidates']} |")
+    rows += ["",
         "## 作業元のファイル", "",
         "ブラウザ向け配信物以外の形式を個別に記録します。元の公開パスは維持しています。", "",
     ]
@@ -350,7 +395,30 @@ def markdown_report(report: dict) -> str:
         rows += [f"- `{path}`" for path in report["unused_stylesheet_candidates"]]
     else:
         rows.append("検出なし。")
-    rows += ["", "## 再生成", "", "Sheet の入力を含める場合は、非公開の JSON をリポジトリ外に置きます。セルの内容はレポートに保存しません。", "", "```sh", "python3 scripts/site_audit.py --sheet-data /private/tmp/yachielab-preview-sheet-source.json --output docs/assets/manifest.json --markdown docs/assets/README.md", "```", "", "`--check` は欠落したローカルファイル、参照中の HTML 実体画像、機密情報らしい文字列、プレビューの公開設定などの具体的エラーで失敗します。重複ファイル・参照候補・重複 ID は別途レビューできる警告です。", ""]
+    rows += ["", "## 再生成", "", "Sheet の入力を含める場合は、非公開の JSON をリポジトリ外に置きます。セルの内容はレポートに保存しません。", "", "```sh", "python3 scripts/site_audit.py --sheet-data /private/tmp/yachielab-preview-sheet-source.json --output docs/assets/manifest.json --markdown docs/assets/README.md --catalogue docs/assets/catalogue.md", "```", "", "`--check` は欠落したローカルファイル、参照中の HTML 実体画像、機密情報らしい文字列、プレビューの公開設定などの具体的エラーで失敗します。重複ファイル・参照候補・重複 ID は別途レビューできる警告です。", ""]
+    return "\n".join(rows)
+
+
+def catalogue_report(report: dict) -> str:
+    rows = ["# 資産の参照一覧", "",
+            "監査時点の公開 HTML と、そこから読み込まれるローカル CSS / JS を基準に分けています。入力・ソースだけの参照には Sheet の書き出し、未読込 CSS、旧 GAS、コメント内のファイル名も含みます。動的な全 URL と外部からの直接リンクは網羅していません。", "",
+            "参照未確認のファイルも公開パスを維持します。重複や古い版を含め、この一覧から自動削除しません。ハッシュ付きファイル名と `?v=` は元のローカルファイルへ解決します。詳細な SHA と全参照証拠は [manifest.json](manifest.json) を参照してください。", ""]
+    labels = [("published-reference", "公開ページから辿れる参照"),
+              ("source-reference", "入力・ソースだけの参照"),
+              ("review-candidate", "参照未確認・確認を保留")]
+    for classification, label in labels:
+        assets = [asset for asset in report["assets"] if asset["reference_class"] == classification]
+        rows += ["## " + label, "", f"{len(assets)} 件。", "",
+                 "| 公開パス | 実体 | MiB | 参照証拠 |", "| --- | --- | ---: | --- |"]
+        for asset in assets:
+            label_path = asset["path"].replace("\\", "\\\\").replace("[", "\\[").replace("]", "\\]").replace("|", "&#124;")
+            target = "../../" + quote(asset["path"], safe="/")
+            evidence = asset["published_reference_evidence"] or asset["reference_evidence"]
+            preview = ", ".join(evidence[:3]).replace("|", "&#124;") or "参照未確認"
+            if len(evidence) > 3:
+                preview += f" ほか{len(evidence) - 3}件"
+            rows.append(f"| [{label_path}]({target}) | {asset['kind']} | {asset['bytes'] / 1024 / 1024:.3f} | {preview} |")
+        rows.append("")
     return "\n".join(rows)
 
 
@@ -360,6 +428,7 @@ def main() -> int:
     parser.add_argument("--sheet-source", "--sheet-data", dest="sheet_source", action="append", type=Path, default=[], help="Optional private JSON export with Sheet cell strings; repeat for multiple files")
     parser.add_argument("--output", type=Path, help="Write deterministic report JSON; the private Sheet data is never included")
     parser.add_argument("--markdown", type=Path, help="Write the human-readable asset report")
+    parser.add_argument("--catalogue", type=Path, help="Write every asset grouped by published/source/unconfirmed references")
     parser.add_argument("--check", action="store_true", help="Exit 1 on concrete errors; review candidates and duplicate IDs remain warnings")
     args = parser.parse_args()
     root = args.root.resolve()
@@ -374,6 +443,9 @@ def main() -> int:
     if args.markdown:
         args.markdown.parent.mkdir(parents=True, exist_ok=True)
         args.markdown.write_text(markdown_report(report), encoding="utf-8")
+    if args.catalogue:
+        args.catalogue.parent.mkdir(parents=True, exist_ok=True)
+        args.catalogue.write_text(catalogue_report(report), encoding="utf-8")
     print(json.dumps(report["summary"], ensure_ascii=False, indent=2))
     for issue in report["errors"]:
         print("ERROR " + json.dumps(issue, ensure_ascii=False))

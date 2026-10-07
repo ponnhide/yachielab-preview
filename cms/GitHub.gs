@@ -81,7 +81,7 @@ function cmsPublish_(files, message) {
     var entry = snapshot.entries[path];
     if (entry.type !== 'blob') return;
     if (/\.html$/.test(path)) pageShas[path] = entry.sha;
-    else if (/^(?:img|pdf)\//.test(path)) assetShas[path] = entry.sha;
+    else if (/^(?:img|img_new|pdf)\//.test(path)) assetShas[path] = entry.sha;
   });
   var unchangedPageShas = Object.assign({}, pageShas), unchangedAssetShas = Object.assign({}, assetShas);
   files.forEach(function(file) {
@@ -89,7 +89,7 @@ function cmsPublish_(files, message) {
     seen[file.path] = true;
     var actual = snapshot.entries[file.path];
     if (file.expectedSha && (!actual || actual.sha !== file.expectedSha)) throw new Error('Page changed during rendering: ' + file.path);
-    var content = previewPrepareHtml_(file.html), sha = cmsGitBlobSha_(content);
+    var content = cmsVersionAssetHtml_(previewPrepareHtml_(file.html)), sha = cmsGitBlobSha_(content);
     pageShas[file.path] = sha;
     if (actual && actual.sha === sha) return;
     entries.push({path: file.path, mode: '100644', type: 'blob', content: content});
@@ -99,15 +99,19 @@ function cmsPublish_(files, message) {
   var settingsSha = cmsGitBlobSha_(settingsContent), existingSettings = snapshot.entries['site-settings.json'];
   if (!existingSettings || existingSettings.sha !== settingsSha) entries.push({path: 'site-settings.json', mode: '100644', type: 'blob', content: settingsContent});
   context.pendingAssets.forEach(function(asset) {
-    var computedSha = cmsGitBlobSha_(Utilities.base64Decode(asset.content));
+    var computedSha = cmsAssetVersionSha_(asset.path);
     assetShas[asset.path] = computedSha;
     var actual = snapshot.entries[asset.path];
     if (actual && actual.sha === computedSha) return;
     var blob = cmsGithub_('git/blobs', 'post', {content: asset.content, encoding: 'base64'});
+    if (blob.sha !== computedSha) throw new Error('Asset blob SHA verification failed. Publication stopped.');
     entries.push({path: asset.path, mode: '100644', type: 'blob', sha: blob.sha});
     assetShas[asset.path] = blob.sha;
     assetsChanged++;
   });
+  var versionsContent = JSON.stringify(cmsAssetVersionsManifest_(), null, 2) + '\n';
+  var versionsSha = cmsGitBlobSha_(versionsContent), existingVersions = snapshot.entries['asset-versions.json'];
+  if (!existingVersions || existingVersions.sha !== versionsSha) entries.push({path: 'asset-versions.json', mode: '100644', type: 'blob', content: versionsContent});
   if (!entries.length) return {changed: false, commit: snapshot.head, pages: 0, assets: 0, pageShas: pageShas, assetShas: assetShas};
   var tree = cmsGithub_('git/trees', 'post', {base_tree: snapshot.tree, tree: entries});
   if (tree.sha === snapshot.tree) return {changed: false, commit: snapshot.head, pages: 0, assets: 0, pageShas: unchangedPageShas, assetShas: unchangedAssetShas};

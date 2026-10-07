@@ -2,7 +2,7 @@
  * happen until the complete GitHub publish has succeeded (including no-change).
  * Bump this version after changing Renderer, SheetStyles, Showdown or HTML normalization.
  */
-var CMS_CACHE_RENDERER_VERSION_ = '2026-10-07.3';
+var CMS_CACHE_RENDERER_VERSION_ = '2026-10-08.1';
 var CMS_CACHE_SHEET_ = '_cms_cache';
 var CMS_CACHE_TTL_MS_ = 6 * 60 * 60 * 1000;
 var CMS_CACHE_CELL_LIMIT_ = 40000;
@@ -172,6 +172,14 @@ function cmsCacheFingerprint_(context, sourceId, row, richrow) {
     if (richKeys.indexOf(key) >= 0 && text && text.trim().indexOf('/*') !== 0) rich[index] = cmsCacheRich_(richrow && richrow[index]);
   });
   var input = {version: CMS_CACHE_RENDERER_VERSION_, source: sourceId, row: row, rich: rich, parameters: parameters};
+  // Check linked source assets before deciding whether the row HTML is reusable.
+  // A stable Sheet URL can point to new bytes without any cell edit.
+  if (typeof cmsAssetRowFingerprint_ === 'function') {
+    var alumniHeading = name === 'Alumni' && Object.keys(rich).some(function(index) {
+      return String(header[index]).replace(/ \(.+\)/, '') === '/* Name' && (rich[index] || []).some(function(run) { return run.bold; });
+    });
+    input.assets = cmsAssetRowFingerprint_(row, parameters, {alumniHeading: alumniHeading});
+  }
   if (name === 'Publication') {
     input.members = (context.members || []).slice().sort();
     input.journals = context.journals || {};
@@ -237,6 +245,7 @@ function cmsCacheRenderRows_(name) {
           rendered = appendSingle(row.slice(), rows.rich[index]);
         } finally { context.refreshData = oldRefreshData; }
         context.cacheStats.rowsRendered++;
+        if (typeof cmsVersionAssetHtml_ === 'function') rendered = cmsVersionAssetHtml_(rendered);
         record = {type: 'row', key: key, source: name, sourceId: sourceId, row: index + 1, fingerprint: fingerprint,
           version: CMS_CACHE_RENDERER_VERSION_, generatedAt: new Date().toISOString(), html: rendered,
           dependencies: cmsCacheManifest_(context, rendered), sha: cmsGitBlobSha_(rendered)};
@@ -297,6 +306,7 @@ function cmsCacheCommit_(result) {
         sha = existing && existing.sha;
       }
       var publishedHtml = typeof previewPrepareHtml_ === 'function' ? previewPrepareHtml_(staged.file.html) : staged.file.html;
+      if (typeof cmsVersionAssetHtml_ === 'function') publishedHtml = cmsVersionAssetHtml_(publishedHtml);
       if (!/^[a-f0-9]{40}$/.test(sha || '') || cmsGitBlobSha_(publishedHtml) !== sha) { delete records[key]; return; }
       var record = Object.assign({}, staged, {sha: sha});
       delete record.file;

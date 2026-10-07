@@ -1,6 +1,6 @@
 # 画像・PDF の資産監査
 
-このファイルは `scripts/site_audit.py --markdown docs/assets/README.md` で生成します。個別のパス・SHA-256・参照証拠・重複は [manifest.json](manifest.json) に保存しています。
+このファイルは `scripts/site_audit.py --markdown docs/assets/README.md` で生成します。個別のパス・SHA-256・参照証拠・重複は [manifest.json](manifest.json)、用途別の全件一覧は [catalogue.md](catalogue.md) に保存しています。
 
 ## 範囲と結果
 
@@ -11,6 +11,8 @@ HTML / CSS / JS / GAS のローカルソースを確認しました。ファイ�
 | 画像・PDF のファイル | 480 |
 | 総容量 | 579.3 MiB |
 | 参照証拠あり | 211 |
+| 公開ページから辿れる参照 | 178 |
+| 入力・ソースだけの参照 | 33 |
 | 参照証拠なしの確認候補 | 269 |
 | 候補の容量 | 216.1 MiB |
 | SHA-256 が同一のグループ | 64 |
@@ -18,7 +20,17 @@ HTML / CSS / JS / GAS のローカルソースを確認しました。ファイ�
 | 入力された Sheet のタブ | 38 |
 | 具体的な検査エラー | 0 |
 
-**確認候補は削除候補の確定ではありません。** Sheet、生成処理、組み立てた URL、過去の公開資料、外部リンクの確認が必要です。この整理では既存の画像・PDF を削除・移動していません。
+**確認候補は削除候補の確定ではありません。** Sheet、生成処理、組み立てた URL、過去の公開資料、外部リンクの確認が必要です。この整理では既存の画像・PDF を削除・移動していません。公開ページから辿れる参照も、画面上での表示や利用回数を測定したものではありません。Sheet は指定された書き出し時点の内容だけを確認しています。
+
+## ディレクトリ別の画像数
+
+画像数は拡張子を基準とし、HEIC や形式不一致のファイルも含みます。PDF や作業元を含む全ファイル数と区別します。
+
+| ディレクトリ | 全ファイル | 画像拡張子 | 画像の参照証拠あり | 画像の参照未確認 |
+| --- | ---: | ---: | ---: | ---: |
+| `img/` | 360 | 357 | 150 | 207 |
+| `img_new/` | 49 | 49 | 4 | 45 |
+| `pdf/` | 71 | 0 | 0 | 0 |
 
 ## 作業元のファイル
 
@@ -76,7 +88,7 @@ HTML / JS の静的参照を基準にしています。旧資料や外部利用�
 Sheet の入力を含める場合は、非公開の JSON をリポジトリ外に置きます。セルの内容はレポートに保存しません。
 
 ```sh
-python3 scripts/site_audit.py --sheet-data /private/tmp/yachielab-preview-sheet-source.json --output docs/assets/manifest.json --markdown docs/assets/README.md
+python3 scripts/site_audit.py --sheet-data /private/tmp/yachielab-preview-sheet-source.json --output docs/assets/manifest.json --markdown docs/assets/README.md --catalogue docs/assets/catalogue.md
 ```
 
 `--check` は欠落したローカルファイル、参照中の HTML 実体画像、機密情報らしい文字列、プレビューの公開設定などの具体的エラーで失敗します。重複ファイル・参照候補・重複 ID は別途レビューできる警告です。

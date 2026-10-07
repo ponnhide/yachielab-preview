@@ -21,6 +21,13 @@ function cmsRun_(work, command) {
     var context = cmsContext_();
     cmsGithubSnapshot_();
     var result = work(context);
+    try { if (typeof cmsAssetsCommit_ === 'function') cmsAssetsCommit_(result); }
+    catch (assetRegistryError) {
+      result.assetsSaved = false;
+      context.assetStats = context.assetStats || {};
+      context.assetStats.registryErrors = (context.assetStats.registryErrors || 0) + 1;
+      console.warn('CMS publication completed; asset registry save failed. The next update will check sources again.');
+    }
     try { cmsCacheCommit_(result); }
     catch (cacheError) {
       context.cacheStats = context.cacheStats || {};
@@ -30,11 +37,15 @@ function cmsRun_(work, command) {
       console.warn('CMS publication completed; optional render cache save failed.');
     }
     var stats = context.cacheStats || {};
+    var assetStats = context.assetStats || {};
     var metrics = {
       command: command, rowsRendered: stats.rowsRendered || 0, rowsReused: stats.rowsReused || 0,
       pagesSkipped: stats.pagesSkipped || 0, fragmentsSkipped: stats.fragmentsSkipped || 0,
       sheetReads: context.sheetReads || 0, githubReads: context.githubReads || 0, githubWrites: context.githubWrites || 0,
       pagesChanged: result.pages || 0, assetsChanged: result.assets || 0,
+      assetsChecked: assetStats.checked || 0, assetsDownloaded: assetStats.downloaded || 0,
+      assetsNotModified: assetStats.notModified || 0, assetRegistryErrors: assetStats.registryErrors || 0,
+      publisherPdfsPreserved: (context.assetWarnings || []).length,
       cacheReadErrors: stats.cacheReadErrors || 0, cacheWriteErrors: stats.cacheWriteErrors || 0,
       elapsedMs: Date.now() - started
     };
@@ -42,6 +53,8 @@ function cmsRun_(work, command) {
     console.info('CMS metrics: ' + JSON.stringify(metrics));
     var status = result.changed ? 'Preview updated: ' + (result.pages || 0) + ' page(s).' : 'No changes to publish.';
     if (result.cacheSaved === false) status += ' Cache save failed; next update will regenerate.';
+    if (result.assetsSaved === false) status += ' Asset registry save failed; next update will check sources again.';
+    if (metrics.publisherPdfsPreserved) status += ' ' + metrics.publisherPdfsPreserved + ' publisher PDF link(s) kept; not re-fetched.';
     var summary = ' Generated ' + metrics.rowsRendered + ', reused ' + metrics.rowsReused + ' rows; skipped ' + metrics.pagesSkipped + ' pages; ' + (metrics.elapsedMs / 1000).toFixed(1) + 's.';
     // A UI notification failure must not turn a successful publication into a failure.
     try { context.spreadsheet.toast(status + summary, 'Website CMS', 8); }

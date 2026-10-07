@@ -340,3 +340,25 @@ test('Member output has no neighboring-row dependency and one edited biography i
   state.rows.page[2][3] = 'Bob changed'; state.newRun(); state.render();
   assert.equal(counters(state).rowsRendered, 1); assert.equal(counters(state).rowsReused, 2);
 });
+
+test('source asset checks happen before row reuse and changed bytes invalidate only their row', () => {
+  const state = fixture({page: [HEAD, ['All','Common','Content','One','https://example.org/photo.jpg'], ['All','Common','Content','Two','']]});
+  let sourceSha = 'a'.repeat(40), checks = 0;
+  function run() {
+    state.newRun();
+    state.run.sandbox.cmsAssetRowFingerprint_ = row => {
+      checks++;
+      return row[4] ? [{sourceKey: 'same-source', path:'img/photo.jpg', sha:sourceSha}] : [];
+    };
+    return state.render();
+  }
+  state.entries['img/photo.jpg'] = {type:'blob', sha:sourceSha};
+  state.publish(run());
+  state.publish(run());
+  assert.equal(counters(state).rowsReused, 2);
+  assert.equal(checks, 4, 'Both runs verify source bytes before cache lookup');
+  sourceSha = 'b'.repeat(40);
+  run();
+  assert.equal(counters(state).rowsRendered, 1);
+  assert.equal(counters(state).rowsReused, 1);
+});

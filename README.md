@@ -20,7 +20,7 @@
 | `cms/` | 検証 GAS の編集元。Git で差分を確認してから専用 GAS に反映します。認証情報は含めません。 |
 | `js/` | 表示言語、所属、ロゴの境界、メニュー、ニュースなどのブラウザ側処理。 |
 | `css/` | サイトの基本レイアウトとコンポーネント。Sheets が指定する見た目との関係もここで管理します。 |
-| `img/`, `img_new/`, `pdf/` | 既存の公開 URL を維持するための配信資産。参照が見つからないファイルも即削除しません。 |
+| `img/`, `img_new/`, `pdf/` | 配信する画像・PDFと作業元。既存の公開 URL を維持し、参照未確認のファイルも削除・移動しません。[参照一覧](docs/assets/catalogue.md)で確認します。 |
 | `scripts/` | オフライン検査と資産一覧を生成する開発用ツール。 |
 | `docs/` | 運用手順・構造の説明・資産監査。 |
 
@@ -38,11 +38,15 @@
 | `Update the current page` | 選択した登録ページの本文。共通部品タブを選択している場合は、その部品を21ページへ反映。 |
 | `Update shared components` | header / footer / sidebar / mobile menu を、index を含む21ページへ1コミットで反映。各ページの本文は維持。 |
 | `Update all registered pages` | 登録された20ページの本文を1コミットで更新。index の共通部品には上のメニューを使用。 |
-| `Refresh linked assets on current page` | 選択ページが参照する外部・Drive 資産を取り直し、同名ファイルの変更も反映。形式と1ファイル16 MiB上限を検査。 |
+| `Refresh linked assets on current page` | 選択ページが参照する外部・Drive 資産を強制的に取得し直します。通常更新でも変更を確認します。形式と1ファイル16 MiB上限を検査。 |
 
 独立ページでは空の Lab が本文の終了ですが、共通部品の空の Lab は意図したラッパー行として使います。共通部品の行をそこで打ち切ったり、整理の際に削除したりしないでください。論文著者の強調は `Member` 行の別名だけを対象とし、`Alumni` 行を自動で対象に加えません。
 
 HTML の生成処理を直す場合は `cms/`、表示の共通ルールは `css/`、ブラウザの動作は `js/` を変更します。Sheets の値に依存する修正は、実際に Sheets → GAS → GitHub → Pages を通して確かめます。
+
+画像の取得元と公開先の対応は、専用 Sheet の自動管理タブ `_cms_assets` で保持します。同名でも異なる取得元は、元の識別子から生成したハッシュをファイル名に加えて区別します。公開する `asset-versions.json` はローカルパスと画像・PDFの SHA だけを持ち、取得元 URL を含みません。ブラウザはこの情報を使って画像 URL の `?v=` を更新します。元の公開パスは残し、参照未確認の画像や重複ファイルの削除とは別に管理します。
+
+出版社などの外部 HTTP PDF は自動同期の対象外です。既存のローカル PDF があればそれを維持し、なければ元の外部リンクを使います。Drive / Dropbox の PDF は同期します。詳細は [資産の運用](docs/maintenance.md#資産の取り扱い) を参照してください。
 
 GitHub 認証には、この検証リポジトリだけに Contents の書き込みを許可したトークンを使います。専用 GAS の Script Properties に `PREVIEW_GITHUB_TOKEN` として保存します。トークンをソース、Sheet、コミット、ログに入れません。`cms/PreviewIsolation.gs` がコピーした Sheet・リポジトリ・ブランチ・書き込みパスを確認します。GAS にソースを反映するときは、この保護コードも一緒に維持してください。
 
@@ -55,16 +59,20 @@ Python 3.9 以降の標準ライブラリだけで検査できます。追加パ
 ```sh
 python3 scripts/test_site_audit.py
 python3 scripts/site_audit.py --check
-python3 scripts/site_audit.py --output docs/assets/manifest.json --markdown docs/assets/README.md
+python3 scripts/site_audit.py --output docs/assets/manifest.json --markdown docs/assets/README.md --catalogue docs/assets/catalogue.md
 ```
 
 Sheet の保存データも資産参照の調査に含める場合は、リポジトリ外に置いた JSON を指定します。レポートに Sheet のセル内容は出力しません。
 
 ```sh
-python3 scripts/site_audit.py --sheet-data /private/tmp/yachielab-preview-sheet-source.json --output docs/assets/manifest.json --markdown docs/assets/README.md
+python3 scripts/site_audit.py --sheet-data /private/tmp/yachielab-preview-sheet-source.json --output docs/assets/manifest.json --markdown docs/assets/README.md --catalogue docs/assets/catalogue.md
 ```
 
 検査は HTML / CSS / JS / GAS のローカル参照、画像・PDF の実体、同一ファイル、トークンらしい文字列、プレビューの本番リンク・Analytics・`noindex`・`CNAME` を確認します。外部サイトの死活、ブラウザのレイアウト、実際の GAS 認証は別途確認が必要です。
+
+ローカルで画像を追加・上書きした場合は `node scripts/version_assets.cjs` で変更予定を確認し、`node scripts/version_assets.cjs --write` でバージョン情報と HTML の資産 URL を更新します。後者は `codex/preview` に限定し、画像の削除・移動やコミット・公開は行いません。詳しくは [資産の運用](docs/maintenance.md#資産の取り扱い) を参照してください。
+
+資産一覧は、公開 HTML から辿れる CSS / JS を含む参照、入力・ソースだけの参照、参照未確認に分類します。実際に画面へ表示された回数や外部からの直リンクを調べた結果ではありません。Sheet の参照調査には最新の書き出しを指定してください。ハッシュ付きファイル名と `?v=` のある URL も、対象の実ファイルを確認します。
 
 ローカルの配信には `python3 -m http.server 8000` を使えます。GitHub Pages の `/yachielab-preview/` というパスでの確認も行ってください。Pages に必要な `.nojekyll` を維持します。
 

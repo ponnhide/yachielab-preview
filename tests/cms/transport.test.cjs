@@ -76,7 +76,7 @@ function fixture(options = {}) {
       getValues() { state.reads[name + ':values'] = (state.reads[name + ':values'] || 0) + 1; return matrix(); },
       getRichTextValues() { state.reads[name + ':rich'] = (state.reads[name + ':rich'] || 0) + 1; return matrix().map(row => row.map(() => null)); },
       setValues(rows) {
-        assert.equal(name, '_cms_cache', 'Cache writes must not alter source content tabs');
+        assert.ok(['_cms_cache','_cms_assets'].includes(name), 'Technical writes must not alter source content tabs');
         if (options.cacheWriteFailure) throw new Error('Mock cache storage failure');
         state.mutations.push(['setValues', name, rows.length]);
         rows.forEach((row, r) => row.forEach((cell, c) => {
@@ -108,7 +108,7 @@ function fixture(options = {}) {
   const spreadsheet = {
     getId: () => state.activeId, getSheetByName: getSheet,
     getActiveSheet: () => getSheet(state.activeSheet),
-    insertSheet(name) { assert.equal(name, '_cms_cache'); values[name] = []; state.mutations.push(['insertSheet', name]); return getSheet(name); },
+    insertSheet(name) { assert.ok(['_cms_cache','_cms_assets'].includes(name)); values[name] = []; state.mutations.push(['insertSheet', name]); return getSheet(name); },
     toast(...args) { state.toasts.push(args); }
   };
   const menu = { addItem(label, handler) { state.menuItems.push([label, handler]); return menu; }, addSeparator() { return menu; }, addToUi() { state.menusAdded++; return menu; } };
@@ -154,7 +154,7 @@ function fixture(options = {}) {
         const entry = state.entries.find(value => value.path === name);
         return response({ sha: entry ? entry.sha : BLOB, content: Buffer.from(state.contents.get(name) || html).toString('base64') });
       }
-      if (method === 'post' && endpoint === 'git/blobs') return response({ sha: '3'.repeat(40) }, 201);
+      if (method === 'post' && endpoint === 'git/blobs') return response({ sha: gitBlobSha(Buffer.from(payload.content, 'base64')) }, 201);
       if (method === 'post' && endpoint === 'git/trees') {
         state.preparedEntries = payload.tree;
         return response({ sha: state.treeUnchanged ? state.tree : NEW_TREE }, 201);
@@ -186,7 +186,7 @@ function fixture(options = {}) {
     }
     vm.runInContext(source, context, { filename: name });
   }
-  ['PreviewIsolation.gs', 'SheetRepository.gs', 'SheetStyles.gs', 'Hashes.gs', 'RenderCache.gs', 'GitHub.gs', 'AssetStore.gs'].forEach(load);
+  ['PreviewIsolation.gs', 'SheetRepository.gs', 'SheetStyles.gs', 'Hashes.gs', 'RenderCache.gs', 'AssetVersions.gs', 'GitHub.gs', 'AssetRegistry.gs', 'AssetStore.gs'].forEach(load);
   state.context = context;
   state.load = load;
   state.github = (endpoint, method = 'get', payload) => context.previewFetch_('https://api.github.com/repos/' + PREVIEW_REPO + '/' + endpoint, {method, payload: payload === undefined ? undefined : JSON.stringify(payload)});
@@ -206,6 +206,11 @@ function gitBlobSha(value) {
 function addCurrentSettings(state) {
   const content = JSON.stringify({logoActiveOpacity: 1, logoInactiveOpacity: 0.5, logoTransitionMs: 300}, null, 2) + '\n';
   state.entries.push({path: 'site-settings.json', type: 'blob', mode: '100644', sha: gitBlobSha(content)});
+  const assets = {};
+  state.entries.filter(entry => entry.type === 'blob' && /^(?:img|img_new|pdf)\//.test(entry.path)).sort((a,b)=>a.path.localeCompare(b.path)).forEach(entry => { assets[entry.path] = entry.sha; });
+  const manifest = JSON.stringify({version:1,assets}, null, 2) + '\n';
+  state.entries = state.entries.filter(entry => entry.path !== 'asset-versions.json');
+  state.entries.push({path: 'asset-versions.json', type:'blob', mode:'100644', sha:gitBlobSha(manifest)});
 }
 
 // Guard tests deliberately call the lowest-level network boundary directly.
@@ -323,7 +328,7 @@ test('several pages and an asset are published as one tree, one commit and one r
   assert.equal(posts(state, 'git/commits').length, 1);
   const tree = posts(state, 'git/trees')[0].payload;
   assert.equal(tree.base_tree, TREE);
-  assert.deepEqual(tree.tree.map(entry => entry.path), ['contact.html', 'research.html', 'site-settings.json', 'img/new.jpg']);
+  assert.deepEqual(tree.tree.map(entry => entry.path).sort(), ['contact.html', 'research.html', 'site-settings.json', 'img/new.jpg', 'asset-versions.json'].sort());
   const settings = tree.tree.find(entry => entry.path === 'site-settings.json');
   assert.deepEqual(JSON.parse(settings.content), {logoActiveOpacity: 1, logoInactiveOpacity: 0.5, logoTransitionMs: 300});
   assert.doesNotMatch(settings.content, /test-preview-token|spreadsheet|repository/i);
@@ -364,7 +369,7 @@ test('a settings-only publication is still an atomic commit with zero HTML pages
   assert.equal(result.changed, true);
   assert.equal(result.pages, 0);
   assert.equal(result.assets, 0);
-  assert.deepEqual(posts(state, 'git/trees')[0].payload.tree.map(entry => entry.path), ['site-settings.json']);
+  assert.deepEqual(posts(state, 'git/trees')[0].payload.tree.map(entry => entry.path).sort(), ['site-settings.json','asset-versions.json'].sort());
   assert.equal(posts(state, 'git/commits').length, 1);
   assert.equal(state.io.filter(call => call.method === 'patch').length, 1);
 });
@@ -468,12 +473,13 @@ test('asset downloads and native Drive uploads validate actual bytes and queue o
   state.downloads.set('https://example.org/bad.jpg', Buffer.from('<html><head>Access denied</head></html>'));
   assert.throws(() => state.context.uploadImg('https://example.org/bad.jpg'), /HTML page/i);
   assert.equal(state.context.cmsContext_().pendingAssets.length, 0);
-  state.downloads.set('https://example.org/report.pdf', Buffer.from('%PDF-1.7\n%%EOF'));
-  assert.equal(state.context.uploadImg('https://example.org/report.pdf'), './pdf/report.pdf');
-  assert.equal(state.context.uploadImg('https://example.org/report.pdf'), './pdf/report.pdf');
-  assert.equal(state.io.filter(call => call.url === 'https://example.org/report.pdf').length, 1);
+  state.downloads.set('https://www.dropbox.com/report.pdf?dl=1', Buffer.from('%PDF-1.7\n%%EOF'));
+  const first = state.context.uploadImg('https://www.dropbox.com/report.pdf?dl=0');
+  assert.match(first, /^\.\/pdf\/report--[a-f0-9]{12}\.pdf\?v=[a-f0-9]{12}$/);
+  assert.equal(state.context.uploadImg('https://www.dropbox.com/report.pdf?dl=0'), first);
+  assert.equal(state.io.filter(call => call.url === 'https://www.dropbox.com/report.pdf?dl=1').length, 1);
   state.drives.set('native-file', {name: 'Portrait.jpeg', bytes: [255, 216, 255, 224, 0, 16, 255, 217]});
-  assert.equal(state.context.uploadImg('https://drive.google.com/file/d/native-file/view'), './img/Portrait.jpeg');
+  assert.match(state.context.uploadImg('https://drive.google.com/file/d/native-file/view'), /^\.\/img\/Portrait--[a-f0-9]{12}\.jpeg\?v=[a-f0-9]{12}$/);
   assert.equal(state.context.cmsContext_().pendingAssets.length, 2);
   assert.equal(state.io.filter(call => call.url.includes('drive.google.com')).length, 0, 'Native DriveApp access should replace HTML download URLs');
 });
@@ -595,6 +601,7 @@ test('unchanged binary assets skip blob uploads as well as publication trees', (
   const content = Buffer.from([255, 216, 255, 224, 0, 16, 255, 217]);
   const expected = gitBlobSha(content);
   state.entries.find(entry => entry.path === 'img/existing.jpg').sha = expected;
+  addCurrentSettings(state);
   state.context.cmsContext_().pendingAssets.push({path: 'img/existing.jpg', content: content.toString('base64')});
   const result = state.context.cmsPublish_([]);
   assert.equal(result.changed, false);
