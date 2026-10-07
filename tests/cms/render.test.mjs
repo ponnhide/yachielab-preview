@@ -66,6 +66,28 @@ check('Rich text preserves bold/color runs and converts the email marker', () =>
   assert.equal(r.rendererRichText_('Name ', rich), '**<span style="color:#ff0000">Name</span>** ');
   assert(r.rendererRichText_('name\\@\\example.org', null).includes('alt="[at]"'));
 });
+check('Showdown renders localized PDF links with spaced local filenames as anchors instead of visible versioned Markdown', () => {
+  const destination = './pdf/Graduate application guidelines.pdf?download=1&v=abcdef123456#page=2';
+  const { runtime: r } = setup({ uploadImg: () => destination });
+  for (const label of ['Application guidelines', '募集要項', '申请指南']) {
+    const html = r.rendererMarkdown_('[' + label + '](https://www.dropbox.com/x/guidelines.pdf?dl=0)');
+    const href = (html.match(/<a href="([^"]+)"/) || [])[1];
+    assert(href, 'Real Showdown must render a clickable link in each language');
+    assert.equal(href.replace(/&amp;/g, '&'), './pdf/Graduate%20application%20guidelines.pdf?download=1&v=abcdef123456#page=2');
+    assert.equal(html.replace(/<[^>]+>/g, '').trim(), label, 'Neither the Markdown destination nor version query belongs in visible prose');
+  }
+});
+check('Markdown asset space encoding preserves existing percent escapes, query values, anchors and literal replacement text', () => {
+  const destination = './pdf/already%20encoded and raw.pdf?key=a%20b&literal=$&#page%202';
+  const { runtime: r } = setup({ uploadImg: () => destination });
+  const html = r.rendererMarkdown_('[PDF](https://www.dropbox.com/x/paper.pdf?dl=0)');
+  const href = (html.match(/<a href="([^"]+)"/) || [])[1];
+  assert.equal(href.replace(/&amp;/g, '&'), './pdf/already%20encoded%20and%20raw.pdf?key=a%20b&literal=$&#page%202');
+  assert(!html.includes('%2520')); assert(!html.includes('dropbox.com'));
+  const ordinary = setup();
+  assert.equal(ordinary.runtime.rendererMarkdown_('[External](https://example.org/paper%20one.pdf?x=1#page=2)'), '<p><a href="https://example.org/paper%20one.pdf?x=1#page=2">External</a></p>');
+  assert.equal(ordinary.uploads.length, 0);
+});
 check('Content image dimensions and explicit custom style render on the correct nodes', () => {
   const { runtime: r } = setup();
   const html = r.appendSingle(['All', 'Common', 'Content', 'Text', 'https://example.org/photo.png', 80, 'auto', '/* insta filter', 'object-fit:contain;', '', 'photo', 'color:red;'], []);

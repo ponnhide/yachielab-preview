@@ -21,7 +21,13 @@ function rendererMarkdown_(text) {
   var links = text.match(/\[[^\]]+\]\(https?:\/\/[^)]+\)/g) || [];
   links.forEach(function (link) {
     var url = link.match(/\]\((https?:\/\/[^)]+)\)/)[1];
-    if (url.indexOf('www.dropbox.com') >= 0) text = text.replace(url, uploadImg(url));
+    if (url.indexOf('www.dropbox.com') >= 0) {
+      var destination = uploadImg(url);
+      // Showdown treats spaces in Markdown destinations as syntax, so a local
+      // filename needs URL spaces encoded without re-encoding existing escapes.
+      if (/^(?:\.\/)?(?:img|img_new|pdf)\//.test(destination)) destination = destination.replace(/ /g, '%20');
+      text = text.replace(url, function () { return destination; });
+    }
   });
   return new showdown.Converter().makeHtml(text);
 }
