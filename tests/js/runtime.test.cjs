@@ -2,7 +2,24 @@
 const assert = require('node:assert/strict');
 const vm = require('node:vm');
 const { test } = require('node:test');
-const { createBrowser } = require('./browser-harness.cjs');
+const { createBrowser: createBrowserFixture } = require('./browser-harness.cjs');
+
+function measureLogoStack(browser, stack) {
+  stack.getBoundingClientRect = () => {
+    const height = stack.style.height && stack.style.height !== 'auto' ? Number.parseFloat(stack.style.height) : browser.metrics.logoHeight;
+    const top = Number.parseFloat(stack.style.top) || 0;
+    return {top, bottom: top + height, height};
+  };
+}
+function createBrowser(page, options) {
+  const browser = createBrowserFixture(page, options);
+  browser.document.querySelectorAll('.logo-stack').forEach(stack => measureLogoStack(browser, stack));
+  return browser;
+}
+function controlledLogo(browser, id) {
+  const section = browser.element(id);
+  return section && (section.querySelector('.logo-stack') || section.querySelector('img'));
+}
 
 const tick = () => new Promise(resolve => setImmediate(resolve));
 
@@ -94,8 +111,8 @@ test('logo crop matches header boundary and never stretches below its original h
   browser.metrics.mainTop = 110;
   browser.window.dispatch('scroll');
   browser.flush();
-  assert.equal(browser.document.querySelector('#frontlogo img').style.height, '81.2px');
-  assert.equal(browser.document.querySelector('#backlogo img').getBoundingClientRect().height, 110);
+  assert.equal(controlledLogo(browser, 'frontlogo').style.height, '81.2px');
+  assert.equal(controlledLogo(browser, 'backlogo').getBoundingClientRect().height, 110);
 });
 
 test('footer retreat is language-specific and a sudden Home fully restores logo/sidebar positions', () => {
@@ -105,8 +122,8 @@ test('footer retreat is language-specific and a sudden Home fully restores logo/
   browser.metrics.mainTop = -4500; // Main bottom=500, EN retreat=500-(320*2)=-140.
   browser.window.dispatch('scroll');
   browser.flush();
-  const front = browser.document.querySelector('#frontlogo img');
-  const back = browser.document.querySelector('#backlogo img');
+  const front = controlledLogo(browser, 'frontlogo');
+  const back = controlledLogo(browser, 'backlogo');
   assert.equal(front.style.top, '-140px');
   assert.equal(back.style.top, '-140px');
   assert.equal(browser.element('sidebar').style.top, '108px');
@@ -265,8 +282,8 @@ test('a fractional header boundary stays in normal flow at scroll zero despite c
   browser.metrics.mainTop = 191.9957; // Fractional layout pixels share the same boundary.
   browser.run('common.js');
   browser.flush();
-  const front = browser.document.querySelector('#frontlogo img');
-  const back = browser.document.querySelector('#backlogo img');
+  const front = controlledLogo(browser, 'frontlogo');
+  const back = controlledLogo(browser, 'backlogo');
   assert.equal(front.style.position, 'relative');
   assert.equal(back.style.position, 'relative');
   assert.equal(front.style.height, 'auto');
@@ -275,4 +292,110 @@ test('a fractional header boundary stays in normal flow at scroll zero despite c
   browser.flush();
   assert.equal(front.style.position, 'fixed');
   assert.equal(back.style.position, 'fixed');
+});
+
+
+function installSplitLogos(browser) {
+  const stacks = {};
+  for (const id of ['frontlogo', 'backlogo', 'frontlogo2', 'backlogo2']) {
+    const section = browser.element(id);
+    section.querySelectorAll('img, .logo-stack').forEach(element => element.remove());
+    const anchor = section.querySelector('a') || section;
+    const stack = browser.document.createElement('span');
+    stack.classList.add('logo-stack');
+    stack.style.width = '268.8px';
+    const canvas = browser.document.createElement('span');
+    canvas.classList.add('logo-canvas');
+    canvas.style.aspectRatio = '772 / 315';
+    for (const [name, top, height] of [['ubc', '0px', '44.9181347px'], ['osaka', '64.4145078px', '45.2668394px']]) {
+      const image = browser.document.createElement('img');
+      image.classList.add('logo-part-' + name);
+      image.style.position = 'absolute';
+      image.style.top = top;
+      image.style.height = height;
+      image.style.width = '268.8px';
+      canvas.appendChild(image);
+    }
+    stack.appendChild(canvas);
+    anchor.appendChild(stack);
+    measureLogoStack(browser, stack);
+    stacks[id] = stack;
+  }
+  return stacks;
+}
+
+test('split artwork crops only the outer wrapper and preserves both child SVG positions and width', () => {
+  const browser = createBrowser('research.html');
+  const stacks = installSplitLogos(browser);
+  const children = Object.values(stacks).flatMap(stack => stack.querySelectorAll('img'));
+  const before = children.map(image => ({...image.style}));
+  browser.run('common.js');
+  browser.flush();
+  assert.equal(stacks.frontlogo.style.position, 'relative');
+  browser.metrics.mainTop = 110;
+  browser.window.dispatch('scroll');
+  browser.flush();
+  assert.equal(stacks.frontlogo.style.height, '81.2px');
+  assert.equal(stacks.frontlogo.style.position, 'fixed');
+  assert.equal(stacks.backlogo.getBoundingClientRect().height, 110);
+  assert.equal(stacks.backlogo.style.height, undefined);
+  assert.equal(stacks.frontlogo.style.width, '268.8px');
+  assert.deepEqual(children.map(image => ({...image.style})), before);
+  assert.equal(stacks.frontlogo.style.objectPosition, undefined, 'Object-fit cropping belongs only to the legacy img path');
+});
+
+test('split logo scroll, Home, affiliation and language changes use the latest geometry without touching child artwork', () => {
+  const browser = createBrowser('research.html');
+  const stacks = installSplitLogos(browser);
+  const before = Object.values(stacks).flatMap(stack => stack.querySelectorAll('img')).map(image => ({...image.style}));
+  browser.run('common.js');
+  browser.flush();
+  browser.metrics.mainTop = -4500;
+  browser.window.dispatch('scroll');
+  browser.flush();
+  assert.equal(stacks.frontlogo.style.top, '-140px');
+  assert.equal(stacks.frontlogo.style.height, '0px');
+  browser.element('JA').dispatch('click');
+  browser.flush();
+  assert.equal(stacks.frontlogo.style.top, '-44px');
+  // Rapidly queued actions must draw the newest Home/Osaka state in one frame.
+  browser.metrics.mainTop = 192;
+  browser.window.dispatch('scroll');
+  browser.window.YachieSite.setAffiliation('Osaka');
+  browser.element('ZH').dispatch('click');
+  browser.flush();
+  for (const id of ['frontlogo2', 'backlogo2']) {
+    assert.equal(stacks[id].style.position, 'relative');
+    assert.equal(stacks[id].style.top, '0px');
+  }
+  assert.equal(stacks.frontlogo2.style.height, 'auto');
+  assert.equal(browser.element('frontlogo').style.display, 'none');
+  assert.notEqual(browser.element('frontlogo2').style.display, 'none');
+  browser.window.YachieSite.setAffiliation('UBC');
+  browser.flush();
+  assert.equal(stacks.frontlogo.style.top, '0px');
+  assert.equal(stacks.frontlogo.style.height, 'auto');
+  assert.equal(browser.frames.size, 0);
+  assert.deepEqual(Object.values(stacks).flatMap(stack => stack.querySelectorAll('img')).map(image => ({...image.style})), before);
+});
+
+test('legacy single-image markup remains a working fallback on an excluded page and missing Osaka logo IDs', () => {
+  const browser = createBrowser('yuka.html', {url: 'https://ponnhide.github.io/yachielab-preview/yuka.html?lang=ZH&affil=Osaka'});
+  assert.equal(browser.document.querySelector('.logo-stack'), null);
+  browser.run('common.js');
+  browser.flush();
+  const front = controlledLogo(browser, 'frontlogo');
+  const back = controlledLogo(browser, 'backlogo');
+  assert.equal(front.tagName, 'IMG');
+  browser.metrics.mainTop = 110;
+  browser.window.dispatch('scroll');
+  browser.flush();
+  assert.equal(front.style.height, '81.2px');
+  assert.equal(front.style.objectPosition, 'top');
+  assert.equal(back.getBoundingClientRect().height, 110);
+  browser.metrics.mainTop = 192;
+  browser.window.dispatch('scroll');
+  browser.flush();
+  assert.equal(front.style.height, 'auto');
+  assert.equal(front.style.top, '0px');
 });

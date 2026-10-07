@@ -171,6 +171,13 @@
     };
   }
 
+  function logoElement(id) {
+    const section = document.getElementById(id);
+    // Split artwork uses a full-size internal canvas inside a clipped wrapper.
+    // Legacy/excluded pages may still use their original single composite image.
+    return section && (section.querySelector('.logo-stack') || section.querySelector('img'));
+  }
+
   function resetLogo(front, back) {
     [front, back].forEach(function (element) {
       setStyle(element, { position: 'relative', top: '0px', left: '0px' });
@@ -210,8 +217,8 @@
     }
     if (homePage) return; // Homepage logo scroll code was inactive in the original.
 
-    const front = document.querySelector(state.affiliation === 'Osaka' ? '#frontlogo2 img' : '#frontlogo img') || document.querySelector('#frontlogo img');
-    const back = document.querySelector(state.affiliation === 'Osaka' ? '#backlogo2 img' : '#backlogo img') || document.querySelector('#backlogo img');
+    const front = logoElement(state.affiliation === 'Osaka' ? 'frontlogo2' : 'frontlogo') || logoElement('frontlogo');
+    const back = logoElement(state.affiliation === 'Osaka' ? 'backlogo2' : 'backlogo') || logoElement('backlogo');
     if (isMobile()) {
       resetLogo(front, back);
       if (sidebar) sidebar.style.top = originalSidebarTop;
@@ -226,7 +233,7 @@
     if (front && back) {
       const geometry = calculateInteriorGeometry({
         mainTop: mainRect.top, mainBottom: mainRect.bottom, headerHeight: headerHeight,
-        viewportWidth: window.innerWidth, logoHeight: back.getBoundingClientRect().height || back.height,
+        viewportWidth: window.innerWidth, logoHeight: back.getBoundingClientRect().height || back.height || 0,
         sidebarHeight: sidebar ? sidebar.clientHeight : 0, sidebarTop: sidebarHomeTop || 0,
         language: state.language
       });
@@ -237,7 +244,8 @@
           left: geometry.fixed ? 'max(0px, calc((100% - 1920px) / 2))' : '0px'
         });
       });
-      setStyle(front, { objectPosition: 'top', height: geometry.frontHeight === null ? 'auto' : geometry.frontHeight + 'px' });
+      if (front.tagName === 'IMG') front.style.objectPosition = 'top';
+      setStyle(front, { height: geometry.frontHeight === null ? 'auto' : geometry.frontHeight + 'px' });
       if (sidebar) sidebar.style.top = geometry.sidebarTop + 'px';
     }
     if (container) {

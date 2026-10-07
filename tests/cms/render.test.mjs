@@ -73,6 +73,27 @@ check('Content image dimensions and explicit custom style render on the correct 
   assert(html.includes('data-sheet-style="width height object-fit"'));
   assert(html.includes('id="photo" style="color: red !important;" data-sheet-style="color"'));
 });
+check('Header pair presets produce two independent SVGs without fetching old composites', () => {
+  const { runtime: r, uploads } = setup();
+  for (const id of ['frontlogo', 'frontlogo2', 'backlogo', 'backlogo2']) {
+    for (const [filename, variant] of [['two_logos_on_white_on_black.svg', 'white'], ['two_logos_teal_on_white.svg', 'teal']]) {
+      const html = r.appendSingle(['All', 'Common', 'Content', '', 'https://example.org/' + filename + '?dl=0', '', '', '', '', './index.html', id, 'z-index:2;'], []);
+      assert(html.includes('class="logo-stack content_img"'));
+      assert(html.includes('class="logo-canvas"'));
+      assert(html.includes('./img/header-ubc-' + variant + '.svg'));
+      assert(html.includes('./img/header-osaka-' + variant + '.svg'));
+      assert.equal((html.match(/<img /g) || []).length, 2);
+      assert(html.includes('<a href="./index.html">'));
+      assert(!html.includes(filename));
+    }
+  }
+  assert.equal(uploads.length, 0);
+  const custom = r.appendSingle(['All', 'Common', 'Content', '', 'https://example.org/custom.svg', '', '', '', '', '', 'frontlogo', ''], []);
+  assert(!custom.includes('logo-stack'));
+  assert(custom.includes('custom.svg'));
+  const ordinary = r.appendSingle(['All', 'Common', 'Content', '', 'https://example.org/two_logos_teal_on_white.svg', '', '', '', '', '', 'photo', ''], []);
+  assert(!ordinary.includes('logo-stack'));
+});
 check('Header logo dimensions remain changeable by the clipping controller', () => {
   const { runtime: r } = setup();
   const attributes = r.rendererImageStyleAttributes_({ '/* ID': 'frontlogo', '/* img width': '400px', '/* img height': '100px', '/* img style': 'margin-top:12px;' });

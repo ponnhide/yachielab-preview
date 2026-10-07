@@ -44,7 +44,8 @@ assert.deepEqual(imports(fs.readFileSync(path.join(cssRoot, 'common.css'), 'utf8
 const common = expand('common.css');
 const compact = common.replace(/\s+/g, '');
 // The boundary effect needs an independently cropped foreground and a full-size background.
-assert(compact.includes('#frontlogoimg,#backlogoimg,#frontlogo2img,#backlogo2img{'));
+assert(compact.includes('#frontlogoimg,#backlogoimg,#frontlogo2img,#backlogo2img,'));
+assert(compact.includes('#frontlogo.logo-stack,#backlogo.logo-stack,#frontlogo2.logo-stack,#backlogo2.logo-stack{'));
 assert(compact.includes('object-fit:cover;object-position:top;'));
 assert(compact.includes('width:clamp(35px,calc(25vw-clamp(5px,4vw,4vw)),400px);'));
 assert(compact.includes('#backlogo,#backlogo2{width:100%;margin-top:0;position:absolute;z-index:1;'));

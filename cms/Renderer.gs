@@ -139,16 +139,32 @@ function appendContent(adict) {
   var content = '<section class="content ' + rendererClasses_(adict) + '" id="' + sheetAttribute_(sheetValue_(adict, '/* ID')) + '"' + sheetStyleAttributes_(sheetValue_(adict, '/* Style')) + '>\n';
   var image = sheetValue_(adict, '/* img url');
   if (image) {
-    var imageLink = uploadImg(image), filter = sheetValue_(adict, '/* insta filter');
-    var imageHtml = '<img src="' + sheetAttribute_(imageLink) + '" alt="content_img"';
-    if (filter) imageHtml = '<div class="content_img_div ' + sheetAttribute_(filter) + '"' + rendererImageStyleAttributes_(adict) + '>' + imageHtml + '></div>';
-    else imageHtml += rendererImageStyleAttributes_(adict) + ' class="content_img">';
+    var imageHtml = rendererLogoPair_(adict, image);
+    if (!imageHtml) {
+      var imageLink = uploadImg(image), filter = sheetValue_(adict, '/* insta filter');
+      imageHtml = '<img src="' + sheetAttribute_(imageLink) + '" alt="content_img"';
+      if (filter) imageHtml = '<div class="content_img_div ' + sheetAttribute_(filter) + '"' + rendererImageStyleAttributes_(adict) + '>' + imageHtml + '></div>';
+      else imageHtml += rendererImageStyleAttributes_(adict) + ' class="content_img">';
+    }
     var hyperlink = sheetValue_(adict, '/* img hyperlink');
     content += (hyperlink ? '<a href="' + sheetAttribute_(hyperlink) + '">' + imageHtml + '</a>' : imageHtml) + '\n';
   }
   var text = sheetValue_(adict, '/* Text');
   if (text) content += rendererMarkdown_(text) + '\n';
   return content + '</section>\n';
+}
+
+function rendererLogoPair_(adict, image) {
+  if (!/^(?:frontlogo2?|backlogo2?)$/.test(sheetValue_(adict, '/* ID'))) return '';
+  // Preserve existing Sheet inputs as presets, while emitting independent SVGs.
+  var filename = sheetString_(image).split(/[?#]/)[0].split('/').pop();
+  var variant = filename === 'two_logos_on_white_on_black.svg' ? 'white' :
+    filename === 'two_logos_teal_on_white.svg' ? 'teal' : '';
+  if (!variant) return '';
+  return '<span class="logo-stack content_img"' + rendererImageStyleAttributes_(adict) + '><span class="logo-canvas">' +
+    '<img class="logo-ubc" src="./img/header-ubc-' + variant + '.svg" alt="Yachie Lab, University of British Columbia">' +
+    '<img class="logo-osaka" src="./img/header-osaka-' + variant + '.svg" alt="Laboratory of Creative Destruction Biology, The University of Osaka">' +
+    '</span></span>';
 }
 
 function appendPost(adict) {

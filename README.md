@@ -68,4 +68,4 @@ python3 scripts/site_audit.py --sheet-data /private/tmp/yachielab-preview-sheet-
 
 ローカルの配信には `python3 -m http.server 8000` を使えます。GitHub Pages の `/yachielab-preview/` というパスでの確認も行ってください。Pages に必要な `.nojekyll` を維持します。
 
-詳しい手順は [運用・構造](docs/maintenance.md)、表示ルールは [CSS の構造](css/README.md)、画像・PDF の状況は [資産監査](docs/assets/README.md) を参照してください。
+詳しい手順は [運用・構造](docs/maintenance.md)、表示ルールは [CSS の構造](css/README.md)、画像・PDF の状況は [資産監査](docs/assets/README.md)、確認した範囲は [検証記録](docs/verification.md) を参照してください。

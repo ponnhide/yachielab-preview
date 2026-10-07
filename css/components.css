@@ -118,7 +118,11 @@
 #frontlogo img,
 #backlogo img,
 #frontlogo2 img,
-#backlogo2 img {
+#backlogo2 img,
+#frontlogo .logo-stack,
+#backlogo .logo-stack,
+#frontlogo2 .logo-stack,
+#backlogo2 .logo-stack {
   width: clamp(35px, calc(25vw - clamp(5px, 4vw, 4vw)), 400px);
   object-fit: cover; 
   object-position: top; 
@@ -129,6 +133,34 @@
   position: relative; 
   top: 0; 
   left: 0; 
+}
+
+/* Each lab has its own SVG. Crop the shared layer, keeping the artwork's
+   original 772 x 315 canvas and inter-logo gap independent of crop height. */
+.logo-stack {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: baseline;
+}
+.logo-stack .logo-canvas {
+  display: block;
+  position: relative;
+  height: 0;
+  padding-bottom: calc(100% * 315 / 772);
+}
+#normal_header .logo-stack .logo-canvas img {
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: auto;
+  max-height: none;
+  margin: 0;
+  float: none;
+  left: 0;
+  top: 0;
+}
+#normal_header .logo-stack .logo-canvas .logo-osaka {
+  top: calc(100% * 185 / 315);
 }
 
 #backlogo,
