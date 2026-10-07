@@ -73,7 +73,7 @@ check('Content image dimensions and explicit custom style render on the correct 
   assert(html.includes('data-sheet-style="width height object-fit"'));
   assert(html.includes('id="photo" style="color: red !important;" data-sheet-style="color"'));
 });
-check('Header pair presets produce two independent SVGs without fetching old composites', () => {
+check('Header pair presets produce independent lab buttons without a home-link wrapper', () => {
   const { runtime: r, uploads } = setup();
   for (const id of ['frontlogo', 'frontlogo2', 'backlogo', 'backlogo2']) {
     for (const [filename, variant] of [['two_logos_on_white_on_black.svg', 'white'], ['two_logos_teal_on_white.svg', 'teal']]) {
@@ -83,7 +83,12 @@ check('Header pair presets produce two independent SVGs without fetching old com
       assert(html.includes('./img/header-ubc-' + variant + '.svg'));
       assert(html.includes('./img/header-osaka-' + variant + '.svg'));
       assert.equal((html.match(/<img /g) || []).length, 2);
-      assert(html.includes('<a href="./index.html">'));
+      assert.equal((html.match(/<button type="button"/g) || []).length, 2);
+      assert(html.includes('class="logo-control logo-ubc" data-affiliation="UBC"'));
+      assert(html.includes('class="logo-control logo-osaka" data-affiliation="Osaka"'));
+      assert.equal((html.match(/aria-pressed="false"/g) || []).length, 2);
+      assert(!html.includes('<a '));
+      assert(!/<img[^>]*class="logo-/.test(html));
       assert(!html.includes(filename));
     }
   }
@@ -93,6 +98,24 @@ check('Header pair presets produce two independent SVGs without fetching old com
   assert(custom.includes('custom.svg'));
   const ordinary = r.appendSingle(['All', 'Common', 'Content', '', 'https://example.org/two_logos_teal_on_white.svg', '', '', '', '', '', 'photo', ''], []);
   assert(!ordinary.includes('logo-stack'));
+});
+check('Mobile lab buttons preserve Sheet image sizing without replacing home or institution links', () => {
+  const { runtime: r, uploads } = setup();
+  for (const [id, affiliation, filename] of [['mobile-ubc-lab', 'UBC', 'header-ubc-white.svg'], ['mobile-osaka-lab', 'Osaka', 'header-osaka-white.svg']]) {
+    const html = r.appendSingle(['All', 'Common', 'Content', '', './img/' + filename, 'clamp(140px, 65vw, 300px)', 'auto', '', 'margin:0;float:none;', './index.html', id, 'margin:0;margin-bottom:12px;'], []);
+    assert(html.includes('data-affiliation="' + affiliation + '"'));
+    assert(html.includes('width: clamp(140px, 65vw, 300px);height: auto;'));
+    assert(html.includes('margin-bottom: 12px !important;'));
+    assert(!html.includes('<a '));
+    assert.equal((html.match(/<img /g) || []).length, 1);
+  }
+  assert.equal(uploads.length, 0);
+  const home = r.appendSingle(['All', 'Common', 'Content', '', 'https://example.org/home.svg', '', '', '', '', './index.html', 'mobile-yachielablogo', ''], []);
+  assert(home.includes('<a href="./index.html">'));
+  assert(!home.includes('data-affiliation'));
+  const institution = r.appendSingle(['All', 'Common', 'Content', '', 'https://example.org/ubc.svg', '', '', '', '', 'https://www.ubc.ca/', 'mobile-ubclogo', ''], []);
+  assert(institution.includes('<a href="https://www.ubc.ca/">'));
+  assert(!institution.includes('data-affiliation'));
 });
 check('Header logo dimensions remain changeable by the clipping controller', () => {
   const { runtime: r } = setup();

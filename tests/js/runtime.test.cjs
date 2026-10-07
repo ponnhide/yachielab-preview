@@ -13,7 +13,68 @@ function measureLogoStack(browser, stack) {
 }
 function createBrowser(page, options) {
   const browser = createBrowserFixture(page, options);
-  browser.document.querySelectorAll('.logo-stack').forEach(stack => measureLogoStack(browser, stack));
+  const prepareElement = element => {
+    element.style.setProperty = (name, value) => { element.style[name] = String(value); };
+    const originalRectangle = element.getBoundingClientRect.bind(element);
+    element.getBoundingClientRect = () => {
+      if (element.classList.contains('logo-stack')) {
+        const height = element.style.height && element.style.height !== 'auto' ? Number.parseFloat(element.style.height) : browser.metrics.logoHeight;
+        const top = Number.parseFloat(element.style.top) || 0;
+        return {top, bottom: top + height, height};
+      }
+      if (element.classList.contains('logo-control')) {
+        let stack = element.parentElement;
+        while (stack && !stack.classList.contains('logo-stack')) stack = stack.parentElement;
+        if (stack) {
+          const isOsaka = element.getAttribute('data-affiliation') === 'Osaka';
+          const top = stack.getBoundingClientRect().top + (isOsaka ? 213.41425 : 0) / 343.41425 * browser.metrics.logoHeight;
+          const height = (isOsaka ? 130 : 129) / 343.41425 * browser.metrics.logoHeight;
+          return {top, bottom: top + height, height};
+        }
+      }
+      return originalRectangle();
+    };
+    element.replaceChild = (replacement, original) => {
+      replacement.remove();
+      const index = element.children.indexOf(original);
+      assert(index >= 0);
+      element.children[index] = replacement;
+      replacement.parentElement = element;
+      replacement.env = element.env;
+      original.parentElement = null;
+      return original;
+    };
+    element.replaceWith = replacement => element.parentElement.replaceChild(replacement, element);
+    element.insertBefore = (replacement, before) => {
+      replacement.remove();
+      const index = before ? element.children.indexOf(before) : element.children.length;
+      assert(index >= 0);
+      element.children.splice(index, 0, replacement);
+      replacement.parentElement = element;
+      replacement.env = element.env;
+      return replacement;
+    };
+    return element;
+  };
+  const walk = element => { prepareElement(element); element.children.forEach(walk); };
+  walk(browser.document);
+  const makeElement = browser.document.createElement;
+  browser.document.createElement = tag => prepareElement(makeElement(tag));
+  const computedStyle = browser.window.getComputedStyle;
+  browser.window.getComputedStyle = element => ({
+    ...computedStyle(element),
+    getPropertyValue(name) {
+      let owner = element;
+      while (owner) {
+        if (owner.style[name] !== undefined) return String(owner.style[name]);
+        const source = owner.getAttribute('style') || '';
+        const match = source.match(new RegExp('(?:^|;)\\s*' + name + ':\\s*([^;]+)'));
+        if (match) return match[1];
+        owner = owner.parentElement;
+      }
+      return '';
+    }
+  });
   return browser;
 }
 function controlledLogo(browser, id) {
@@ -24,18 +85,18 @@ function controlledLogo(browser, id) {
 const tick = () => new Promise(resolve => setImmediate(resolve));
 
 // Public page content and URI behavior, independent of implementation internals.
-test('homepage Japanese is applied in one click, with its Osaka default and no reload', () => {
+test('language changes preserve the selected affiliation in one click without reload', () => {
   const browser = createBrowser('index.html');
   browser.run('common.js');
   browser.run('index.js');
   browser.flush();
   browser.element('JA').dispatch('click');
   browser.flush();
-  assert.equal(browser.window.location.search, '?lang=JA&affil=Osaka');
+  assert.equal(browser.window.location.search, '?lang=JA&affil=UBC');
   assert.equal(browser.reloads, 0);
   assert.equal(browser.document.documentElement.lang, 'ja');
-  assert.equal(browser.element('frontlogo').style.display, 'none');
-  assert.notEqual(browser.element('frontlogo2').style.display, 'none');
+  assert.notEqual(browser.element('frontlogo').style.display, 'none');
+  if (browser.element('frontlogo2')) assert.equal(browser.element('frontlogo2').style.display, 'none');
   const label = browser.element('main_research_EN');
   assert.equal(label.querySelector('.English').style.display, 'none');
   assert.notEqual(label.querySelector('.Japanese').style.display, 'none');
@@ -61,8 +122,8 @@ test('interior default remains UBC and Chinese Osaka sections are not lost', () 
   assert.equal(browser.window.YachieSite.getState().affiliation, 'UBC');
   browser.window.YachieSite.setAffiliation('Osaka');
   browser.element('ZH').dispatch('click');
-  assert.equal(browser.element('frontlogo').style.display, 'none');
-  assert.notEqual(browser.element('frontlogo2').style.display, 'none');
+  assert.notEqual(browser.element('frontlogo').style.display, 'none');
+  if (browser.element('frontlogo2')) assert.equal(browser.element('frontlogo2').style.display, 'none');
   const osakaChinese = browser.document.querySelectorAll('.Osaka.Chinese');
   assert.ok(osakaChinese.length > 0);
   osakaChinese.forEach(element => assert.notEqual(element.style.display, 'none'));
@@ -82,7 +143,7 @@ test('HTML navigation parameters preserve unrelated query keys, hashes and exter
   browser.document.body.appendChild(download);
   browser.run('common.js');
   browser.element('ZH').dispatch('click');
-  assert.equal(link.getAttribute('href'), './contact.html?campaign=lab&lang=ZH#address');
+  assert.equal(link.getAttribute('href'), './contact.html?campaign=lab&lang=ZH&affil=UBC#address');
   assert.equal(outside.getAttribute('href'), 'https://www.addgene.org/Nozomu_Yachie/');
   assert.equal(download.getAttribute('href'), './pdf/example.pdf');
 });
@@ -364,13 +425,13 @@ test('split logo scroll, Home, affiliation and language changes use the latest g
   browser.window.YachieSite.setAffiliation('Osaka');
   browser.element('ZH').dispatch('click');
   browser.flush();
-  for (const id of ['frontlogo2', 'backlogo2']) {
+  for (const id of ['frontlogo', 'backlogo']) {
     assert.equal(stacks[id].style.position, 'relative');
     assert.equal(stacks[id].style.top, '0px');
   }
-  assert.equal(stacks.frontlogo2.style.height, 'auto');
-  assert.equal(browser.element('frontlogo').style.display, 'none');
-  assert.notEqual(browser.element('frontlogo2').style.display, 'none');
+  assert.equal(stacks.frontlogo.style.height, 'auto');
+  assert.notEqual(browser.element('frontlogo').style.display, 'none');
+  if (browser.element('frontlogo2')) assert.equal(browser.element('frontlogo2').style.display, 'none');
   browser.window.YachieSite.setAffiliation('UBC');
   browser.flush();
   assert.equal(stacks.frontlogo.style.top, '0px');
@@ -379,23 +440,246 @@ test('split logo scroll, Home, affiliation and language changes use the latest g
   assert.deepEqual(Object.values(stacks).flatMap(stack => stack.querySelectorAll('img')).map(image => ({...image.style})), before);
 });
 
-test('legacy single-image markup remains a working fallback on an excluded page and missing Osaka logo IDs', () => {
+test('legacy excluded page upgrades only its header DOM and preserves the page body', () => {
   const browser = createBrowser('yuka.html', {url: 'https://ponnhide.github.io/yachielab-preview/yuka.html?lang=ZH&affil=Osaka'});
   assert.equal(browser.document.querySelector('.logo-stack'), null);
   browser.run('common.js');
   browser.flush();
   const front = controlledLogo(browser, 'frontlogo');
   const back = controlledLogo(browser, 'backlogo');
-  assert.equal(front.tagName, 'IMG');
+  assert.equal(front.classList.contains('logo-stack'), true);
+  assert.equal(front.querySelectorAll('.logo-control').length, 2);
+  assert.equal(browser.element('frontlogo').parentElement.id, 'head-title');
   browser.metrics.mainTop = 110;
   browser.window.dispatch('scroll');
   browser.flush();
   assert.equal(front.style.height, '81.2px');
-  assert.equal(front.style.objectPosition, 'top');
+  assert.equal(front.style.objectPosition, undefined);
   assert.equal(back.getBoundingClientRect().height, 110);
   browser.metrics.mainTop = 192;
   browser.window.dispatch('scroll');
   browser.flush();
   assert.equal(front.style.height, 'auto');
   assert.equal(front.style.top, '0px');
+});
+
+
+function logoControl(browser, layer, affiliation) {
+  return controlledLogo(browser, layer).querySelector('.logo-control[data-affiliation="' + affiliation + '"]');
+}
+function mobileLogoControl(browser, affiliation) {
+  const element = browser.element(affiliation === 'UBC' ? 'mobile-ubc-lab' : 'mobile-osaka-lab');
+  return element.getAttribute('data-affiliation') ? element : element.querySelector('.logo-control');
+}
+
+test('every ordinary page uses URL affiliation first and language-based defaults only at initialization', () => {
+  for (const page of ['index.html', 'research.html', 'contact.html', 'people.html', 'yuka.html']) {
+    for (const language of ['EN', 'JA', 'ZH']) {
+      for (const affiliation of [null, 'UBC', 'Osaka', 'unknown']) {
+        const url = new URL('https://ponnhide.github.io/yachielab-preview/' + page);
+        url.searchParams.set('lang', language);
+        if (affiliation) url.searchParams.set('affil', affiliation);
+        const browser = createBrowser(page, {url: url.href});
+        browser.run('common.js');
+        browser.flush();
+        const selected = /^(UBC|Osaka)$/.test(affiliation || '') ? affiliation : language === 'JA' ? 'Osaka' : 'UBC';
+        assert.equal(browser.window.YachieSite.getState().affiliation, selected, page + ' ' + language + ' ' + affiliation);
+        assert.equal(browser.window.location.pathname, url.pathname);
+        assert.equal(browser.window.location.searchParams.get('affil'), selected);
+        assert.notEqual(browser.element('frontlogo').style.display, 'none');
+        if (browser.element('frontlogo2')) assert.equal(browser.element('frontlogo2').style.display, 'none');
+        assert.equal(logoControl(browser, 'frontlogo', selected).getAttribute('aria-pressed'), 'true');
+        browser.window.YachieSite.setLanguage(language === 'JA' ? 'EN' : 'JA');
+        assert.equal(browser.window.YachieSite.getState().affiliation, selected, 'Language changes retain affiliation');
+      }
+    }
+  }
+});
+
+test('Lab-only rows filter by affiliation while All wrappers retain their original display', () => {
+  const browser = createBrowser('research.html');
+  const sections = {};
+  for (const affiliation of ['UBC', 'Osaka', 'All']) {
+    const section = browser.document.createElement('section');
+    section.classList.add(affiliation);
+    section.style.display = 'flex';
+    browser.document.body.appendChild(section);
+    sections[affiliation] = section;
+  }
+  browser.run('common.js');
+  assert.equal(sections.UBC.style.display, 'flex');
+  assert.equal(sections.Osaka.style.display, 'none');
+  browser.window.YachieSite.setAffiliation('Osaka');
+  assert.equal(sections.UBC.style.display, 'none');
+  assert.equal(sections.Osaka.style.display, 'flex');
+  assert.equal(sections.All.style.display, 'flex');
+});
+
+test('desktop logo clicks stay on the current page and propagate state through internal links', () => {
+  const browser = createBrowser('contact.html', {url: 'https://ponnhide.github.io/yachielab-preview/contact.html?lang=ZH&affil=UBC&campaign=lab#address'});
+  const ordinary = browser.document.createElement('a');
+  ordinary.setAttribute('href', './research.html?affil=UBC&campaign=link#project');
+  browser.document.body.appendChild(ordinary);
+  const generalPeople = browser.document.createElement('a');
+  generalPeople.setAttribute('href', './people.html');
+  browser.document.body.appendChild(generalPeople);
+  const ubcPeople = browser.document.createElement('a');
+  ubcPeople.setAttribute('href', './people.html?affil=UBC');
+  browser.document.body.appendChild(ubcPeople);
+  browser.run('common.js');
+  browser.flush();
+  const front = controlledLogo(browser, 'frontlogo');
+  assert.notEqual(front.parentElement.tagName, 'A', 'Lab selectors must not be home links');
+  const click = logoControl(browser, 'frontlogo', 'Osaka').dispatch('click');
+  assert.equal(click.defaultPrevented, true);
+  browser.flush();
+  assert.equal(browser.window.location.pathname, '/yachielab-preview/contact.html');
+  assert.equal(browser.window.location.hash, '#address');
+  assert.equal(browser.window.location.searchParams.get('campaign'), 'lab');
+  assert.equal(browser.window.location.searchParams.get('affil'), 'Osaka');
+  assert.equal(ordinary.getAttribute('href'), './research.html?affil=Osaka&campaign=link&lang=ZH#project');
+  assert.match(generalPeople.getAttribute('href'), /affil=Osaka/);
+  assert.match(ubcPeople.getAttribute('href'), /affil=UBC/);
+  for (const layer of ['frontlogo', 'backlogo']) {
+    assert.equal(logoControl(browser, layer, 'Osaka').getAttribute('aria-pressed'), 'true');
+    assert.equal(logoControl(browser, layer, 'UBC').getAttribute('aria-pressed'), 'false');
+  }
+  assert.equal(logoControl(browser, 'frontlogo', 'Osaka').listeners.has('keydown'), false, 'Native buttons must avoid duplicate synthesized keyboard clicks');
+});
+
+test('white crop and teal exclusion remain synchronized through scroll, Home, resize and affiliation changes', () => {
+  const browser = createBrowser('research.html');
+  browser.run('common.js');
+  browser.flush();
+  const front = controlledLogo(browser, 'frontlogo');
+  const back = controlledLogo(browser, 'backlogo');
+  assert.equal(back.style.clipPath, 'inset(110px 0px 0px)');
+  browser.metrics.mainTop = 110;
+  browser.window.dispatch('scroll');
+  browser.flush();
+  assert.equal(front.style.height, '81.2px');
+  assert.equal(back.style.clipPath, 'inset(81.2px 0px 0px)', 'Teal must be removed everywhere the translucent white layer exists');
+  browser.window.YachieSite.setAffiliation('Osaka');
+  browser.flush();
+  assert.equal(back.style.clipPath, 'inset(81.2px 0px 0px)');
+  browser.metrics.mainTop = -100;
+  browser.window.dispatch('scroll');
+  browser.flush();
+  assert.equal(front.style.height, '0px');
+  assert.equal(back.style.clipPath, 'inset(0px 0px 0px)');
+  browser.metrics.mainTop = 192;
+  browser.metrics.logoHeight = 130;
+  browser.window.dispatch('resize');
+  browser.flush();
+  assert.equal(front.style.height, 'auto');
+  assert.equal(back.style.clipPath, 'inset(130px 0px 0px)');
+  assert.equal(front.style.top, '0px');
+});
+
+test('a lab has one keyboard stop across its visible white and teal layers, with focus following the visible layer', () => {
+  const browser = createBrowser('research.html');
+  browser.run('common.js');
+  browser.flush();
+  const frontUbc = logoControl(browser, 'frontlogo', 'UBC');
+  const backUbc = logoControl(browser, 'backlogo', 'UBC');
+  assert.equal(frontUbc.getAttribute('tabindex'), '0');
+  assert.equal(backUbc.getAttribute('tabindex'), '-1');
+  assert.equal(backUbc.getAttribute('aria-hidden'), 'true');
+  frontUbc.focus();
+  browser.metrics.mainTop = -1;
+  browser.window.dispatch('scroll');
+  browser.flush();
+  assert.equal(frontUbc.getAttribute('tabindex'), '-1');
+  assert.equal(backUbc.getAttribute('tabindex'), '0');
+  assert.equal(backUbc.getAttribute('aria-hidden'), 'false');
+  assert.equal(browser.document.activeElement, backUbc);
+  for (const id of ['frontlogo2', 'backlogo2']) {
+    const element = browser.element(id);
+    if (element) element.querySelectorAll('.logo-control').forEach(control => assert.equal(control.getAttribute('tabindex'), '-1'));
+  }
+});
+
+test('validated head custom properties reach every desktop and mobile controller', () => {
+  const browser = createBrowser('research.html');
+  browser.element('head').setAttribute('style', '--lab-logo-active-opacity:.9;--lab-logo-inactive-opacity:.25;--lab-logo-transition-duration:.45s;');
+  browser.run('common.js');
+  browser.flush();
+  browser.document.querySelectorAll('.logo-stack, .logo-control[data-affiliation]').forEach(element => {
+    assert.equal(element.style['--lab-logo-active-opacity'], '0.9');
+    assert.equal(element.style['--lab-logo-inactive-opacity'], '0.25');
+    assert.equal(element.style['--lab-logo-transition-duration'], '450ms');
+  });
+  const invalid = createBrowser('research.html');
+  invalid.element('head').setAttribute('style', '--lab-logo-active-opacity:2;--lab-logo-inactive-opacity:bad;--lab-logo-transition-duration:10001ms;');
+  invalid.run('common.js');
+  const control = logoControl(invalid, 'frontlogo', 'UBC');
+  assert.equal(control.style['--lab-logo-active-opacity'], '1');
+  assert.equal(control.style['--lab-logo-inactive-opacity'], '0.5');
+  assert.equal(control.style['--lab-logo-transition-duration'], '300ms');
+});
+
+test('same-origin settings JSON updates all controllers without changing the selected page or lab', async () => {
+  const browser = createBrowser('contact.html', {url: 'https://ponnhide.github.io/yachielab-preview/contact.html?lang=JA'});
+  const requests = [];
+  browser.window.fetch = (url, options) => {
+    requests.push({url, options});
+    return Promise.resolve({ok: true, json: () => Promise.resolve({logoActiveOpacity: 0.85, logoInactiveOpacity: 0.2, logoTransitionMs: 725})});
+  };
+  browser.run('common.js');
+  await tick();
+  browser.flush();
+  assert.equal(requests.length, 1);
+  assert.equal(requests[0].url, 'https://ponnhide.github.io/yachielab-preview/site-settings.json');
+  assert.equal(requests[0].options.credentials, 'same-origin');
+  assert.equal(browser.window.location.pathname, '/yachielab-preview/contact.html');
+  assert.equal(browser.window.location.searchParams.get('affil'), 'Osaka');
+  browser.document.querySelectorAll('.logo-control[data-affiliation]').forEach(control => {
+    assert.equal(control.style['--lab-logo-active-opacity'], '0.85');
+    assert.equal(control.style['--lab-logo-inactive-opacity'], '0.2');
+    assert.equal(control.style['--lab-logo-transition-duration'], '725ms');
+  });
+});
+
+test('invalid or offline settings JSON retains the valid head settings as one complete configuration', async () => {
+  const responses = [
+    {ok: true, json: () => Promise.resolve({logoActiveOpacity: 0.8, logoInactiveOpacity: 0.1, logoTransitionMs: 10001})},
+    {ok: true, json: () => Promise.resolve({logoActiveOpacity: '0.8', logoInactiveOpacity: 0.1, logoTransitionMs: 250})},
+    {ok: false},
+    null
+  ];
+  for (const response of responses) {
+    const browser = createBrowser('research.html');
+    browser.element('head').setAttribute('style', '--lab-logo-active-opacity:.95;--lab-logo-inactive-opacity:.35;--lab-logo-transition-duration:600ms;');
+    browser.window.fetch = () => response ? Promise.resolve(response) : Promise.reject(new Error('Offline'));
+    browser.run('common.js');
+    await tick();
+    browser.flush();
+    const control = logoControl(browser, 'frontlogo', 'UBC');
+    assert.equal(control.style['--lab-logo-active-opacity'], '0.95');
+    assert.equal(control.style['--lab-logo-inactive-opacity'], '0.35');
+    assert.equal(control.style['--lab-logo-transition-duration'], '600ms');
+  }
+});
+
+test('legacy mobile menus gain one lab selector group and its choices stay on the current page', () => {
+  const browser = createBrowser('yuka.html', {width: 390, url: 'https://ponnhide.github.io/yachielab-preview/yuka.html?lang=JA'});
+  const bodyPosts = browser.document.querySelector('.posts');
+  const bodyChildren = bodyPosts.children.slice();
+  browser.run('common.js');
+  browser.run('mobile_menu.js');
+  browser.flush();
+  assert.deepEqual(bodyPosts.children, bodyChildren, 'Legacy header migration must preserve body nodes');
+  assert.equal(browser.document.querySelectorAll('#mobile-lab-switch').length, 1);
+  assert.equal(mobileLogoControl(browser, 'Osaka').getAttribute('aria-pressed'), 'true');
+  browser.element('menu-icon').dispatch('click');
+  browser.completeAnimation();
+  mobileLogoControl(browser, 'UBC').dispatch('click');
+  browser.flush();
+  assert.equal(browser.window.location.pathname, '/yachielab-preview/yuka.html');
+  assert.equal(browser.window.location.searchParams.get('affil'), 'UBC');
+  assert.equal(mobileLogoControl(browser, 'UBC').getAttribute('aria-pressed'), 'true');
+  assert.equal(browser.element('mobile-menu').style.visibility, 'visible');
+  for (const layer of ['frontlogo', 'backlogo']) {
+    assert.equal(logoControl(browser, layer, 'UBC').getAttribute('tabindex'), '-1', 'Hidden desktop header controls are not keyboard targets on mobile');
+  }
 });

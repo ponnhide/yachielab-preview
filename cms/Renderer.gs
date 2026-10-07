@@ -140,6 +140,11 @@ function appendContent(adict) {
   var image = sheetValue_(adict, '/* img url');
   if (image) {
     var imageHtml = rendererLogoPair_(adict, image);
+    var affiliationControl = !!imageHtml;
+    if (!imageHtml) {
+      imageHtml = rendererMobileLabControl_(adict, image);
+      affiliationControl = !!imageHtml;
+    }
     if (!imageHtml) {
       var imageLink = uploadImg(image), filter = sheetValue_(adict, '/* insta filter');
       imageHtml = '<img src="' + sheetAttribute_(imageLink) + '" alt="content_img"';
@@ -147,7 +152,7 @@ function appendContent(adict) {
       else imageHtml += rendererImageStyleAttributes_(adict) + ' class="content_img">';
     }
     var hyperlink = sheetValue_(adict, '/* img hyperlink');
-    content += (hyperlink ? '<a href="' + sheetAttribute_(hyperlink) + '">' + imageHtml + '</a>' : imageHtml) + '\n';
+    content += (hyperlink && !affiliationControl ? '<a href="' + sheetAttribute_(hyperlink) + '">' + imageHtml + '</a>' : imageHtml) + '\n';
   }
   var text = sheetValue_(adict, '/* Text');
   if (text) content += rendererMarkdown_(text) + '\n';
@@ -162,9 +167,26 @@ function rendererLogoPair_(adict, image) {
     filename === 'two_logos_teal_on_white.svg' ? 'teal' : '';
   if (!variant) return '';
   return '<span class="logo-stack content_img"' + rendererImageStyleAttributes_(adict) + '><span class="logo-canvas">' +
-    '<img class="logo-ubc" src="./img/header-ubc-' + variant + '.svg" alt="Yachie Lab, University of British Columbia">' +
-    '<img class="logo-osaka" src="./img/header-osaka-' + variant + '.svg" alt="Laboratory of Creative Destruction Biology, The University of Osaka">' +
+    rendererLabControl_('UBC', './img/header-ubc-' + variant + '.svg', '') +
+    rendererLabControl_('Osaka', './img/header-osaka-' + variant + '.svg', '') +
     '</span></span>';
+}
+
+function rendererLabControl_(affiliation, image, attributes) {
+  var university = affiliation === 'UBC' ? 'University of British Columbia' : 'The University of Osaka';
+  var name = affiliation === 'UBC' ? 'Yachie Lab, ' + university : 'Laboratory of Creative Destruction Biology, ' + university;
+  return '<button type="button" class="logo-control logo-' + affiliation.toLowerCase() + '" data-affiliation="' + affiliation +
+    '" aria-label="Switch to ' + university + ' lab" aria-pressed="false"' + attributes + '>' +
+    '<img src="' + sheetAttribute_(image) + '" alt="' + name + '"></button>';
+}
+
+function rendererMobileLabControl_(adict, image) {
+  var id = sheetValue_(adict, '/* ID');
+  var affiliation = id === 'mobile-ubc-lab' ? 'UBC' : id === 'mobile-osaka-lab' ? 'Osaka' : '';
+  if (!affiliation) return '';
+  // Local split artwork is already managed; ordinary custom URLs use AssetStore.
+  var imageLink = /^\.\/img\/header-(?:ubc|osaka)-(?:white|teal)\.svg$/.test(image) ? image : uploadImg(image);
+  return rendererLabControl_(affiliation, imageLink, rendererImageStyleAttributes_(adict));
 }
 
 function appendPost(adict) {

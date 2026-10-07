@@ -11,7 +11,19 @@ const PDF_PATH = 'pdf';
 const GITHUB_TOKEN = PropertiesService.getScriptProperties().getProperty('PREVIEW_GITHUB_TOKEN') || '';
 
 function previewWritablePath_(path) {
-  return typeof path === 'string' && !/(?:^|\/)\.\.(?:\/|$)|[\\?%\x00-\x1f]/.test(path) && /^(?:[a-zA-Z0-9_-]+\.html|(?:img|pdf)\/[^/]+)$/.test(path);
+  return typeof path === 'string' && !/(?:^|\/)\.\.(?:\/|$)|[\\?%\x00-\x1f]/.test(path) && /^(?:site-settings\.json|[a-zA-Z0-9_-]+\.html|(?:img|pdf)\/[^/]+)$/.test(path);
+}
+
+function previewSiteSettingsContent_(content) {
+  var settings;
+  try { settings = JSON.parse(content); } catch (error) { return false; }
+  if (!settings || typeof settings !== 'object' || Array.isArray(settings)) return false;
+  var keys = ['logoActiveOpacity', 'logoInactiveOpacity', 'logoTransitionMs'];
+  if (Object.keys(settings).length !== keys.length || !keys.every(function(key) { return Object.prototype.hasOwnProperty.call(settings, key); })) return false;
+  return keys.every(function(key) {
+    var value = settings[key];
+    return typeof value === 'number' && Number.isFinite(value) && value >= 0 && value <= (key === 'logoTransitionMs' ? 10000 : 1);
+  });
 }
 
 function previewPrepareHtml_(html) {
@@ -69,9 +81,9 @@ function previewFetch_(url, options) {
   } else if (method === 'post' && endpoint === 'git/trees') {
     allowed = !!payload && /^[a-f0-9]{40}$/.test(payload.base_tree) && Array.isArray(payload.tree) && payload.tree.every(function(entry) {
       return previewWritablePath_(entry.path) && entry.mode === '100644' && entry.type === 'blob' &&
-        ((typeof entry.content === 'string' && /\.html$/.test(entry.path) && entry.sha === undefined) || (/^[a-f0-9]{40}$/.test(entry.sha) && /^(?:img|pdf)\//.test(entry.path) && entry.content === undefined));
+        ((typeof entry.content === 'string' && entry.sha === undefined && (/\.html$/.test(entry.path) || (entry.path === 'site-settings.json' && previewSiteSettingsContent_(entry.content)))) || (/^[a-f0-9]{40}$/.test(entry.sha) && /^(?:img|pdf)\//.test(entry.path) && entry.content === undefined));
     });
-    if (allowed) payload.tree.forEach(function(entry) { if (entry.content !== undefined) entry.content = previewPrepareHtml_(entry.content); });
+    if (allowed) payload.tree.forEach(function(entry) { if (entry.content !== undefined && /\.html$/.test(entry.path)) entry.content = previewPrepareHtml_(entry.content); });
   } else if (method === 'post' && endpoint === 'git/blobs') {
     allowed = !!payload && payload.encoding === 'base64' && typeof payload.content === 'string';
   } else if (method === 'post' && endpoint === 'git/commits') {
@@ -82,6 +94,9 @@ function previewFetch_(url, options) {
     var path = endpoint.slice('contents/'.length);
     allowed = !!payload && payload.branch === PREVIEW_BRANCH && previewWritablePath_(path);
     if (allowed && /\.html$/.test(path)) payload.content = Utilities.base64Encode(previewPrepareHtml_(Utilities.newBlob(Utilities.base64Decode(payload.content)).getDataAsString('UTF-8')), Utilities.Charset.UTF_8);
+    if (allowed && path === 'site-settings.json') {
+      allowed = typeof payload.content === 'string' && previewSiteSettingsContent_(Utilities.newBlob(Utilities.base64Decode(payload.content)).getDataAsString('UTF-8'));
+    }
   }
   if (!allowed) throw new Error('Preview CMS: unsupported repository operation; request blocked.');
   if (payload) request.payload = JSON.stringify(payload);

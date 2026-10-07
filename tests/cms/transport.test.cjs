@@ -45,6 +45,7 @@ function fixture(options = {}) {
     downloads: new Map(), drives: new Map()
   };
   const values = {
+    header: [['Lab', 'Language', 'Function', 'Direction', 'ID', 'Style'], ['All', 'Common', 'div', 'v', 'head', '']],
     parameters: [
       ['Function', 'Parameter1', 'Parameter2'],
       ['Member', '/* Name', '/* Name in publication'],
@@ -116,6 +117,7 @@ function fixture(options = {}) {
       if (method === 'get' && endpoint.startsWith('git/ref/heads/')) return response({ object: { sha: state.head } });
       if (method === 'get' && endpoint.startsWith('git/commits/')) return response({ sha: HEAD, tree: { sha: state.tree } });
       if (method === 'get' && endpoint.startsWith('git/trees/')) return response({ sha: state.tree, tree: state.entries, truncated: Boolean(state.truncated) });
+      if (method === 'get' && endpoint.startsWith('contents/site-settings.json')) return response({sha: BLOB, content: Buffer.from(JSON.stringify({logoActiveOpacity: 1, logoInactiveOpacity: 0.5, logoTransitionMs: 300})).toString('base64')});
       if (method === 'get' && endpoint.startsWith('contents/')) return response({ sha: BLOB, content: Buffer.from(html).toString('base64') });
       if (method === 'post' && endpoint === 'git/blobs') return response({ sha: '3'.repeat(40) }, 201);
       if (method === 'post' && endpoint === 'git/trees') return response({ sha: state.treeUnchanged ? state.tree : NEW_TREE }, 201);
@@ -266,12 +268,102 @@ test('several pages and an asset are published as one tree, one commit and one r
   assert.equal(posts(state, 'git/commits').length, 1);
   const tree = posts(state, 'git/trees')[0].payload;
   assert.equal(tree.base_tree, TREE);
-  assert.deepEqual(tree.tree.map(entry => entry.path), ['contact.html', 'research.html', 'img/new.jpg']);
+  assert.deepEqual(tree.tree.map(entry => entry.path), ['contact.html', 'research.html', 'site-settings.json', 'img/new.jpg']);
+  const settings = tree.tree.find(entry => entry.path === 'site-settings.json');
+  assert.deepEqual(JSON.parse(settings.content), {logoActiveOpacity: 1, logoInactiveOpacity: 0.5, logoTransitionMs: 300});
+  assert.doesNotMatch(settings.content, /test-preview-token|spreadsheet|repository/i);
   assert.equal(posts(state, 'git/commits')[0].payload.parents[0], HEAD);
   const ref = state.io.filter(call => call.method === 'patch');
   assert.equal(ref.length, 1);
   assert.equal(ref[0].payload.sha, COMMIT);
   assert.equal(ref[0].payload.force, false);
+});
+
+test('head CSS settings publish only numeric values with seconds converted to milliseconds', () => {
+  const state = fixture({sheetRows: {header: [
+    ['Lab', 'Language', 'Function', 'Direction', 'ID', 'Style'],
+    ['All', 'Common', 'div', 'v', 'head', 'display:flex; --lab-logo-active-opacity:0.8 !important; --lab-logo-inactive-opacity:0.25; --lab-logo-transition-duration:.45s;'],
+    ['All', 'Common', 'div', 'v', 'other', '--lab-logo-active-opacity:0;']
+  ]}});
+  const result = state.context.cmsPublish_([{path: 'contact.html', html, expectedSha: BLOB}]);
+  assert.equal(result.pages, 1, 'The JSON settings file is not an HTML page');
+  const content = posts(state, 'git/trees')[0].payload.tree.find(entry => entry.path === 'site-settings.json').content;
+  assert.deepEqual(JSON.parse(content), {logoActiveOpacity: 0.8, logoInactiveOpacity: 0.25, logoTransitionMs: 450});
+  assert.equal(state.reads['header:values'], 1);
+  assert.equal(state.reads['header:rich'], 1);
+});
+
+test('settings bounds include zero and the maximum duration, and the last CSS declaration wins', () => {
+  const state = fixture({sheetRows: {header: [
+    ['Lab', 'Language', 'Function', 'Direction', 'ID', 'Style'],
+    ['All', 'Common', 'div', 'v', 'head', '--lab-logo-active-opacity:0.2; --lab-logo-active-opacity:1; --lab-logo-inactive-opacity:0; --lab-logo-transition-duration:10s;']
+  ]}});
+  const settings = JSON.parse(JSON.stringify(state.context.cmsSiteSettings_()));
+  assert.deepEqual(settings, {logoActiveOpacity: 1, logoInactiveOpacity: 0, logoTransitionMs: 10000});
+  assert.equal(state.context.cmsSiteSettings_(), state.context.cmsSiteSettings_(), 'Read the head settings once per execution');
+});
+
+test('a settings-only publication is still an atomic commit with zero HTML pages', () => {
+  const state = fixture();
+  const result = state.context.cmsPublish_([], 'Refresh site settings');
+  assert.equal(result.changed, true);
+  assert.equal(result.pages, 0);
+  assert.equal(result.assets, 0);
+  assert.deepEqual(posts(state, 'git/trees')[0].payload.tree.map(entry => entry.path), ['site-settings.json']);
+  assert.equal(posts(state, 'git/commits').length, 1);
+  assert.equal(state.io.filter(call => call.method === 'patch').length, 1);
+});
+
+test('invalid Sheet settings fail before GitHub I/O rather than silently using defaults', () => {
+  const bad = [
+    '--lab-logo-active-opacity:NaN;', '--lab-logo-active-opacity:Infinity;', '--lab-logo-active-opacity:1.01;',
+    '--lab-logo-inactive-opacity:-0.1;', '--lab-logo-inactive-opacity:50%;', '--lab-logo-inactive-opacity:;',
+    '--lab-logo-active-opacity:<0.5>;', '--lab-logo-transition-duration:10001ms;',
+    '--lab-logo-active-opacity:0.5; --lab-logo-active-opacity:;',
+    '--lab-logo-active-opacity:0.5; --lab-logo-active-opacity:<0.8>;',
+    '--lab-logo-transition-duration:-1ms;', '--lab-logo-transition-duration:300;',
+    '--lab-logo-transition-duration:calc(1s);', '--lab-logo-transition-duration:1e309s;'
+  ];
+  for (const css of bad) {
+    const state = fixture({sheetRows: {header: [['Lab', 'Language', 'Function', 'Direction', 'ID', 'Style'], ['All', 'Common', 'div', 'v', 'head', css]]}});
+    blockedWithoutIo(state, () => state.context.cmsPublish_([{path: 'contact.html', html}]));
+  }
+});
+
+test('missing or duplicated head settings rows stop before any GitHub operation', () => {
+  for (const rows of [[], [['All', 'Common', 'div', 'v', 'other', '']], [['All', 'Common', 'div', 'v', 'head', ''], ['All', 'Common', 'div', 'v', 'head', '']]]) {
+    const state = fixture({sheetRows: {header: [['Lab', 'Language', 'Function', 'Direction', 'ID', 'Style'], ...rows]}});
+    blockedWithoutIo(state, () => state.context.cmsPublish_([{path: 'contact.html', html}]));
+  }
+});
+
+test('the exact root settings JSON can be read and written on the preview branch', () => {
+  const state = fixture();
+  const settings = {logoActiveOpacity: 1, logoInactiveOpacity: 0.5, logoTransitionMs: 300};
+  const content = JSON.stringify(settings);
+  const read = state.context.getGithubFileContent('ignored', PREVIEW_REPO, 'site-settings.json', PREVIEW_BRANCH);
+  assert.deepEqual(JSON.parse(Buffer.from(read.content, 'base64').toString('utf8')), settings);
+  assert.match(state.io[0].url, /contents\/site-settings\.json\?ref=codex%2Fpreview$/);
+  state.github('git/trees', 'post', {base_tree: TREE, tree: [{path: 'site-settings.json', mode: '100644', type: 'blob', content}]});
+  assert.equal(posts(state, 'git/trees')[0].payload.tree[0].content, content, 'JSON must not pass through the HTML normalizer');
+  state.github('contents/site-settings.json', 'put', {branch: PREVIEW_BRANCH, content: Buffer.from(content).toString('base64')});
+  assert.equal(state.io.at(-1).method, 'put');
+});
+
+test('settings guards reject other JSON paths, opaque blob SHAs, invalid schemas and main', () => {
+  const state = fixture();
+  const valid = {logoActiveOpacity: 1, logoInactiveOpacity: 0.5, logoTransitionMs: 300};
+  for (const name of ['other.json', 'docs/site-settings.json', '/site-settings.json', 'site-settings.json/other', '../site-settings.json', 'site-settings%2ejson']) {
+    blockedWithoutIo(state, () => state.github('git/trees', 'post', {base_tree: TREE, tree: [{path: name, mode: '100644', type: 'blob', content: JSON.stringify(valid)}]}));
+  }
+  blockedWithoutIo(state, () => state.github('git/trees', 'post', {base_tree: TREE, tree: [{path: 'site-settings.json', mode: '100644', type: 'blob', sha: BLOB}]}));
+  const invalid = ['not JSON', '{}', '[]', 'null', JSON.stringify({...valid, token: 'do not publish'}), JSON.stringify({...valid, logoActiveOpacity: '1'}), JSON.stringify({...valid, logoInactiveOpacity: 1.1}), JSON.stringify({...valid, logoTransitionMs: -1}), JSON.stringify({...valid, logoTransitionMs: 10001})];
+  for (const content of invalid) {
+    blockedWithoutIo(state, () => state.github('git/trees', 'post', {base_tree: TREE, tree: [{path: 'site-settings.json', mode: '100644', type: 'blob', content}]}));
+    blockedWithoutIo(state, () => state.github('contents/site-settings.json', 'put', {branch: PREVIEW_BRANCH, content: Buffer.from(content).toString('base64')}));
+  }
+  blockedWithoutIo(state, () => state.github('contents/site-settings.json?ref=main'));
+  blockedWithoutIo(state, () => state.github('contents/site-settings.json', 'put', {branch: 'main', content: Buffer.from(JSON.stringify(valid)).toString('base64')}));
 });
 
 test('a contents blob SHA mismatch and an incomplete GitHub tree stop before writes', () => {

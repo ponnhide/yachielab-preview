@@ -24,8 +24,50 @@ function getGithubFileContent(token, repo, path, branch) {
   return cmsGithub_('contents/' + path + '?ref=' + encodeURIComponent(branch), 'get', null, true);
 }
 
+// Publish only these numeric settings. The Sheet and credentials stay private.
+function cmsSiteSettings_() {
+  var context = cmsContext_();
+  if (context.siteSettings) return context.siteSettings;
+  var headRows = cmsSheetRows_('header').values.slice(1).filter(function(row) {
+    return row[2] === 'div' && sheetString_(row[4]).trim() === 'head';
+  });
+  if (headRows.length !== 1) throw new Error('Header must contain exactly one head row for the site settings.');
+  var css = sheetString_(headRows[0][5]);
+  var properties = {
+    '--lab-logo-active-opacity': 'logoActiveOpacity',
+    '--lab-logo-inactive-opacity': 'logoInactiveOpacity',
+    '--lab-logo-transition-duration': 'logoTransitionMs'
+  };
+  var settings = {logoActiveOpacity: 1, logoInactiveOpacity: 0.5, logoTransitionMs: 300};
+  var values = {};
+  sheetDeclarations_(css).forEach(function(declaration) {
+    if (Object.prototype.hasOwnProperty.call(properties, declaration.property)) values[declaration.property] = declaration.value;
+  });
+  // The shared CSS parser omits malformed/empty declarations. A named setting
+  // must fail explicitly in that case instead of silently using its default.
+  var declared = /(?:^|;)\s*(--lab-logo-(?:active-opacity|inactive-opacity|transition-duration))\s*:([^;]*)/gi;
+  var match, clean = css.replace(/\/\*[\s\S]*?\*\//g, '');
+  while ((match = declared.exec(clean))) {
+    if (sheetDeclarations_(match[1] + ':' + match[2]).length !== 1 || !Object.prototype.hasOwnProperty.call(values, match[1].toLowerCase())) throw new Error('Invalid header site setting: ' + match[1].toLowerCase());
+  }
+  Object.keys(properties).forEach(function(property) {
+    if (!Object.prototype.hasOwnProperty.call(values, property)) return;
+    var value = values[property].trim(), number;
+    if (property === '--lab-logo-transition-duration') {
+      var duration = value.match(/^([+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:e[+-]?\d+)?)\s*(ms|s)$/i);
+      number = duration ? Number(duration[1]) * (duration[2].toLowerCase() === 's' ? 1000 : 1) : NaN;
+      if (!Number.isFinite(number) || number < 0 || number > 10000) throw new Error('Invalid header site setting: transition duration must be 0..10000 ms, with ms or s units.');
+    } else {
+      number = /^[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:e[+-]?\d+)?$/i.test(value) ? Number(value) : NaN;
+      if (!Number.isFinite(number) || number < 0 || number > 1) throw new Error('Invalid header site setting: opacity must be a finite number from 0 to 1.');
+    }
+    settings[properties[property]] = number;
+  });
+  return context.siteSettings = settings;
+}
+
 function cmsPublish_(files, message) {
-  if (!files.length && !cmsContext_().pendingAssets.length) return {changed: false};
+  var settings = cmsSiteSettings_();
   var snapshot = cmsGithubSnapshot_();
   var current = cmsGithub_('git/ref/heads/' + PREVIEW_BRANCH).object.sha;
   if (current !== snapshot.head) throw new Error('Preview branch changed during rendering. Run the update again.');
@@ -37,6 +79,7 @@ function cmsPublish_(files, message) {
     if (file.expectedSha && (!actual || actual.sha !== file.expectedSha)) throw new Error('Page changed during rendering: ' + file.path);
     return {path: file.path, mode: '100644', type: 'blob', content: previewPrepareHtml_(file.html)};
   });
+  entries.push({path: 'site-settings.json', mode: '100644', type: 'blob', content: JSON.stringify(settings, null, 2) + '\n'});
   cmsContext_().pendingAssets.forEach(function(asset) {
     var blob = cmsGithub_('git/blobs', 'post', {content: asset.content, encoding: 'base64'});
     entries.push({path: asset.path, mode: '100644', type: 'blob', sha: blob.sha});
