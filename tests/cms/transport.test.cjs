@@ -37,7 +37,8 @@ function fixture(options = {}) {
   const state = {
     io: [], activeId: options.activeId || PREVIEW_SHEET, head: HEAD, tree: TREE,
     treeUnchanged: false, status: options.status || 200,
-    reads: {}, mutations: [], menuItems: [], menusAdded: 0, activeSheet: 'contact', toasts: [], logs: [],
+    reads: {}, mutations: [], menuItems: [], menusAdded: 0, activeSheet: 'contact', toasts: [], logs: [], sleeps: [],
+    blobStatuses: (options.blobStatuses || []).slice(),
     entries: [
       {path: 'contact.html', type: 'blob', mode: '100644', sha: BLOB},
       {path: 'research.html', type: 'blob', mode: '100644', sha: '1'.repeat(40)},
@@ -122,6 +123,7 @@ function fixture(options = {}) {
     },
     LockService: { getDocumentLock: () => ({ tryLock: () => true, waitLock() {}, releaseLock() {} }), getScriptLock: () => ({ tryLock: () => true, waitLock() {}, releaseLock() {} }) },
     Utilities: {
+      sleep: milliseconds => state.sleeps.push(milliseconds),
       Charset: { UTF_8: 'UTF-8' },
       DigestAlgorithm: { SHA_1: 'SHA_1', SHA_256: 'SHA_256' },
       computeDigest: (algorithm, value) => bytes(crypto.createHash(String(algorithm).replace(/[-_]/g, '').toLowerCase()).update(Buffer.from(typeof value === 'string' ? value : value.map(byte => (byte + 256) % 256))).digest()),
@@ -154,7 +156,11 @@ function fixture(options = {}) {
         const entry = state.entries.find(value => value.path === name);
         return response({ sha: entry ? entry.sha : BLOB, content: Buffer.from(state.contents.get(name) || html).toString('base64') });
       }
-      if (method === 'post' && endpoint === 'git/blobs') return response({ sha: gitBlobSha(Buffer.from(payload.content, 'base64')) }, 201);
+      if (method === 'post' && endpoint === 'git/blobs') {
+        const status = state.blobStatuses.length ? state.blobStatuses.shift() : 201;
+        return status === 201 ? response({ sha: gitBlobSha(Buffer.from(payload.content, 'base64')) }, 201) :
+          response({message: 'Private mock response must not be exposed'}, status);
+      }
       if (method === 'post' && endpoint === 'git/trees') {
         state.preparedEntries = payload.tree;
         return response({ sha: state.treeUnchanged ? state.tree : NEW_TREE }, 201);
@@ -610,6 +616,94 @@ test('unchanged binary assets skip blob uploads as well as publication trees', (
   assert.equal(result.assetShas['img/existing.jpg'], expected);
   assert.equal(posts(state, 'git/blobs').length, 0);
   assert.equal(posts(state, 'git/trees').length, 0);
+});
+
+test('large legacy image bytes reuse the repository blob under the new source-specific path', () => {
+  const state = fixture();
+  const content = Buffer.alloc(3122891, 0xa5), expected = gitBlobSha(content);
+  state.entries.push({path: 'img/legacy-large.JPG', type: 'blob', mode: '100644', sha: expected});
+  const newPath = 'img/joinus--123456789abc.JPG';
+  state.context.cmsContext_().pendingAssets.push({path: newPath, content: content.toString('base64')});
+  const result = state.context.cmsPublish_([]);
+  assert.equal(result.changed, true);
+  assert.equal(result.assets, 1, 'A new filename still changes the publication tree');
+  assert.equal(result.assetShas[newPath], expected);
+  assert.equal(posts(state, 'git/blobs').length, 0, 'Known image bytes must never be uploaded again');
+  assert.deepEqual(posts(state, 'git/trees')[0].payload.tree.find(entry => entry.path === newPath),
+    {path: newPath, mode: '100644', type: 'blob', sha: expected});
+  assert.ok(state.entries.some(entry => entry.path === 'img/legacy-large.JPG' && entry.sha === expected));
+  assert.equal(state.io.filter(call => call.method === 'patch').length, 1);
+  assert.deepEqual(state.sleeps, []);
+});
+
+test('new blob 500/502/503/504 retries are bounded and preserve content and atomic publication', () => {
+  for (const status of [500, 502, 503, 504]) {
+    const state = fixture({blobStatuses: [status, status, 201]});
+    const content = Buffer.from([255, 216, 255, 224, 0, 16, 255, 217]);
+    const asset = {path: 'img/new-retry.jpg', content: content.toString('base64')};
+    state.context.cmsContext_().pendingAssets.push(asset);
+    const result = state.context.cmsPublish_([]);
+    assert.equal(result.assetShas[asset.path], gitBlobSha(content));
+    assert.equal(posts(state, 'git/blobs').length, 3);
+    posts(state, 'git/blobs').forEach(call => assert.deepEqual(call.payload, {content: asset.content, encoding: 'base64'}));
+    assert.deepEqual(state.sleeps, [500, 1500]);
+    assert.equal(posts(state, 'git/trees').length, 1);
+    assert.equal(posts(state, 'git/commits').length, 1);
+    assert.equal(state.io.filter(call => call.method === 'patch').length, 1);
+    assert.equal(state.context.cmsContext_().githubWrites, 6, 'Every actual retry must count as a GitHub write');
+    assert.deepEqual(state.logs, [], 'Failed attempt bodies must not be logged');
+  }
+});
+
+test('three failed new-blob attempts stop before any tree, commit or branch mutation', () => {
+  const state = fixture({blobStatuses: [500, 502, 504, 201]});
+  state.context.cmsContext_().pendingAssets.push({path: 'img/fails.jpg', content: Buffer.from([255, 216, 255, 217]).toString('base64')});
+  assert.throws(() => state.context.cmsPublish_([]), /^Error: Preview GitHub request failed with HTTP 504\.$/);
+  assert.equal(posts(state, 'git/blobs').length, 3);
+  assert.deepEqual(state.sleeps, [500, 1500]);
+  assert.equal(state.context.cmsContext_().githubWrites, 3);
+  assert.equal(posts(state, 'git/trees').length, 0);
+  assert.equal(posts(state, 'git/commits').length, 0);
+  assert.equal(state.io.filter(call => call.method === 'patch').length, 0);
+  assert.equal(state.head, HEAD);
+  assert.deepEqual(state.logs, []);
+});
+
+test('blob validation/rate-limit errors and non-blob operations are never retried', () => {
+  for (const status of [400, 403, 404, 409, 413, 422, 429, 501]) {
+    const state = fixture({blobStatuses: [status, 201]});
+    assert.throws(() => state.context.cmsGithub_('git/blobs', 'post', {content: 'eA==', encoding: 'base64'}), new RegExp('HTTP ' + status));
+    assert.equal(posts(state, 'git/blobs').length, 1);
+    assert.equal(state.context.cmsContext_().githubWrites, 1);
+    assert.deepEqual(state.sleeps, []);
+  }
+  for (const [endpoint, method, payload] of [
+    ['git/trees', 'post', {base_tree: TREE, tree: writeEntries()}],
+    ['git/refs/heads/' + PREVIEW_BRANCH, 'patch', {sha: COMMIT, force: false}],
+    ['git/ref/heads/' + PREVIEW_BRANCH, 'get', null]
+  ]) {
+    const state = fixture({status: 500});
+    assert.throws(() => state.context.cmsGithub_(endpoint, method, payload), /HTTP 500/);
+    assert.equal(state.io.length, 1);
+    assert.deepEqual(state.sleeps, []);
+  }
+  const state = fixture(); let attempts = 0;
+  state.context.previewFetch_ = () => { attempts++; throw new Error('Transport interrupted'); };
+  assert.throws(() => state.context.cmsGithub_('git/blobs', 'post', {content: 'eA==', encoding: 'base64'}), /Transport interrupted/);
+  assert.equal(attempts, 1, 'Only the exact sanitized GitHub HTTP error permits retry');
+  assert.deepEqual(state.sleeps, []);
+});
+
+test('two new filenames with identical binary bytes need only one blob upload', () => {
+  const state = fixture();
+  const content = Buffer.from([255, 216, 255, 217]).toString('base64');
+  state.context.cmsContext_().pendingAssets.push({path: 'img/first.jpg', content}, {path: 'img/second.jpg', content});
+  const result = state.context.cmsPublish_([]);
+  assert.equal(result.assets, 2);
+  assert.equal(result.assetShas['img/first.jpg'], result.assetShas['img/second.jpg']);
+  assert.equal(posts(state, 'git/blobs').length, 1);
+  assert.equal(posts(state, 'git/trees').length, 1);
+  assert.equal(state.io.filter(call => call.method === 'patch').length, 1);
 });
 
 test('a branch change immediately before the final ref update never publishes the prepared commit', () => {

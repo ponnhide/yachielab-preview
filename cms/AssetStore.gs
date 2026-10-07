@@ -40,8 +40,12 @@ function cmsAssetPdfFallback_(value, source, key, name, path, store, reason) {
   var legacyPath = 'pdf/' + name, legacy = entries[legacyPath];
   context.assetWarnings = context.assetWarnings || [];
   context.assetWarnings.push(reason || 'oversized-pdf-kept');
+  // A GitHub commit may succeed before its private ownership record is saved.
+  // Recover the identity-derived path first; never override a conflicting owner.
+  var derived = entries[path], pathOwner = store.owners[path];
+  var recoverable = !owner && (!pathOwner || pathOwner === key) && derived && derived.type === 'blob';
   var savedPath = owner && owner.identity === source.identity && owned && owned.type === 'blob' ? ownedPath :
-    legacy && legacy.type === 'blob' ? legacyPath : '';
+    recoverable ? path : legacy && legacy.type === 'blob' ? legacyPath : '';
   var saved = savedPath && entries[savedPath];
   // This result describes the old published link, not successfully fetched
   // source bytes. Do not stage validators or a fresh ownership record.

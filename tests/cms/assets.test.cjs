@@ -281,6 +281,26 @@ test('ordinary/rebuild/data updates preserve PDF legacy or external links withou
   }
 });
 
+test('a successful manual PDF publish followed by registry-save failure does not revert to its legacy copy on normal update',()=>{
+  const s=fixture(),url='https://www.dropbox.com/x/paper.pdf?dl=0';s.entries['pdf/paper.pdf']={type:'blob',sha:gitSha('%PDF-legacy')};
+  s.http(url,Buffer.from('%PDF-current'));s.newRun({refreshAssets:true});const publishedUrl=s.run.sandbox.uploadImg(url);
+  s.failWrite=true;const result=s.publish();assert.equal(result.changed,true);assert.equal(result.assetsSaved,false);
+  s.failWrite=false;s.fetches=[];s.newRun();assert.equal(s.run.sandbox.uploadImg(url),publishedUrl);
+  assert.equal(s.fetches.length,0);assert.equal(s.run.context.pendingAssets.length,0);assert.equal(Object.keys(s.run.context.assetRegistry.staged).length,0);
+  assert.deepEqual([...s.run.context.assetWarnings],['pdf-sync-manual']);
+});
+
+test('PDF recovery never chooses a deterministic path owned by a conflicting source identity',()=>{
+  for(const conflictingRecord of [false,true]) {
+    const s=fixture(),url='https://www.dropbox.com/x/paper.pdf?dl=0',r=s.run.sandbox;
+    const source=r.cmsAssetSource_(url),key=r.cmsAssetKey_(source.identity),target=r.cmsAssetPath_('paper.pdf',key),store=r.cmsAssetRegistry_();
+    s.entries[target]={type:'blob',sha:gitSha('%PDF-unrelated')};s.entries['pdf/paper.pdf']={type:'blob',sha:gitSha('%PDF-legacy')};
+    if(conflictingRecord)store.records[key]={identity:'http:https://other.example/paper.pdf',path:target};
+    else store.owners[target]='different-source-key';
+    assert.equal(r.uploadImg(url),'./pdf/paper.pdf?v='+gitSha('%PDF-legacy').slice(0,12));assert.equal(s.fetches.length,0);assert.equal(s.run.context.pendingAssets.length,0);
+  }
+});
+
 test('external asset HTTP calls have a bounded timeout and progress logs contain only quantitative values',()=>{
   const s=fixture(),logs=[];s.run.sandbox.console.log=value=>logs.push(value);
   for(let i=0;i<5;i++){const url=remote.replace('/example/','/source'+i+'/');s.http(url);s.run.sandbox.uploadImg(url);}

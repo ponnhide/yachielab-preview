@@ -3,11 +3,22 @@ function cmsGithub_(endpoint, method, payload, allowMissing) {
   var options = {method: method || 'get', muteHttpExceptions: true, contentType: 'application/json'};
   var context = cmsContext_();
   var counter = options.method.toLowerCase() === 'get' ? 'githubReads' : 'githubWrites';
-  context[counter] = (context[counter] || 0) + 1;
   if (payload) options.payload = JSON.stringify(payload);
-  var response = previewFetch_('https://api.github.com/repos/' + PREVIEW_REPOSITORY + '/' + endpoint, options);
-  if (allowMissing && response.getResponseCode() === 404) return null;
-  return JSON.parse(response.getContentText());
+  // Identical blob content produces the same SHA. Retrying this POST cannot
+  // publish a page or move a branch; other writes must never be retried here.
+  var retryBlob = endpoint === 'git/blobs' && options.method.toLowerCase() === 'post' &&
+    payload && payload.encoding === 'base64' && typeof payload.content === 'string';
+  for (var attempt = 0; attempt < (retryBlob ? 3 : 1); attempt++) {
+    context[counter] = (context[counter] || 0) + 1;
+    try {
+      var response = previewFetch_('https://api.github.com/repos/' + PREVIEW_REPOSITORY + '/' + endpoint, options);
+      if (allowMissing && response.getResponseCode() === 404) return null;
+      return JSON.parse(response.getContentText());
+    } catch (error) {
+      if (!retryBlob || attempt === 2 || !/^Preview GitHub request failed with HTTP (500|502|503|504)\.$/.test(String(error && error.message || ''))) throw error;
+      Utilities.sleep(attempt === 0 ? 500 : 1500);
+    }
+  }
 }
 
 function cmsGithubSnapshot_() {
@@ -76,10 +87,11 @@ function cmsPublish_(files, message) {
   var snapshot = cmsGithubSnapshot_();
   var current = cmsGithub_('git/ref/heads/' + PREVIEW_BRANCH).object.sha;
   if (current !== snapshot.head) throw new Error('Preview branch changed during rendering. Run the update again.');
-  var seen = {}, entries = [], pageShas = {}, assetShas = {}, pagesChanged = 0, assetsChanged = 0;
+  var seen = {}, entries = [], pageShas = {}, assetShas = {}, repositoryBlobs = {}, pagesChanged = 0, assetsChanged = 0;
   Object.keys(snapshot.entries).forEach(function(path) {
     var entry = snapshot.entries[path];
     if (entry.type !== 'blob') return;
+    repositoryBlobs[entry.sha] = true;
     if (/\.html$/.test(path)) pageShas[path] = entry.sha;
     else if (/^(?:img|img_new|pdf)\//.test(path)) assetShas[path] = entry.sha;
   });
@@ -103,8 +115,12 @@ function cmsPublish_(files, message) {
     assetShas[asset.path] = computedSha;
     var actual = snapshot.entries[asset.path];
     if (actual && actual.sha === computedSha) return;
-    var blob = cmsGithub_('git/blobs', 'post', {content: asset.content, encoding: 'base64'});
+    // A source-specific filename may still refer to bytes already stored under
+    // a legacy name. Reuse that Git object while keeping the new path intact.
+    var blob = repositoryBlobs[computedSha] ? {sha: computedSha} :
+      cmsGithub_('git/blobs', 'post', {content: asset.content, encoding: 'base64'});
     if (blob.sha !== computedSha) throw new Error('Asset blob SHA verification failed. Publication stopped.');
+    repositoryBlobs[blob.sha] = true;
     entries.push({path: asset.path, mode: '100644', type: 'blob', sha: blob.sha});
     assetShas[asset.path] = blob.sha;
     assetsChanged++;
