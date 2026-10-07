@@ -4817,7 +4817,8 @@
       "sha256": "cf8b9c754cee5d896cce6ce5b58cc0e983c2fe610a67db035647cacdd03b88c6",
       "kind": "pdf",
       "reference_evidence": [
-        "publications.html:href"
+        "publications.html:href",
+        "source:filename-match"
       ],
       "status": "referenced",
       "source_asset": false
