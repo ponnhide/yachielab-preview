@@ -1,0 +1,275 @@
+/* Header, logo layers, typography, sidebar and footer defaults. Explicit CMS styles have inline important priority. */
+
+#menu-icon{ 
+  display: none;
+}
+
+#head-title{
+  
+  height: 36%;
+  margin-bottom: 0vw;
+}
+
+#head-title-h1{
+  margin-top: 0vw; 
+  margin-bottom: 0; 
+  margin-left: clamp(5px, 2vw, 40px); 
+  font-family: raleway, roboto, helvetica, verdana, arial, Sans-Serif; 
+  font-weight: 700; 
+  font-style: italic; 
+  font-size: clamp(calc(1.3 * 6pt) , calc(1.3 * 1.0vw) , calc(1.3 * 14.4pt));
+  /* The legacy stray token invalidated line-height; keep its effective default. */
+  line-height: normal; 
+  height: 1.0em;
+  color: white; 
+  width: 70%;
+}
+
+#languages { 
+  position: relative;
+  top: 0;
+  right: 0;
+  z-index: 3;
+}
+
+#top-menu{
+  color:#CD853F; 
+  font-family: montserrat, raleway, roboto, helvetica, verdana, arial, Sans-Serif; 
+  font-weight: 600; 
+  font-size: clamp(calc(0.95 * 6pt) , calc(0.95 * 1.0vw) , calc(0.95 * 14.4pt)); 
+  justify-content: flex-end !important; 
+  width: 100%; 
+  height: 22%; 
+  z-index: 3;
+  
+}
+
+#top-menu section{
+  font-weight: 700; 
+  color: #DA9436; 
+  margin-top: calc(0.15 * clamp(37.5px, 15vw, calc(300px * 0.96)));
+  margin-left: clamp(2.5px, 1vw, 20px);
+  margin-right: 0.5vw;
+  border-right: 1.0px solid #30303000; 
+  background-color: #CD853F00; 
+  font-size: clamp(calc(1.05 * 6pt) , calc(1.05 * 1.0vw) , calc(1.05 * 14.4pt)); 
+  text-align: center; 
+  height: 2.0em; 
+  line-height: 2.0em;
+}
+
+#top-menu p {
+  line-height: 1.0em;
+}
+
+#top-menu a {
+  color:inherit;
+  text-decoration: none;
+}
+
+#top-menu a:hover {
+  text-decoration: none;
+}
+
+#EN{
+  font-weight: 700; 
+  color: white; 
+  border-right: 1.0px solid #303030; 
+  background-color: #DA9436; 
+  width: clamp(15px, 6vw, calc(120px * 0.96)); 
+  font-size: clamp(calc(1.05 * 6pt) , calc(1.05 * 1.0vw) , calc(1.05 * 14.4pt)); 
+  text-align: center; 
+  height: 2.0em; 
+  line-height: 2.0em;
+}
+
+#JA{
+  font-weight: 100; 
+  color: white; 
+  border-right: 1px solid rgb(48, 48, 48); 
+  background-color: rgb(136, 136, 136); 
+  width: clamp(15px, 6vw, calc(120px * 0.96));
+  font-size: clamp(calc(1.05 * 6pt) , calc(1.05 * 1.0vw) , calc(1.05 * 14.4pt)); 
+  text-align: center; 
+  height: 2em; 
+  line-height: 2em;
+}
+
+#ZH{
+  font-weight: 100; 
+  color: white; 
+  background-color: rgb(136, 136, 136); 
+  width: clamp(15px, 6vw, calc(120px * 0.96));
+  font-size: clamp(calc(1.05 * 6pt) , calc(1.05 * 1.0vw) , calc(1.05 * 14.4pt)); 
+  text-align: center; 
+  height: 2em; 
+  line-height: 2em;
+}
+
+#frontlogo,
+#frontlogo2 {
+  width: 100%; 
+  height: 56%; 
+  margin-top: 0;
+  z-index: 2;
+  
+}
+
+#frontlogo img,
+#backlogo img,
+#frontlogo2 img,
+#backlogo2 img {
+  width: clamp(35px, calc(25vw - clamp(5px, 4vw, 4vw)), 400px);
+  object-fit: cover; 
+  object-position: top; 
+  margin-top: calc(0.15 * clamp(37.5px, 15vw, calc(300px * 0.96)));
+  margin-left: clamp(5px, 2vw, calc(40px * 0.96)); 
+  margin-bottom: 0; 
+  float: none; 
+  position: relative; 
+  top: 0; 
+  left: 0; 
+}
+
+#backlogo,
+#backlogo2 {
+  width: 100%; 
+  margin-top:0; 
+  position: absolute; 
+  z-index: 1;
+}
+
+#sidebar p {
+  margin-top: 0px;
+  margin-bottom: 0px;
+  font-size: clamp(calc(1.05 * 5pt) , calc(1.05 * 1.0vw) , calc(1.05 * 14.4pt));
+  font-weight: 600;
+  line-height: 2.0em;
+}
+
+#sidebar a {
+  color:inherit;
+  text-decoration: none;
+}
+
+#sidebar a:hover {
+  text-decoration: none;
+}
+
+.posts h1{
+  color:#008080;
+  width: 100%;
+  font-size: clamp(calc(2.2 * 6pt) , calc(2.2 * 1.0vw) , calc(2.2 * 14.4pt));
+  font-family: raleway, roboto;
+  font-weight: 800;
+  line-height: 1.1;
+  margin-top: 0px;
+  padding-top: clamp(7.5px, 3vw, calc(60px * 0.96));
+  margin-bottom: clamp(5px, 2vw, calc(40px * 0.96));
+}
+
+.posts h2{
+  color: #CD853F;
+  width: 100%;
+  font-size: clamp(calc(1.75 * 6pt) , calc(1.75 * 1.0vw) , calc(1.75 * 14.4pt));
+  font-family: raleway, roboto;
+  font-weight: 800;
+  line-height: 1.2;
+  margin-top: 0px;
+  padding-top: clamp(6.25px, 2.5vw, calc(50px * 0.96));
+  margin-bottom: clamp(3.75px, 1.5vw, calc(30px * 0.96));
+}
+
+.posts h3{
+  color: #968036;
+  width: 100%;
+  font-size: clamp(calc(1.55 * 6pt) , calc(1.55 * 1.0vw) , calc(1.55 * 14.4pt));
+  font-family: raleway, roboto;
+  font-weight: 800;
+  line-height: 1.2;
+  margin-top: 0px;
+  padding-top: clamp(5px, 2vw, calc(40px * 0.96));
+  margin-bottom: clamp(2.5px, 1vw, calc(20px * 0.96));
+}
+
+.posts .photo{
+  margin-top: 20px;
+  width: 60%;
+}
+
+.posts .photo img{
+  width: 100%;
+}
+
+#foot{
+  padding-top: clamp(5px, 2vw, calc(40px * 0.96));
+  padding-bottom: clamp(15px, 6vw, calc(120px * 0.96));
+  margin-bottom: 0 !important;
+  width: 100%;
+  background: linear-gradient(180deg, #0044DD00 0%, #0055E300 100%)
+  
+}
+
+#foot-address{
+  width: 60%; 
+  align-items: flex-start; 
+  font-size: clamp(calc(1.0 * 5pt) , calc(1.0 * 1.0vw) , calc(1.0 * 14.4pt)); 
+  color: #FFFFFF !important; 
+  margin-left: clamp(5px, 2vw, calc(40px * 0.96));
+}
+
+#foot-logo{
+  width: 40%; 
+  align-items: flex-end; 
+  margin-right: clamp(5px, 2vw, calc(40px * 0.96));
+}
+
+#foot-ubclogo{
+  margin-top: 0; 
+  margin-bottom: 0; 
+  margin-right:3vw;
+}
+
+#foot-ubclogo img{
+  height: clamp(calc(12.5px * 44 / 32), calc(2.2vw * 44 / 32), 55px);
+}
+
+#foot-primelogo{
+  margin-top: 0; 
+  margin-bottom: 0; 
+  margin-right:0;
+}
+
+#foot-primelogo img{
+  height: clamp(calc(12.5px * 42 / 32), calc(2.2vw * 42 / 32), 52.5px);
+}
+
+#foot-ubclablogo{
+  margin-top: 0.0vw; 
+  margin-bottom: 0; 
+  margin-right:2.8vw;
+  height: 65%;
+}
+
+#foot-ubclablogo img,
+#foot-osakalablogo img {
+  height: clamp(calc(12.5px * 50 / 32), calc(2.2vw * 50 / 32), 60px);
+}
+
+#foot-osakalablogo{
+  margin-top: 0.0vw; 
+  margin-bottom: 0; 
+  height: 65%;
+}
+
+#foot-snslogo{
+  height: 20% !important;
+  align-items: center; 
+  margin-top: 0; 
+  margin-bottom: 0; 
+}
+
+#foot-snslogo section{
+  margin-left: 2.5vw; 
+  margin-bottom: 0;
+}

@@ -1,16 +1,2 @@
-section .content_img{
-  float: left;
-  margin-left:   10px; 
-  margin-bottom: 10px; 
-  margin-right:  0px; 
-  margin-top:    0px; 
-}
-
-.content a{
-  color: #0033CC;
-  text-decoration: none;
-}
-
-.content a:hover{
-  text-decoration: underline;
-}
+/* Legacy, unused by registered pages; retained for existing links. */
+@import url("./legacy/resources.css");

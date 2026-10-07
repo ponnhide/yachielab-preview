@@ -1,0 +1,221 @@
+/* Shared responsive shell. The 600px boundary is also used by the JavaScript controllers. */
+
+@media screen and (max-width: 600px){
+  html {
+    background: white;   
+  }
+  
+  body {
+    background: white;  
+    overscroll-behavior: none;
+  }
+
+  #container{
+    position:relative;
+    background-size: auto 100%;
+    background-repeat: no-repeat;
+    background-position: top 50% right 50%;
+    height: 100vh;
+  }
+  
+  #normal_header {
+    display: none;
+  } 
+  
+  #mobile_header {
+    position: fixed; 
+    top: 0; 
+    left: 0;
+    z-index: 1;
+    width: 100%; 
+    height: 70px;
+    display: block;
+    min-height: 30px;
+    background: #FFFFFFEF;
+    justify-content: flex-end; 
+  }
+  
+  #mobile_header img{
+    margin-top: 12.5px;
+    margin-left: 4.5vw;
+    height: 44px;
+    width: auto;
+  }
+  
+  #mobile-logo img{ 
+    position: fixed;
+    top: 0;
+    left: 0;
+    margin-top: 12.5px;
+    margin-left: 4.5vw;
+    height: 44px;
+    width: auto;
+    z-index: 100;
+  }
+
+  #menu-icon {
+    position: absolute;
+    top: 22.5px;
+    right: 20px;
+    transform: translate(-0%, -0%);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 25px;
+  }
+  
+  .bar1, .bar2, .bar3 {
+    background-color: #0055E3;
+    height: 2.5px;
+    transition: transform 0.15s ease-in-out, background-color 0.15s linear;
+    width: 100%;
+    margin: 0;
+  }
+  
+  #menu-icon.open .bar1 {
+    width: 39.05px;
+    transform: rotate(-45deg) translate(-7.5px, 7.5px);
+    transform-origin: 50% 50%;
+    background-color: white;
+  }
+
+  #menu-icon.open .bar2 {
+    opacity: 0;
+  }
+
+  #menu-icon.open .bar3 {
+    width: 39.05px;
+    transform: rotate(45deg) translate(-7.5px, -7.5px);
+    transform-origin: 50% 50%;
+    background-color: white;
+  }
+ 
+  #mobile-interlinks{
+    margin-top: calc(100 * min(80vw, 1400px) / 1400);
+    margin-bottom: 4.5vw;  
+    margin-left: 5vw; 
+    font-family: raleway, roboto;
+    color: #0033CC; 
+    font-weight: 600;
+  }
+
+  #mobile-interlinks .content{
+    font-size: clamp(calc(1.8 * 6pt) , calc(1.8 * 1.0vw) , calc(1.8 * 12pt));
+    margin-bottom: 3.5vw; 
+  }
+
+  #mobile-interlinks p{
+    color: white;
+    line-height: 1.2em;
+  }
+  
+  #mobile-interlinks a{
+    color: inherit;
+    text-decoration: none;
+  }
+  
+  #mobile-interlinks a:active {
+    text-decoration: underline;
+  }
+
+  #mobile-lang{
+    margin-top: calc(100 * min(80vw, 1400px) / 1400);
+    margin-right: 5.5vw;
+  } 
+  
+  #mobile-lang .content{
+    font-size: clamp(calc(1.8 * 6pt) , calc(1.8 * 1.0vw) , calc(1.8 * 12pt));
+    padding-top: calc(0 * min(80vw, 1400px) / 1400);
+    padding-bottom: calc(70 * min(80vw, 1400px) / 1400);
+    margin-bottom: 0;
+    height: 1.2em;
+  }
+
+  #mobile-lang p{
+    line-height: 1.2em;
+    text-align: right;
+    vertical-align: middle;
+  }
+  
+  #mobileEN{
+    color: #CD853F;
+    font-weight: 700; 
+  }
+  
+  #mobileJA{
+    color: #BBBBBB;
+    font-weight: 100; 
+  }
+
+  #mobileZH{
+    color: #BBBBBB;
+    font-weight: 100; 
+  }
+  
+  aside{
+    display: none;
+  }
+  
+  main { 
+    position: relative; 
+    padding-top: 70px;
+    z-index: 0;
+    width: 100%;
+    min-height: 100vh;
+    height: auto;
+    background: linear-gradient(180deg, #FFFFFFFF 0px, #FFFFFFFF 70px, #FFFFFFFF 70px, #FFFFFFFF 100%);
+  }
+  
+  main .posts{
+    width: 100%;
+    font-size: clamp(calc(1.2 * 6pt) , calc(1.2 * 1.0vw) , calc(1.2 * 12pt));
+    padding-left: 5vw;
+    padding-right: 5vw;
+    overflow-x: hidden;
+    background: #FFFFFF00;
+  }
+  
+  .posts h1{
+    color: #0077FF;
+    font-size: clamp(calc(1.6 * 6pt) , calc(1.6 * 1.0vw) , calc(1.6 * 12pt));
+    padding-top: 15px;
+    margin-bottom: 10px;
+  }
+  
+  .posts h2{
+    color: #968036;
+    font-size: clamp(calc(1.4 * 6pt) , calc(1.4 * 1.0vw) , calc(1.4 * 12pt));
+    padding-top: 10px;
+    margin-bottom: 5px;
+  }
+  
+  .posts h3{
+    color: #CD853F;
+    font-size: clamp(calc(1.3 * 6pt) , calc(1.3 * 1.0vw) , calc(1.3 * 12pt));
+    padding-top: 10px;
+    margin-bottom: 5px;
+  }
+
+  footer {
+    display: none;
+  }
+   
+  #mobile-menu{
+    overflow-x: hidden;
+    position: fixed;
+    padding-top: 70px;
+    top: 0px;
+    left: 0vw;
+    visibility: hidden;
+    z-index: 100;
+    width: 100vw;
+    display: flex;
+    background: #303030FA;
+    margin: 0;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: flex-start;
+  } 
+}

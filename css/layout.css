@@ -1,0 +1,109 @@
+/* Site shell geometry. Logo cropping and navigation motion are controlled by JavaScript. */
+
+#container{
+  position:relative;
+  background-image: url("../img/All_member_cropped.png");
+  background-size: 100% auto;
+  background-repeat: no-repeat;
+  background-position: top 0 right 50%;
+  width: min(100%, 1920px); 
+}
+
+#normal_header {
+  width: 100%;
+  height: clamp(37.5px, 15vw, calc(300px * 0.96));
+  display: flex;
+  z-index: 10;
+  justify-content: center;
+  background: linear-gradient(180deg, #0055E300 5%, #004FDF00 50%, #0044DD00 100%);
+}
+
+#head{ 
+  width: 100%;
+  height: 100%;
+   
+  position: relative;
+}
+
+#mobile_header {
+  display: none;
+}
+
+aside {
+  display: none;
+  position: absolute;
+  top: 0;  
+  left: 0;
+  
+  width: 100%;
+  background: #FFFFFF;
+  color: #008080;
+  font-family: raleway, roboto;
+  z-index:1;
+}
+
+aside #sidebar {
+  float: left;
+  padding-top: clamp(7.5px, 3vw, calc(60px * 0.96)); 
+  margin-left: clamp(5px, 2vw, calc(40px * 0.96));
+  background-color: #FFFFFF00;
+  
+  
+  position: fixed;
+  z-index: 2;
+}
+
+main {
+  position: relative;
+  width: 100%;
+  overflow-x: hidden;
+  display: flex;
+  background: #FFFFFF00;
+  
+}
+
+main .posts {
+  padding-left: 25%;
+  padding-right: clamp(5px, 2vw, calc(40px * 0.96));
+  padding-bottom: clamp(5px, 8vw, calc(160px * 0.96));
+  width: 100%;
+  overflow-x: hidden;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  color: #202020;
+  font-family: roboto, helvetica, verdana, arial, Sans-Serif;
+  font-weight: 300;
+  font-size: clamp(calc(1.1 * 6pt) , calc(1.1 * 1.0vw) , calc(1.1 * 14.4pt));
+  line-height: 1.6em;
+  min-height: 30em;
+  background: #FFFFFFFF;
+  
+}
+
+/* This short page previously depended on the social embed's global box-sizing.
+   Include the mobile header padding and the posts' 30em minimum padding in
+   their boxes, preserving the page height without resizing other pages. */
+[data-page="summercamp_2026"] main,
+[data-page="summercamp_2026"] main .posts {
+  box-sizing: border-box;
+}
+
+footer {
+  
+  
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  background-image: url("../img/All_member_cropped2.png");
+  background-size: 100% auto;
+  background-repeat: no-repeat;
+  background-position: bottom 0 right 50%;
+  
+  z-index: 3;
+
+}
+
+#mobile-menu{
+  display: none;
+}

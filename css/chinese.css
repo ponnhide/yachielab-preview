@@ -1,23 +1,2 @@
-h1.Chinese {
-  font-family: raleway, "Noto Sans SC", sans-serif !important;
-}
-
-h2.Chinese {
-  font-family: raleway, "Noto Sans SC", sans-serif !important;
-}
-
-h3.Chinese {
-  font-family: raleway, "Noto Sans SC", sans-serif !important;
-}
-
-.content.Chinese {
-  font-family: roboto, "Noto Sans SC",  sans-serif !important;
-}
-
-aside .content.Chinese {
-  font-family: raleway, "Noto Sans SC",  sans-serif !important;
-}
-
-#mobile-interlinks .content.Chinese {
-  font-family: raleway, "Noto Sans SC",  sans-serif !important;
-}
+/* Compatibility entrypoint for existing HTML and CMS output. */
+@import url("./components/chinese.css");

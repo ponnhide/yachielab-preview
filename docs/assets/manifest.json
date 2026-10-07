@@ -1,0 +1,5923 @@
+{
+  "schema_version": 1,
+  "scope": {
+    "asset_directories": [
+      "img",
+      "img_new",
+      "pdf"
+    ],
+    "source_files": 78,
+    "secret_text_files": 84,
+    "html_pages": 24,
+    "sheet_sources_supplied": 1,
+    "sheet_tabs_supplied": 38,
+    "external_direct_links_checked": false
+  },
+  "summary": {
+    "asset_files": 476,
+    "asset_bytes": 607327219,
+    "referenced_assets": 205,
+    "review_candidates": 271,
+    "review_candidate_bytes": 227885991,
+    "duplicate_groups": 64,
+    "errors": 0,
+    "warnings": 3
+  },
+  "errors": [],
+  "warnings": [
+    {
+      "code": "asset-type-mismatch",
+      "detected": "html",
+      "expected": "jpeg",
+      "source": "img/Picture_Madhu_Rangesa.jpeg"
+    },
+    {
+      "code": "asset-type-mismatch",
+      "detected": "html",
+      "expected": "svg",
+      "source": "img/navy_yachielablogo2.svg"
+    },
+    {
+      "code": "duplicate-id",
+      "count": 2,
+      "id": "mobile-addgennelogo",
+      "source": "yuka.html"
+    }
+  ],
+  "assets": [
+    {
+      "path": "img/00001056-copy.JPG",
+      "bytes": 257103,
+      "sha256": "defa32cc2bb38d174b6d23873d6b747bdf6e1b8afb030980311f871901ae545a",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "people.html:src",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/1538750937671.jpg",
+      "bytes": 23933,
+      "sha256": "ce9776764cb6ffa7ac3c7aa41f35799a446a347937bb9e04a030eec377ac5f62",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "alumni.html:src",
+        "intern_recruit.html:src",
+        "internexp.html:src",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/1746382580295.jpg",
+      "bytes": 79224,
+      "sha256": "be61174b84f125b33c1ede4b2ad4f582363f9460014eb7aff9a23f0e880883f7",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "sheet:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/4.cover-source_thumb.jpg",
+      "bytes": 79570,
+      "sha256": "64a73b1396c8e47e4836e3d782394b2771a48fdfeebbc3c839054333fdaf9247",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "publications.html:src",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/9784758121446_02.jpg",
+      "bytes": 345178,
+      "sha256": "fa658338fe5998c891a74b055f9225187ebc03bfaf7a71394b08d11859b334a4",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "jikkenigaku2.html:src",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/9784758122528.jpg",
+      "bytes": 170780,
+      "sha256": "e978860e6cc4b98516a405467270dc82328fe4a72f92c09c218d6eb91561c41b",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "jikkenigaku.html:src",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/A.png",
+      "bytes": 661534,
+      "sha256": "102f2d0949e7b8767415f4ed341587bfefa7ac235fca9315bec56b4cf545f3f9",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/AA.png",
+      "bytes": 733674,
+      "sha256": "45a5ee2efb0bd34e3f21bcdd639b30693d0266f3794f5fe97ad81dd5286fe2ed",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/AAr.png",
+      "bytes": 341593,
+      "sha256": "2480ff290520c951fd5f68c2955219d3bcdaf99ce03e392c59b4f379c878a5ab",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/All_member.png",
+      "bytes": 2378661,
+      "sha256": "7c0c1d043cd0e4ba7f1bc9cafc246c875fe726dde0f60bdddffd740166972872",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/All_member_cropped.png",
+      "bytes": 1907019,
+      "sha256": "c1a438779dc5770237170bf6f37f3753de0022ffa4d331b7922c6547979d9714",
+      "kind": "png",
+      "reference_evidence": [
+        "css/layout.css:css-url",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/All_member_cropped2.png",
+      "bytes": 2047888,
+      "sha256": "e94b517b5da33a0a921aa41415ab3d7c2d3061588d13aa0d40d45695f86487b9",
+      "kind": "png",
+      "reference_evidence": [
+        "css/layout.css:css-url",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/All_member_cropped2r.png",
+      "bytes": 771961,
+      "sha256": "f1d52d72397d00ffe3010a938efd7a7e4761af61ee9d93ba392eeaec7e1b9119",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/All_member_croppedr.png",
+      "bytes": 711129,
+      "sha256": "f66172cbef0ae64af11e01cee9c0cf14f809ca96e94b32eda6c3ca7d192c3e76",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/Ar.png",
+      "bytes": 302004,
+      "sha256": "63792066b9ee771f88cf0f22459640fe1fdf482f495d97cbe6f20a232d78d9ce",
+      "kind": "png",
+      "reference_evidence": [
+        "index.html:src",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/Arman2021.jpg",
+      "bytes": 22247,
+      "sha256": "68712a8fdbc3a594094cb185ae7f1b743cf62394142b1467347389e80f9789d0",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "people.html:src",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/B.png",
+      "bytes": 1118269,
+      "sha256": "1e09275cff68aa540ae51d65f7847a0b1a104c0fda4c63fe1866dbb464c62d0b",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/BB.png",
+      "bytes": 1217050,
+      "sha256": "87996fd9eaf51a5e9b688921ee4f9bb1a102735573e47a9f9d34d6171d7e47dd",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/BBr.png",
+      "bytes": 637341,
+      "sha256": "e6eaec5cae41faff9c695bfdd36342768f0f8d17dbf1028570a5dfed010ef789",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/BG.png",
+      "bytes": 5000629,
+      "sha256": "207fbc0b53527eb3a89b7f7357c55a795eaf0f4b45171c766ce19fc338881fde",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/BGr.png",
+      "bytes": 1537828,
+      "sha256": "ca4e5df47094d8eaf5137776d5e15b114c2e507fd7cf9b17e3624a2b7b15854f",
+      "kind": "png",
+      "reference_evidence": [
+        "index.html:src",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/Br.png",
+      "bytes": 564256,
+      "sha256": "a40ddffd1846374af8f8de7d8da1ba14ec07299e2d84934ddd67593171282173",
+      "kind": "png",
+      "reference_evidence": [
+        "index.html:src",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/Brett.jpg",
+      "bytes": 15050,
+      "sha256": "ec13d869468453863d5997109c21d715a438759a8fa30f53f57dc7c4ae648efb",
+      "kind": "jpeg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/C.png",
+      "bytes": 241202,
+      "sha256": "df00f97bd7e6a3c9ae78736d323c3156a46c90c5fbf8adb4d85c7f0f8014e1f5",
+      "kind": "png",
+      "reference_evidence": [
+        "source:dynamic-png-stem"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/CC.png",
+      "bytes": 253457,
+      "sha256": "142efb5e9582015456830c201ec8808f3c180ee418264033a8bae14f638a0f2d",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/CCr.png",
+      "bytes": 113190,
+      "sha256": "a611a92b0cb5807a2aabc7f112a24feadd7f22b878d3e282bcbb97fac8777295",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/Chengyu.jpg",
+      "bytes": 39280,
+      "sha256": "cb3fe0e293ee4d2d2f94f3d89d555749e21766b5efa4451dae20097ce9451b70",
+      "kind": "jpeg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/Chengyu2.jpg",
+      "bytes": 3063498,
+      "sha256": "dbef9a573125c142e4c7b3e668748736d302fefd917875e6c4ccdb51339022ef",
+      "kind": "jpeg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/Chengyu_Ye.jpg",
+      "bytes": 2196299,
+      "sha256": "f6a3cd1a430301caaefbc6434c0f18087fe81bdf022d40c762fc01326349e37d",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "people.html:src",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/Cr.png",
+      "bytes": 100228,
+      "sha256": "8141f0e66c39ebbeed909569c502a1f834e07b77508aa73408ef4e5d19d7c4c6",
+      "kind": "png",
+      "reference_evidence": [
+        "index.html:src",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/DD_1.png",
+      "bytes": 438367,
+      "sha256": "3368582931d8c9640fde537df3f7af4aeed919c0517b0b2b6a1922be7289dbe2",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/DD_1r.png",
+      "bytes": 221875,
+      "sha256": "fb04fa610fd37fb27c86d0cc0742702c8c3aaa17512a659759e85c3cd99352c4",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/DD_2.png",
+      "bytes": 618231,
+      "sha256": "5b251809aee1235ffd16a1d34e9ed5a64f5781b024dc8f0ab936dada160824f7",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/DD_2r.png",
+      "bytes": 346608,
+      "sha256": "997f29241bd0dc763b2f587959555ca8148dfbd6101e0de13eaa747767f22913",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/DNA event recording.jpg",
+      "bytes": 164488,
+      "sha256": "e37e5819d477983778d95cd5895973e081bc8f49e4427e9ee94f4adf9bd1c515",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "research.html:src"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/DSCF0584.jpg",
+      "bytes": 210158,
+      "sha256": "dea7600d65d0f7af7dfba677b8ade9060ff720d64d9697ef78c6ba90d78b4f70",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "people.html:src",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/DSC_0530.jpg",
+      "bytes": 3364118,
+      "sha256": "88102eb56f8540128bb7c1b7202cb7187d78fd0513615a8433b9d473ecbf1f3a",
+      "kind": "jpeg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/D_1.png",
+      "bytes": 417672,
+      "sha256": "9b403ed99a5cd90e423855c6e63fc5e5820c35bd5e5b05da852a9426dbb74b7c",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/D_1r.png",
+      "bytes": 205479,
+      "sha256": "04b8b90890754d8c97abd50da94ab837a457ce623be3f889ea1f54fd2b497df6",
+      "kind": "png",
+      "reference_evidence": [
+        "index.html:src",
+        "source:dynamic-png-stem",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/D_2.png",
+      "bytes": 616412,
+      "sha256": "b0c3d736a36c083024f8d7593a0a2b884cc996abbcb6b6d86f8f9e100838fbbd",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/D_2r.png",
+      "bytes": 339850,
+      "sha256": "fbe4720b19bb49ebb68863914b1f4bd87e319629fb1412a1a3f8815e1242cc46",
+      "kind": "png",
+      "reference_evidence": [
+        "source:dynamic-png-stem"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/David_Mackay.png",
+      "bytes": 591832,
+      "sha256": "d88d082d35ca665fbac063abacbd395f05683c705f2a19fd06f3ba2fd87ddc2c",
+      "kind": "png",
+      "reference_evidence": [
+        "sheet:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/Dustin_Ameis.png",
+      "bytes": 366558,
+      "sha256": "fb6efd906f0d43973536f283cd147be8f29694c7aaeaff169ae8d9863dca48b2",
+      "kind": "png",
+      "reference_evidence": [
+        "people.html:src",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/E.png",
+      "bytes": 747786,
+      "sha256": "38fd0a30b855e14c326704f86682025122e4912ef3e3987a93caa83a4e2f48d2",
+      "kind": "png",
+      "reference_evidence": [
+        "source:dynamic-png-stem"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/EE.png",
+      "bytes": 804661,
+      "sha256": "b80f44f799cea94857c66a33df5e468beaec8e4173492ba7a2204f964b653b06",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/EEr.png",
+      "bytes": 326597,
+      "sha256": "28ae19761d0b2360efc1a3254c3c887a296303b9837e8f4d1b04af09629085d3",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/Endger.jpg",
+      "bytes": 133463,
+      "sha256": "b668f5ebf58b74923739f2819a7a275275a020df4071e6542b56a043b5a2572a",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "sheet:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/Er.png",
+      "bytes": 299803,
+      "sha256": "ab76c8be0bde3598928c33e7b63038782ef8c03991c02c41a65a00fa229c7593",
+      "kind": "png",
+      "reference_evidence": [
+        "index.html:src",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/F1i1URkaUAA0p3s.jpeg",
+      "bytes": 673600,
+      "sha256": "c6a92424a3a104b8c283d0b5695490e4872d6cd44f4fe564afa7b49e77f54d2f",
+      "kind": "jpeg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/FF_1.png",
+      "bytes": 412857,
+      "sha256": "70a2e777e105324b3f02b7e313584ac25082a8b6d757fdfbbf579190f61ff5d3",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/FF_1_cropped.png",
+      "bytes": 269674,
+      "sha256": "cfa59bec5057ad46faa6cc6a086b193376e2441fb0ada153f0a5b2b0fde83ed1",
+      "kind": "png",
+      "reference_evidence": [
+        "css/pages/index.css:css-url",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/FF_1r.png",
+      "bytes": 180264,
+      "sha256": "c29670615482f97a6c75fc9b9f74f81ecadc396b54f53c53bae1ceac8f49e15b",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/FF_2.png",
+      "bytes": 430193,
+      "sha256": "5dd86a6626ca0a996b6e83a822a43fead6fd7687e6ee313a19b345df84ab55e3",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/FF_2_cropped.png",
+      "bytes": 296798,
+      "sha256": "d66b5a3ec91d9a1642e8d792ad1513e234c69e751d12bb32856e6dde05f44b45",
+      "kind": "png",
+      "reference_evidence": [
+        "css/pages/index.css:css-url",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/FF_2r.png",
+      "bytes": 188026,
+      "sha256": "9e6dc36d4a230afed2307f252362923dc6b74806698cf72107e33a937a49a09c",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/FRACTAL_cover_small.jpg",
+      "bytes": 197184,
+      "sha256": "ccb31621d1e99f237afaa2aa0a8002e4199437113d2f54cce74526ab6c98af4d",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "publications.html:src",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/F_1.png",
+      "bytes": 394116,
+      "sha256": "19b9a71ca0a98caef508b7ab209bf7d1c18f285dda1b4bef43028fa0534fef4f",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/F_1r.png",
+      "bytes": 169817,
+      "sha256": "3a07a5fccb153e099aacfc1173c66ce06a62f0d1833b2eee1b16fd6790d45be4",
+      "kind": "png",
+      "reference_evidence": [
+        "index.html:src",
+        "source:dynamic-png-stem",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/F_2.png",
+      "bytes": 426093,
+      "sha256": "e5848f670e0fdde85af769fe897bf99c50a7cb93a92eecd4b29053b7b9977075",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/F_2r.png",
+      "bytes": 186848,
+      "sha256": "9b822a5ab2077ffe84e2530c1095635e66045d20a1174acdc6cfdf469a210c91",
+      "kind": "png",
+      "reference_evidence": [
+        "source:dynamic-png-stem"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/G.png",
+      "bytes": 335383,
+      "sha256": "bfb8292e737430347f5f3651011415d8a8923ff551f8f01af706cb9db934f948",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/GG.png",
+      "bytes": 355279,
+      "sha256": "b3aacde038573a6208aa563fcd4dd56a477d70c31abf9a0f8c03dc6a4b4a3ae0",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/GGr.png",
+      "bytes": 164236,
+      "sha256": "7d51a7d1baa1c816177933223da98bd75517ec07072aebabb147549d32b25b63",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/Gr.png",
+      "bytes": 147028,
+      "sha256": "7145a661451c76e59f84c809e4d3b686e69ba4a29996244de9434ea6680d0bd4",
+      "kind": "png",
+      "reference_evidence": [
+        "index.html:src",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/Greenstreet500x605.jpg",
+      "bytes": 442265,
+      "sha256": "a437348148c8df92162781029a93fcfd0551f07949c5b77e6fdab946f98dc1b2",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "publications.html:src",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/HGHrdslWQAEmByC.jpg",
+      "bytes": 355818,
+      "sha256": "390dab1983e901f9b8428ebf998c77f239f1776de8fb9b8dfff6f73de230b805",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "publications.html:src",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/HH_1.png",
+      "bytes": 938786,
+      "sha256": "53edc5438b15814c7894328c6c829a8a8a57111a848bbddca230e91625ae628a",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/HH_1r.png",
+      "bytes": 413291,
+      "sha256": "0b17859d4e350ec4231fc1e73c166bde41e23e6100cf18918d9af23d46a0b3ff",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/HH_2.png",
+      "bytes": 1079353,
+      "sha256": "cddb788604ebcd7c1865500dd8220007e34dc588780ef92213e1c39c543092e0",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/HH_2r.png",
+      "bytes": 458329,
+      "sha256": "5689c927e2e2f316fed54f1fd3b0fe28b9e461a28a505b3268b63eb87f43e25f",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/H_1.png",
+      "bytes": 869915,
+      "sha256": "4125f510dbccbaa82054a43c912837f343be564331ba9cc5e8fb25b6f3a8aa8b",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/H_1r.png",
+      "bytes": 372765,
+      "sha256": "949c2e83cb8000e94fd0b7b5b60efb23baba2715a878becf5ccf653b728bffb3",
+      "kind": "png",
+      "reference_evidence": [
+        "index.html:src",
+        "source:dynamic-png-stem",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/H_2.png",
+      "bytes": 1055457,
+      "sha256": "d3f8342b6d3be761dc9e3a9ff9c171b65d78283a9e78ac57a65c2a62d5908169",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/H_2r.png",
+      "bytes": 445005,
+      "sha256": "25950cab4c8eeb4a78df739a11f634e50c9c4a7a46df040406072ec7640478c4",
+      "kind": "png",
+      "reference_evidence": [
+        "source:dynamic-png-stem"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/Headshot.jpg",
+      "bytes": 1068697,
+      "sha256": "a3e4e6d4d110765bd72d2d5cbcb7e88abda4373773e6afa9503c75dd00b18a2b",
+      "kind": "jpeg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/Headshot_Chaehyeon-Lee.jpg",
+      "bytes": 1068697,
+      "sha256": "a3e4e6d4d110765bd72d2d5cbcb7e88abda4373773e6afa9503c75dd00b18a2b",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "sheet:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/Headshot_low.jpg",
+      "bytes": 82452,
+      "sha256": "1dd7c8b3407d78426fbead5a4d5809bc348602e9b5a2f312a047c4df418eb8d8",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "sheet:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/Herbert.jpg",
+      "bytes": 107333,
+      "sha256": "952f1604a4d3fbb0db826c97d54cb169def9991c1a74d9cb92c9f69ab38f85ae",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "people.html:src",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/Hideto.jpg",
+      "bytes": 20201,
+      "sha256": "9422ad54ecd826ba7ab5d3bc0ef35bf6ba4c605135ca434ea272884e9266d17e",
+      "kind": "jpeg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/I.png",
+      "bytes": 500336,
+      "sha256": "d99f94f00166c1988b62af01cdecb421e715cbeffab72c3be304d080b72a81db",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/II.png",
+      "bytes": 541046,
+      "sha256": "f629d46b9abad5fdbbb610bec2197c61af37c76b534520ef1ccd64603717b0f8",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/IIr.png",
+      "bytes": 273051,
+      "sha256": "ca683f83eb164f3a4ff45addc486eefd88b1b3764cd0b418e69028c7282555cb",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/IMG-20250913-WA0005.jpg",
+      "bytes": 470758,
+      "sha256": "3acc4235d8f3c84d4eae4fccb86901694fa361c4a30819e558f7169a36b716aa",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "people.html:src",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/IMG_1416.HEIC",
+      "bytes": 1739129,
+      "sha256": "86222004a4dab823e7376097c9ffee5cd9e6f244b1676d56e0725fa7a42c03e8",
+      "kind": "heic",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": true
+    },
+    {
+      "path": "img/IMG_1691-copy.jpg",
+      "bytes": 8859896,
+      "sha256": "b12432122bd71b87667e6ebaffd5ea0bac84e081b8ce124c1705467418bea91a",
+      "kind": "jpeg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/IMG_2959.jpg",
+      "bytes": 1576240,
+      "sha256": "f50ea60fe06b67d53e3242193b73b49e2195f630f222e4151107f89aed13f507",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "people.html:src",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/IMG_3031.jpeg",
+      "bytes": 1082958,
+      "sha256": "595f9ac75de84a40072decb5cdbc4fbf26248b5860847fa8ed540844b9bf44cb",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "people.html:src",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/IMG_6865.jpg",
+      "bytes": 2717547,
+      "sha256": "fdcb9b1d2c4a63411cac0ddd9fc2449fd54c92c2560becd7c40e01711b02b8cb",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "people.html:src",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/INTERSTELLAR.jpg",
+      "bytes": 895625,
+      "sha256": "e10155e43ad30cf0370540b11d4dec17821ddd67aa9a85a7f316ff9c1683f1b4",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "resources.html:src",
+        "software.html:src",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/Ir.png",
+      "bytes": 251125,
+      "sha256": "03f4afeeb7124728d4740384ec64ab9b66364412e4704b38a3ddbefffde99cb6",
+      "kind": "png",
+      "reference_evidence": [
+        "index.html:src",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/JJ_1.png",
+      "bytes": 667889,
+      "sha256": "4fe654a0ea0438f6e3a4a8d2c9c55842731f65bfa2eca7e991c1caab0a38adf4",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/JJ_1r.png",
+      "bytes": 231642,
+      "sha256": "230b9b255459c91da17aa9285e3beffd31a2fc60ef1d3746afe7d7c2a400a5a0",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/JJ_2.png",
+      "bytes": 697270,
+      "sha256": "e2d218e2fae25a192341bebeb6e6132e505059ebe5780f86459806bf996dea7e",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/JJ_2r.png",
+      "bytes": 269633,
+      "sha256": "c99f1ab0c1cc3a42119f62596f4b38574b1dfe7b8938e1aad6ee3f3e2d4ed9c3",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/J_1.png",
+      "bytes": 592225,
+      "sha256": "1f30b709cc25b6439aa7dc82e79332d75ac19bfb86e396d3d202f02167700650",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/J_1r.png",
+      "bytes": 212051,
+      "sha256": "7f7ea5f1a640c39f8eaee1fd45a15ad5645f6650131e8b9f491608605c94e9ee",
+      "kind": "png",
+      "reference_evidence": [
+        "index.html:src",
+        "source:dynamic-png-stem",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/J_2.png",
+      "bytes": 694771,
+      "sha256": "8dd6cefdeed1b1e699b14f6cd598c96e0b787c1c0e1d796f9a4973efaf5676cf",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/J_2r.png",
+      "bytes": 279006,
+      "sha256": "dbb02016535e962293b5245c261d2b3c3ad8565924a59085d9b4668f54229e23",
+      "kind": "png",
+      "reference_evidence": [
+        "source:dynamic-png-stem"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/Jing.jpg",
+      "bytes": 35351,
+      "sha256": "7758608d2be1a26f116b2670bfee0d9605ae813c2b2785044f890b2e41189597",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "sheet:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/Justy.jpg",
+      "bytes": 42910,
+      "sha256": "76bd54db9698989368402fa1540f04ac151754d8d83fbd5b21fb93397943fa6f",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "sheet:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/K.png",
+      "bytes": 422176,
+      "sha256": "39c35f801127fe7cfa23b20998dcbf0568407df265d6484b7b3baf8863a960d2",
+      "kind": "png",
+      "reference_evidence": [
+        "source:dynamic-png-stem"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/KK.png",
+      "bytes": 451441,
+      "sha256": "20606a2c87de9894b1821de9a6f9809da74d47d447ab2f2d5b2953dbd5f6db83",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/KKr.png",
+      "bytes": 201917,
+      "sha256": "ff6a8b0eadb20b61cbba779dc75c3c6987bdbd816484361e99dd7876d966f50c",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/Keiran_Maskell.jpg",
+      "bytes": 385930,
+      "sha256": "701050e95311b88c92f3f9a519b869510d1122b1c700ff5e5cf68a9f0cdb1695",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "people.html:src",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/Kr.png",
+      "bytes": 180222,
+      "sha256": "62d4886325746bb2449b2f3ba3e64d2f916bbbcdd7a411405227619154dc2ced",
+      "kind": "png",
+      "reference_evidence": [
+        "index.html:src",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/LL_1.png",
+      "bytes": 349247,
+      "sha256": "3111240812f9fb8582fce62c0ece41054682851f8f86caed50a9a4b42d909320",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/LL_1r.png",
+      "bytes": 172224,
+      "sha256": "97ed3336acd4703340e09c335a59c8123db0781bc473292d2e734a1c8d6ef6a2",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/LL_2.png",
+      "bytes": 414669,
+      "sha256": "c3f8670992720b2a1e4870e45ec4655e07747db57bd70a4462be40012bf89be2",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/LL_2r.png",
+      "bytes": 213588,
+      "sha256": "f17b6dff8fe37ee0b6a6b315fb212d8b48e05a29704dee0c91c7516e182fad86",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/L_1.png",
+      "bytes": 323569,
+      "sha256": "672fb3705369340532348938eb0c2c5aa3cb8324145901d2608f0d3615358e93",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/L_1r.png",
+      "bytes": 151452,
+      "sha256": "cc9220b23a3768bff9618b17f81e3b52f14c750fffe924881c5b333e3d8e9cab",
+      "kind": "png",
+      "reference_evidence": [
+        "index.html:src",
+        "source:dynamic-png-stem",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/L_2.png",
+      "bytes": 408672,
+      "sha256": "4a8bef7a0f5f3895550674b1ee694aaa2aff293b13788b8afb255da66fcb849c",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/L_2r.png",
+      "bytes": 209300,
+      "sha256": "0ee3a766828cec63d369349dcad3247b573ea8155f5aaca22eef9fa9818e55b1",
+      "kind": "png",
+      "reference_evidence": [
+        "source:dynamic-png-stem"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/Lu2.JPG",
+      "bytes": 2183078,
+      "sha256": "ede7987dff939319361fe9009634804b1a2637b0b9688e1fc8dc84df7803895d",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "people.html:src",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/MM_1.png",
+      "bytes": 276598,
+      "sha256": "bbc6e61c81e1098ef2ca7acd6fcf5f478bc86856e39956a57d06891616328b32",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/MM_1r.png",
+      "bytes": 131710,
+      "sha256": "6f0f114d66960431c2f8ba1c403a446bbdd8c7483ce77e1662ba7d091a391bfb",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/MM_2.png",
+      "bytes": 350431,
+      "sha256": "c289fbd01c213d21100ccae2999b7b6d54ce5486bf99232a80d33be204bb60fd",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/MM_2r.png",
+      "bytes": 177360,
+      "sha256": "2c1c77dc37f0f11d1ea1bbb7c971f0de381b869520784ac71c165f0285a4bd86",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/M_1.png",
+      "bytes": 269718,
+      "sha256": "56563b980d4985c4a19b22684731ee70d91f3961c36ffbc4413d1674c58b0528",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/M_1r.png",
+      "bytes": 120483,
+      "sha256": "21608acf40321c0a10564bbf68db2dcd86c8e0033685b9218cf4775a564e44c3",
+      "kind": "png",
+      "reference_evidence": [
+        "index.html:src",
+        "source:dynamic-png-stem",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/M_2.png",
+      "bytes": 348143,
+      "sha256": "e22deaeb0a18b4625aee93f682009fa601fb6c9df7d86d5089fe98a63026c032",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/M_2r.png",
+      "bytes": 173428,
+      "sha256": "a36dc0c728c2a17b8dbe7427de423c8d80bda4195c1e0d40d397d68d7b868975",
+      "kind": "png",
+      "reference_evidence": [
+        "source:dynamic-png-stem"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/Madina.jpg",
+      "bytes": 22077,
+      "sha256": "e409e6082c5a9899e7df277c8aed914200bbc775d1f27c136fb46a8a2fb96ce4",
+      "kind": "jpeg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/NBT-cover.jpg",
+      "bytes": 88627,
+      "sha256": "deb71239bd0a78657eeb3ad513e7c642fa0f6f658a95a06737edda3348115442",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "publications.html:src",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/NN_1.png",
+      "bytes": 709503,
+      "sha256": "a5bbf8e32e1077c3c7fd3aa3be04489ae93150d5861351f9c458b870972deae2",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/NN_1r.png",
+      "bytes": 287089,
+      "sha256": "c49fdf57887b030c755911afb42a71be4fbffb4d4421f3a58b9ddf0106fbd0f1",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/NN_2.png",
+      "bytes": 748831,
+      "sha256": "32489ec1ea4e125b3dbd7d76352981781ea25a9b1737c613a4f4f4277974c2dd",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/NN_2r.png",
+      "bytes": 342589,
+      "sha256": "698f40c822efa0ed8698e48b8eb8c58a63a5c6568d0069e03bee51bcff3d8bc9",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/N_1.png",
+      "bytes": 676090,
+      "sha256": "2ef85c9b8c27acd65c06d2ba52dfb553f3f31eb698acebbc79b4bc4fd0f84ec7",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/N_1r.png",
+      "bytes": 264823,
+      "sha256": "b3ae1926502272ab7da71a8273fe68d75f168f526fe2c774d035909b569b530c",
+      "kind": "png",
+      "reference_evidence": [
+        "index.html:src",
+        "source:dynamic-png-stem",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/N_2.png",
+      "bytes": 736528,
+      "sha256": "5ab3e140aec89bb32a09a54a013e0381693df7c20b461cb9768114ca02825b2b",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/N_2r.png",
+      "bytes": 341800,
+      "sha256": "4be741b2be184cc8204b2c96ce286aca382c0690d7424064cec1b52d05b30df2",
+      "kind": "png",
+      "reference_evidence": [
+        "source:dynamic-png-stem"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/Nanami.jpg",
+      "bytes": 84745,
+      "sha256": "ec3ba80964da4fc0da5f9b99f22dfae2bd9f710f7fb06b262df8bf5c9238ffdc",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "people.html:src",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/Nozomu300x300.jpg",
+      "bytes": 24518,
+      "sha256": "156788b6a94d33c7e509d0fe18256452aa9927ea1218c3fceee6a07ce28fe810",
+      "kind": "jpeg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/NozomuYachie_banting-photo.jpg",
+      "bytes": 273410,
+      "sha256": "dd90b3bff9ad85ae31d99e4c990fb883a1f79cec9db00566e6aeb42035214f06",
+      "kind": "jpeg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/Nozomu_Yachie2015_crop.jpg",
+      "bytes": 158700,
+      "sha256": "7ad0bb4424c6e3637b2b2cb15c52bba26befcc6f7458b6b56302a74c54b00fc0",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "nzmyachie.html:src",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/Nozomu_Yachie2_low.jpg",
+      "bytes": 681692,
+      "sha256": "90fa924b695fe1c5a45b31365a7d2de7fe5709ca5b7a9c3beed383bc2f5f8fcf",
+      "kind": "jpeg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/Nozomu_Yachie2_low2.jpg",
+      "bytes": 215829,
+      "sha256": "c9f5574bde21b15d47ccc2023c85e610fced936bf4e1f6dfa5128fc893c7bfc1",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "people.html:src",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/O.png",
+      "bytes": 356446,
+      "sha256": "b3554f44088fea36d1f44700f16ccbd2d1c5701c5e0e744fdfe51eacece3d193",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/OO.png",
+      "bytes": 378464,
+      "sha256": "b8e3b1aac76b7c1956e8ac928e0a745a701f64db23105403301b847e623a828e",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/OOr.png",
+      "bytes": 177434,
+      "sha256": "725226ee413f94397512dfcd3a2c53e8a72dabb2abd16e5355573223be8514a3",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/Or.png",
+      "bytes": 157221,
+      "sha256": "00fa749d79a5fb8d4cf3472b28a575d61640696d30e957649b2fed5e5a109efb",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/Osaka_University_Logo.svg",
+      "bytes": 19109,
+      "sha256": "56afab56c85a5533908b3f3e6c5ed88acebcb92b0db16cb6957509ba72a305be",
+      "kind": "svg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/Osaka_group_photo_v4.jpg",
+      "bytes": 2265189,
+      "sha256": "aa5c7ffe98b8ce77b613f311336a08139ad36679f90059156be391ddaa5dc630",
+      "kind": "jpeg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/Osaka_top.jpg",
+      "bytes": 3393168,
+      "sha256": "7b59dfdb37f0dac6d28fbea93c36bc66b7452d378f968b74231824a3fa364872",
+      "kind": "jpeg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/Osaka_top_low.jpg",
+      "bytes": 492829,
+      "sha256": "1892db0bf7efc1af3388244e60876249f23fb552fd20c133474ee40f2dbe20f0",
+      "kind": "jpeg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/Picture_Madhu_Rangesa.jpeg",
+      "bytes": 615323,
+      "sha256": "29cef4a51ea32ed73eb79760a23968dea101ad6eb62b54eb031ba8263be8f0cc",
+      "kind": "html",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/Picture_Madhu_Rangesa2.jpeg",
+      "bytes": 314923,
+      "sha256": "d97f6f255563ec39283a7f8dc53f1624c3b6e40377b177a13a0b5020478ce838",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "people.html:src",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/Picture_Madhu_Rangesa_mod.jpeg",
+      "bytes": 443546,
+      "sha256": "3a880ab0a7eeaca5341dc05294f2bc286875c08dffcf07fc40d672f40fd4d5d6",
+      "kind": "jpeg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/QUEEN.jpg",
+      "bytes": 471335,
+      "sha256": "6869a759c42c7858b9413bb9ce5f6a2f52aa371a0d97dbb426c09a67d4bf181f",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "resources.html:src",
+        "software.html:src",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/Ren.jpg",
+      "bytes": 32104,
+      "sha256": "2542eef446fd02274837a62599e3e9cbea7819653b32a5e5fae1dc3d6ac2f3dd",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "people.html:src",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/RinaMAScdefence2022_1280x720.JPG",
+      "bytes": 500713,
+      "sha256": "c4a077ef6ab32baa8b4ce0ce74d57a0402a374e109cbbf5b6d028bf941f3565e",
+      "kind": "jpeg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/SBME_UBC_Horizontal_Primary_Faculties_Colour.png",
+      "bytes": 99508,
+      "sha256": "344ee6ffe44fa5667bb640030d4e04ee3be781a70a73df3e6412291ced9a9196",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/SBME_UBC_Horizontal_Primary_Faculties_Colour.svg",
+      "bytes": 26957,
+      "sha256": "1da2ca8318ce959b6b6e86d62d676f696bf73fd87d82231b186553b6f2164c30",
+      "kind": "svg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/Sam-Toussi.jpg",
+      "bytes": 93902,
+      "sha256": "ee1be607d51dd488b554c91ce1d0b28d6c9160f333b8cab664cee2d962aa30ac",
+      "kind": "jpeg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/Sanchit.jpg",
+      "bytes": 27169,
+      "sha256": "d3c261d37dc93562a5254d55478340349726945124d23d53dca3d6c82ac4fb35",
+      "kind": "jpeg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/Sean.jpg",
+      "bytes": 121416,
+      "sha256": "f1a1f0a51ef9306140ec4432b6789a405d6b5c6c347a6d4258945174f5ed485e",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "people.html:src",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/Shoma_Matsumoto.jpeg",
+      "bytes": 125251,
+      "sha256": "25f52d0379aceb9b864ad3adb10c594aef0eabd5d4473e2de371e283bdc387fd",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "news.html:src",
+        "people.html:src",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/Shoma_Matsumoto.jpg",
+      "bytes": 125251,
+      "sha256": "25f52d0379aceb9b864ad3adb10c594aef0eabd5d4473e2de371e283bdc387fd",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "sheet:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/Sofia.jpg",
+      "bytes": 34543,
+      "sha256": "b8ca92adfa8cf7a7aee4278f18d6f564d17c0b1c155e0dac56911ce5cfbb0706",
+      "kind": "jpeg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/Sofia2.jpg",
+      "bytes": 2737590,
+      "sha256": "106d61aa1e2ce191ed6231696c68639801c5ecd1acb733377071c62bef7e7e82",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "people.html:src",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/Soh.jpg",
+      "bytes": 130114,
+      "sha256": "c7975a34ef1b22e6be3038e22591ad32e873be706ae27bb2da959d2f5ee9036b",
+      "kind": "jpeg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/Theo.jpg",
+      "bytes": 73728,
+      "sha256": "91a9b14e00e4930278345d477e33f8af73cd46b2d6db61ca857e963beb82b992",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "sheet:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/Vishaly.jpg",
+      "bytes": 42433,
+      "sha256": "5f9313afdc66b188f8bf56e986b83a45ca45eac1fcc51ee0fe9b32f3d23b2932",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "sheet:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/Yachie_lab_osaka_2025.jpg",
+      "bytes": 2125120,
+      "sha256": "8041ff21246812369f9f548b72f504b884718af1c22e6a15a3f96fe2ebb19bbd",
+      "kind": "jpeg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/Yin.jpg",
+      "bytes": 46592,
+      "sha256": "b36077eac85f4516b9e93799a4dd38cf924cef3fac91d40dece370357cc5a9e8",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "people.html:src",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/Yonggang Lu.jpg",
+      "bytes": 159652,
+      "sha256": "6a307e5bbf32e6a9d66be3665ef89446b921f4080c9efccc8565e865f58949cd",
+      "kind": "jpeg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/Yonggang-Lu.jpg",
+      "bytes": 159652,
+      "sha256": "6a307e5bbf32e6a9d66be3665ef89446b921f4080c9efccc8565e865f58949cd",
+      "kind": "jpeg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/Yuka_Nakada.jpg",
+      "bytes": 62054,
+      "sha256": "d3cd8a00cb92b6d1540265a5199f2df0c09cc468ba7189d6ae1f8b6e2573f694",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "intern_recruit.html:src",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/Yuka_Nakatani.jpeg",
+      "bytes": 1110898,
+      "sha256": "5c3f9cdca323b393e4ebe0a907e76ab82b6a2e3132305a00d511275d90a9d3a7",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "news.html:src",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/Yuka_v2.jpg",
+      "bytes": 416206,
+      "sha256": "7b673a87887f72efda54420ef9498733e0d0d07b16bb2f8ea5e606432e153272",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "people.html:src",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/Yusuke.jpg",
+      "bytes": 106506,
+      "sha256": "d01ad3c78c98ec5820651ecb1d16e12f44831bbf55aa4a4ed70db9aca973109b",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "alumni.html:src",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/Yusuke_Ozaki.jpg",
+      "bytes": 699185,
+      "sha256": "97f18b77bb8d9f8772b36ac884ba43b79ff442fcc2c214b01e610c78e18a286f",
+      "kind": "jpeg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/Yusuke_Ozaki_low.jpg",
+      "bytes": 265096,
+      "sha256": "787caeed21fd755a8c03193a4f917f3a45ef0fa2eb0448aac21a4b215279b7c8",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "alumni.html:src",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/_文字位置参考.png",
+      "bytes": 199061,
+      "sha256": "fbd7be9b39d4abaf30804bc488c9911684c4ab32a2bde38aeb065b6c73a62800",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/_文字位置参考r.png",
+      "bytes": 71789,
+      "sha256": "39fa6c00d50279c89cff04668703de24c397a31121f895d7dc3e9bec7a001b38",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/_青文字_スクリーン.png",
+      "bytes": 198106,
+      "sha256": "7e13476c9681d4fa866b450225979b9ce85c81c8cbb6893d6d280bbac75ff23a",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/_青文字_スクリーンr.png",
+      "bytes": 75650,
+      "sha256": "464171363947944a0283bdc15f914afabf2a96dfbb1ee73e127bca57dc997ce0",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/_黒枠.png",
+      "bytes": 107878,
+      "sha256": "75d572e80c1ed1b9dddfdf4535ea33f1fef57639dd7bfa1ad7667c205f873f38",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/_黒枠r.png",
+      "bytes": 26663,
+      "sha256": "e74bbe95abebbd3bdfe138fb77ee381fa8dfd225a61d976f397875123f379dc6",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/ahmed.jpg",
+      "bytes": 59334,
+      "sha256": "d884772bf4bb9897e2ff39e121618bd9bba3c902f39bbba3e4346a9464cb6887",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "sheet:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/anushka.jpg",
+      "bytes": 137626,
+      "sha256": "123e3331aec1c0d50bc3dc4254649065a0422afc2eb0d8cfaf4536791e06fa0c",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "sheet:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/at.gif",
+      "bytes": 67,
+      "sha256": "7bb899df98da96ea057370d7ef27e19820c06370906a2eb6f5da50ac0f62cda9",
+      "kind": "gif",
+      "reference_evidence": [
+        "contact.html:src",
+        "hideto.html:src",
+        "intern_recruit.html:src",
+        "joinus.html:src",
+        "nzmyachie.html:src",
+        "pd_recruit.html:src",
+        "people.html:src",
+        "sheet:filename-match",
+        "source:filename-match",
+        "tech_recruit.html:src",
+        "yuka.html:src"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/b55f3ab194a281860bf3627f06ea2997.JPG",
+      "bytes": 2183078,
+      "sha256": "ede7987dff939319361fe9009634804b1a2637b0b9688e1fc8dc84df7803895d",
+      "kind": "jpeg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/background.jpg",
+      "bytes": 6033510,
+      "sha256": "e33ec92af49f16a924e375fd654d61a6f5d1274ce14f32591b033422e36240ca",
+      "kind": "jpeg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/bfg.jpg",
+      "bytes": 362959,
+      "sha256": "0cfc423199418e6dd3490da159154e641f56bf7ea8d6ff6857868350d5d0939c",
+      "kind": "jpeg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/blank.png",
+      "bytes": 19322,
+      "sha256": "f3b79340e9d249b3446b659f8835d779a84b9b1bbe5999ed252797bd7a8faa0e",
+      "kind": "png",
+      "reference_evidence": [
+        "source:dynamic-png-stem"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/blank_person.jpg",
+      "bytes": 2102,
+      "sha256": "3684583869e00883d4808b2734254632bf10f458cc3b1b7ac8cc16848507ba2f",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "intern_recruit.html:src",
+        "internexp.html:src",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/blankr.png",
+      "bytes": 4880,
+      "sha256": "aeac6a2edec4ea76e925f957bbc7f8f31b1336b6e319551880ae15ed8fd87ab4",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/blue_chrr.png",
+      "bytes": 75650,
+      "sha256": "464171363947944a0283bdc15f914afabf2a96dfbb1ee73e127bca57dc997ce0",
+      "kind": "png",
+      "reference_evidence": [
+        "index.html:src",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/blue_yachielablogo.svg",
+      "bytes": 15260,
+      "sha256": "f727ceec67cbf96aef22f834828c442cf64e80533fa2c47a0aa47c2d5d3e7dfc",
+      "kind": "svg",
+      "reference_evidence": [
+        "blank.html:src",
+        "contact.html:src",
+        "download.html:src",
+        "index.html:src",
+        "internexp.html:src",
+        "jikkenigaku.html:src",
+        "jikkenigaku2.html:src",
+        "joinus.html:src",
+        "news.html:src",
+        "people.html:src",
+        "publications.html:src",
+        "research.html:src",
+        "resources.html:src",
+        "sheet:filename-match",
+        "software.html:src",
+        "source:filename-match",
+        "summercamp_2026.html:src"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/cgRNA_thumbnail.jpg",
+      "bytes": 129291,
+      "sha256": "0562212e3767666c4abd043d73ae12b4f8f68c0ddf3fc9e17598e6e647bf8f1b",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "publications.html:src",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/cloneselect-highcontrast.jpg",
+      "bytes": 307651,
+      "sha256": "2b16067f871626554848e77524e67b2713fa1d010ba18d47aadd0cd0d0939e4e",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "research.html:src",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/cloneselect.jpg",
+      "bytes": 307651,
+      "sha256": "2b16067f871626554848e77524e67b2713fa1d010ba18d47aadd0cd0d0939e4e",
+      "kind": "jpeg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/contact_test.png",
+      "bytes": 320974,
+      "sha256": "cdafc0ef57e47ce2ab4c396f09f884338f9d9d30105df5b8311602557d4fd42c",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/cover_ol2.jpg",
+      "bytes": 1066298,
+      "sha256": "47132c9c235c52b4c771c01a11fce0c405409935ebe77f01dd26765d0aae0160",
+      "kind": "jpeg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/cover_ol2.png",
+      "bytes": 1201877,
+      "sha256": "3d0bce541d8c5d2f0a16b43aa8d38519212825bc0cebfeb04e4453903762dd65",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/cover_ol3.jpg",
+      "bytes": 1275117,
+      "sha256": "7096d95c9db0a375a3d941dca9bc539c0271afc06a8de98f16af3318bd418b4b",
+      "kind": "jpeg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/cover_ol3.png",
+      "bytes": 3877209,
+      "sha256": "403e14e6629779a6d501100c3d48b8ac73dc7245cb4aca8c3ed47f7573073cb4",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/dayag.jpg",
+      "bytes": 66378,
+      "sha256": "f11eed7142f7b57aa3ffe3e2343a972736b3a4949012fcf64246dbec9b170d53",
+      "kind": "jpeg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/de-shachie-2021.JPG",
+      "bytes": 3122891,
+      "sha256": "b4fd98b8f2bdedbe33cf16896a82631a53671e8a6d306d5d10ce574d775bf55e",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "joinus.html:src",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/dji_fly_20240530_103042_838_1717090252846_photo_optimized.JPG",
+      "bytes": 3349634,
+      "sha256": "6b12393c2fbd00f0ca893bc2d25232717d9fc23e7fb40f370c4d2fcab96ced85",
+      "kind": "jpeg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/dji_fly_20260219_105720_0204_1771527692287_photo.jpg",
+      "bytes": 2023771,
+      "sha256": "6496e5658f4a539a58ef35926fff1cc44277cd624fabe7d0293c460882f32e27",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "people.html:src",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/dji_fly_20260611_130824_0005_1781151221305_photo.jpg",
+      "bytes": 2127229,
+      "sha256": "cce9127facdc78ec0b79354c2443129856172c29f0ff27848a08a650de2be1d4",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "people.html:src",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/eric.jpg",
+      "bytes": 676995,
+      "sha256": "e40c3c28c454edc641f403715f3992f5ccbb7d0090c069b8ebc4cc8c8d73e441",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "news.html:src",
+        "people.html:src",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/favicon.ico",
+      "bytes": 77302,
+      "sha256": "5f362df579c5745b25fff9dbb2f2f46ff3629a4333850d1bcad99b77e120e02b",
+      "kind": "ico",
+      "reference_evidence": [
+        "alumni.html:href",
+        "blank.html:href",
+        "collab.html:href",
+        "contact.html:href",
+        "download.html:href",
+        "hideto.html:href",
+        "index.html:href",
+        "intern_recruit.html:href",
+        "internexp.html:href",
+        "jikkenigaku.html:href",
+        "jikkenigaku2.html:href",
+        "joinus.html:href",
+        "news.html:href",
+        "nzmyachie.html:href",
+        "pd_recruit.html:href",
+        "people.html:href",
+        "publications.html:href",
+        "research.html:href",
+        "resources.html:href",
+        "software.html:href",
+        "source:filename-match",
+        "summercamp_2026.html:href",
+        "tech_recruit.html:href",
+        "yuka.html:href"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/fig01.jpg",
+      "bytes": 164488,
+      "sha256": "e37e5819d477983778d95cd5895973e081bc8f49e4427e9ee94f4adf9bd1c515",
+      "kind": "jpeg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/fractal_concept.jpg",
+      "bytes": 1097486,
+      "sha256": "d3068dde64869dcad533cdb6be3b4d82fe98313465a697cc7f556d759a99b5f9",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "resources.html:src",
+        "software.html:src",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/genomeediting.jpg",
+      "bytes": 380404,
+      "sha256": "d0b0734c7773d8a7691b79b32ad278fc6223c74d26465bf8da192a7efdeb14ee",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "research.html:src",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/github_PRESUME.jpg",
+      "bytes": 529567,
+      "sha256": "eefcdfbf26125de0e4ee6ecb903d5872aa6d43b694fdfc33df4e8fbb4d226d50",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "resources.html:src",
+        "software.html:src",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/gray_addgene.svg",
+      "bytes": 4238,
+      "sha256": "237532a641f466aa45b583c82bb0b99e618fdaff9ecabcb024927c90bc016992",
+      "kind": "svg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/gray_github.svg",
+      "bytes": 1212,
+      "sha256": "2bfcbb54026e8170631c2e8ab2a392041827d0b617c92ca63facc23e6c691be6",
+      "kind": "svg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/gray_yachielablogo.afdesign",
+      "bytes": 51944,
+      "sha256": "fd825e87eb9c1766aa1a2aa5fa48ea3fafabb831aac0f2f46ec3cbe287bd721c",
+      "kind": "unknown",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": true
+    },
+    {
+      "path": "img/gray_yachielablogo.svg",
+      "bytes": 15260,
+      "sha256": "d078bd2d46452a5058265e6d90fcf0d2a043a9c608f80f1deb627571579bdf09",
+      "kind": "svg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/headshot-mod.png",
+      "bytes": 1830537,
+      "sha256": "ac9749a2c6b5493a6facb7c7101480170f49a7d85969a423a69a312558f45dc3",
+      "kind": "png",
+      "reference_evidence": [
+        "people.html:src",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/hideto2.jpg",
+      "bytes": 251113,
+      "sha256": "f1260190f79b73cb7a99435711c17156477b4512035bf67fcf5ffd8db812f25d",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "people.html:src",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/hideto3.jpeg",
+      "bytes": 66709,
+      "sha256": "f29ef2185dc76b40ea9d902eb2caa2498d688a02bbd68f60630a3437e50cfeea",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "hideto.html:src",
+        "sheet:filename-match",
+        "source:filename-match",
+        "yuka.html:src"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/hitoshi.jpg",
+      "bytes": 48073,
+      "sha256": "eddf5a606b84a0cf1ece434e1f7092681b216640ac412da54b00bdb200160860",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "alumni.html:src",
+        "intern_recruit.html:src",
+        "internexp.html:src",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/instagram.jpg",
+      "bytes": 191694,
+      "sha256": "309fd143b691704c9e9d41e1f43cecae2e67a4229e91bdeeab6f04e5f0d9c3d1",
+      "kind": "jpeg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/joinus_test.png",
+      "bytes": 855139,
+      "sha256": "17179f09c135b7e3470198d5336997e35678c5861a2bd4360eda3798a8590ef9",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/jutapat.jpg",
+      "bytes": 635473,
+      "sha256": "e6e156ecbbf74fef4d4c6b9ca57160b0cb86eb83194dee8d19fc0289adf82dbe",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "news.html:src",
+        "people.html:src",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/kawasaki-shunsuke.jpg",
+      "bytes": 88107,
+      "sha256": "99397cde2ca4d30f93afce8b379d13ad17a70ece6302034063ecb785111fa6c8",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "people.html:src",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/kazuki.jpg",
+      "bytes": 3517848,
+      "sha256": "b890615c0382944862c63af4da9869e617952e39f8682646f65105d3be19c869",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "people.html:src",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/lablogosquare.jpg",
+      "bytes": 167014,
+      "sha256": "4944b97427b52c0850af856c7f64235a0ae8a50745d6a5d3f9ada12348f15a18",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "download.html:href",
+        "news.html:src",
+        "resources.html:href",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/lablogosquare200x200.jpg",
+      "bytes": 29384,
+      "sha256": "ec26543c269768582e4483741c0cdf27a797a547fa998d41c98be86106210f66",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "download.html:src",
+        "resources.html:src",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/labmeeting2021.jpg",
+      "bytes": 236020,
+      "sha256": "21a15d421ea3171e464c0c7d47d97d1e43cc67e314600c34867a74d8b83707e0",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "joinus.html:src",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/logo-cdb-osaka-black-on-white (blue).svg",
+      "bytes": 31133,
+      "sha256": "183c1904f2945eb8b273c5effd8758768ec07cf64fcc4a2375c480dfbea43138",
+      "kind": "svg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/logo-cdb-osaka-black-on-white.svg",
+      "bytes": 31061,
+      "sha256": "56c9298e6e289829665b10fc3635cdde7fab136073490a9d9d602ffcbf09e511",
+      "kind": "svg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/logo-cdb-osaka-white-on-black (blue).svg",
+      "bytes": 31855,
+      "sha256": "f6b86ed38e40c06f2696ea7b8834301b2e1efadf259e711fa96ccde53ce8fd87",
+      "kind": "svg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/logo-cdb-osaka-white-on-black-blue.svg",
+      "bytes": 31855,
+      "sha256": "f6b86ed38e40c06f2696ea7b8834301b2e1efadf259e711fa96ccde53ce8fd87",
+      "kind": "svg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/logo-cdb-osaka-white-on-black.svg",
+      "bytes": 31825,
+      "sha256": "19e086f477aca45105788614a7b2ac49681a107b5b1ce4405440e23e49523ebd",
+      "kind": "svg",
+      "reference_evidence": [
+        "alumni.html:src",
+        "blank.html:src",
+        "collab.html:src",
+        "contact.html:src",
+        "download.html:src",
+        "hideto.html:src",
+        "index.html:src",
+        "intern_recruit.html:src",
+        "internexp.html:src",
+        "jikkenigaku.html:src",
+        "jikkenigaku2.html:src",
+        "joinus.html:src",
+        "news.html:src",
+        "nzmyachie.html:src",
+        "pd_recruit.html:src",
+        "people.html:src",
+        "publications.html:src",
+        "research.html:src",
+        "resources.html:src",
+        "sheet:filename-match",
+        "software.html:src",
+        "source:filename-match",
+        "summercamp_2026.html:src",
+        "tech_recruit.html:src"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/logo-yachielab-ubc-black-on-white (blue).svg",
+      "bytes": 31142,
+      "sha256": "b83299727c0702ebb7bb76c9249ffbe2ec95a5e85fe80ef072a23ace473976ba",
+      "kind": "svg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/logo-yachielab-ubc-black-on-white.svg",
+      "bytes": 31079,
+      "sha256": "9a949ed19adcd0fa5d5d3bd8a992cd47619fba175ab828eda60d2fd9c886f476",
+      "kind": "svg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/logo-yachielab-ubc-white-on-black (blue).svg",
+      "bytes": 31959,
+      "sha256": "f1190d4d21879fb37995fbe575d697ccd17c78653cdb7c0ffeacb854d59e0d82",
+      "kind": "svg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/logo-yachielab-ubc-white-on-black-blue.svg",
+      "bytes": 31959,
+      "sha256": "f1190d4d21879fb37995fbe575d697ccd17c78653cdb7c0ffeacb854d59e0d82",
+      "kind": "svg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/logo-yachielab-ubc-white-on-black.svg",
+      "bytes": 31929,
+      "sha256": "55d0fa5d364ec4cf8b239a33cccf2ad4bf3f7d31f2a55e2c4341d9eab759ff61",
+      "kind": "svg",
+      "reference_evidence": [
+        "alumni.html:src",
+        "blank.html:src",
+        "collab.html:src",
+        "contact.html:src",
+        "download.html:src",
+        "hideto.html:src",
+        "index.html:src",
+        "intern_recruit.html:src",
+        "internexp.html:src",
+        "jikkenigaku.html:src",
+        "jikkenigaku2.html:src",
+        "joinus.html:src",
+        "news.html:src",
+        "nzmyachie.html:src",
+        "pd_recruit.html:src",
+        "people.html:src",
+        "publications.html:src",
+        "research.html:src",
+        "resources.html:src",
+        "sheet:filename-match",
+        "software.html:src",
+        "source:filename-match",
+        "summercamp_2026.html:src",
+        "tech_recruit.html:src"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/logo.jpg",
+      "bytes": 112222,
+      "sha256": "ec35318b71c8b70d224e6d8b8a40d58e9582ad33095bd61be3a5496beb782758",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "publications.html:src",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/logo_joinus.png",
+      "bytes": 45534,
+      "sha256": "e04e5156a54d2b88126a1e545bffeea59bd828de34a89a7605c59006a6da5bb8",
+      "kind": "png",
+      "reference_evidence": [
+        "index.html:src",
+        "source:dynamic-png-stem",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/logo_joinus.svg",
+      "bytes": 17660,
+      "sha256": "849791ab2b5fb933e24d4ebf09e876d08f56238f7025d109ef3140de5d31fdb9",
+      "kind": "svg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/logo_joinus_BL.png",
+      "bytes": 50551,
+      "sha256": "c86c85564f2c957ba5171c5c5a8f7bce4c762cbae47685b1bdd5551827436dcf",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/logo_joinus_w.svg",
+      "bytes": 17753,
+      "sha256": "f5efd68489c56ea7db43a0a21fe9b68cbbffe16d6682f5ef21b3f89b6c2e9c7a",
+      "kind": "svg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/logo_news.png",
+      "bytes": 34559,
+      "sha256": "65bdda6d2fecf5b51986cc429fd59b9270df0d61d756221bdbbd2b2257e0e900",
+      "kind": "png",
+      "reference_evidence": [
+        "index.html:src",
+        "source:dynamic-png-stem",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/logo_news.svg",
+      "bytes": 13996,
+      "sha256": "de39369507801cafd12e582a27dfcaf660aebab613fb82bf28897ded88c1fd19",
+      "kind": "svg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/logo_news_BL.png",
+      "bytes": 39179,
+      "sha256": "4fa6b7470adf984abbd73038cf85d2ecf85db7fb0eea3ee9ceffec61ea5bea69",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/logo_news_w.svg",
+      "bytes": 14078,
+      "sha256": "7376b6f06666bc6081e07c97099de19b1fad07baa887c55d0e88e767db793987",
+      "kind": "svg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/logo_people_osak.png",
+      "bytes": 31966,
+      "sha256": "87aba4121777eaadc925e290ba27646e67722dd91c2f998337ff1992cd6e3623",
+      "kind": "png",
+      "reference_evidence": [
+        "index.html:src",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/logo_people_osak.svg",
+      "bytes": 10337,
+      "sha256": "fdd98c573d2360df0603b9dde5bcf4fcde4b510a7f1cf8dd45fddbe9cde6493e",
+      "kind": "svg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/logo_people_osak_BL.png",
+      "bytes": 36059,
+      "sha256": "4004a5742a96d1aafb748fea95dc54bf151eab92fbba715749a0d386dbcd0424",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/logo_people_osak_w.svg",
+      "bytes": 10415,
+      "sha256": "0503c7092950d29803ccc33f8ae62bde41df1ba87ca24efe9f9bfb362464ffb3",
+      "kind": "svg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/logo_people_ubc.png",
+      "bytes": 30615,
+      "sha256": "c54a4d06d54163f4a4d72cdd4ea70f09bb0e3d28f8cb93ebb31db301d60a9267",
+      "kind": "png",
+      "reference_evidence": [
+        "index.html:src",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/logo_people_ubc.svg",
+      "bytes": 9852,
+      "sha256": "57b7995163375ed3b8131472e18730c9c4c4a760fc861b046f66726e3e7e789e",
+      "kind": "svg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/logo_people_ubc_BL.png",
+      "bytes": 34377,
+      "sha256": "07070d92cc78aacac4733f6d7e1461f8125ca6eae4bd79b70d08d4d21c777fcb",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/logo_people_ubc_w.svg",
+      "bytes": 9863,
+      "sha256": "72063716e2321c8c8df62465f9eb0b6c9285bf41df1ddf20af3b86085cc1e21f",
+      "kind": "svg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/logo_publications.png",
+      "bytes": 33437,
+      "sha256": "7dfce5e8503cbfb42dc6b740352074e7b45200200da303b97c130aa2ebaf759a",
+      "kind": "png",
+      "reference_evidence": [
+        "index.html:src",
+        "source:dynamic-png-stem",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/logo_publications.svg",
+      "bytes": 12040,
+      "sha256": "da5767c7f3ea38e2d09b9d0304bedc818bb6de0a71bfcab7849ac372c37611ba",
+      "kind": "svg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/logo_publications_BL.png",
+      "bytes": 37517,
+      "sha256": "10581e38aa575ecedb5cb86b8a6a4588c64727cc43af6a363369315c6c2008b0",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/logo_publications_w.svg",
+      "bytes": 12133,
+      "sha256": "89541cab8ab9d121f9ce41f9d450961513b5e39ea5f29d10df188785a3080235",
+      "kind": "svg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/logo_research.png",
+      "bytes": 31017,
+      "sha256": "6b5ff1ba2abbaa0205053760cb6b243c9a2306b654e9ccd161b3cb4fc2331d58",
+      "kind": "png",
+      "reference_evidence": [
+        "index.html:src",
+        "source:dynamic-png-stem",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/logo_research.svg",
+      "bytes": 13326,
+      "sha256": "e3226300d62680cd05ddd12938af274e255a6752e74d4b71086566540bbecf06",
+      "kind": "svg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/logo_research_BL.png",
+      "bytes": 34706,
+      "sha256": "622e6d8a286ca79598d3dfb400d227d1666d32748037b844f8dede0d08c023e5",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/logo_research_w.afdesign",
+      "bytes": 32966,
+      "sha256": "5c88d9dcc5e4fee0d527d3e7d79c2ee24808996fd8d9403153d631b7b30b0124",
+      "kind": "unknown",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": true
+    },
+    {
+      "path": "img/logo_research_w.svg",
+      "bytes": 13419,
+      "sha256": "94fc08066308baa3a7a006504d7505773d88570283719373b46a756e910528c6",
+      "kind": "svg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/logo_resources.png",
+      "bytes": 35996,
+      "sha256": "32bc4fda12a00a29e86b9cf843192cd75f2bd92245cddbb5e53ea042872176d8",
+      "kind": "png",
+      "reference_evidence": [
+        "index.html:src",
+        "source:dynamic-png-stem",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/logo_resources.svg",
+      "bytes": 10786,
+      "sha256": "a171292466e3ace1c11cce2db41c050a57aeeb37d9b3985dfeddc363d2a4a904",
+      "kind": "svg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/logo_resources_BL.png",
+      "bytes": 40961,
+      "sha256": "0f35d604229a7304e899a9a9523c9f01706cbc35d3e25422c2c26711cbd9530a",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/logo_resources_w.svg",
+      "bytes": 10868,
+      "sha256": "2f20084235bb315499ccb610120811ca86b83513c42f237e12a54abad47518b7",
+      "kind": "svg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/louis.jpg",
+      "bytes": 69219,
+      "sha256": "c655899f76a06246d45d54b74577b5179d5e68be940abc832e7cd2f29f47a3bb",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "sheet:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/navy_SBME_logo.svg",
+      "bytes": 33668,
+      "sha256": "6659c017fbfcaa87c0604d36a4fca76e130af2f4a2f917368e2ee68ab23d5c97",
+      "kind": "svg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/navy_addgene.svg",
+      "bytes": 3644,
+      "sha256": "b7974adb93c1520c4111d0b02cb55d809e9541b0317890343ac6b4bfd05f581c",
+      "kind": "svg",
+      "reference_evidence": [
+        "sheet:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/navy_github.svg",
+      "bytes": 1083,
+      "sha256": "2f2b920240a7d35d87e2c03ceafc8e47757f19b6b7302054e809c39f5b1d18b0",
+      "kind": "svg",
+      "reference_evidence": [
+        "sheet:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/navy_instagram.svg",
+      "bytes": 994,
+      "sha256": "95d4d79fcd3a4d5c0f807261018f65a31a477ea0a7131590a76af43fd86791d3",
+      "kind": "svg",
+      "reference_evidence": [
+        "sheet:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/navy_osakauniv_logo.svg",
+      "bytes": 23935,
+      "sha256": "db4c42d569193b3b0ce299c28afb22ce93060b0612d31854edfbd3828049257c",
+      "kind": "svg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/navy_prime_logo_v.svg",
+      "bytes": 74305,
+      "sha256": "939453ab903b462479cef0e1f2d509b7f2772e7a5a1f0386c6e1f91964670ee0",
+      "kind": "svg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/navy_primeicon.svg",
+      "bytes": 17985,
+      "sha256": "a99bec1189ffa75406fb3d9f9ded52cf205cd1b361bdbe2475de95f37e24ea53",
+      "kind": "svg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/navy_primelogo_h.svg",
+      "bytes": 28762,
+      "sha256": "e33b69bebf0dfa2b1005a8464868d5877fd8c80d3f4a00fccf259d25154c814c",
+      "kind": "svg",
+      "reference_evidence": [
+        "sheet:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/navy_ubcicon.svg",
+      "bytes": 6274,
+      "sha256": "be1a3b66819f71381380ffeaa090e669da0c886fbdca4fabd500df506d86a45b",
+      "kind": "svg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/navy_ubclogo.svg",
+      "bytes": 6274,
+      "sha256": "be1a3b66819f71381380ffeaa090e669da0c886fbdca4fabd500df506d86a45b",
+      "kind": "svg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/navy_ubclogo_h.svg",
+      "bytes": 11579,
+      "sha256": "1b14b1b0843a803fffa9528049cacc458fd44a6bde18caea9c513ef0ad8ab671",
+      "kind": "svg",
+      "reference_evidence": [
+        "sheet:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/navy_x.svg",
+      "bytes": 932,
+      "sha256": "bfca4e7c491cfac1a0b26361d8499da5ec373ab71e7a96c20f70b5abc07d268a",
+      "kind": "svg",
+      "reference_evidence": [
+        "sheet:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/navy_yachielab_logo.png",
+      "bytes": 138293,
+      "sha256": "1257df4a4053487df6bc04aa67dfed80f541ad859ab2f90490179943ac135e6d",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/navy_yachielablogo.svg",
+      "bytes": 15222,
+      "sha256": "7e30434df4433c1f8cb322f41f9b597bec05712f15266526e09b7677b4f84fa6",
+      "kind": "svg",
+      "reference_evidence": [
+        "sheet:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/navy_yachielablogo2.svg",
+      "bytes": 74487,
+      "sha256": "23356c600ce0ea656b515fb141e53e7c7543c409773b97d6e5781adb55710d08",
+      "kind": "html",
+      "reference_evidence": [
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/news_test.png",
+      "bytes": 927236,
+      "sha256": "5d55d8dfa708e8791c137351b4929409457f967d3b636c819558e7a91f1c9342",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/nophoto.jpg",
+      "bytes": 59068,
+      "sha256": "75e0133f8ef12020b6c5f99bc0b664c6934cb645df47034a393ebdbfa043af12",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "alumni.html:src",
+        "news.html:src",
+        "people.html:src",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/nzm2015sept.jpg",
+      "bytes": 431725,
+      "sha256": "fa4ce9e82878d8a1477ba3b4b44a2e7114ac02594adff131e617f1730d9c1c49",
+      "kind": "jpeg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/obi.jpg",
+      "bytes": 886980,
+      "sha256": "e81f6fde079e124123fffac702bc532ee55e78e4706cff51f9769559652d9743",
+      "kind": "jpeg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/obi2.jpg",
+      "bytes": 863322,
+      "sha256": "a4a7496e22275e1cea84a24a0c0d9df02c396f2e264ecb7ad0e44b63ab83bd01",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "jikkenigaku2.html:src",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/osaka-group-March-2024.jpg",
+      "bytes": 3040729,
+      "sha256": "b4d6cff6c67a2e470f4f107de67954263ea8666ffc9eda6d8683ebf826bf947a",
+      "kind": "jpeg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/osaka-university.jpg",
+      "bytes": 673600,
+      "sha256": "c6a92424a3a104b8c283d0b5695490e4872d6cd44f4fe564afa7b49e77f54d2f",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "joinus.html:src",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/people_UBC_test.png",
+      "bytes": 624141,
+      "sha256": "3e81ea09f73b78b3cf469856b180dbdc66f88c038a2bcaaee44315e2a9116a85",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/people_osaka_test.png",
+      "bytes": 829561,
+      "sha256": "5479e1cc9c91f00db20991939cde293098f4c765f3b22627e09a5412f5b8cad6",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/pfp.png",
+      "bytes": 20721618,
+      "sha256": "bedc9c5f6f1dc00a081b620d7e56fd495bc8d70d3ad2d0814a67499309b9ff95",
+      "kind": "png",
+      "reference_evidence": [
+        "people.html:src",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/project.jpg",
+      "bytes": 203450,
+      "sha256": "47dccb45615b963d0e1242ca080fed164f7d109b6c4682e66e85fd41ea048c5a",
+      "kind": "jpeg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/publication_test.png",
+      "bytes": 534912,
+      "sha256": "15ccd70aa6b64064250f7822a709824f593f3b3c88f5adccefcc4ae233d81e6b",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/research_test.png",
+      "bytes": 591337,
+      "sha256": "956ef87a1821f3b053c7a104d6e05e276fd130fe8e9b5f64b678f83108b4910f",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/rina2.jpg",
+      "bytes": 41023,
+      "sha256": "9555bb57df36ddfa468086149fcff9961b94e6720a54b50e69ffb29910ea1bae",
+      "kind": "jpeg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/sanchit_profilePic.png",
+      "bytes": 13380083,
+      "sha256": "b84690258c8655850178e85bc655ffa0ee657b669e3dd9e1bcfaa0214719bec8",
+      "kind": "png",
+      "reference_evidence": [
+        "people.html:src",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/sciadv_small.jpg",
+      "bytes": 75261,
+      "sha256": "be6ae1b7fe2f0c9330a41c46e21a93e5ae3bb4008280c6d44bb6709cc0627c25",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "publications.html:src",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/setsubun_1_2026.jpg",
+      "bytes": 1979768,
+      "sha256": "10e72caf898170beca3f72c73b12d88152d2c0c247a2d3ed1d07d2f5e3644b05",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "news.html:src",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/setsubun_2_2026.jpg",
+      "bytes": 355728,
+      "sha256": "5b87126e5623a495b9c8d6277a42fd382881c56b3567850f454cfa7ac472c6a0",
+      "kind": "jpeg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/sign.png",
+      "bytes": 32380,
+      "sha256": "1939547f452c656641988802d17162506a480ef55abebc7d37c4ca220a92f380",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/sign.svg",
+      "bytes": 39147,
+      "sha256": "e656ee3a4257eeb8e5edb2a00f27070ad5f332eecd697547afdc5c25cdb32d13",
+      "kind": "svg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/sign_gray.svg",
+      "bytes": 33878,
+      "sha256": "64706bc8491022a35700e3db02f88791ce6060bc5254a5afa860b23e0751a13b",
+      "kind": "svg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/sign_white.svg",
+      "bytes": 33801,
+      "sha256": "9572ef7b3e8269edf041549fe1333a164562a7220e48d02c5619cc46a7e4af4f",
+      "kind": "svg",
+      "reference_evidence": [
+        "alumni.html:src",
+        "blank.html:src",
+        "collab.html:src",
+        "contact.html:src",
+        "download.html:src",
+        "hideto.html:src",
+        "index.html:src",
+        "intern_recruit.html:src",
+        "internexp.html:src",
+        "jikkenigaku.html:src",
+        "jikkenigaku2.html:src",
+        "joinus.html:src",
+        "news.html:src",
+        "nzmyachie.html:src",
+        "pd_recruit.html:src",
+        "people.html:src",
+        "publications.html:src",
+        "research.html:src",
+        "resources.html:src",
+        "sheet:filename-match",
+        "software.html:src",
+        "source:filename-match",
+        "summercamp_2026.html:src",
+        "tech_recruit.html:src",
+        "yuka.html:src"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/stephanie.jpg",
+      "bytes": 54541,
+      "sha256": "6fcf034402f2d67c38ce3d7a1b15f8aae121fdaf18196f1929a7345cb14dfad7",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "sheet:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/tatsuya.jpg",
+      "bytes": 77326,
+      "sha256": "f15ff3e4b40386407bd3ae8dbcc25279aad618ff344f1ddb6a7ff3c0d876fa3a",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "intern_recruit.html:src",
+        "internexp.html:src",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/teal_yachielablogo.svg",
+      "bytes": 15298,
+      "sha256": "ee3337f0a7d6d5ccdfb313e2955a781a2ee14ce30449ca6248364aa0b1f85ae4",
+      "kind": "svg",
+      "reference_evidence": [
+        "alumni.html:src",
+        "collab.html:src",
+        "hideto.html:src",
+        "intern_recruit.html:src",
+        "nzmyachie.html:src",
+        "pd_recruit.html:src",
+        "source:filename-match",
+        "tech_recruit.html:src",
+        "yuka.html:src"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/thumbnail2.png",
+      "bytes": 1326064,
+      "sha256": "1c5d33a6edf84b1958c7f2784fb9344081ecf692c95cb10db3b4da03d1ec29e9",
+      "kind": "png",
+      "reference_evidence": [
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/thumbnail_v1.jpeg",
+      "bytes": 407433,
+      "sha256": "f25ac392d773c89a93aba434ff8be7237f7c4e2e023201ec08847c4abb9af81e",
+      "kind": "jpeg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/thumbnail_v2.png",
+      "bytes": 900428,
+      "sha256": "035d4103e5693867a1baf61cc89ae3a3e06e155962e8a84237d5f2279a5e8f87",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/top-image.jpg",
+      "bytes": 20389428,
+      "sha256": "7da4da21c8d8459b25f95f78f9ff598df8ab180b768f7e39170cf3a74cf6abd0",
+      "kind": "jpeg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/top-image_low.jpg",
+      "bytes": 1460647,
+      "sha256": "84eb06d7222bd85807f63db6041a0954bb0abe59bd4af7927541cb1b28b07e3f",
+      "kind": "jpeg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/top-image_low_cropped.jpg",
+      "bytes": 1267251,
+      "sha256": "51b1c40e00e166f073c9d5b1c98804cebee1f351b7630b7fa57be0fc365498e6",
+      "kind": "jpeg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/transparent.png",
+      "bytes": 24386,
+      "sha256": "ca9737456e3c1242518457eef2bc8eedb9a64de0083d4a407f613749b4c21dcf",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/transparentr.png",
+      "bytes": 4880,
+      "sha256": "aeac6a2edec4ea76e925f957bbc7f8f31b1336b6e319551880ae15ed8fd87ab4",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/two_logos_black_on_white.svg",
+      "bytes": 76040,
+      "sha256": "43756efb98b1ced63fbe454cfc2191bcde0e01a9ea79940b872a52906a6ba592",
+      "kind": "svg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/two_logos_on_white_on_black.svg",
+      "bytes": 77654,
+      "sha256": "7eb24576692bb592b449e9e7e06e63edbf521c3e156b12db19a4768b86785276",
+      "kind": "svg",
+      "reference_evidence": [
+        "alumni.html:src",
+        "blank.html:src",
+        "collab.html:src",
+        "contact.html:src",
+        "download.html:src",
+        "hideto.html:src",
+        "index.html:src",
+        "intern_recruit.html:src",
+        "internexp.html:src",
+        "jikkenigaku.html:src",
+        "jikkenigaku2.html:src",
+        "joinus.html:src",
+        "news.html:src",
+        "nzmyachie.html:src",
+        "pd_recruit.html:src",
+        "people.html:src",
+        "publications.html:src",
+        "research.html:src",
+        "resources.html:src",
+        "sheet:filename-match",
+        "software.html:src",
+        "source:filename-match",
+        "summercamp_2026.html:src",
+        "tech_recruit.html:src"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/two_logos_osaka_black_on_white.svg",
+      "bytes": 76072,
+      "sha256": "991d0f56dc6db0b63b7e61e1801b90be078ea5f276923b65fe485db36ea6e804",
+      "kind": "svg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/two_logos_osaka_teal_on_white.svg",
+      "bytes": 78955,
+      "sha256": "3bb3ab0b6e5051ad90e6797e490275cd082d8b591536a031a8519bc94bad4381",
+      "kind": "svg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/two_logos_osaka_white_on_black.svg",
+      "bytes": 77686,
+      "sha256": "c7eb4b398a9231639c08ad1dc8a6691e8bdf2d9efd339cbb3099cfc7af3dbf39",
+      "kind": "svg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/two_logos_teal_on_white.svg",
+      "bytes": 78923,
+      "sha256": "0f0c1372fd5a70c1edff07ae50c0ff6e3110bb9b69dd849b28046122e22ea8fc",
+      "kind": "svg",
+      "reference_evidence": [
+        "alumni.html:src",
+        "blank.html:src",
+        "collab.html:src",
+        "contact.html:src",
+        "download.html:src",
+        "hideto.html:src",
+        "index.html:src",
+        "intern_recruit.html:src",
+        "internexp.html:src",
+        "jikkenigaku.html:src",
+        "jikkenigaku2.html:src",
+        "joinus.html:src",
+        "news.html:src",
+        "nzmyachie.html:src",
+        "pd_recruit.html:src",
+        "people.html:src",
+        "publications.html:src",
+        "research.html:src",
+        "resources.html:src",
+        "sheet:filename-match",
+        "software.html:src",
+        "source:filename-match",
+        "summercamp_2026.html:src",
+        "tech_recruit.html:src"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/white_addgene.svg",
+      "bytes": 4042,
+      "sha256": "972d3db901ea31ddb15c65435c18b25f16666c3d024b6769ac89bd4ac5426712",
+      "kind": "svg",
+      "reference_evidence": [
+        "alumni.html:src",
+        "blank.html:src",
+        "collab.html:src",
+        "contact.html:src",
+        "download.html:src",
+        "hideto.html:src",
+        "index.html:src",
+        "intern_recruit.html:src",
+        "internexp.html:src",
+        "jikkenigaku.html:src",
+        "jikkenigaku2.html:src",
+        "joinus.html:src",
+        "news.html:src",
+        "nzmyachie.html:src",
+        "pd_recruit.html:src",
+        "people.html:src",
+        "publications.html:src",
+        "research.html:src",
+        "resources.html:src",
+        "sheet:filename-match",
+        "software.html:src",
+        "source:filename-match",
+        "summercamp_2026.html:src",
+        "tech_recruit.html:src",
+        "yuka.html:src"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/white_alligator.svg",
+      "bytes": 132668,
+      "sha256": "786597d96249851d7aab2aa8e05464d90db0b6b13e5152a5b5e95cd0c6a2335c",
+      "kind": "svg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/white_barclock.svg",
+      "bytes": 196374,
+      "sha256": "cd58e6d37ad3c9b18d339c4822ef9e65bb7d8e6cb9badbd8c816705948ac1883",
+      "kind": "svg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/white_bfg.svg",
+      "bytes": 186464,
+      "sha256": "607c34e6455e3d1d435b8b56f3b340a7bcbee32455906f82c16e9e1471aa088d",
+      "kind": "svg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/white_cas9.svg",
+      "bytes": 164609,
+      "sha256": "5e9ec5ea91943572390013f30c52db65f72a6bb488c7ea90c78c5a1bd7e76bda",
+      "kind": "svg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/white_cloneselect.svg",
+      "bytes": 107709,
+      "sha256": "8b8e1ca0abfa82130608cf7bd436cf63b27185ac25b5bcab6c969ba1e2dee004",
+      "kind": "svg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/white_github.svg",
+      "bytes": 1201,
+      "sha256": "9f8d4bebf4798c17726d92a396a154c6e8cc0dac23eaf505b4aafa4510c47ef1",
+      "kind": "svg",
+      "reference_evidence": [
+        "alumni.html:src",
+        "blank.html:src",
+        "collab.html:src",
+        "contact.html:src",
+        "download.html:src",
+        "hideto.html:src",
+        "index.html:src",
+        "intern_recruit.html:src",
+        "internexp.html:src",
+        "jikkenigaku.html:src",
+        "jikkenigaku2.html:src",
+        "joinus.html:src",
+        "news.html:src",
+        "nzmyachie.html:src",
+        "pd_recruit.html:src",
+        "people.html:src",
+        "publications.html:src",
+        "research.html:src",
+        "resources.html:src",
+        "sheet:filename-match",
+        "software.html:src",
+        "source:filename-match",
+        "summercamp_2026.html:src",
+        "tech_recruit.html:src",
+        "yuka.html:src"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/white_instagram.svg",
+      "bytes": 1172,
+      "sha256": "4ae99499d5d35777de2d961398a6722179431b4e1e82adc4a83457d10c58b11a",
+      "kind": "svg",
+      "reference_evidence": [
+        "alumni.html:src",
+        "blank.html:src",
+        "collab.html:src",
+        "contact.html:src",
+        "download.html:src",
+        "hideto.html:src",
+        "index.html:src",
+        "intern_recruit.html:src",
+        "internexp.html:src",
+        "jikkenigaku.html:src",
+        "jikkenigaku2.html:src",
+        "joinus.html:src",
+        "news.html:src",
+        "nzmyachie.html:src",
+        "pd_recruit.html:src",
+        "people.html:src",
+        "publications.html:src",
+        "research.html:src",
+        "resources.html:src",
+        "sheet:filename-match",
+        "software.html:src",
+        "source:filename-match",
+        "summercamp_2026.html:src",
+        "tech_recruit.html:src",
+        "yuka.html:src"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/white_interactome.svg",
+      "bytes": 176342,
+      "sha256": "19b72bab52223adaea8111f67d5da292bc3f15f6f4cf30a8faa7e1f9cbe59361",
+      "kind": "svg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/white_prime_logo_h_old.svg",
+      "bytes": 74202,
+      "sha256": "b3f6d2739e28bbae5966472835a942da3ff89f6bdd0fb30564e44a2afea98b1f",
+      "kind": "svg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/white_prime_logo_h_old2.svg",
+      "bytes": 28587,
+      "sha256": "d2a752a59d91e41d48e77d154320ced470e9ff411ede010b9d35c6c1d9a352f8",
+      "kind": "svg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/white_prime_logo_v.svg",
+      "bytes": 101816,
+      "sha256": "657e5694c120773ebcb8792dd0e9bdb1a2730cf9c6b4a8cbbf5663bbcf7017eb",
+      "kind": "svg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/white_primelogo_h.svg",
+      "bytes": 21843,
+      "sha256": "f8cbe173358d010d29eaca8a5752804dc36f14cec015da4f9232776be79377b5",
+      "kind": "svg",
+      "reference_evidence": [
+        "source:filename-match",
+        "yuka.html:src"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/white_primelogo_h_uo.svg",
+      "bytes": 21843,
+      "sha256": "f8cbe173358d010d29eaca8a5752804dc36f14cec015da4f9232776be79377b5",
+      "kind": "svg",
+      "reference_evidence": [
+        "alumni.html:src",
+        "blank.html:src",
+        "collab.html:src",
+        "contact.html:src",
+        "download.html:src",
+        "hideto.html:src",
+        "index.html:src",
+        "intern_recruit.html:src",
+        "internexp.html:src",
+        "jikkenigaku.html:src",
+        "jikkenigaku2.html:src",
+        "joinus.html:src",
+        "news.html:src",
+        "nzmyachie.html:src",
+        "pd_recruit.html:src",
+        "people.html:src",
+        "publications.html:src",
+        "research.html:src",
+        "resources.html:src",
+        "sheet:filename-match",
+        "software.html:src",
+        "source:filename-match",
+        "summercamp_2026.html:src",
+        "tech_recruit.html:src",
+        "yuka.html:src"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/white_primelogo_h_uo_2.svg",
+      "bytes": 42407,
+      "sha256": "3834d6a536bd4bea4505837cf4a113b6626f6ba1087818bc6eb165a3edcff03b",
+      "kind": "svg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/white_spade.svg",
+      "bytes": 126837,
+      "sha256": "f4113d0ce84791797a921578f477de77b64859c0ecaff9f807e20415155cc8a6",
+      "kind": "svg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/white_ubclogo.svg",
+      "bytes": 3609,
+      "sha256": "7bf080d7ee023d8b25095dba9e008a963b8ce69f726e512a0106de17e6184f7a",
+      "kind": "svg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/white_ubclogo_h.svg",
+      "bytes": 11469,
+      "sha256": "1551c857a98b484a942f44b11efa76132c701701cc4bf5f0715b50ccec285a90",
+      "kind": "svg",
+      "reference_evidence": [
+        "alumni.html:src",
+        "blank.html:src",
+        "collab.html:src",
+        "contact.html:src",
+        "download.html:src",
+        "hideto.html:src",
+        "index.html:src",
+        "intern_recruit.html:src",
+        "internexp.html:src",
+        "jikkenigaku.html:src",
+        "jikkenigaku2.html:src",
+        "joinus.html:src",
+        "news.html:src",
+        "nzmyachie.html:src",
+        "pd_recruit.html:src",
+        "people.html:src",
+        "publications.html:src",
+        "research.html:src",
+        "resources.html:src",
+        "sheet:filename-match",
+        "software.html:src",
+        "source:filename-match",
+        "summercamp_2026.html:src",
+        "tech_recruit.html:src",
+        "yuka.html:src"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/white_ubclogo_narrow.svg",
+      "bytes": 15696,
+      "sha256": "f651854ea83550bbc8e003fcc046daf8448039d444fcdc60502edacceba6be40",
+      "kind": "svg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/white_x.svg",
+      "bytes": 913,
+      "sha256": "847d79b26130485e3071d4ddc5134b2479be2ffb88cce9257c93e5b3bee1b851",
+      "kind": "svg",
+      "reference_evidence": [
+        "alumni.html:src",
+        "blank.html:src",
+        "collab.html:src",
+        "contact.html:src",
+        "download.html:src",
+        "hideto.html:src",
+        "index.html:src",
+        "intern_recruit.html:src",
+        "internexp.html:src",
+        "jikkenigaku.html:src",
+        "jikkenigaku2.html:src",
+        "joinus.html:src",
+        "news.html:src",
+        "nzmyachie.html:src",
+        "pd_recruit.html:src",
+        "people.html:src",
+        "publications.html:src",
+        "research.html:src",
+        "resources.html:src",
+        "sheet:filename-match",
+        "software.html:src",
+        "source:filename-match",
+        "summercamp_2026.html:src",
+        "tech_recruit.html:src",
+        "yuka.html:src"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/white_yachielablogo.svg",
+      "bytes": 10195,
+      "sha256": "d5cb0878d500b83851188118fa23370492ebf7e9f96ed01219072664b6ae3f97",
+      "kind": "svg",
+      "reference_evidence": [
+        "alumni.html:src",
+        "blank.html:src",
+        "collab.html:src",
+        "contact.html:src",
+        "download.html:src",
+        "hideto.html:src",
+        "index.html:src",
+        "intern_recruit.html:src",
+        "internexp.html:src",
+        "jikkenigaku.html:src",
+        "jikkenigaku2.html:src",
+        "joinus.html:src",
+        "news.html:src",
+        "nzmyachie.html:src",
+        "pd_recruit.html:src",
+        "people.html:src",
+        "publications.html:src",
+        "research.html:src",
+        "resources.html:src",
+        "sheet:filename-match",
+        "software.html:src",
+        "source:filename-match",
+        "summercamp_2026.html:src",
+        "tech_recruit.html:src",
+        "yuka.html:src"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/x_logo.svg",
+      "bytes": 722,
+      "sha256": "4e04da7dca1dd29c93543e419c5ed75e74415b75194defca4591b3748a12ac66",
+      "kind": "svg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/yusuke2.jpg",
+      "bytes": 61413,
+      "sha256": "36d4831d926819de7508da87050699a8999b59042062c413f59dff94f9ee9477",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "intern_recruit.html:src",
+        "internexp.html:src",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/■清書.jpg",
+      "bytes": 20389428,
+      "sha256": "7da4da21c8d8459b25f95f78f9ff598df8ab180b768f7e39170cf3a74cf6abd0",
+      "kind": "jpeg",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/サイン.png",
+      "bytes": 94661,
+      "sha256": "d9cad9b66958b2d6a3e43303aa20f0c02babb8f8ae7ff9c557adaca272524e2c",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/ロゴ_Join us.png",
+      "bytes": 97381,
+      "sha256": "902397295706dda5d50f86e946edb3232203e98faa37b7833e2830fb1c0a40a1",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/ロゴ_News.png",
+      "bytes": 95897,
+      "sha256": "9b75308f2d127a24e8f76389a6f31e42befc8146c28a2e9707cbc00ff57607fe",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/ロゴ_People in Osaka.png",
+      "bytes": 95121,
+      "sha256": "13782e5f8ef0f8d63119ecc3755ffefd1bb923da70b4c5dc1583514b723c00d2",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/ロゴ_People in Vancouver.png",
+      "bytes": 94981,
+      "sha256": "39cc5fbe476433278445a34f15661826645987def4d02a1a081aa4913d6b36dc",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/ロゴ_Publications.png",
+      "bytes": 96376,
+      "sha256": "7cd176325e3cfd59749f0f9a7f37c03690d126cd12f95941d5ce9f75c7ed2b21",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/ロゴ_Research.png",
+      "bytes": 97096,
+      "sha256": "f09c268f22fa89ede3bd399e069ecf7386b7d7e1904075d22f86ee125dda3843",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/ロゴ_Resources.png",
+      "bytes": 94932,
+      "sha256": "2cf22685dea0cbdebc3f97274605ac7b242edabbe450600ccdbd5cab7543341b",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/位置参考.png",
+      "bytes": 4636702,
+      "sha256": "9bd73a5b91def3a12d4397156da234ef1a8e68d768d673ec9a02010d28c9a41f",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/位置参考r.png",
+      "bytes": 2002378,
+      "sha256": "5a28dca1188b2be87fc3dfa6ff45dd472da25022745c53d38c89604722f6576b",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/生物物理海外だより (2).pdf",
+      "bytes": 8259761,
+      "sha256": "ad2d662caa29d5410043bdae77b519d52e4c0a388edb52704fa1aa56eebef0b7",
+      "kind": "pdf",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img_new/A.png",
+      "bytes": 661534,
+      "sha256": "102f2d0949e7b8767415f4ed341587bfefa7ac235fca9315bec56b4cf545f3f9",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img_new/AA.png",
+      "bytes": 733674,
+      "sha256": "45a5ee2efb0bd34e3f21bcdd639b30693d0266f3794f5fe97ad81dd5286fe2ed",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img_new/B.png",
+      "bytes": 1118269,
+      "sha256": "1e09275cff68aa540ae51d65f7847a0b1a104c0fda4c63fe1866dbb464c62d0b",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img_new/BB.png",
+      "bytes": 1217050,
+      "sha256": "87996fd9eaf51a5e9b688921ee4f9bb1a102735573e47a9f9d34d6171d7e47dd",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img_new/C.png",
+      "bytes": 241202,
+      "sha256": "df00f97bd7e6a3c9ae78736d323c3156a46c90c5fbf8adb4d85c7f0f8014e1f5",
+      "kind": "png",
+      "reference_evidence": [
+        "source:dynamic-png-stem"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img_new/CC.png",
+      "bytes": 253457,
+      "sha256": "142efb5e9582015456830c201ec8808f3c180ee418264033a8bae14f638a0f2d",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img_new/DD_1.png",
+      "bytes": 438367,
+      "sha256": "3368582931d8c9640fde537df3f7af4aeed919c0517b0b2b6a1922be7289dbe2",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img_new/DD_2.png",
+      "bytes": 618231,
+      "sha256": "5b251809aee1235ffd16a1d34e9ed5a64f5781b024dc8f0ab936dada160824f7",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img_new/D_1.png",
+      "bytes": 417672,
+      "sha256": "9b403ed99a5cd90e423855c6e63fc5e5820c35bd5e5b05da852a9426dbb74b7c",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img_new/D_2.png",
+      "bytes": 616412,
+      "sha256": "b0c3d736a36c083024f8d7593a0a2b884cc996abbcb6b6d86f8f9e100838fbbd",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img_new/E.png",
+      "bytes": 747786,
+      "sha256": "38fd0a30b855e14c326704f86682025122e4912ef3e3987a93caa83a4e2f48d2",
+      "kind": "png",
+      "reference_evidence": [
+        "source:dynamic-png-stem"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img_new/EE.png",
+      "bytes": 804661,
+      "sha256": "b80f44f799cea94857c66a33df5e468beaec8e4173492ba7a2204f964b653b06",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img_new/FF_1.png",
+      "bytes": 412857,
+      "sha256": "70a2e777e105324b3f02b7e313584ac25082a8b6d757fdfbbf579190f61ff5d3",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img_new/FF_2.png",
+      "bytes": 430193,
+      "sha256": "5dd86a6626ca0a996b6e83a822a43fead6fd7687e6ee313a19b345df84ab55e3",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img_new/F_1.png",
+      "bytes": 394116,
+      "sha256": "19b9a71ca0a98caef508b7ab209bf7d1c18f285dda1b4bef43028fa0534fef4f",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img_new/F_2.png",
+      "bytes": 426093,
+      "sha256": "e5848f670e0fdde85af769fe897bf99c50a7cb93a92eecd4b29053b7b9977075",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img_new/G.png",
+      "bytes": 335383,
+      "sha256": "bfb8292e737430347f5f3651011415d8a8923ff551f8f01af706cb9db934f948",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img_new/GG.png",
+      "bytes": 355279,
+      "sha256": "b3aacde038573a6208aa563fcd4dd56a477d70c31abf9a0f8c03dc6a4b4a3ae0",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img_new/HH_1.png",
+      "bytes": 938786,
+      "sha256": "53edc5438b15814c7894328c6c829a8a8a57111a848bbddca230e91625ae628a",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img_new/HH_2.png",
+      "bytes": 1079353,
+      "sha256": "cddb788604ebcd7c1865500dd8220007e34dc588780ef92213e1c39c543092e0",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img_new/H_1.png",
+      "bytes": 869915,
+      "sha256": "4125f510dbccbaa82054a43c912837f343be564331ba9cc5e8fb25b6f3a8aa8b",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img_new/H_2.png",
+      "bytes": 1055457,
+      "sha256": "d3f8342b6d3be761dc9e3a9ff9c171b65d78283a9e78ac57a65c2a62d5908169",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img_new/I.png",
+      "bytes": 500336,
+      "sha256": "d99f94f00166c1988b62af01cdecb421e715cbeffab72c3be304d080b72a81db",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img_new/II.png",
+      "bytes": 541046,
+      "sha256": "f629d46b9abad5fdbbb610bec2197c61af37c76b534520ef1ccd64603717b0f8",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img_new/JJ_1.png",
+      "bytes": 667889,
+      "sha256": "4fe654a0ea0438f6e3a4a8d2c9c55842731f65bfa2eca7e991c1caab0a38adf4",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img_new/JJ_2.png",
+      "bytes": 697270,
+      "sha256": "e2d218e2fae25a192341bebeb6e6132e505059ebe5780f86459806bf996dea7e",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img_new/J_1.png",
+      "bytes": 592225,
+      "sha256": "1f30b709cc25b6439aa7dc82e79332d75ac19bfb86e396d3d202f02167700650",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img_new/J_2.png",
+      "bytes": 694771,
+      "sha256": "8dd6cefdeed1b1e699b14f6cd598c96e0b787c1c0e1d796f9a4973efaf5676cf",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img_new/K.png",
+      "bytes": 422176,
+      "sha256": "39c35f801127fe7cfa23b20998dcbf0568407df265d6484b7b3baf8863a960d2",
+      "kind": "png",
+      "reference_evidence": [
+        "source:dynamic-png-stem"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img_new/KK.png",
+      "bytes": 451441,
+      "sha256": "20606a2c87de9894b1821de9a6f9809da74d47d447ab2f2d5b2953dbd5f6db83",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img_new/LL_1.png",
+      "bytes": 349247,
+      "sha256": "3111240812f9fb8582fce62c0ece41054682851f8f86caed50a9a4b42d909320",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img_new/LL_2.png",
+      "bytes": 414669,
+      "sha256": "c3f8670992720b2a1e4870e45ec4655e07747db57bd70a4462be40012bf89be2",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img_new/L_1.png",
+      "bytes": 323569,
+      "sha256": "672fb3705369340532348938eb0c2c5aa3cb8324145901d2608f0d3615358e93",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img_new/L_2.png",
+      "bytes": 408672,
+      "sha256": "4a8bef7a0f5f3895550674b1ee694aaa2aff293b13788b8afb255da66fcb849c",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img_new/MM_1.png",
+      "bytes": 276598,
+      "sha256": "bbc6e61c81e1098ef2ca7acd6fcf5f478bc86856e39956a57d06891616328b32",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img_new/MM_2.png",
+      "bytes": 350431,
+      "sha256": "c289fbd01c213d21100ccae2999b7b6d54ce5486bf99232a80d33be204bb60fd",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img_new/M_1.png",
+      "bytes": 269718,
+      "sha256": "56563b980d4985c4a19b22684731ee70d91f3961c36ffbc4413d1674c58b0528",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img_new/M_2.png",
+      "bytes": 348143,
+      "sha256": "e22deaeb0a18b4625aee93f682009fa601fb6c9df7d86d5089fe98a63026c032",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img_new/NN_1.png",
+      "bytes": 709503,
+      "sha256": "a5bbf8e32e1077c3c7fd3aa3be04489ae93150d5861351f9c458b870972deae2",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img_new/NN_2.png",
+      "bytes": 748831,
+      "sha256": "32489ec1ea4e125b3dbd7d76352981781ea25a9b1737c613a4f4f4277974c2dd",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img_new/N_1.png",
+      "bytes": 676090,
+      "sha256": "2ef85c9b8c27acd65c06d2ba52dfb553f3f31eb698acebbc79b4bc4fd0f84ec7",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img_new/N_2.png",
+      "bytes": 736528,
+      "sha256": "5ab3e140aec89bb32a09a54a013e0381693df7c20b461cb9768114ca02825b2b",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img_new/O.png",
+      "bytes": 356446,
+      "sha256": "b3554f44088fea36d1f44700f16ccbd2d1c5701c5e0e744fdfe51eacece3d193",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img_new/OO.png",
+      "bytes": 378464,
+      "sha256": "b8e3b1aac76b7c1956e8ac928e0a745a701f64db23105403301b847e623a828e",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img_new/_BG.png",
+      "bytes": 4137126,
+      "sha256": "61bcb6ec902508f34a1b702cd5b70997b3e44526e2521003bbb9ae4f53c2ec0f",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img_new/_文字位置参考.png",
+      "bytes": 199061,
+      "sha256": "fbd7be9b39d4abaf30804bc488c9911684c4ab32a2bde38aeb065b6c73a62800",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img_new/_青文字_スクリーン.png",
+      "bytes": 198106,
+      "sha256": "7e13476c9681d4fa866b450225979b9ce85c81c8cbb6893d6d280bbac75ff23a",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img_new/_黒枠.png",
+      "bytes": 107878,
+      "sha256": "75d572e80c1ed1b9dddfdf4535ea33f1fef57639dd7bfa1ad7667c205f873f38",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img_new/位置参考.png",
+      "bytes": 4636702,
+      "sha256": "9bd73a5b91def3a12d4397156da234ef1a8e68d768d673ec9a02010d28c9a41f",
+      "kind": "png",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/1471-2105-11-232.pdf",
+      "bytes": 1156514,
+      "sha256": "e80ecd7809e7a411dd60ac8e13bea656e3f6b62b33b19260c503eb9f6625e050",
+      "kind": "pdf",
+      "reference_evidence": [
+        "publications.html:href",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/1471-2164-12-416.pdf",
+      "bytes": 855115,
+      "sha256": "0bf4d9c1efab6fb0f2fc2ff04083525878a07702b59677eda64213b9a8f28373",
+      "kind": "pdf",
+      "reference_evidence": [
+        "publications.html:href",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/191.full.pdf",
+      "bytes": 2662502,
+      "sha256": "6b14cfd4de17a25593485044d63c57e0de5ad41d772c00eb82c66629dac65a40",
+      "kind": "pdf",
+      "reference_evidence": [
+        "publications.html:href",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/2022.08.04.502727v1.full.pdf",
+      "bytes": 2432286,
+      "sha256": "4e9c2cabb1b4f7797d0fcab50d2296ae6b27b7d7bee66210ed38c610f830c6c1",
+      "kind": "pdf",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/2022.10.26.513620v1.full.pdf",
+      "bytes": 1789483,
+      "sha256": "3ef21587b5999a6d8ed311120d115f94db0da0cc5318eb1ff130f385366df7e7",
+      "kind": "pdf",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/2023.01.18.524633v2.full.pdf",
+      "bytes": 32660664,
+      "sha256": "7d3cd89d460d36284f4eac731707e4dee5e28c9c341d76a8b9ddcdd23599ae3d",
+      "kind": "pdf",
+      "reference_evidence": [
+        "research.html:href",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/2023.01.26.525784v1.full.pdf",
+      "bytes": 4962745,
+      "sha256": "7b8dcfefef388291ab96c61583b818aeacbe361aef23a0d44e7f3020c1ebae64",
+      "kind": "pdf",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/2023.12.10.570953v1.full.pdf",
+      "bytes": 2531446,
+      "sha256": "332f8ac87a580fa65ec90778f31763195945ec984a4680623007408db2effe45",
+      "kind": "pdf",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/2026.08.08.743703v2.full.pdf",
+      "bytes": 37866023,
+      "sha256": "bc8e74d02f2a3905d66aa44a6960657269b3a6b990d02ac90ceab3e850a351f2",
+      "kind": "pdf",
+      "reference_evidence": [
+        "publications.html:href",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/2026.08.31.747971v1.full.pdf",
+      "bytes": 29760889,
+      "sha256": "dbfabbbd9919b2d06ccb6ebdb4e8b6dc9a012315a96980412c46379c84445a0b",
+      "kind": "pdf",
+      "reference_evidence": [
+        "publications.html:href",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/Advanced Optical Materials - 2023 - Kawasaki - Computational Design of Synthetic Optical Barcodes in Microdroplets.pdf",
+      "bytes": 2883018,
+      "sha256": "c49246f8996c8d47949573b837ca73bd764bd7f0852193d0c181f86b4994dc7b",
+      "kind": "pdf",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/Advanced-Optical-Materials-2023-Kawasaki-Computational-Design-of-Synthetic-Optical-Barcodes-in-Microdroplets.pdf",
+      "bytes": 2883018,
+      "sha256": "c49246f8996c8d47949573b837ca73bd764bd7f0852193d0c181f86b4994dc7b",
+      "kind": "pdf",
+      "reference_evidence": [
+        "publications.html:href",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/CV - Nanami Masuyama.pdf",
+      "bytes": 111127,
+      "sha256": "0bd1fec8cc692eef6682d7b6b2e6ba8fd3a8303d979ffa08161f2452a5f021d0",
+      "kind": "pdf",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/CV-YusukeKijima v20210103.pdf",
+      "bytes": 97735,
+      "sha256": "5c2dd8d00b2fecef01a260d5ce1e61e8909341fea9126dce1cd4c967890037bc",
+      "kind": "pdf",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/Drawing07102018.pdf",
+      "bytes": 2443616,
+      "sha256": "725c44d367341d1404f5bb6b6699b1d9179323de1d4f5d6acd9159b4a3e04212",
+      "kind": "pdf",
+      "reference_evidence": [
+        "download.html:href",
+        "resources.html:href",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/Herbert_Yao_resume_0324.pdf",
+      "bytes": 145118,
+      "sha256": "582506ac7a22f1abb279fa46d208442eaf3d375c101a1c0bb9b55f5aca55795f",
+      "kind": "pdf",
+      "reference_evidence": [
+        "people.html:href",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/Integrative-Features-of-the-Yeast-Phosphoproteome-and-Protein-Protein-Interaction-Map.pdf",
+      "bytes": 524229,
+      "sha256": "ca0dde4104b40ff971c42a0fda983d7a80ca957efac0854f54db6a18245692af",
+      "kind": "pdf",
+      "reference_evidence": [
+        "publications.html:href",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/Ishiguro_CurrOpin2019.pdf",
+      "bytes": 1535284,
+      "sha256": "10261e21a6c18c655856d6206ebc400bd52691f95e3c2a257dc869705c263912",
+      "kind": "pdf",
+      "reference_evidence": [
+        "publications.html:href",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/Masuyama_CurrOpin2019.pdf",
+      "bytes": 1429583,
+      "sha256": "3e82dd071004f27951ec4ebb32cdcb105f6da5c15a4571e4ab384adab53aa4d1",
+      "kind": "pdf",
+      "reference_evidence": [
+        "publications.html:href",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/Methods Mol Biol Ishiguro and Yachie.pdf",
+      "bytes": 882451,
+      "sha256": "cf8b9c754cee5d896cce6ce5b58cc0e983c2fe610a67db035647cacdd03b88c6",
+      "kind": "pdf",
+      "reference_evidence": [
+        "publications.html:href"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/Mori Hideto CV.pdf",
+      "bytes": 264030,
+      "sha256": "2be6b17e9ae690437b255433d165f303dc2d86a870e0a9c5fc04ec683c6f2548",
+      "kind": "pdf",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/Mori-Hideto-CV_EN.pdf",
+      "bytes": 264522,
+      "sha256": "e7bafa96c708e677a22cb87888e35aa77d99af51ff2836754979d96763e3d32c",
+      "kind": "pdf",
+      "reference_evidence": [
+        "hideto.html:href",
+        "people.html:href",
+        "sheet:filename-match",
+        "source:filename-match",
+        "yuka.html:href"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/Mori-Hideto-CV_JA.pdf",
+      "bytes": 517457,
+      "sha256": "633d9e3e2ae92cd36a600f5b3ca02464f2cdfca73f32a1d445107ebec7232a29",
+      "kind": "pdf",
+      "reference_evidence": [
+        "hideto.html:href",
+        "sheet:filename-match",
+        "source:filename-match",
+        "yuka.html:href"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/Nozaki_2011_Gene.pdf",
+      "bytes": 416042,
+      "sha256": "755b69d05868607fe5ffbecfc0d083655cb17aaaa91d1145bfed0b50f5e441de",
+      "kind": "pdf",
+      "reference_evidence": [
+        "publications.html:href",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/PIIS0092867415004304.pdf",
+      "bytes": 2687585,
+      "sha256": "34d4c3e934408384b2aef99e80d254721259811bbb931458f86cdf67276aa619",
+      "kind": "pdf",
+      "reference_evidence": [
+        "publications.html:href",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/PIIS0092867423009637.pdf",
+      "bytes": 8980062,
+      "sha256": "9d4c0c5642ed7d10739f387e4dc8ab52c78042821abce1efba06ce38a68284d9",
+      "kind": "pdf",
+      "reference_evidence": [
+        "publications.html:href",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/PIIS2405471219303175.pdf",
+      "bytes": 6521543,
+      "sha256": "83f07fc1f6b5abe110f850ed73bdef82f9733acbe12b13cd48e94da65a406d36",
+      "kind": "pdf",
+      "reference_evidence": [
+        "publications.html:href",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/PIIS2405471223002430.pdf",
+      "bytes": 8097566,
+      "sha256": "495d1e6172cac7c063fc9f0f072b2099b08424bcec988ad0b6075009c0056c37",
+      "kind": "pdf",
+      "reference_evidence": [
+        "publications.html:href",
+        "research.html:href",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/Pooled CRISPR screening of high-content...lular phenotypes using ghost cytometry.pdf",
+      "bytes": 15095842,
+      "sha256": "e40baddccbfe269d7951f74fdba64810215d1ec87e00c26269ba19c4945a7c65",
+      "kind": "pdf",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/Pooled-CRISPR-screening-of-high-content...lular-phenotypes-using-ghost-cytometry.pdf",
+      "bytes": 15095842,
+      "sha256": "e40baddccbfe269d7951f74fdba64810215d1ec87e00c26269ba19c4945a7c65",
+      "kind": "pdf",
+      "reference_evidence": [
+        "publications.html:href",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/Soma_2007_Science.pdf",
+      "bytes": 832551,
+      "sha256": "8d33c533ee43770a6646e140a245f64980c6526ea365fbcb13bfd1f4269e84da",
+      "kind": "pdf",
+      "reference_evidence": [
+        "publications.html:href",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/Soma_2013_Scirep.pdf",
+      "bytes": 652487,
+      "sha256": "2f4cd4deba7492c3b4005f5384dc73f293771d3136e01610b95594ac9c14b598",
+      "kind": "pdf",
+      "reference_evidence": [
+        "publications.html:href",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/Sugahara_2008_MBE.pdf",
+      "bytes": 1114200,
+      "sha256": "ed78902b79f83e737ce413495dd80ba1c78ddfeb17a4411eb48aad789d46bd78",
+      "kind": "pdf",
+      "reference_evidence": [
+        "publications.html:href",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/Suzuki_2012_JoVE.pdf",
+      "bytes": 533168,
+      "sha256": "0ed5d1695f3f5530939b0182dc98ef18c8217d3536c9acfd43cf14eadb1da17c",
+      "kind": "pdf",
+      "reference_evidence": [
+        "publications.html:href",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/Yachie2017.pdf",
+      "bytes": 4700159,
+      "sha256": "697b4cad8cb9772348cc7c06561a9f666d94547ced3263d78b638a960c1d0e75",
+      "kind": "pdf",
+      "reference_evidence": [
+        "publications.html:href",
+        "research.html:href",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/Yachie_2006_FEBS_Lett.pdf",
+      "bytes": 427442,
+      "sha256": "db37df7259455b0b4673451cf69c530e3e6f68918eccf5fa0020987fef2b1f78",
+      "kind": "pdf",
+      "reference_evidence": [
+        "publications.html:href",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/Yachie_2006_Gene.pdf",
+      "bytes": 813804,
+      "sha256": "a6c09b19552d6ade767ecccf67290172bdcc5457395a64c1d48f067b3877887a",
+      "kind": "pdf",
+      "reference_evidence": [
+        "publications.html:href",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/Yachie_2007_Biotechnol_Prog.pdf",
+      "bytes": 510673,
+      "sha256": "c2889f31b0f72b87d762193b2e1f4d017771cd602dd29df023c33d1d1ef855cb",
+      "kind": "pdf",
+      "reference_evidence": [
+        "publications.html:href",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/Yachie_2008_Syst_Synth_Biol.pdf",
+      "bytes": 284823,
+      "sha256": "e197fdd739163070abaaf1f2d21629ce0ca71965949c9aa21b79a585f707ef1e",
+      "kind": "pdf",
+      "reference_evidence": [
+        "publications.html:href",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/Yachie_2009_MCP.pdf",
+      "bytes": 590643,
+      "sha256": "61ae5af2ad0e7b7f0499ddf2fefd542178adcc306ba9d7767de1014dcd893249",
+      "kind": "pdf",
+      "reference_evidence": [
+        "publications.html:href",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/Yachie_et_al-2023-Nature_Biotechnology.pdf",
+      "bytes": 826817,
+      "sha256": "3fec998f0fbfd3eb176a11c5e01079ec933240a09df61354adc1981549ab73ed",
+      "kind": "pdf",
+      "reference_evidence": [
+        "publications.html:href",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/Yuka_CV.pdf",
+      "bytes": 148758,
+      "sha256": "57439f065325277311324309f983bb2f415d2f794282f84f844cd5ffd4a0e4c3",
+      "kind": "pdf",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/Yuka_CV_v2.pdf",
+      "bytes": 183746,
+      "sha256": "813b07a66a74cae2bc2c9bff5bed3939c040d1d0091708859dd0886a19bb8d56",
+      "kind": "pdf",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/Yuka_CV_v3.pdf",
+      "bytes": 194276,
+      "sha256": "5895d5c3eb7e0259c40b78d78d930ee67dd026d3b62ae46a39d8260eabdeed45",
+      "kind": "pdf",
+      "reference_evidence": [
+        "people.html:href",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/breakthrough01.pdf",
+      "bytes": 3348886,
+      "sha256": "8f077c9c8a8b00abc1598902d697d404b928c81ac5922f7c92d904c415a30f86",
+      "kind": "pdf",
+      "reference_evidence": [
+        "jikkenigaku.html:href",
+        "publications.html:href",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/breakthrough02.pdf",
+      "bytes": 13054022,
+      "sha256": "68cf9a42ab0aff50a4df0534ae46c44b6fb7631f9cb07822fe64216521c1644d",
+      "kind": "pdf",
+      "reference_evidence": [
+        "jikkenigaku.html:href",
+        "publications.html:href",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/breakthrough04.pdf",
+      "bytes": 13245689,
+      "sha256": "66a1cc085acb6753b0a0b2671987bf443ba3997af745a91b1bcb17a3a5cad3a2",
+      "kind": "pdf",
+      "reference_evidence": [
+        "jikkenigaku.html:href",
+        "publications.html:href",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/elife-46754-v1.pdf",
+      "bytes": 2514517,
+      "sha256": "b2fc500e65debb11fe7b08d2d6da2a6bbe93bdc8ba06be528e5b5184d6115f11",
+      "kind": "pdf",
+      "reference_evidence": [
+        "publications.html:href",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/for sharing Nearly everything about the Yachie lab v3.pdf",
+      "bytes": 693625,
+      "sha256": "0cdea03d45d0453fdf2006d3248591c8123d5ae9640fabf23daab915f94b7835",
+      "kind": "pdf",
+      "reference_evidence": [
+        "joinus.html:href"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/gky890.pdf",
+      "bytes": 2388890,
+      "sha256": "d60fc866bfe3456ba5af58b20de9eb5761e1ebaa87a44aafe99bfc14bcda87aa",
+      "kind": "pdf",
+      "reference_evidence": [
+        "hideto.html:href",
+        "publications.html:href",
+        "research.html:href",
+        "resources.html:href",
+        "sheet:filename-match",
+        "software.html:href",
+        "source:filename-match",
+        "yuka.html:href"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/growingtree01122019.pdf",
+      "bytes": 4675134,
+      "sha256": "e6c3f61c8c22b4e631eb2212aff4ec48ec31ebe3066274e23c16ca4da4a34698",
+      "kind": "pdf",
+      "reference_evidence": [
+        "download.html:href",
+        "resources.html:href",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/lablogo.pdf",
+      "bytes": 817740,
+      "sha256": "cc6562e2248701f6c228edff46c660ea560ed0e1772b3905aa1aa825f7a938e6",
+      "kind": "pdf",
+      "reference_evidence": [
+        "download.html:href",
+        "resources.html:href",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/s41467-020-15796-7.pdf",
+      "bytes": 2065914,
+      "sha256": "e032f8c446652d0340358caafd1a80a20a11edc6fa0a60c9ae84dad0157ccdb2",
+      "kind": "pdf",
+      "reference_evidence": [
+        "publications.html:href",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/s41467-022-30588-x.pdf",
+      "bytes": 1258678,
+      "sha256": "81497357a63892f520f9377d293d8ae87f00aa0ac78264e6ca9183976c04988b",
+      "kind": "pdf",
+      "reference_evidence": [
+        "hideto.html:href",
+        "publications.html:href",
+        "research.html:href",
+        "resources.html:href",
+        "sheet:filename-match",
+        "software.html:href",
+        "source:filename-match",
+        "yuka.html:href"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/s41540-021-00190-w.pdf",
+      "bytes": 1827052,
+      "sha256": "519d712909e540ebe99239bb5934858fd93e6bdabf7937400e2e227ac81aa2a8",
+      "kind": "pdf",
+      "reference_evidence": [
+        "publications.html:href",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/s41587-020-0509-0.pdf",
+      "bytes": 14168653,
+      "sha256": "2dfdc4f948446801767972c04a874d3a51e00ddcad77c4550f12b6d48769d89f",
+      "kind": "pdf",
+      "reference_evidence": [
+        "hideto.html:href",
+        "publications.html:href",
+        "research.html:href",
+        "resources.html:href",
+        "sheet:filename-match",
+        "software.html:href",
+        "source:filename-match",
+        "yuka.html:href"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/s41587-021-01111-2.pdf",
+      "bytes": 16681549,
+      "sha256": "abcc4a850a1fa17ba9f0d998ea943febb26874600c7fe5cd03f4956aa86f0ac3",
+      "kind": "pdf",
+      "reference_evidence": [
+        "publications.html:href",
+        "research.html:href",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/s41587-025-02649-1.pdf",
+      "bytes": 23092006,
+      "sha256": "9fdf14474305404725361e398ce6f79a48b98aef6838b6a585f44a25a7d37437",
+      "kind": "pdf",
+      "reference_evidence": [
+        "publications.html:href",
+        "research.html:href",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/s41598-021-02986-6.pdf",
+      "bytes": 2800822,
+      "sha256": "e59bb20df212360f1bcbf34f9c4fe9ca7ed4c676fcd15ef62b9769edb6a4e0ec",
+      "kind": "pdf",
+      "reference_evidence": [
+        "publications.html:href",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/s42003-024-06422-z.pdf",
+      "bytes": 2241994,
+      "sha256": "37fbd52b855b3039350ee4fcc3140d6fe798a46f6fc7aa984a7ad61a286068f3",
+      "kind": "pdf",
+      "reference_evidence": [
+        "publications.html:href",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/sciadv.add2793.pdf",
+      "bytes": 2411594,
+      "sha256": "5b77d8c817f35892a2c3a9a79bbccb851e23ec9d8a8cb67f50026faa9239de4b",
+      "kind": "pdf",
+      "reference_evidence": [
+        "publications.html:href",
+        "research.html:href",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/science.aaf8729.pdf",
+      "bytes": 2463474,
+      "sha256": "17020b65668a32ac288a78e3f31cc876c6db98c70ab4daa02b1f8419902b0561",
+      "kind": "pdf",
+      "reference_evidence": [
+        "publications.html:href",
+        "research.html:href",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/science.aai8233.pdf",
+      "bytes": 201407,
+      "sha256": "d79f63e9193c3d61b3fd534e573b3c8d7d9cb9b8c0e426410ae51e9487ed972a",
+      "kind": "pdf",
+      "reference_evidence": [
+        "publications.html:href",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/science.aas9129.pdf",
+      "bytes": 644399,
+      "sha256": "22271b1f6ed8cef54ae161eeacc0a735a746a4733d2e4632240a0bbeac535751",
+      "kind": "pdf",
+      "reference_evidence": [
+        "publications.html:href",
+        "research.html:href",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/science.abo3471.pdf",
+      "bytes": 1055115,
+      "sha256": "3d52ebe225be541d2b4c677bc6527e5618cda2034381ee9411eb88b3f7522854",
+      "kind": "pdf",
+      "reference_evidence": [
+        "publications.html:href",
+        "research.html:href",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/short-Nozomu-Yachie-CV.pdf",
+      "bytes": 316366,
+      "sha256": "fc8b38507e2bf11b30d9d6ad6e11f417d71bb8ef92e1a5b9fbb1bbf4a148077f",
+      "kind": "pdf",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/short-Nozomu-Yachie-CV2.pdf",
+      "bytes": 315881,
+      "sha256": "b5339a7b1aaefd56bdd973c45cb656c930551bd05dcaa6864a2e0d7428b2159e",
+      "kind": "pdf",
+      "reference_evidence": [
+        "people.html:href",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/short-Nozomu-Yachie-CV3.pdf",
+      "bytes": 315885,
+      "sha256": "ebefe0ef2aa2346ed74972988abd5631e10946f28df88591711d527e9969ecd1",
+      "kind": "pdf",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/short-Nozomu-Yachie-CV4.pdf",
+      "bytes": 320831,
+      "sha256": "3e4942126a9eee7615fcd5f80daaed42d95fb85f8426a6dc3f231a5dbc992e2c",
+      "kind": "pdf",
+      "reference_evidence": [],
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/short-Nozomu-Yachie-CV_20260909.pdf",
+      "bytes": 684629,
+      "sha256": "0ad982144604681b1ec625cbb685846f009b16b14392d9b52579b14b0f3141d5",
+      "kind": "pdf",
+      "reference_evidence": [
+        "nzmyachie.html:href",
+        "people.html:href",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "pdf/yachie-et-al-2016-pooled-matrix-protein-interaction-screens-using-barcode-fusion-genetics.pdf",
+      "bytes": 3012653,
+      "sha256": "8413cfaa941cdf415b4e8635921d2ba85fe8adb7eba3ae8ec556903246087a4d",
+      "kind": "pdf",
+      "reference_evidence": [
+        "publications.html:href",
+        "sheet:filename-match",
+        "source:filename-match"
+      ],
+      "status": "referenced",
+      "source_asset": false
+    }
+  ],
+  "duplicate_groups": [
+    {
+      "sha256": "102f2d0949e7b8767415f4ed341587bfefa7ac235fca9315bec56b4cf545f3f9",
+      "paths": [
+        "img/A.png",
+        "img_new/A.png"
+      ],
+      "bytes_each": 661534
+    },
+    {
+      "sha256": "142efb5e9582015456830c201ec8808f3c180ee418264033a8bae14f638a0f2d",
+      "paths": [
+        "img/CC.png",
+        "img_new/CC.png"
+      ],
+      "bytes_each": 253457
+    },
+    {
+      "sha256": "19b9a71ca0a98caef508b7ab209bf7d1c18f285dda1b4bef43028fa0534fef4f",
+      "paths": [
+        "img/F_1.png",
+        "img_new/F_1.png"
+      ],
+      "bytes_each": 394116
+    },
+    {
+      "sha256": "1e09275cff68aa540ae51d65f7847a0b1a104c0fda4c63fe1866dbb464c62d0b",
+      "paths": [
+        "img/B.png",
+        "img_new/B.png"
+      ],
+      "bytes_each": 1118269
+    },
+    {
+      "sha256": "1f30b709cc25b6439aa7dc82e79332d75ac19bfb86e396d3d202f02167700650",
+      "paths": [
+        "img/J_1.png",
+        "img_new/J_1.png"
+      ],
+      "bytes_each": 592225
+    },
+    {
+      "sha256": "20606a2c87de9894b1821de9a6f9809da74d47d447ab2f2d5b2953dbd5f6db83",
+      "paths": [
+        "img/KK.png",
+        "img_new/KK.png"
+      ],
+      "bytes_each": 451441
+    },
+    {
+      "sha256": "25f52d0379aceb9b864ad3adb10c594aef0eabd5d4473e2de371e283bdc387fd",
+      "paths": [
+        "img/Shoma_Matsumoto.jpeg",
+        "img/Shoma_Matsumoto.jpg"
+      ],
+      "bytes_each": 125251
+    },
+    {
+      "sha256": "2b16067f871626554848e77524e67b2713fa1d010ba18d47aadd0cd0d0939e4e",
+      "paths": [
+        "img/cloneselect-highcontrast.jpg",
+        "img/cloneselect.jpg"
+      ],
+      "bytes_each": 307651
+    },
+    {
+      "sha256": "2ef85c9b8c27acd65c06d2ba52dfb553f3f31eb698acebbc79b4bc4fd0f84ec7",
+      "paths": [
+        "img/N_1.png",
+        "img_new/N_1.png"
+      ],
+      "bytes_each": 676090
+    },
+    {
+      "sha256": "3111240812f9fb8582fce62c0ece41054682851f8f86caed50a9a4b42d909320",
+      "paths": [
+        "img/LL_1.png",
+        "img_new/LL_1.png"
+      ],
+      "bytes_each": 349247
+    },
+    {
+      "sha256": "32489ec1ea4e125b3dbd7d76352981781ea25a9b1737c613a4f4f4277974c2dd",
+      "paths": [
+        "img/NN_2.png",
+        "img_new/NN_2.png"
+      ],
+      "bytes_each": 748831
+    },
+    {
+      "sha256": "3368582931d8c9640fde537df3f7af4aeed919c0517b0b2b6a1922be7289dbe2",
+      "paths": [
+        "img/DD_1.png",
+        "img_new/DD_1.png"
+      ],
+      "bytes_each": 438367
+    },
+    {
+      "sha256": "38fd0a30b855e14c326704f86682025122e4912ef3e3987a93caa83a4e2f48d2",
+      "paths": [
+        "img/E.png",
+        "img_new/E.png"
+      ],
+      "bytes_each": 747786
+    },
+    {
+      "sha256": "39c35f801127fe7cfa23b20998dcbf0568407df265d6484b7b3baf8863a960d2",
+      "paths": [
+        "img/K.png",
+        "img_new/K.png"
+      ],
+      "bytes_each": 422176
+    },
+    {
+      "sha256": "4125f510dbccbaa82054a43c912837f343be564331ba9cc5e8fb25b6f3a8aa8b",
+      "paths": [
+        "img/H_1.png",
+        "img_new/H_1.png"
+      ],
+      "bytes_each": 869915
+    },
+    {
+      "sha256": "45a5ee2efb0bd34e3f21bcdd639b30693d0266f3794f5fe97ad81dd5286fe2ed",
+      "paths": [
+        "img/AA.png",
+        "img_new/AA.png"
+      ],
+      "bytes_each": 733674
+    },
+    {
+      "sha256": "464171363947944a0283bdc15f914afabf2a96dfbb1ee73e127bca57dc997ce0",
+      "paths": [
+        "img/_青文字_スクリーンr.png",
+        "img/blue_chrr.png"
+      ],
+      "bytes_each": 75650
+    },
+    {
+      "sha256": "4a8bef7a0f5f3895550674b1ee694aaa2aff293b13788b8afb255da66fcb849c",
+      "paths": [
+        "img/L_2.png",
+        "img_new/L_2.png"
+      ],
+      "bytes_each": 408672
+    },
+    {
+      "sha256": "4fe654a0ea0438f6e3a4a8d2c9c55842731f65bfa2eca7e991c1caab0a38adf4",
+      "paths": [
+        "img/JJ_1.png",
+        "img_new/JJ_1.png"
+      ],
+      "bytes_each": 667889
+    },
+    {
+      "sha256": "53edc5438b15814c7894328c6c829a8a8a57111a848bbddca230e91625ae628a",
+      "paths": [
+        "img/HH_1.png",
+        "img_new/HH_1.png"
+      ],
+      "bytes_each": 938786
+    },
+    {
+      "sha256": "56563b980d4985c4a19b22684731ee70d91f3961c36ffbc4413d1674c58b0528",
+      "paths": [
+        "img/M_1.png",
+        "img_new/M_1.png"
+      ],
+      "bytes_each": 269718
+    },
+    {
+      "sha256": "5ab3e140aec89bb32a09a54a013e0381693df7c20b461cb9768114ca02825b2b",
+      "paths": [
+        "img/N_2.png",
+        "img_new/N_2.png"
+      ],
+      "bytes_each": 736528
+    },
+    {
+      "sha256": "5b251809aee1235ffd16a1d34e9ed5a64f5781b024dc8f0ab936dada160824f7",
+      "paths": [
+        "img/DD_2.png",
+        "img_new/DD_2.png"
+      ],
+      "bytes_each": 618231
+    },
+    {
+      "sha256": "5dd86a6626ca0a996b6e83a822a43fead6fd7687e6ee313a19b345df84ab55e3",
+      "paths": [
+        "img/FF_2.png",
+        "img_new/FF_2.png"
+      ],
+      "bytes_each": 430193
+    },
+    {
+      "sha256": "672fb3705369340532348938eb0c2c5aa3cb8324145901d2608f0d3615358e93",
+      "paths": [
+        "img/L_1.png",
+        "img_new/L_1.png"
+      ],
+      "bytes_each": 323569
+    },
+    {
+      "sha256": "6a307e5bbf32e6a9d66be3665ef89446b921f4080c9efccc8565e865f58949cd",
+      "paths": [
+        "img/Yonggang Lu.jpg",
+        "img/Yonggang-Lu.jpg"
+      ],
+      "bytes_each": 159652
+    },
+    {
+      "sha256": "70a2e777e105324b3f02b7e313584ac25082a8b6d757fdfbbf579190f61ff5d3",
+      "paths": [
+        "img/FF_1.png",
+        "img_new/FF_1.png"
+      ],
+      "bytes_each": 412857
+    },
+    {
+      "sha256": "75d572e80c1ed1b9dddfdf4535ea33f1fef57639dd7bfa1ad7667c205f873f38",
+      "paths": [
+        "img/_黒枠.png",
+        "img_new/_黒枠.png"
+      ],
+      "bytes_each": 107878
+    },
+    {
+      "sha256": "7da4da21c8d8459b25f95f78f9ff598df8ab180b768f7e39170cf3a74cf6abd0",
+      "paths": [
+        "img/top-image.jpg",
+        "img/■清書.jpg"
+      ],
+      "bytes_each": 20389428
+    },
+    {
+      "sha256": "7e13476c9681d4fa866b450225979b9ce85c81c8cbb6893d6d280bbac75ff23a",
+      "paths": [
+        "img/_青文字_スクリーン.png",
+        "img_new/_青文字_スクリーン.png"
+      ],
+      "bytes_each": 198106
+    },
+    {
+      "sha256": "87996fd9eaf51a5e9b688921ee4f9bb1a102735573e47a9f9d34d6171d7e47dd",
+      "paths": [
+        "img/BB.png",
+        "img_new/BB.png"
+      ],
+      "bytes_each": 1217050
+    },
+    {
+      "sha256": "8dd6cefdeed1b1e699b14f6cd598c96e0b787c1c0e1d796f9a4973efaf5676cf",
+      "paths": [
+        "img/J_2.png",
+        "img_new/J_2.png"
+      ],
+      "bytes_each": 694771
+    },
+    {
+      "sha256": "9b403ed99a5cd90e423855c6e63fc5e5820c35bd5e5b05da852a9426dbb74b7c",
+      "paths": [
+        "img/D_1.png",
+        "img_new/D_1.png"
+      ],
+      "bytes_each": 417672
+    },
+    {
+      "sha256": "9bd73a5b91def3a12d4397156da234ef1a8e68d768d673ec9a02010d28c9a41f",
+      "paths": [
+        "img/位置参考.png",
+        "img_new/位置参考.png"
+      ],
+      "bytes_each": 4636702
+    },
+    {
+      "sha256": "a3e4e6d4d110765bd72d2d5cbcb7e88abda4373773e6afa9503c75dd00b18a2b",
+      "paths": [
+        "img/Headshot.jpg",
+        "img/Headshot_Chaehyeon-Lee.jpg"
+      ],
+      "bytes_each": 1068697
+    },
+    {
+      "sha256": "a5bbf8e32e1077c3c7fd3aa3be04489ae93150d5861351f9c458b870972deae2",
+      "paths": [
+        "img/NN_1.png",
+        "img_new/NN_1.png"
+      ],
+      "bytes_each": 709503
+    },
+    {
+      "sha256": "aeac6a2edec4ea76e925f957bbc7f8f31b1336b6e319551880ae15ed8fd87ab4",
+      "paths": [
+        "img/blankr.png",
+        "img/transparentr.png"
+      ],
+      "bytes_each": 4880
+    },
+    {
+      "sha256": "b0c3d736a36c083024f8d7593a0a2b884cc996abbcb6b6d86f8f9e100838fbbd",
+      "paths": [
+        "img/D_2.png",
+        "img_new/D_2.png"
+      ],
+      "bytes_each": 616412
+    },
+    {
+      "sha256": "b3554f44088fea36d1f44700f16ccbd2d1c5701c5e0e744fdfe51eacece3d193",
+      "paths": [
+        "img/O.png",
+        "img_new/O.png"
+      ],
+      "bytes_each": 356446
+    },
+    {
+      "sha256": "b3aacde038573a6208aa563fcd4dd56a477d70c31abf9a0f8c03dc6a4b4a3ae0",
+      "paths": [
+        "img/GG.png",
+        "img_new/GG.png"
+      ],
+      "bytes_each": 355279
+    },
+    {
+      "sha256": "b80f44f799cea94857c66a33df5e468beaec8e4173492ba7a2204f964b653b06",
+      "paths": [
+        "img/EE.png",
+        "img_new/EE.png"
+      ],
+      "bytes_each": 804661
+    },
+    {
+      "sha256": "b8e3b1aac76b7c1956e8ac928e0a745a701f64db23105403301b847e623a828e",
+      "paths": [
+        "img/OO.png",
+        "img_new/OO.png"
+      ],
+      "bytes_each": 378464
+    },
+    {
+      "sha256": "bbc6e61c81e1098ef2ca7acd6fcf5f478bc86856e39956a57d06891616328b32",
+      "paths": [
+        "img/MM_1.png",
+        "img_new/MM_1.png"
+      ],
+      "bytes_each": 276598
+    },
+    {
+      "sha256": "be1a3b66819f71381380ffeaa090e669da0c886fbdca4fabd500df506d86a45b",
+      "paths": [
+        "img/navy_ubcicon.svg",
+        "img/navy_ubclogo.svg"
+      ],
+      "bytes_each": 6274
+    },
+    {
+      "sha256": "bfb8292e737430347f5f3651011415d8a8923ff551f8f01af706cb9db934f948",
+      "paths": [
+        "img/G.png",
+        "img_new/G.png"
+      ],
+      "bytes_each": 335383
+    },
+    {
+      "sha256": "c289fbd01c213d21100ccae2999b7b6d54ce5486bf99232a80d33be204bb60fd",
+      "paths": [
+        "img/MM_2.png",
+        "img_new/MM_2.png"
+      ],
+      "bytes_each": 350431
+    },
+    {
+      "sha256": "c3f8670992720b2a1e4870e45ec4655e07747db57bd70a4462be40012bf89be2",
+      "paths": [
+        "img/LL_2.png",
+        "img_new/LL_2.png"
+      ],
+      "bytes_each": 414669
+    },
+    {
+      "sha256": "c49246f8996c8d47949573b837ca73bd764bd7f0852193d0c181f86b4994dc7b",
+      "paths": [
+        "pdf/Advanced Optical Materials - 2023 - Kawasaki - Computational Design of Synthetic Optical Barcodes in Microdroplets.pdf",
+        "pdf/Advanced-Optical-Materials-2023-Kawasaki-Computational-Design-of-Synthetic-Optical-Barcodes-in-Microdroplets.pdf"
+      ],
+      "bytes_each": 2883018
+    },
+    {
+      "sha256": "c6a92424a3a104b8c283d0b5695490e4872d6cd44f4fe564afa7b49e77f54d2f",
+      "paths": [
+        "img/F1i1URkaUAA0p3s.jpeg",
+        "img/osaka-university.jpg"
+      ],
+      "bytes_each": 673600
+    },
+    {
+      "sha256": "cddb788604ebcd7c1865500dd8220007e34dc588780ef92213e1c39c543092e0",
+      "paths": [
+        "img/HH_2.png",
+        "img_new/HH_2.png"
+      ],
+      "bytes_each": 1079353
+    },
+    {
+      "sha256": "d3f8342b6d3be761dc9e3a9ff9c171b65d78283a9e78ac57a65c2a62d5908169",
+      "paths": [
+        "img/H_2.png",
+        "img_new/H_2.png"
+      ],
+      "bytes_each": 1055457
+    },
+    {
+      "sha256": "d99f94f00166c1988b62af01cdecb421e715cbeffab72c3be304d080b72a81db",
+      "paths": [
+        "img/I.png",
+        "img_new/I.png"
+      ],
+      "bytes_each": 500336
+    },
+    {
+      "sha256": "df00f97bd7e6a3c9ae78736d323c3156a46c90c5fbf8adb4d85c7f0f8014e1f5",
+      "paths": [
+        "img/C.png",
+        "img_new/C.png"
+      ],
+      "bytes_each": 241202
+    },
+    {
+      "sha256": "e22deaeb0a18b4625aee93f682009fa601fb6c9df7d86d5089fe98a63026c032",
+      "paths": [
+        "img/M_2.png",
+        "img_new/M_2.png"
+      ],
+      "bytes_each": 348143
+    },
+    {
+      "sha256": "e2d218e2fae25a192341bebeb6e6132e505059ebe5780f86459806bf996dea7e",
+      "paths": [
+        "img/JJ_2.png",
+        "img_new/JJ_2.png"
+      ],
+      "bytes_each": 697270
+    },
+    {
+      "sha256": "e37e5819d477983778d95cd5895973e081bc8f49e4427e9ee94f4adf9bd1c515",
+      "paths": [
+        "img/DNA event recording.jpg",
+        "img/fig01.jpg"
+      ],
+      "bytes_each": 164488
+    },
+    {
+      "sha256": "e40baddccbfe269d7951f74fdba64810215d1ec87e00c26269ba19c4945a7c65",
+      "paths": [
+        "pdf/Pooled CRISPR screening of high-content...lular phenotypes using ghost cytometry.pdf",
+        "pdf/Pooled-CRISPR-screening-of-high-content...lular-phenotypes-using-ghost-cytometry.pdf"
+      ],
+      "bytes_each": 15095842
+    },
+    {
+      "sha256": "e5848f670e0fdde85af769fe897bf99c50a7cb93a92eecd4b29053b7b9977075",
+      "paths": [
+        "img/F_2.png",
+        "img_new/F_2.png"
+      ],
+      "bytes_each": 426093
+    },
+    {
+      "sha256": "ede7987dff939319361fe9009634804b1a2637b0b9688e1fc8dc84df7803895d",
+      "paths": [
+        "img/Lu2.JPG",
+        "img/b55f3ab194a281860bf3627f06ea2997.JPG"
+      ],
+      "bytes_each": 2183078
+    },
+    {
+      "sha256": "f1190d4d21879fb37995fbe575d697ccd17c78653cdb7c0ffeacb854d59e0d82",
+      "paths": [
+        "img/logo-yachielab-ubc-white-on-black (blue).svg",
+        "img/logo-yachielab-ubc-white-on-black-blue.svg"
+      ],
+      "bytes_each": 31959
+    },
+    {
+      "sha256": "f629d46b9abad5fdbbb610bec2197c61af37c76b534520ef1ccd64603717b0f8",
+      "paths": [
+        "img/II.png",
+        "img_new/II.png"
+      ],
+      "bytes_each": 541046
+    },
+    {
+      "sha256": "f6b86ed38e40c06f2696ea7b8834301b2e1efadf259e711fa96ccde53ce8fd87",
+      "paths": [
+        "img/logo-cdb-osaka-white-on-black (blue).svg",
+        "img/logo-cdb-osaka-white-on-black-blue.svg"
+      ],
+      "bytes_each": 31855
+    },
+    {
+      "sha256": "f8cbe173358d010d29eaca8a5752804dc36f14cec015da4f9232776be79377b5",
+      "paths": [
+        "img/white_primelogo_h.svg",
+        "img/white_primelogo_h_uo.svg"
+      ],
+      "bytes_each": 21843
+    },
+    {
+      "sha256": "fbd7be9b39d4abaf30804bc488c9911684c4ab32a2bde38aeb065b6c73a62800",
+      "paths": [
+        "img/_文字位置参考.png",
+        "img_new/_文字位置参考.png"
+      ],
+      "bytes_each": 199061
+    }
+  ],
+  "unused_stylesheet_candidates": [
+    "css/common_01222024.css",
+    "css/index_new.css",
+    "css/joinus.css",
+    "css/resources.css"
+  ]
+}

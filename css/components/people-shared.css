@@ -1,0 +1,24 @@
+/* Shared member and alumni layout. */
+
+main .photo{
+  position: relative;
+  width: 45vw;
+}
+
+main .content{
+  display: flex;
+  flex-direction: column;
+}
+
+.posts h2{
+  margin-bottom: clamp(1px, 0.4vw, calc(8px * 0.96));
+}
+
+.position{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 56vw;
+  margin-top: clamp(3px, 1.2vw, calc(24px * 0.96));
+  margin-bottom: clamp(1.5px, 0.6vw, calc(12px * 0.96));
+}

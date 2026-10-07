@@ -1,188 +1,85 @@
-const menu     = document.getElementById('mobile-menu');
-const menuIcon = document.getElementById('menu-icon');
-const mEN = document.getElementById('mobileEN');
-const mJA = document.getElementById('mobileJA');
-const mZH = document.getElementById('mobileZH');
-const mmc = document.getElementById("mobile-menu-content"); 
-let mENisReplaced = false;
-let mJAisReplaced = false;
-let mZHisReplaced = false;
-let opened = false
-vw = window.innerWidth;
-let height = mmc.clientHeight + 0.1*vw
+/** Mobile menu: one synchronous target state and a cancelable animation. */
+(function (window, document) {
+  'use strict';
+  const site = window.YachieSite;
+  const menu = document.getElementById('mobile-menu');
+  const icon = document.getElementById('menu-icon');
+  const content = document.getElementById('mobile-menu-content');
+  if (!site || !menu || !icon || !content) return;
+  const header = document.getElementById('mobile_header');
+  const logo = document.querySelector('#mobile_header img');
+  const originalLogoDisplay = logo ? logo.style.display : '';
+  let opened = false;
+  let animationFrame = null;
+  let animationToken = 0;
+  let currentHeight = 0;
+  const duration = 220;
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-function setmEN(){
-  LANG = "EN";
-  if (mENisReplaced===false) {
-    mEN.style.fontWeight   = '700';
-    mEN.style.color = '#CD853F';
-    mJA.style.fontWeight   = '100';
-    mJA.style.color = '#BBBBBB';
-    mZH.style.fontWeight   = '100';
-    mZH.style.color = '#BBBBBB';
-    for (var i = 0; i < jaElements.length; i++) {
-      jaElements[i].style.display = "none";
+  function menuHeight() { return content.clientHeight + window.innerWidth * 0.1; }
+  function updateChrome() {
+    icon.classList.toggle('open', opened);
+    icon.setAttribute('aria-expanded', String(opened));
+    menu.setAttribute('aria-hidden', String(!opened));
+    if (header) header.style.background = opened ? '#FFFFFF00' : '#FFFFFFEF';
+    if (logo) {
+      logo.style.display = opened ? 'none' : originalLogoDisplay;
+      if (site.isHomePage) logo.style.opacity = opened ? '' : '0';
     }
-    for (var i = 0; i < zhElements.length; i++) {
-      zhElements[i].style.display = "none";
-    }
-    for (var i = 0; i < enElements.length; i++) {
-      if(intersection(enElements[i].className.split(' '), AFFILS).length > 0){
-        enElements[i].style.display = original_enElements[i];
-      } 
-    }
-    mENisReplaced = true;
-    mJAisReplaced = false;
-    mZHisReplaced = false;
-    updateLinksForLanguage("EN");
-    height = mmc.clientHeight + 0.1*vw;
-    menu.style.height = height;
-  } else {
-    null;
   }
-  ubcElements   = Array.from(document.getElementsByClassName('UBC English')).concat(Array.from(document.getElementsByClassName('UBC Common')));
-  primeElements = Array.from(document.getElementsByClassName('Osaka English')).concat(Array.from(document.getElementsByClassName('Osaka Common')));
-}
 
-function setmJA(){ 
-  LANG = "JA";
-  if (mJAisReplaced===false) {
-    mEN.style.fontWeight   = '300';
-    mEN.style.color = '#BBBBBB';
-    mJA.style.fontWeight   = '600';
-    mJA.style.color = '#CD853F';
-    mZH.style.fontWeight   = '100';
-    mZH.style.color = '#BBBBBB';
-    for (var i = 0; i < enElements.length; i++) {
-      enElements[i].style.display = "none";
-    } 
-    for (var i = 0; i < zhElements.length; i++) {
-      zhElements[i].style.display = "none";
-    }
-    for (var i = 0; i < jaElements.length; i++) {
-      if(intersection(jaElements[i].className.split(' '), AFFILS).length > 0){
-        jaElements[i].style.display = original_jaElements[i];
+  function animate(target, immediate) {
+    animationToken += 1;
+    const token = animationToken;
+    if (animationFrame !== null) window.cancelAnimationFrame(animationFrame);
+    animationFrame = null;
+    const startHeight = currentHeight;
+    let startTime = null;
+    function frame(timestamp) {
+      if (token !== animationToken) return;
+      if (startTime === null) startTime = timestamp;
+      const progress = immediate || reducedMotion.matches ? 1 : Math.min(1, (timestamp - startTime) / duration);
+      currentHeight = startHeight + (target - startHeight) * progress;
+      menu.style.height = currentHeight + 'px';
+      if (progress < 1) {
+        animationFrame = window.requestAnimationFrame(frame);
+      } else {
+        animationFrame = null;
+        if (!opened) {
+          menu.style.visibility = 'hidden';
+          if (!site.isMobile()) menu.style.display = '';
+        }
       }
     }
-    mENisReplaced = false;
-    mJAisReplaced = true;
-    mZHisReplaced = false;
-    updateLinksForLanguage("JA");
-    height = mmc.clientHeight + 0.1*vw;
-    menu.style.height = height; 
-  } else {
-    null; 
+    if (immediate) frame(0);
+    else animationFrame = window.requestAnimationFrame(frame);
   }
-  ubcElements   = Array.from(document.getElementsByClassName('UBC Japanese')).concat(Array.from(document.getElementsByClassName('UBC Common')));
-  primeElements = Array.from(document.getElementsByClassName('Osaka Japanese')).concat(Array.from(document.getElementsByClassName('Osaka Common')));
-}
 
-function setmZH(){
-  LANG = "ZH";
-  if (mZHisReplaced===false) {
-    mEN.style.fontWeight   = '300';
-    mEN.style.color = '#BBBBBB';
-    mJA.style.fontWeight   = '100';
-    mJA.style.color = '#BBBBBB';
-    mZH.style.fontWeight   = '600';
-    mZH.style.color = '#CD853F';
-    for (var i = 0; i < enElements.length; i++) {
-      enElements[i].style.display = "none";
-    } 
-    for (var i = 0; i < jaElements.length; i++) {
-      jaElements[i].style.display = "none";
+  function setOpen(value, immediate) {
+    opened = Boolean(value) && site.isMobile();
+    updateChrome();
+    if (opened) {
+      menu.style.visibility = 'visible';
+      menu.style.display = 'flex';
     }
-    for (var i = 0; i < zhElements.length; i++) {
-      if(intersection(zhElements[i].className.split(' '), AFFILS).length > 0){
-        zhElements[i].style.display = original_zhElements[i];
-      }
-    } 
-    mENisReplaced = false;
-    mJAisReplaced = false;
-    mZHisReplaced = true;
-    updateLinksForLanguage("ZH");
-    height = mmc.clientHeight + 0.1*vw;
-    menu.style.height = height; 
-  } else {
-    null; 
-  }
-  ubcElements   = Array.from(document.getElementsByClassName('UBC Chinese')).concat(Array.from(document.getElementsByClassName('UBC Common')));
-  primeElements = Array.from(document.getElementsByClassName('Osaka Chinese')).concat(Array.from(document.getElementsByClassName('Osaka Common'))); 
-}
-
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-async function operatemenu() {
-  var pathname = window.location.pathname;
-  var mobileHeader = document.getElementById('mobile_header');
-  var imgInHeader = document.querySelector('#mobile_header img');
-  console.log(imgInHeader);
-  vw  = window.innerWidth; 
-  var duration = 60;
-  console.log(opened);
-  if (opened){
-    for (let i = 0; i < duration; i++) {
-      await sleep(1);
-      menu.style.height=String(height-i*height/(duration-1)) + "px";
-    }
-    menu.style.visibility = "hidden";
-    mobileHeader.style.background = "#FFFFFFEF";
-    if(pathname.includes("index.html") || pathname === '/' || pathname === '/yachielab-preview/'){
-      imgInHeader.style.opacity = 0.0;
-    }else{
-      imgInHeader.style.display = "block";
-    }
-    opened = false; 
-  } else {
-    mobileHeader.style.background = "#FFFFFF00";
-    imgInHeader.style.display = "none";
-    menu.style.visibility = "visible";
-    menu.style.display="flex";
-    for (let i = 0; i < duration; i++) {
-      await sleep(1);
-      menu.style.height=String(i*height/(duration-1)) + "px";
-    }
-    opened = true
-  }
-}
-
-if(vw <= 600){
-  if (params.has('lang') === true) {
-    const lang = params.get('lang');
-    if(lang === "EN"){
-      setmEN();
-    } else if(lang === "JA"){
-      setmJA();
-    } else if(lang === "ZH"){
-      setmZH();
-    }
-  } else {
-    setmEN();
-  }
-  
-  var original_ubcElements = [];
-  for (var i = 0; i < ubcElements.length; i++) {
-    original_ubcElements.push(ubcElements[i].style.display);
-  }
-  var original_primeElements = [];
-  for (var i = 0; i < primeElements.length; i++) {
-    original_primeElements.push(primeElements[i].style.display);
+    animate(opened ? menuHeight() : 0, immediate);
   }
 
-  if (params.has('affil') === true) {
-    const affil = params.get('affil');
-    if(affil === "UBC"){
-      setUBC();
-    }else if(affil === "Osaka"){
-      setOsaka();
-    }
-  }
-}
-
-menuIcon.addEventListener('click', operatemenu);
-mEN.addEventListener('click', setmEN);
-mJA.addEventListener('click', setmJA);
-mZH.addEventListener('click', setmZH);
-
+  // The old inline onclick and asynchronous loop each owned the icon state.
+  icon.removeAttribute('onclick');
+  icon.setAttribute('aria-controls', 'mobile-menu');
+  icon.setAttribute('aria-label', 'Menu');
+  site.bindButton(icon, function () { setOpen(!opened); });
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape' && opened) { setOpen(false); icon.focus(); }
+  });
+  site.subscribe(function () { if (opened) animate(menuHeight(), true); });
+  window.addEventListener('resize', function () {
+    if (!site.isMobile()) setOpen(false, true);
+    else if (opened) animate(menuHeight(), true);
+  });
+  window.addEventListener('orientationchange', function () {
+    if (opened) animate(menuHeight(), true);
+  });
+  setOpen(false, true);
+})(window, document);

@@ -1,11 +1,2 @@
-iframe {
-  width: clamp(400px, 100%, 600px);
-  height: 400;
-}
-
-@media screen and (max-width: 600px){
-  iframe {
-    width: 99%;
-    height: 300;
-  }
-}
+/* Compatibility entrypoint for existing HTML and CMS output. */
+@import url("./pages/contact.css");

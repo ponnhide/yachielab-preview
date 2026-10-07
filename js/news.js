@@ -1,110 +1,101 @@
-function reloadTwitter(){
-  let observer = new IntersectionObserver((entries, observer) => {
-        let twitter_detects = [];
-        let insta_detects   = [];
-        let bsk_detects     = [];
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                let tw_block = entry.target.querySelector('blockquote.pre-twitter-tweet'); 
-                if(tw_block !== null){
-                  if(tw_block.classList.contains("twitter-tweet") === false){ 
-                    tw_block.classList.add("twitter-tweet");
-                    twitter_detects.push(tw_block);
-                    observer.unobserve(entry.target);
-                  }
-                } 
-              
-                let bsk_block = entry.target.querySelector('blockquote.pre-bluesky-embed'); 
-                if(bsk_block !== null){
-                  if(bsk_block.classList.contains("bluesky-embed") === false){ 
-                    bsk_block.classList.add("bluesky-embed");
-                    bsk_detects.push(bsk_block);
-                    observer.unobserve(entry.target);
-                  }
-                }
-                
-                let insta_block = entry.target.querySelector('blockquote.pre-instagram-media'); 
-                if(insta_block !== null){ 
-                  if(insta_block.classList.contains("instagram-media") === false){ 
-                    insta_block.classList.remove("pre-instagram-media");
-                    insta_block.classList.add("instagram-media");
-                    insta_detects.push(insta_block);
-                    observer.unobserve(entry.target);
-                  }
-                }
-            }
+/** Lazy SNS widgets. Each provider script is loaded once; process new containers
+ * through its public API instead of removing and reexecuting scripts on scroll.
+ */
+(function (window, document) {
+  'use strict';
+  const site = window.YachieSite;
+  const scripts = new Map();
+  const prepared = new WeakSet();
+  const providers = [
+    {
+      name: 'twitter', selector: 'blockquote.pre-twitter-tweet, blockquote.twitter-tweet',
+      preClass: 'pre-twitter-tweet', activeClass: 'twitter-tweet',
+      source: 'https://platform.twitter.com/widgets.js',
+      ready: function () { return Boolean(window.twttr && window.twttr.widgets && window.twttr.widgets.load); },
+      process: function (container) { return window.twttr.widgets.load(container); }
+    },
+    {
+      name: 'instagram', selector: 'blockquote.pre-instagram-media, blockquote.instagram-media',
+      preClass: 'pre-instagram-media', activeClass: 'instagram-media',
+      source: 'https://www.instagram.com/embed.js',
+      ready: function () { return Boolean(window.instgrm && window.instgrm.Embeds); },
+      process: function () { window.instgrm.Embeds.process(); }
+    },
+    {
+      name: 'bluesky', selector: 'blockquote.pre-bluesky-embed, blockquote.bluesky-embed',
+      preClass: 'pre-bluesky-embed', activeClass: 'bluesky-embed',
+      source: 'https://embed.bsky.app/static/embed.js',
+      ready: function () { return Boolean(window.bluesky && window.bluesky.scan); },
+      process: function (container) { window.bluesky.scan(container); }
+    }
+  ];
+
+  function loadScript(provider) {
+    if (provider.ready()) return Promise.resolve();
+    if (scripts.has(provider.name)) return scripts.get(provider.name);
+    const promise = new Promise(function (resolve, reject) {
+      let script = Array.from(document.querySelectorAll('script[src]')).find(function (element) {
+        return element.src === provider.source;
+      });
+      const isNew = !script;
+      if (isNew) {
+        script = document.createElement('script');
+        script.src = provider.source;
+        script.async = true;
+        script.dataset.snsProvider = provider.name;
+      }
+      script.addEventListener('load', function () {
+        if (provider.ready()) resolve();
+        else reject(new Error(provider.name + ' embed API is unavailable'));
+      }, { once: true });
+      script.addEventListener('error', function () { reject(new Error(provider.name + ' embed script failed to load')); }, { once: true });
+      if (isNew) document.body.appendChild(script);
+    });
+    scripts.set(provider.name, promise);
+    return promise;
+  }
+
+  function processContainer(container) {
+    providers.forEach(function (provider) {
+      const blocks = Array.from(container.querySelectorAll(provider.selector)).filter(function (block) { return !prepared.has(block); });
+      if (!blocks.length) return;
+      blocks.forEach(function (block) {
+        prepared.add(block);
+        block.classList.remove(provider.preClass);
+        block.classList.add(provider.activeClass);
+      });
+      loadScript(provider).then(function () {
+        return provider.process(container);
+      }).then(function () {
+        if (site) site.requestLayout();
+      }).catch(function (error) {
+        // Preserve the original blockquote and its link if an external service fails.
+        // A later language change or visibility entry may retry without duplicate scripts.
+        blocks.forEach(function (block) { prepared.delete(block); });
+        scripts.delete(provider.name);
+        document.querySelectorAll('script[src]').forEach(function (script) {
+          if (script.dataset.snsProvider === provider.name) script.remove();
         });
-        
-        console.log(insta_detects); 
-        if(twitter_detects.length > 0){
-          let script = document.body.querySelector('script.twitter');
-          if(script !== null){
-            script.remove();
-            let newScript   =  document.createElement('script');
-            newScript.classList.add("twitter");
-            newScript.src   = "https://platform.twitter.com/widgets.js";
-            newScript.async = true; 
-            document.body.appendChild(newScript);
-          } else {
-            let newScript   =  document.createElement('script');
-            newScript.classList.add("twitter"); 
-            newScript.src   = "https://platform.twitter.com/widgets.js";
-            newScript.async = true; 
-            document.body.appendChild(newScript);
-          }
-        }
-        
-        if(bsk_detects.length > 0){
-          let script = document.body.querySelector('script.bsk');
-          if(script !== null){
-            script.remove();
-            let newScript   =  document.createElement('script');
-            newScript.classList.add("bsk");
-            newScript.src   = "https://embed.bsky.app/static/embed.js";
-            newScript.async = true; 
-            document.body.appendChild(newScript);
-          } else {
-            let newScript   =  document.createElement('script');
-            newScript.classList.add("bsk"); 
-            newScript.src   = "https://embed.bsky.app/static/embed.js";
-            newScript.async = true; 
-            document.body.appendChild(newScript);
-          }
-        }
-
-        if(insta_detects.length > 0){
-          let script = document.body.querySelector('script.insta');
-          if(script !== null){
-            script.remove();
-            let newScript   =  document.createElement('script');
-            newScript.classList.add("insta");
-            newScript.src   = "https://www.instagram.com/embed.js";
-            document.body.appendChild(newScript);
-          } else {
-            let newScript   =  document.createElement('script');
-            newScript.classList.add("insta"); 
-            newScript.src   = "https://www.instagram.com/embed.js";
-            document.body.appendChild(newScript);
-            console.log("hoge", newScript.src)
-          }
-        }
-    
-    }, {
-        rootMargin: '0px',
-        threshold: 0.1 
+        console.warn(error.message);
+      });
     });
-    
-    document.querySelectorAll('.sns-post').forEach(entity => {
-        observer.observe(entity);
-    });
-}
+  }
 
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-window.addEventListener('load',  function(){
-    reloadTwitter();
-    //loadTwitterWidgetsScript(loadTwitterWidgets); 
-});
-
+  let observer = null;
+  const containers = Array.from(document.querySelectorAll('.sns-post'));
+  if ('IntersectionObserver' in window) {
+    observer = new window.IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        processContainer(entry.target);
+      });
+    }, { rootMargin: '0px', threshold: 0.1 });
+    containers.forEach(function (container) { observer.observe(container); });
+  } else {
+    containers.forEach(processContainer);
+  }
+  if (site) site.subscribe(function () {
+    if (!observer) containers.forEach(processContainer);
+    else containers.forEach(function (container) { observer.unobserve(container); observer.observe(container); });
+  });
+})(window, document);

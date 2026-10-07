@@ -1,8 +1,16 @@
 .DS_Store
 *.pyc
 *.swp
-/__pycache__/
+__pycache__/
 /build/
 /dist/
 /tmp/
 /output/
+/node_modules/
+/private/
+.env
+.env.*
+.clasp.json
+.clasprc.json
+*sheet-source*.json
+*sheet-export*.json

@@ -1,0 +1,155 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import vm from 'node:vm';
+import { fileURLToPath } from 'node:url';
+
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
+const modules = ['showdown.gs', 'SheetStyles.gs', 'Renderer.gs', 'Publications.gs'];
+let checks = 0;
+function check(name, callback) {
+  callback(); checks++;
+  console.log(`PASS ${name}`);
+}
+function setup(overrides = {}) {
+  const calls = [], sleeps = [], cache = new Map(), uploads = [];
+  let reads = 0;
+  const parameters = {
+    H1: ['Lab', 'Language', 'Function', '/* Title', '/* ID', '/* Style'],
+    Content: ['Lab', 'Language', 'Function', '/* Text', '/* img url', '/* img width', '/* img height', '/* insta filter', '/* img style', '/* img hyperlink', '/* ID', '/* Style'],
+    Member: ['Lab', 'Language', 'Function', '/* Name', '/* Personal links', '/* Position', '/* Start Date', '/* End Date', '/* Name in publication', '/* Photo url', '/* insta filter', '/* Biosketch', '/* Project', '/* E-mail', '/* Hobby or fun fact', '/* Twitter', '/* Others', '/* Margin top', '/* Margin bottom', '/* ID'],
+  };
+  const context = { parameters, members: ['Lab A'], journals: { 'Long journal': 'Journal' } };
+  const sandbox = {
+    console: { log() { throw new Error('Renderer must not log raw row values'); } },
+    cmsContext_: () => { reads++; return context; },
+    PreElement: 'START', PostElement: 'END', PubRepDict: {}, MDLINKREG: /\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g,
+    uploadImg: url => { uploads.push(url); return './img/' + new URL(url).pathname.split('/').pop(); },
+    Utilities: { sleep: milliseconds => sleeps.push(milliseconds) },
+    CacheService: { getScriptCache: () => ({ get: key => cache.get(key) || null, put: (key, value, ttl) => { assert.equal(ttl, 21600); cache.set(key, value); } }) },
+    PropertiesService: { getScriptProperties: () => ({ getProperty: () => null }) },
+    previewFetch_: (url, options) => { calls.push({ url, options }); return { getResponseCode: () => 200, getContentText: () => 'PMID- 123\nTI  - A title - with a hyphen\n      continued title\nAU  - Lab A\nJT  - Long journal\nVI  - 2\nDP  - 2026 Oct\n' }; },
+    ...overrides,
+  };
+  const runtime = vm.createContext(sandbox);
+  for (const filename of modules) vm.runInContext(fs.readFileSync(path.join(root, 'cms', filename), 'utf8'), runtime, { filename });
+  return { runtime, context, calls, sleeps, cache, uploads, reads: () => reads };
+}
+
+check('Explicit Sheet values win; motion and generated layout keep normal priority', () => {
+  const { runtime: r } = setup();
+  const attributes = r.sheetStyleAttributes_('font-family:"Custom", sans-serif; height:42%; display:none!important; z-index:99 ! important; transform:scale(2)!important;', 'display:flex;');
+  assert(attributes.includes('font-family: &quot;Custom&quot;, sans-serif !important;'));
+  assert(attributes.includes('height: 42% !important;'));
+  assert(attributes.includes('display:flex;'));
+  assert(attributes.includes('display: none;z-index: 99;transform: scale(2);'));
+  assert(attributes.includes('data-sheet-style="font-family height"'));
+  assert(!/display: none !important|z-index: 99 !important|transform: scale\(2\) !important/.test(attributes));
+});
+check('Style parser keeps quoted semicolons and parentheses intact', () => {
+  const { runtime: r } = setup();
+  const result = r.sheetExplicitStyle_('background: url("data:image/svg+xml;a;b"); width:calc(100% - 2px); margin-bottom:0;');
+  assert(result.style.includes('url("data:image/svg+xml;a;b") !important;'));
+  assert(result.style.includes('width: calc(100% - 2px) !important;'));
+  assert.equal(result.properties.join(' '), 'background width margin-bottom');
+});
+check('Header mapping handles numeric cells and missing optional values without Sheet reads', () => {
+  const { runtime: r, reads } = setup();
+  assert.equal(r.appendSingle(['All', 'Common', 'H1', 2026], []), '<h1 class="page_title All Common">2026</h1>');
+  assert.equal(r.appendSingle(['All', 'Common', 'Pass'], []), '');
+  assert.equal(reads(), 1, 'Pass rows need no renderer context or Sheet reads.');
+  assert.throws(() => r.appendSingle(['All', 'Common', 'Unknown'], []), /Unknown row function/);
+});
+check('Rich text preserves bold/color runs and converts the email marker', () => {
+  const { runtime: r } = setup();
+  const rich = { getRuns: () => [{ getText: () => 'Name ', getTextStyle: () => ({ isBold: () => true, isItalic: () => false, getForegroundColorObject: () => ({ asRgbColor: () => ({ asHexString: () => '#ff0000' }) }) }) }] };
+  assert.equal(r.rendererRichText_('Name ', rich), '**<span style="color:#ff0000">Name</span>** ');
+  assert(r.rendererRichText_('name\\@\\example.org', null).includes('alt="[at]"'));
+});
+check('Content image dimensions and explicit custom style render on the correct nodes', () => {
+  const { runtime: r } = setup();
+  const html = r.appendSingle(['All', 'Common', 'Content', 'Text', 'https://example.org/photo.png', 80, 'auto', '/* insta filter', 'object-fit:contain;', '', 'photo', 'color:red;'], []);
+  assert(html.includes('width: 80px !important;height: auto !important;object-fit: contain !important;'));
+  assert(html.includes('data-sheet-style="width height object-fit"'));
+  assert(html.includes('id="photo" style="color: red !important;" data-sheet-style="color"'));
+});
+check('Header logo dimensions remain changeable by the clipping controller', () => {
+  const { runtime: r } = setup();
+  const attributes = r.rendererImageStyleAttributes_({ '/* ID': 'frontlogo', '/* img width': '400px', '/* img height': '100px', '/* img style': 'margin-top:12px;' });
+  assert(attributes.includes('width: 400px;height: 100px;'));
+  assert(!attributes.includes('height: 100px !important'));
+  assert(attributes.includes('data-sheet-style="margin-top"'));
+});
+check('Member IDs and single-line Others fields survive rendering', () => {
+  const { runtime: r } = setup();
+  const adict = { Lab: 'UBC', Language: 'Common', '/* Name': 'Person', '/* Position': 'Researcher', '/* Others': 'Award winner\nGithub: <a href="https://example.org/a:b">profile</a>', '/* ID': 'person-id' };
+  const html = r.appendMember(adict);
+  assert(html.includes('class="member UBC Common" id="person-id"'));
+  assert(html.includes('<span class="key">Award winner</span>'));
+  assert(html.includes('<a href="https://example.org/a:b">profile</a>'));
+  assert(!html.includes('undefined'));
+});
+check('Alumni IDs and final section closure are emitted', () => {
+  const { runtime: r } = setup();
+  r.PreElement = ['All', 'Common', 'H1']; r.PostElement = 'END';
+  const html = r.appendAlumni({ Lab: 'All', Language: 'Common', '/* Name': 'Name', '/* ID': 'alumni-id' });
+  assert(html.includes('class="grid-container alumni All Common" id="alumni-id"'));
+  assert(html.endsWith('</section>'));
+});
+check('Bluesky snippets remove provider scripts and use pre-embed lifecycle classes', () => {
+  const { runtime: r } = setup();
+  const html = r.appendPost({ Lab: 'All', Language: 'Common', '/* Link': '<blockquote class="bluesky-embed" data-bluesky-uri="at://record"><a href="https://bsky.app/profile/test/post/id">post</a></blockquote><script async src="https://embed.bsky.app/static/embed.js"></script>' });
+  assert(html.includes('class="pre-bluesky-embed"'));
+  assert(!html.includes('<script'));
+  assert(r.appendPost({ Lab: 'All', Language: 'Common', '/* Link': 'https://bsky,app/profile/test/post/id' }).includes('https://bsky.app/'));
+});
+check('News markup retains locale classes, optional images and valid paragraphs', () => {
+  const { runtime: r } = setup();
+  const html = r.appendNews({ Lab: 'Osaka', Language: 'Chinese', '/* Name': 'Lab', '/* Date': 2026, '/* Text': '**News**', '/* img url2': 'https://example.org/photo.png' });
+  assert(html.includes('class="x-embed Osaka Chinese"'));
+  assert(html.includes('<p><strong>News</strong></p>'));
+  assert(!html.includes('<p><p>'));
+  assert(html.includes('class="media-grid is-1"'));
+  assert(html.includes('<span>2026</span>'));
+});
+check('MEDLINE preserves multiline hyphenated titles, caches only valid results and renders absent PG gracefully', () => {
+  const { runtime: r, calls, sleeps } = setup();
+  const first = r.pmid_bibdict('https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?id=123');
+  const second = r.pmid_bibdict('https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?id=123');
+  assert.equal(first.TI, 'A title - with a hyphen continued title');
+  assert.equal(first.AU.length, 1);
+  assert.equal(second.TI, first.TI);
+  assert.equal(calls.length, 1); assert.deepEqual(sleeps, [350]);
+  const html = r.pmid_html(first, ['Lab A'], '123', '', '', '', '', [], [], '', 'All', 'Common', 'pub');
+  assert(html.includes('2, 2026')); assert(!html.includes('undefined')); assert(!html.includes(' & <span'));
+});
+check('HTTP 429 and 5xx retry at most three times; permanent failures do not cache', () => {
+  let requests = 0;
+  const { runtime: r, cache, sleeps } = setup({ previewFetch_: () => ({ getResponseCode: () => (++requests === 1 ? 429 : 503), getContentText: () => 'error' }) });
+  assert.throws(() => r.pmid_bibdict('https://eutils.ncbi.nlm.nih.gov/?id=456'), /HTTP 503/);
+  assert.equal(requests, 3); assert.equal(cache.size, 0); assert.equal(sleeps.filter(delay => delay === 350).length, 3);
+  requests = 0;
+  const failed = setup({ previewFetch_: () => { requests++; return { getResponseCode: () => 404, getContentText: () => 'missing' }; } });
+  assert.throws(() => failed.runtime.pmid_bibdict('https://eutils.ncbi.nlm.nih.gov/?id=789'), /HTTP 404/);
+  assert.equal(requests, 1);
+});
+check('A HTTP 200 error document is rejected and never cached', () => {
+  const { runtime: r, cache } = setup({ previewFetch_: () => ({ getResponseCode: () => 200, getContentText: () => '<html>temporarily unavailable</html>' }) });
+  assert.throws(() => r.pmid_bibdict('https://eutils.ncbi.nlm.nih.gov/?id=123'), /no valid MEDLINE/);
+  assert.equal(cache.size, 0);
+});
+check('Publication image params, default members, journal names and optional email reach their targets', () => {
+  const { runtime: r, calls } = setup({ PropertiesService: { getScriptProperties: () => ({ getProperty: key => key === 'PUBMED_EMAIL' ? 'test@example.org' : null }) } });
+  const html = r.appendPublication({ Lab: 'All', Language: 'Common', '/* Pubmed ID': 123, '/* img url': 'https://example.org/article.png', '/* img width': '50%', '/* img height': '/* img height' });
+  assert(html.includes('<a class="JT" href="https://pubmed.ncbi.nlm.nih.gov/123/">Journal</a>'));
+  assert(html.includes('<span class="member">Lab A</span>'));
+  assert(html.includes('alt="paper_img" style="width: 50% !important;" data-sheet-style="width"'));
+  assert(calls[0].url.includes('email=test%40example.org'));
+});
+check('Custom publication accepts blank highlighted authors, missing citation fields and one author', () => {
+  const { runtime: r } = setup();
+  const html = r.appendCustomPublication({ Lab: 'All', Language: 'Common', '/* Title': 'A title.', '/* Authors': 'Author A', '/* Journal': 'Journal', '/* Year, Date': 2026 });
+  assert(!html.includes('undefined')); assert(!html.includes('A title..')); assert(html.includes('2026'));
+});
+
+console.log(`CMS renderer checks passed: ${checks}.`);

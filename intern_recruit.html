@@ -35,7 +35,7 @@
   <script src="./js/mobile_menu.js" defer=""></script>
 </head>
 
-  <body>
+  <body data-page="intern_recruit">
   <div id="container">
     <!-- Header -->
     <header id="mobile_header">
@@ -48,7 +48,7 @@
     </header>
 
     <header id="normal_header"><div class="All Common" style="display: flex; flex-direction: column; justify-content: flex-start;" id="head">
-<div class="All Common" style="display: flex; flex-direction: row; justify-content: flex-start;justify-content: flex-between; width: 100%;" id="head-title">
+<div class="All Common" id="head-title" style="display: flex; flex-direction: row; justify-content: flex-start;width: 100% !important;" data-sheet-style="width">
 <section class="content UBC Common" id="frontlogo" style="z-index: 2;">
 <a href="./index.html"><img src="./img/two_logos_on_white_on_black.svg" alt="content_img" style="" class="content_img"></a>
 </section>
@@ -79,8 +79,8 @@
 </section>
 </div>
 </div>
-<div class=" " style="display: flex; flex-direction: row; justify-content: flex-start;width: 100%; justify-content: right" id="head-lang-logo">
-<div class="All Common" style="display: flex; flex-direction: row; justify-content: flex-start;font-family: raleway; justify-content: right; width: 25%;" id="languages">
+<div class=" " id="head-lang-logo" style="display: flex; flex-direction: row; justify-content: flex-start;width: 100% !important;justify-content: right !important;" data-sheet-style="width justify-content">
+<div class="All Common" id="languages" style="display: flex; flex-direction: row; justify-content: flex-start;font-family: raleway !important;justify-content: right !important;width: 25% !important;" data-sheet-style="font-family justify-content width">
 <section class="content All Common" id="EN">
 <p>English</p>
 </section>
@@ -246,9 +246,9 @@
 </ul>
 <p>通常、書類審査後にオンラインでの面接を実施して、採用可否を決定します。</p>
 </section>
-<h2 class="page_title All Common" id="experience_osaka">インターン体験記 (大阪大学創造的破壊生物学講座）</h2><div class="All Common" style="display: flex; flex-direction: row; justify-content: flex-start;width: 100%; margin-bottom: calc(50 * min(80vw, 1400px) / 1400);">
-<section class="content All Common" id="" style="width: clamp(50px, 20%, 140px); margin-right: calc(20 * min(80vw, 1400px) / 1400);">
-<img src="./img/Yuka_Nakada.jpg" alt="content_img" style="width: 100%;float: left; margin: 0;" class="content_img">
+<h2 class="page_title All Common" id="experience_osaka">インターン体験記 (大阪大学創造的破壊生物学講座）</h2><div class="All Common" style="display: flex; flex-direction: row; justify-content: flex-start;width: 100% !important;margin-bottom: calc(50 * min(80vw, 1400px) / 1400) !important;" data-sheet-style="width margin-bottom">
+<section class="content All Common" id="" style="width: clamp(50px, 20%, 140px) !important;margin-right: calc(20 * min(80vw, 1400px) / 1400) !important;" data-sheet-style="width margin-right">
+<img src="./img/Yuka_Nakada.jpg" alt="content_img" class="content_img" style=" width: 100% !important;float: left !important;margin: 0 !important;" data-sheet-style="width float margin">
 </section>
 <section class="content All Common" id="">
 <p><strong><span style="color:555555">中田 紬花</span></strong><br>
@@ -261,9 +261,9 @@
 異分野への挑戦には困難も伴いましたが、多くの支援を受けながら充実した時間を過ごすことができました。創造的破壊生物学講座は、研究活動に加えて研究費申請や学会発表など多様な経験を積む機会があり、主体的に新しいことへ挑戦したい人にとって非常に魅力的な環境です。ぜひ参加してみてください。<br></p>
 </section>
 </div>
-<h2 class="page_title All Common" id="experience">インターン体験記 (東京大学谷内江研究室）</h2><div class="All Common" style="display: flex; flex-direction: row; justify-content: flex-start;width: 100%; margin-bottom: calc(50 * min(80vw, 1400px) / 1400);">
-<section class="content All Common" id="" style="width: clamp(50px, 20%, 140px); margin-right: calc(20 * min(80vw, 1400px) / 1400);">
-<img src="./img/yusuke2.jpg" alt="content_img" style="width: 100%;float: left; margin: 0;" class="content_img">
+<h2 class="page_title All Common" id="experience">インターン体験記 (東京大学谷内江研究室）</h2><div class="All Common" style="display: flex; flex-direction: row; justify-content: flex-start;width: 100% !important;margin-bottom: calc(50 * min(80vw, 1400px) / 1400) !important;" data-sheet-style="width margin-bottom">
+<section class="content All Common" id="" style="width: clamp(50px, 20%, 140px) !important;margin-right: calc(20 * min(80vw, 1400px) / 1400) !important;" data-sheet-style="width margin-right">
+<img src="./img/yusuke2.jpg" alt="content_img" class="content_img" style=" width: 100% !important;float: left !important;margin: 0 !important;" data-sheet-style="width float margin">
 </section>
 <section class="content All Common" id="">
 <p><strong><span style="color:#555555">木島 佑輔</span></strong><br>
@@ -273,9 +273,9 @@
 谷内江研で2ヶ月インターンとして働かせていただき、バイオインフォマティクスの分野で非常にやりがいのあるテーマを与えていただきました。単細胞RNA-seqの精度を向上させるためには、細胞の種類に由来する非発現遺伝子と技術的に検出しきれなかった遺伝子を判別することが不可欠です。このような難しいテーマの解決法をディスカッションしながら試行錯誤する過程は楽しいものでした。僕がインターンに参加したのは修士2年の修論発表後から博士課程進学までの2ヶ月間で、他のインターン生と比べるとかなり年上でしたが、みな年齢別け隔てなく接してくれたのが印象的でした。特にディスカッションの際は先生も先輩も後輩も関係なく対等に意見を言い合えたため、いろいろな意見を吸収して自分の研究テーマと向き合うことができました。学年やスキル、分野は関係なく、サイエンスに興味があって意欲的な学生はとても充実した時間を過ごせると思います。</p>
 </section>
 </div>
-<div class="All Common" style="display: flex; flex-direction: row; justify-content: flex-start;width: 100%; margin-bottom: calc(50 * min(80vw, 1400px) / 1400);">
-<section class="content All Common" id="" style="width: clamp(50px, 20%, 140px); margin-right: calc(20 * min(80vw, 1400px) / 1400);">
-<img src="./img/tatsuya.jpg" alt="content_img" style="width: 100%;float: left; margin: 0;" class="content_img">
+<div class="All Common" style="display: flex; flex-direction: row; justify-content: flex-start;width: 100% !important;margin-bottom: calc(50 * min(80vw, 1400px) / 1400) !important;" data-sheet-style="width margin-bottom">
+<section class="content All Common" id="" style="width: clamp(50px, 20%, 140px) !important;margin-right: calc(20 * min(80vw, 1400px) / 1400) !important;" data-sheet-style="width margin-right">
+<img src="./img/tatsuya.jpg" alt="content_img" class="content_img" style=" width: 100% !important;float: left !important;margin: 0 !important;" data-sheet-style="width float margin">
 </section>
 <section class="content All Common" id="">
 <p><strong><span style="color:555555">奥村 龍哉 </span></strong><br>
@@ -285,9 +285,9 @@
 春休みの２カ月間、谷内江研のインターンに参加していました、京都大学農学部生の奥村龍哉です。細胞の遺伝子発現の情報からその細胞がどういった種類の細胞か特定することができますが、一度に読める遺伝子発現の情報は限られているため、分類できる細胞の数も限られています。これに対し、遺伝子のネットワークの情報を遺伝子発現の情報に加えることで、一度により多くの細胞を分類可能にしようというテーマで研究していました。インターンに参加したときまだ研究をしたことがなかったため、2カ月間1つのテーマにしっかり向き合ったということがいい経験になりました。論文を読んで理解したりプログラムを書いたりと、研究に必要な基礎的な力が多く身に付いたと思います。またネットワーク情報の使い方や、スーパーコンピュータなど初めて触るものがありましたが、その分分かることも増え、参加してよかったと思います。自分は大学でバイオインフォマティクスを専門に学んでいるわけではなく、足りない知識も多くありましたが、メンバーに分からないことを聞きやすくて助かりました。また厳しい規則などは特にないもののコミットできる環境なので、打ち込めて楽しいと思います。遠方からの参加でしたが、研究補助業務として謝金をいただけたので実質的に東京での滞在費がかからず、大学生の春休み2カ月間という時間を上手に使えたと思います。なかなか地元で勉強がはかどらない人や実際の研究に携わってみたい人にぜひおすすめです。</p>
 </section>
 </div>
-<div class="All Common" style="display: flex; flex-direction: row; justify-content: flex-start;width: 100%; margin-bottom: calc(50 * min(80vw, 1400px) / 1400);">
-<section class="content All Common" id="" style="width: clamp(50px, 20%, 140px); margin-right: calc(20 * min(80vw, 1400px) / 1400);">
-<img src="./img/1538750937671.jpg" alt="content_img" style="width: 100%;float: left; margin: 0;" class="content_img">
+<div class="All Common" style="display: flex; flex-direction: row; justify-content: flex-start;width: 100% !important;margin-bottom: calc(50 * min(80vw, 1400px) / 1400) !important;" data-sheet-style="width margin-bottom">
+<section class="content All Common" id="" style="width: clamp(50px, 20%, 140px) !important;margin-right: calc(20 * min(80vw, 1400px) / 1400) !important;" data-sheet-style="width margin-right">
+<img src="./img/1538750937671.jpg" alt="content_img" class="content_img" style=" width: 100% !important;float: left !important;margin: 0 !important;" data-sheet-style="width float margin">
 </section>
 <section class="content All Common" id="">
 <p><strong><span style="color:#555555">今野 直輝</span></strong><br>
@@ -297,9 +297,9 @@
 私は大量のDNAの配列データから系統樹を高速に推定するための新しい並列計算フレームワークの開発を行いました。同じくインターン生で共同研究者である綿野くんが開発した配列の進化シミュレータが出力する大量 (10^6~8) の配列に対して、どうすれば高速に正確な系統樹を計算できるかを考えながら、大学で学んだ進化モデルやプログラミングをフル活用してソフトウェアを作りました。谷内江研は、先生も学生の方々もとても親しみやすく、割とすぐに打ち解けることが出来ましたし、1週間ごとのミーティングで、自分で調べ考えたことと現状の課題を毎週1時間以上思い切りディスカッションすることが出来たのが非常に楽しかったです。また、進捗報告会で発表する中で自然とサイエンスの議論を英語で行うためのスキル、自分が考えていることを人に分かりやすく伝えるプレゼン力も鍛えられましたし、(留学生も多いので) 研究室の飲み会の会話が英語だったりすることもあって英語での日常会話にも少し慣れてきた気がします。また、研究補助業務として謝金を頂きながら自分が打ち込める研究が出来たのもとてもありがたかったです。夏休みや春休みをフルに使って、大学で勉強してきたことを生かし、または新しいことを勉強しながら研究に打ちこんでみたい方は参加すると楽しいのではないでしょうか。</p>
 </section>
 </div>
-<div class="All Common" style="display: flex; flex-direction: row; justify-content: flex-start;width: 100%; margin-bottom: calc(50 * min(80vw, 1400px) / 1400);">
-<section class="content All Common" id="" style="width: clamp(50px, 20%, 140px); margin-right: calc(20 * min(80vw, 1400px) / 1400);">
-<img src="./img/hitoshi.jpg" alt="content_img" style="width: 100%;float: left; margin: 0;" class="content_img">
+<div class="All Common" style="display: flex; flex-direction: row; justify-content: flex-start;width: 100% !important;margin-bottom: calc(50 * min(80vw, 1400px) / 1400) !important;" data-sheet-style="width margin-bottom">
+<section class="content All Common" id="" style="width: clamp(50px, 20%, 140px) !important;margin-right: calc(20 * min(80vw, 1400px) / 1400) !important;" data-sheet-style="width margin-right">
+<img src="./img/hitoshi.jpg" alt="content_img" class="content_img" style=" width: 100% !important;float: left !important;margin: 0 !important;" data-sheet-style="width float margin">
 </section>
 <section class="content All Common" id="">
 <p><strong><span style="color:#555555">松尾 仁嗣</span></strong><br>
@@ -309,9 +309,9 @@
 tRNAは原核生物のゲノムにおいてオペロンを形成しているものがあることが知られていますが、そのオペロンから個々のtRNAが生成される際に同時に切り取られるスペーサーの配列はどんな機能を持っているのかは謎のままです。谷内江研でのインターンでは、そのtRNAスペーサーに機能があるとしたら何なのかを調べるというプロジェクトに携わらせていただきました。NCBIで公開されている様々な原核生物のゲノムを使い、その大量のデータの中からどういった解析をすると意味があるのか、またそれをどうビジュアライズするかといったことを工夫しながら研究を進めていました。研究室では、先生方や先輩たちと親しみやすく(夜にみんなで飲みに行くことも多くありました)、ミーティングも活発に行なっていたため、意見交換を通して有意義に過ごせたと思っています。また、スパコンを使った解析をしていたため、プログラミングの能力がかなり向上したと成長を実感できました。生活面では、研究室の近くで生活できる生活費をサポートしていただき、自分の研究に集中することができて本当に感謝しています。夏休みと春休みという合計４ヶ月をこの研究室で研究活動に携われたことは今後の卒研や修士以降での研究生活にとって大きなアドバンテージだと思っています。将来研究職などを考えている方にとっては、長期休暇期間にがっつりと研究に関わる貴重な期間ですし、この研究室では本当に多様なテーマを扱っているので、ぜひチャレンジすると良いと思います。</p>
 </section>
 </div>
-<div class="All Common" style="display: flex; flex-direction: row; justify-content: flex-start;width: 100%; margin-bottom: calc(50 * min(80vw, 1400px) / 1400);">
-<section class="content All Common" id="" style="width: clamp(50px, 20%, 140px); margin-right: calc(20 * min(80vw, 1400px) / 1400);">
-<img src="./img/blank_person.jpg" alt="content_img" style="width: 100%;float: left; margin: 0;" class="content_img">
+<div class="All Common" style="display: flex; flex-direction: row; justify-content: flex-start;width: 100% !important;margin-bottom: calc(50 * min(80vw, 1400px) / 1400) !important;" data-sheet-style="width margin-bottom">
+<section class="content All Common" id="" style="width: clamp(50px, 20%, 140px) !important;margin-right: calc(20 * min(80vw, 1400px) / 1400) !important;" data-sheet-style="width margin-right">
+<img src="./img/blank_person.jpg" alt="content_img" class="content_img" style=" width: 100% !important;float: left !important;margin: 0 !important;" data-sheet-style="width float margin">
 </section>
 <section class="content All Common" id="">
 <p><strong><span style="color:#555555">綿野 桂人</span></strong><br>
@@ -323,39 +323,39 @@ tRNAは原核生物のゲノムにおいてオペロンを形成しているも�
 </div>
 </section>
      
-      <section id="mobile-menu"><div class="All Common" style="display: flex; flex-direction: column; justify-content: flex-start;width: 100%; margin-bottom: 5vw; margin-top: 5vw;" id="mobile-menu-content">
-<div class="All Common" style="display: flex; flex-direction: row; justify-content: flex-start;width: 100%; margin-left: 5vw; margin-bottom: 5vw;" id="mobile-logo">
-<section class="content All Common" id="mobile-yachielablogo" style="margin-top: 0; margin-bottom: 0; margin-right:8vw;">
+      <section id="mobile-menu"><div class="All Common" id="mobile-menu-content" style="display: flex; flex-direction: column; justify-content: flex-start;width: 100% !important;margin-bottom: 5vw !important;margin-top: 5vw !important;" data-sheet-style="width margin-bottom margin-top">
+<div class="All Common" id="mobile-logo" style="display: flex; flex-direction: row; justify-content: flex-start;width: 100% !important;margin-left: 5vw !important;margin-bottom: 5vw !important;" data-sheet-style="width margin-left margin-bottom">
+<section class="content All Common" id="mobile-yachielablogo" style="margin-top: 0 !important;margin-bottom: 0 !important;margin-right: 8vw !important;" data-sheet-style="margin-top margin-bottom margin-right">
 <a href="https://ponnhide.github.io/yachielab-preview/"><img src="./img/white_yachielablogo.svg" alt="content_img" style="" class="content_img"></a>
 </section>
 </div>
-<div class="All Common" style="display: flex; flex-direction: row; justify-content: flex-start;width: 100%; margin-left: 5vw; margin-bottom: 5vw; " id="mobile-affillogo">
-<section class="content All Common" id="mobile-ubclogo" style="margin-top: 0; margin-bottom: 0; margin-right:8vw;">
-<a href="https://www.ubc.ca/"><img src="./img/white_ubclogo_h.svg" alt="content_img" style="height: clamp(calc(10px * 44 / 32), calc(7vw * 44 / 32), 44px);margin-top: 0; margin-right: 0; margin-left: 0; margin-bottom: 0; float: left;" class="content_img"></a>
+<div class="All Common" id="mobile-affillogo" style="display: flex; flex-direction: row; justify-content: flex-start;width: 100% !important;margin-left: 5vw !important;margin-bottom: 5vw !important;" data-sheet-style="width margin-left margin-bottom">
+<section class="content All Common" id="mobile-ubclogo" style="margin-top: 0 !important;margin-bottom: 0 !important;margin-right: 8vw !important;" data-sheet-style="margin-top margin-bottom margin-right">
+<a href="https://www.ubc.ca/"><img src="./img/white_ubclogo_h.svg" alt="content_img" class="content_img" style=" height: clamp(calc(10px * 44 / 32), calc(7vw * 44 / 32), 44px);margin-top: 0 !important;margin-right: 0 !important;margin-left: 0 !important;margin-bottom: 0 !important;float: left !important;" data-sheet-style="margin-top margin-right margin-left margin-bottom float"></a>
 </section>
-<section class="content All Common" id="mobile-primelogo" style="margin-top: 0; margin-bottom: 0; margin-right:5vw;">
-<a href="https://prime.osaka-u.ac.jp/"><img src="./img/white_primelogo_h_uo.svg" alt="content_img" style="height: clamp(calc(10px * 44 / 32), calc(7vw * 44 / 32), 44px);margin-top: 0; margin-right: 0; margin-left: 0; margin-bottom: 0; float: left;" class="content_img"></a>
-</section>
-</div>
-<div class="All Common" style="display: flex; flex-direction: row; justify-content: flex-start;width: 100%; margin-left:5vw; align-items: center;" id="mobile-snslogo">
-<section class="content All Common" id="mobile-xlogo" style="margin-right: 5vw; margin-bottom: 0; width: auto;">
-<a href="https://twitter.com/yachielab"><img src="./img/white_x.svg" alt="content_img" style="width: clamp(calc(10px * 30 / 32), calc(7vw * 30 / 32), 30px);margin-top: 0; margin-right: 0; margin-left: 0; margin-bottom: 0; float: left;" class="content_img"></a>
-</section>
-<section class="content All Common" id="mobile-instalogo" style="margin-right: 5vw; margin-bottom: 0; width: auto;">
-<a href="https://www.instagram.com/yachielab/"><img src="./img/white_instagram.svg" alt="content_img" style="width: clamp(10px, 7vw, 32px);margin-top: 0; margin-right: 0; margin-left: 0; margin-bottom: 0; float: left;" class="content_img"></a>
-</section>
-<section class="content All Common" id="mobile-githublogo" style="margin-right: 5vw; margin-bottom: 0; width: auto;">
-<a href="https://github.com/yachielab"><img src="./img/white_github.svg" alt="content_img" style="width: clamp(calc(10px * 35 / 32), calc(7vw * 35 / 32), 35px);margin-top: 0; margin-right: 0; margin-left: 0; margin-bottom: 0; float: left;" class="content_img"></a>
-</section>
-<section class="content All Common" id="mobile-addgennelogo" style="margin-right: 5vw; margin-bottom: 0; width: auto;">
-<a href="http://www.addgene.org/Nozomu_Yachie/"><img src="./img/white_addgene.svg" alt="content_img" style="width: clamp(calc(10px * 45 / 32), calc(7vw * 45 / 32), 45px);margin-top: 0; margin-right: 0; margin-left: 0; margin-bottom: 0; float: left;" class="content_img"></a>
-</section>
-<section class="content All Common" id="mobile-addgennelogo" style="margin-right: 5vw; margin-bottom: 0; width: auto;">
-<a href="https://lit.link/kkuurroo"><img src="./img/sign_white.svg" alt="content_img" style="width: clamp(calc(10px * 84 / 32), calc(2.2vw * 84 / 32), calc(2.1 * 52.8px));margin-top: 0; margin-right: 0; margin-left: 0; margin-bottom: 0; float: left;" class="content_img"></a>
+<section class="content All Common" id="mobile-primelogo" style="margin-top: 0 !important;margin-bottom: 0 !important;margin-right: 5vw !important;" data-sheet-style="margin-top margin-bottom margin-right">
+<a href="https://prime.osaka-u.ac.jp/"><img src="./img/white_primelogo_h_uo.svg" alt="content_img" class="content_img" style=" height: clamp(calc(10px * 44 / 32), calc(7vw * 44 / 32), 44px);margin-top: 0 !important;margin-right: 0 !important;margin-left: 0 !important;margin-bottom: 0 !important;float: left !important;" data-sheet-style="margin-top margin-right margin-left margin-bottom float"></a>
 </section>
 </div>
-<div class="All Common" style="display: flex; flex-direction: row; justify-content: flex-start;width: 100%;" id="mobile-links-lang">
-<div class="All Common" style="display: flex; flex-direction: column; justify-content: flex-start;width: 70%;" id="mobile-interlinks">
+<div class="All Common" id="mobile-snslogo" style="display: flex; flex-direction: row; justify-content: flex-start;width: 100% !important;margin-left: 5vw !important;align-items: center !important;" data-sheet-style="width margin-left align-items">
+<section class="content All Common" id="mobile-xlogo" style="margin-right: 5vw !important;margin-bottom: 0 !important;width: auto !important;" data-sheet-style="margin-right margin-bottom width">
+<a href="https://twitter.com/yachielab"><img src="./img/white_x.svg" alt="content_img" class="content_img" style=" width: clamp(calc(10px * 30 / 32), calc(7vw * 30 / 32), 30px);margin-top: 0 !important;margin-right: 0 !important;margin-left: 0 !important;margin-bottom: 0 !important;float: left !important;" data-sheet-style="margin-top margin-right margin-left margin-bottom float"></a>
+</section>
+<section class="content All Common" id="mobile-instalogo" style="margin-right: 5vw !important;margin-bottom: 0 !important;width: auto !important;" data-sheet-style="margin-right margin-bottom width">
+<a href="https://www.instagram.com/yachielab/"><img src="./img/white_instagram.svg" alt="content_img" class="content_img" style=" width: clamp(10px, 7vw, 32px);margin-top: 0 !important;margin-right: 0 !important;margin-left: 0 !important;margin-bottom: 0 !important;float: left !important;" data-sheet-style="margin-top margin-right margin-left margin-bottom float"></a>
+</section>
+<section class="content All Common" id="mobile-githublogo" style="margin-right: 5vw !important;margin-bottom: 0 !important;width: auto !important;" data-sheet-style="margin-right margin-bottom width">
+<a href="https://github.com/yachielab"><img src="./img/white_github.svg" alt="content_img" class="content_img" style=" width: clamp(calc(10px * 35 / 32), calc(7vw * 35 / 32), 35px);margin-top: 0 !important;margin-right: 0 !important;margin-left: 0 !important;margin-bottom: 0 !important;float: left !important;" data-sheet-style="margin-top margin-right margin-left margin-bottom float"></a>
+</section>
+<section class="content All Common" id="mobile-addgennelogo" style="margin-right: 5vw !important;margin-bottom: 0 !important;width: auto !important;" data-sheet-style="margin-right margin-bottom width">
+<a href="http://www.addgene.org/Nozomu_Yachie/"><img src="./img/white_addgene.svg" alt="content_img" class="content_img" style=" width: clamp(calc(10px * 45 / 32), calc(7vw * 45 / 32), 45px);margin-top: 0 !important;margin-right: 0 !important;margin-left: 0 !important;margin-bottom: 0 !important;float: left !important;" data-sheet-style="margin-top margin-right margin-left margin-bottom float"></a>
+</section>
+<section class="content All Common" id="mobile-kurosignlogo" style="margin-right: 5vw !important;margin-bottom: 0 !important;width: auto !important;" data-sheet-style="margin-right margin-bottom width">
+<a href="https://lit.link/kkuurroo"><img src="./img/sign_white.svg" alt="content_img" class="content_img" style=" width: clamp(calc(10px * 84 / 32), calc(2.2vw * 84 / 32), calc(2.1 * 52.8px));margin-top: 0 !important;margin-right: 0 !important;margin-left: 0 !important;margin-bottom: 0 !important;float: left !important;" data-sheet-style="margin-top margin-right margin-left margin-bottom float"></a>
+</section>
+</div>
+<div class="All Common" id="mobile-links-lang" style="display: flex; flex-direction: row; justify-content: flex-start;width: 100% !important;" data-sheet-style="width">
+<div class="All Common" id="mobile-interlinks" style="display: flex; flex-direction: column; justify-content: flex-start;width: 70% !important;" data-sheet-style="width">
 <section class="content All English" id="">
 <p><a href="index.html">Top</a></p>
 </section>
@@ -453,7 +453,7 @@ tRNAは原核生物のゲノムにおいてオペロンを形成しているも�
 <p><a href="contact.html">联系方式</a></p>
 </section>
 </div>
-<div class="All Common" style="display: flex; flex-direction: column; justify-content: flex-start;width: 30%;" id="mobile-lang">
+<div class="All Common" id="mobile-lang" style="display: flex; flex-direction: column; justify-content: flex-start;width: 30% !important;" data-sheet-style="width">
 <section class="content All Common" id="mobileEN">
 <p>English</p>
 </section>
@@ -470,9 +470,9 @@ tRNAは原核生物のゲノムにおいてオペロンを形成しているも�
     </main>
 
     <!-- Footer -->
-    <footer><div class="All Common" style="display: flex; flex-direction: row; justify-content: flex-start;padding-bottom: 8vw;" id="foot">
+    <footer><div class="All Common" id="foot" style="display: flex; flex-direction: row; justify-content: flex-start;padding-bottom: 8vw !important;" data-sheet-style="padding-bottom">
 <div class="All Common" style="display: flex; flex-direction: column; justify-content: flex-start;" id="foot-address">
-<section class="content All Common" id="" style="margin-bottom:2em;">
+<section class="content All Common" id="" style="margin-bottom: 2em !important;" data-sheet-style="margin-bottom">
 <p><strong>Yachie Laboratory</strong><br>
 School of Biomedical Engineering (SBME)<br>
 The University of British Columbia (UBC)<br>
@@ -500,37 +500,37 @@ Suita, Osaka, Japan 565-0871</p>
 </section>
 </div>
 <div class="All Common" style="display: flex; flex-direction: column; justify-content: flex-start;" id="foot-logo">
-<div class="All Common" style="display: flex; flex-direction: row; justify-content: flex-start;height: 33%;" id="foot-univlogo">
+<div class="All Common" id="foot-univlogo" style="display: flex; flex-direction: row; justify-content: flex-start;height: 33% !important;" data-sheet-style="height">
 <section class="content All Common" id="foot-ubclablogo">
-<a href="https://ponnhide.github.io/yachielab-preview/people.html?lang=EN&amp;affil=UBC"><img src="./img/logo-yachielab-ubc-white-on-black.svg" alt="content_img" style="margin-top: 0; margin-right: 0; margin-left: 0; margin-bottom: 0; float: right;" class="content_img"></a>
+<a href="https://ponnhide.github.io/yachielab-preview/people.html?lang=EN&amp;affil=UBC"><img src="./img/logo-yachielab-ubc-white-on-black.svg" alt="content_img" class="content_img" style=" margin-top: 0 !important;margin-right: 0 !important;margin-left: 0 !important;margin-bottom: 0 !important;float: right !important;" data-sheet-style="margin-top margin-right margin-left margin-bottom float"></a>
 </section>
 <section class="content All Common" id="foot-osakalablogo">
-<a href="https://ponnhide.github.io/yachielab-preview/people.html?lang=JA&amp;affil=Osaka"><img src="./img/logo-cdb-osaka-white-on-black.svg" alt="content_img" style="margin-top: 0; margin-right: 0; margin-left: 0; margin-bottom: 0; float: right;" class="content_img"></a>
+<a href="https://ponnhide.github.io/yachielab-preview/people.html?lang=JA&amp;affil=Osaka"><img src="./img/logo-cdb-osaka-white-on-black.svg" alt="content_img" class="content_img" style=" margin-top: 0 !important;margin-right: 0 !important;margin-left: 0 !important;margin-bottom: 0 !important;float: right !important;" data-sheet-style="margin-top margin-right margin-left margin-bottom float"></a>
 </section>
 </div>
-<div class="All Common" style="display: flex; flex-direction: row; justify-content: flex-start;height: 25%;" id="foot-lablogo">
+<div class="All Common" id="foot-lablogo" style="display: flex; flex-direction: row; justify-content: flex-start;height: 25% !important;" data-sheet-style="height">
 <section class="content All Common" id="foot-ubclogo">
-<a href="https://www.ubc.ca/"><img src="./img/white_ubclogo_h.svg" alt="content_img" style="margin-top: 0; margin-right: 0; margin-left: 0; margin-bottom: 0; float: right;" class="content_img"></a>
+<a href="https://www.ubc.ca/"><img src="./img/white_ubclogo_h.svg" alt="content_img" class="content_img" style=" margin-top: 0 !important;margin-right: 0 !important;margin-left: 0 !important;margin-bottom: 0 !important;float: right !important;" data-sheet-style="margin-top margin-right margin-left margin-bottom float"></a>
 </section>
 <section class="content All Common" id="foot-primelogo">
-<a href="https://prime.osaka-u.ac.jp/"><img src="./img/white_primelogo_h_uo.svg" alt="content_img" style="margin-top: 0; margin-right: 0; margin-left: 0; margin-bottom: 0; float: right;" class="content_img"></a>
+<a href="https://prime.osaka-u.ac.jp/"><img src="./img/white_primelogo_h_uo.svg" alt="content_img" class="content_img" style=" margin-top: 0 !important;margin-right: 0 !important;margin-left: 0 !important;margin-bottom: 0 !important;float: right !important;" data-sheet-style="margin-top margin-right margin-left margin-bottom float"></a>
 </section>
 </div>
-<div class="All Common" style="display: flex; flex-direction: row; justify-content: flex-start;height: 42%;" id="foot-snslogo">
+<div class="All Common" id="foot-snslogo" style="display: flex; flex-direction: row; justify-content: flex-start;height: 20% !important;" data-sheet-style="height">
 <section class="content All Common" id="foot-xlogo">
-<a href="https://twitter.com/yachielab"><img src="./img/white_x.svg" alt="content_img" style="width: clamp(calc(10px * 30 / 32), calc(2.2vw * 30 / 32), 39.6px);margin-top: 0; margin-right: 0; margin-left: 0; margin-bottom: 0; float: right;" class="content_img"></a>
+<a href="https://twitter.com/yachielab"><img src="./img/white_x.svg" alt="content_img" class="content_img" style=" width: clamp(calc(10px * 30 / 32), calc(2.2vw * 30 / 32), 39.6px) !important;margin-top: 0 !important;margin-right: 0 !important;margin-left: 0 !important;margin-bottom: 0 !important;float: right !important;" data-sheet-style="width margin-top margin-right margin-left margin-bottom float"></a>
 </section>
 <section class="content All Common" id="foot-instalogo">
-<a href="https://www.instagram.com/yachielab/"><img src="./img/white_instagram.svg" alt="content_img" style="width: clamp(10px, 2.2vw, 42.24px);margin-top: 0; margin-right: 0; margin-left: 0; margin-bottom: 0; float: right;" class="content_img"></a>
+<a href="https://www.instagram.com/yachielab/"><img src="./img/white_instagram.svg" alt="content_img" class="content_img" style=" width: clamp(10px, 2.2vw, 42.24px) !important;margin-top: 0 !important;margin-right: 0 !important;margin-left: 0 !important;margin-bottom: 0 !important;float: right !important;" data-sheet-style="width margin-top margin-right margin-left margin-bottom float"></a>
 </section>
 <section class="content All Common" id="foot-githublogo">
-<a href="https://github.com/yachielab"><img src="./img/white_github.svg" alt="content_img" style="width: clamp(calc(10px * 35 / 32), calc(2.2vw * 35 / 32), 46.2px);margin-top: 0; margin-right: 0; margin-left: 0; margin-bottom: 0; float: right;" class="content_img"></a>
+<a href="https://github.com/yachielab"><img src="./img/white_github.svg" alt="content_img" class="content_img" style=" width: clamp(calc(10px * 35 / 32), calc(2.2vw * 35 / 32), 46.2px) !important;margin-top: 0 !important;margin-right: 0 !important;margin-left: 0 !important;margin-bottom: 0 !important;float: right !important;" data-sheet-style="width margin-top margin-right margin-left margin-bottom float"></a>
 </section>
 <section class="content All Common" id="foot-addgennelogo">
-<a href="http://www.addgene.org/Nozomu_Yachie/"><img src="./img/white_addgene.svg" alt="content_img" style="width: clamp(calc(10px * 45 / 32), calc(2.2vw * 45 / 32), 59.4px);margin-top: 0; margin-right: 0; margin-left: 0; margin-bottom: 0; float: right;" class="content_img"></a>
+<a href="http://www.addgene.org/Nozomu_Yachie/"><img src="./img/white_addgene.svg" alt="content_img" class="content_img" style=" width: clamp(calc(10px * 45 / 32), calc(2.2vw * 45 / 32), 59.4px) !important;margin-top: 0 !important;margin-right: 0 !important;margin-left: 0 !important;margin-bottom: 0 !important;float: right !important;" data-sheet-style="width margin-top margin-right margin-left margin-bottom float"></a>
 </section>
 <section class="content All Common" id="foot-kurosign">
-<a href="https://lit.link/kkuurroo"><img src="./img/sign_white.svg" alt="content_img" style="width: clamp(calc(10px * 38 / 32), calc(2.2vw * 38 / 32), 50.16px);;margin-top: 0; margin-right: 0; margin-left: 0; margin-bottom: 0; float: right;" class="content_img"></a>
+<a href="https://lit.link/kkuurroo"><img src="./img/sign_white.svg" alt="content_img" class="content_img" style=" width: clamp(calc(10px * 38 / 32), calc(2.2vw * 38 / 32), 50.16px) !important;margin-top: 0 !important;margin-right: 0 !important;margin-left: 0 !important;margin-bottom: 0 !important;float: right !important;" data-sheet-style="width margin-top margin-right margin-left margin-bottom float"></a>
 </section>
 </div>
 </div>

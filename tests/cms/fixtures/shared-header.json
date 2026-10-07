@@ -1,0 +1,412 @@
+{
+  "provenance": "Preview Sheet header and parameters snapshot, 2026-10-07. Remote asset URLs are canonicalized to public local image filenames; all structural rows, blank Lab cells, labels, IDs and styles are retained.",
+  "header": [
+    [
+      "Lab",
+      "Language",
+      "Function",
+      "Parameter 1",
+      "Parameter 2",
+      "Parameter 3",
+      "Parameter 4",
+      "Parameter 5",
+      "Parameter 6",
+      "Parameter 7",
+      "Parameter 8",
+      "Parameter 9",
+      "Parameter 10",
+      "Parameter 11",
+      "Parameter 12",
+      "Parameter 13",
+      "Parameter 14",
+      "Parameter 15",
+      "Parameter 16",
+      "Parameter 17"
+    ],
+    [
+      "All",
+      "Common",
+      "div",
+      "v",
+      "head",
+      "/* Style (Optional)"
+    ],
+    [
+      "All",
+      "Common",
+      "div",
+      "h",
+      "head-title",
+      "justify-content: flex-between; width: 100%;"
+    ],
+    [
+      "UBC",
+      "Common",
+      "Content",
+      "",
+      "./img/two_logos_on_white_on_black.svg",
+      "/* img width (Optional)",
+      "/* img height (Optional)",
+      "/* insta filter (Optional)",
+      "/* img style (Optional)",
+      "./index.html",
+      "frontlogo",
+      "z-index: 2;"
+    ],
+    [
+      "UBC",
+      "Common",
+      "Content",
+      "",
+      "./img/two_logos_teal_on_white.svg",
+      "/* img width (Optional)",
+      "/* img height (Optional)",
+      "/* insta filter (Optional)",
+      "/* img style (Optional)",
+      "./index.html",
+      "backlogo",
+      "z-index: 1;"
+    ],
+    [
+      "Osaka",
+      "Common",
+      "Content",
+      "",
+      "./img/two_logos_on_white_on_black.svg",
+      "/* img width (Optional)",
+      "/* img height (Optional)",
+      "/* insta filter (Optional)",
+      "/* img style (Optional)",
+      "./index.html",
+      "frontlogo2",
+      "z-index: 2;"
+    ],
+    [
+      "Osaka",
+      "Common",
+      "Content",
+      "",
+      "./img/two_logos_teal_on_white.svg",
+      "/* img width (Optional)",
+      "/* img height (Optional)",
+      "/* insta filter (Optional)",
+      "/* img style (Optional)",
+      "./index.html",
+      "backlogo2",
+      "z-index: 1;"
+    ],
+    [
+      "All",
+      "Common",
+      "div",
+      "h",
+      "top-menu",
+      "/* Style (Optional)"
+    ],
+    [
+      "All",
+      "Common",
+      "Content",
+      "[Software](software.html)",
+      "/* img url (Optional)",
+      "/* img width (Optional)",
+      "/* img height (Optional)",
+      "/* insta filter (Optional)",
+      "/* img style (Optional)",
+      "/* img hyperlink (Optional)",
+      "/* ID (Optional)",
+      "/* Style (Optional)"
+    ],
+    [
+      "All",
+      "Common",
+      "Content",
+      "[Downloads](download.html)",
+      "/* img url (Optional)",
+      "/* img width (Optional)",
+      "/* img height (Optional)",
+      "/* insta filter (Optional)",
+      "/* img style (Optional)",
+      "/* img hyperlink (Optional)",
+      "/* ID (Optional)",
+      "/* Style (Optional)"
+    ],
+    [
+      "All",
+      "Common",
+      "Content",
+      "[Collabs](collab.html)",
+      "/* img url (Optional)",
+      "/* img width (Optional)",
+      "/* img height (Optional)",
+      "/* insta filter (Optional)",
+      "/* img style (Optional)",
+      "/* img hyperlink (Optional)",
+      "/* ID (Optional)",
+      "/* Style (Optional)"
+    ],
+    [
+      "All",
+      "Common",
+      "Content",
+      "[Gallery](news.html)",
+      "/* img url (Optional)",
+      "/* img width (Optional)",
+      "/* img height (Optional)",
+      "/* insta filter (Optional)",
+      "/* img style (Optional)",
+      "/* img hyperlink (Optional)",
+      "/* ID (Optional)",
+      "/* Style (Optional)"
+    ],
+    [
+      "All",
+      "Common",
+      "Content",
+      "[Plasmids](https://www.addgene.org/Nozomu_Yachie/)",
+      "/* img url (Optional)",
+      "/* img width (Optional)",
+      "/* img height (Optional)",
+      "/* insta filter (Optional)",
+      "/* img style (Optional)",
+      "/* img hyperlink (Optional)",
+      "/* ID (Optional)",
+      "/* Style (Optional)"
+    ],
+    [
+      "All",
+      "Common",
+      "/div"
+    ],
+    [
+      "All",
+      "Common",
+      "/div"
+    ],
+    [
+      "",
+      "",
+      "div",
+      "h",
+      "head-lang-logo",
+      "width: 100%; justify-content: right"
+    ],
+    [
+      "All",
+      "Common",
+      "div",
+      "h",
+      "languages",
+      "font-family: raleway; justify-content: right; width: 25%;"
+    ],
+    [
+      "All",
+      "Common",
+      "Content",
+      "English",
+      "/* img url (Optional)",
+      "/* img width (Optional)",
+      "/* img height (Optional)",
+      "/* insta filter (Optional)",
+      "/* img style (Optional)",
+      "/* img hyperlink (Optional)",
+      "EN",
+      "/* Style (Optional)"
+    ],
+    [
+      "All",
+      "Common",
+      "Content",
+      "日本語",
+      "/* img url (Optional)",
+      "/* img width (Optional)",
+      "/* img height (Optional)",
+      "/* insta filter (Optional)",
+      "/* img style (Optional)",
+      "/* img hyperlink (Optional)",
+      "JA",
+      "/* Style (Optional)"
+    ],
+    [
+      "All",
+      "Common",
+      "Content",
+      "中文",
+      "/* img url (Optional)",
+      "/* img width (Optional)",
+      "/* img height (Optional)",
+      "/* insta filter (Optional)",
+      "/* img style (Optional)",
+      "/* img hyperlink (Optional)",
+      "ZH",
+      "/* Style (Optional)"
+    ],
+    [
+      "All",
+      "Common",
+      "/div"
+    ],
+    [
+      "",
+      "",
+      "/div"
+    ],
+    [
+      "All",
+      "Common",
+      "/div"
+    ]
+  ],
+  "parameters": [
+    [
+      "Function ",
+      "Parameter 1",
+      "Parameter 2",
+      "Parameter 3",
+      "Parameter 4",
+      "Parameter 5",
+      "Parameter 6",
+      "Parameter 7",
+      "Parameter 8",
+      "Parameter 9",
+      "Parameter 10",
+      "Parameter 11",
+      "Parameter 12",
+      "Parameter 13",
+      "Parameter 14",
+      "Parameter 15",
+      "Parameter 16",
+      "Parameter 17",
+      "Parameter 18"
+    ],
+    [
+      "H1",
+      "/* Title",
+      "/* ID (Optional)",
+      "/* Style (Optional)"
+    ],
+    [
+      "H2",
+      "/* Title",
+      "/* ID (Optional)",
+      "/* Style (Optional)"
+    ],
+    [
+      "H3",
+      "/* Title",
+      "/* ID (Optional)",
+      "/* Style (Optional)"
+    ],
+    [
+      "Content",
+      "/* Text",
+      "/* img url (Optional)",
+      "/* img width (Optional)",
+      "/* img height (Optional)",
+      "/* insta filter (Optional)",
+      "/* img style (Optional)",
+      "/* img hyperlink (Optional)",
+      "/* ID (Optional)",
+      "/* Style (Optional)"
+    ],
+    [
+      "Member",
+      "/* Name",
+      "/* Personal links",
+      "/* Position",
+      "/* Start Date",
+      "/* End Date",
+      "/* Name in publication",
+      "/* Photo url (Optional)",
+      "/* insta filter (Optional)",
+      "/* Biosketch (Optional)",
+      "/* Project (Optional)",
+      "/* E-mail (Optional)",
+      "/* Hobby or fun fact (Optional)",
+      "/* Twitter (Optional)",
+      "/* Others (e.g.: Github: <a href=\"https:/* github.com/ponnhide\">@ponnhide</a>)",
+      "/* Margin top (Optional)",
+      "/* Margin bottom (Optional)",
+      "/* ID (Optional)"
+    ],
+    [
+      "Publication",
+      "/* Pubmed ID",
+      "/* Journal link",
+      "/* PDF link (Optional)",
+      "/* Highlighted authors",
+      "/* Equally contributed authors (Optional)",
+      "/* Corresponding authors (Optional)",
+      "/* img url (Optional)",
+      "/* img width (Optional)",
+      "/* img height (Optional)",
+      "/* Related info (Optional)",
+      "/* Margin top (Optional)",
+      "/* Margin bottom (Optional)",
+      "/* ID (Optional)"
+    ],
+    [
+      "Publication (custom)",
+      "/* Title",
+      "/* Authors",
+      "/* Journal",
+      "/* Journal link",
+      "/* Vol",
+      "/* Page",
+      "/* Year, Date",
+      "/* PDF link (Optional)",
+      "/* Highlighted authors",
+      "/* Equally contributed authors (Optional)",
+      "/* Corresponding authors (Optional)",
+      "/* img url (Optional)",
+      "/* img width (Optional)",
+      "/* img height (Optional)",
+      "/* Related info (Optional)",
+      "/* Margin top (Optional)",
+      "/* Margin bottom (Optional)",
+      "/* ID (Optional)"
+    ],
+    [
+      "Post",
+      "/* Link",
+      "/* ID (Optional)",
+      "/* Style (Optional)"
+    ],
+    [
+      "div",
+      "/* Direction (\"h\" or \"v\")",
+      "/* ID (Optional)",
+      "/* Style (Optional)"
+    ],
+    [
+      "/div"
+    ],
+    [
+      "Alumni",
+      "/* Name",
+      "/* Personal links",
+      "/* Former affiliation",
+      "/* Start date",
+      "/* End date",
+      "/* Current position",
+      "/* Name in publication",
+      "/* Photo url (Optional)",
+      "/* insta filter (Optional)",
+      "/* Margin top (Optional)",
+      "/* Margin bottom (Optional)",
+      "/* ID (Optional)"
+    ],
+    [
+      "Pass"
+    ],
+    [
+      "News",
+      "/* Text",
+      "/* Date",
+      "/* Name",
+      "/* Avatar img url",
+      "/* img url1 (Optional)",
+      "/* img url2 (Optional)"
+    ]
+  ]
+}
