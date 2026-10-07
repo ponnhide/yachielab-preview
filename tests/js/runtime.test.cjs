@@ -506,6 +506,10 @@ test('Lab-only rows filter by affiliation while All wrappers retain their origin
     browser.document.body.appendChild(section);
     sections[affiliation] = section;
   }
+  const intentionallyHidden = browser.document.createElement('section');
+  intentionallyHidden.classList.add('All');
+  intentionallyHidden.style.display = 'none';
+  browser.document.body.appendChild(intentionallyHidden);
   browser.run('common.js');
   assert.equal(sections.UBC.style.display, 'flex');
   assert.equal(sections.Osaka.style.display, 'none');
@@ -513,6 +517,7 @@ test('Lab-only rows filter by affiliation while All wrappers retain their origin
   assert.equal(sections.UBC.style.display, 'none');
   assert.equal(sections.Osaka.style.display, 'flex');
   assert.equal(sections.All.style.display, 'flex');
+  assert.equal(intentionallyHidden.style.display, 'none', 'All-only wrappers retain intentional display:none');
 });
 
 test('desktop logo clicks stay on the current page and propagate state through internal links', () => {

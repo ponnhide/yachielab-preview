@@ -23,7 +23,9 @@
 
   elements.forEach(function (element) {
     const display = window.getComputedStyle(element).display;
-    originalDisplay.set(element, display === 'none' ? 'block' : display);
+    const variant = element.classList.contains('UBC') || element.classList.contains('Osaka') ||
+      Object.values(languages).some(function (language) { return element.classList.contains(language); });
+    originalDisplay.set(element, display === 'none' && variant ? 'block' : display);
   });
 
   function isMobile() { return window.innerWidth <= mobileWidth; }
