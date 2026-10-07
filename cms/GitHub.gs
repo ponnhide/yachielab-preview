@@ -1,6 +1,9 @@
 // Publish a coherent set of generated HTML/asset changes in one commit.
 function cmsGithub_(endpoint, method, payload, allowMissing) {
   var options = {method: method || 'get', muteHttpExceptions: true, contentType: 'application/json'};
+  var context = cmsContext_();
+  var counter = options.method.toLowerCase() === 'get' ? 'githubReads' : 'githubWrites';
+  context[counter] = (context[counter] || 0) + 1;
   if (payload) options.payload = JSON.stringify(payload);
   var response = previewFetch_('https://api.github.com/repos/' + PREVIEW_REPOSITORY + '/' + endpoint, options);
   if (allowMissing && response.getResponseCode() === 404) return null;
@@ -67,28 +70,53 @@ function cmsSiteSettings_() {
 }
 
 function cmsPublish_(files, message) {
+  files = files.filter(function(file) { return !!file; });
+  var context = cmsContext_();
   var settings = cmsSiteSettings_();
   var snapshot = cmsGithubSnapshot_();
   var current = cmsGithub_('git/ref/heads/' + PREVIEW_BRANCH).object.sha;
   if (current !== snapshot.head) throw new Error('Preview branch changed during rendering. Run the update again.');
-  var seen = {};
-  var entries = files.map(function(file) {
+  var seen = {}, entries = [], pageShas = {}, assetShas = {}, pagesChanged = 0, assetsChanged = 0;
+  Object.keys(snapshot.entries).forEach(function(path) {
+    var entry = snapshot.entries[path];
+    if (entry.type !== 'blob') return;
+    if (/\.html$/.test(path)) pageShas[path] = entry.sha;
+    else if (/^(?:img|pdf)\//.test(path)) assetShas[path] = entry.sha;
+  });
+  var unchangedPageShas = Object.assign({}, pageShas), unchangedAssetShas = Object.assign({}, assetShas);
+  files.forEach(function(file) {
     if (!previewWritablePath_(file.path) || !/\.html$/.test(file.path) || seen[file.path]) throw new Error('Invalid generated file path.');
     seen[file.path] = true;
     var actual = snapshot.entries[file.path];
     if (file.expectedSha && (!actual || actual.sha !== file.expectedSha)) throw new Error('Page changed during rendering: ' + file.path);
-    return {path: file.path, mode: '100644', type: 'blob', content: previewPrepareHtml_(file.html)};
+    var content = previewPrepareHtml_(file.html), sha = cmsGitBlobSha_(content);
+    pageShas[file.path] = sha;
+    if (actual && actual.sha === sha) return;
+    entries.push({path: file.path, mode: '100644', type: 'blob', content: content});
+    pagesChanged++;
   });
-  entries.push({path: 'site-settings.json', mode: '100644', type: 'blob', content: JSON.stringify(settings, null, 2) + '\n'});
-  cmsContext_().pendingAssets.forEach(function(asset) {
+  var settingsContent = JSON.stringify(settings, null, 2) + '\n';
+  var settingsSha = cmsGitBlobSha_(settingsContent), existingSettings = snapshot.entries['site-settings.json'];
+  if (!existingSettings || existingSettings.sha !== settingsSha) entries.push({path: 'site-settings.json', mode: '100644', type: 'blob', content: settingsContent});
+  context.pendingAssets.forEach(function(asset) {
+    var computedSha = cmsGitBlobSha_(Utilities.base64Decode(asset.content));
+    assetShas[asset.path] = computedSha;
+    var actual = snapshot.entries[asset.path];
+    if (actual && actual.sha === computedSha) return;
     var blob = cmsGithub_('git/blobs', 'post', {content: asset.content, encoding: 'base64'});
     entries.push({path: asset.path, mode: '100644', type: 'blob', sha: blob.sha});
+    assetShas[asset.path] = blob.sha;
+    assetsChanged++;
   });
+  if (!entries.length) return {changed: false, commit: snapshot.head, pages: 0, assets: 0, pageShas: pageShas, assetShas: assetShas};
   var tree = cmsGithub_('git/trees', 'post', {base_tree: snapshot.tree, tree: entries});
-  if (tree.sha === snapshot.tree) return {changed: false, commit: snapshot.head};
+  if (tree.sha === snapshot.tree) return {changed: false, commit: snapshot.head, pages: 0, assets: 0, pageShas: unchangedPageShas, assetShas: unchangedAssetShas};
   var commit = cmsGithub_('git/commits', 'post', {message: message || 'Update preview website from Google Sheets', tree: tree.sha, parents: [snapshot.head]});
+  // The non-forced ref update is the final concurrency guard, with a fresh
+  // lease check immediately before it rather than relying only on rendering time.
+  if (cmsGithub_('git/ref/heads/' + PREVIEW_BRANCH).object.sha !== snapshot.head) throw new Error('Preview branch changed before publication. Run the update again.');
   cmsGithub_('git/refs/heads/' + PREVIEW_BRANCH, 'patch', {sha: commit.sha, force: false});
-  return {changed: true, commit: commit.sha, pages: files.length, assets: cmsContext_().pendingAssets.length};
+  return {changed: true, commit: commit.sha, pages: pagesChanged, assets: assetsChanged, pageShas: pageShas, assetShas: assetShas};
 }
 
 // Compatibility entrypoints use the same atomic publisher and isolation checks.

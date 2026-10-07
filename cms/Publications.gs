@@ -37,23 +37,59 @@ function publicationMedline_(text) {
   return bibliography;
 }
 
-function pmid_bibdict(url) {
-  var id = (sheetString_(url).match(/[?&]id=([^&]+)/) || [])[1];
-  var cache = CacheService.getScriptCache();
-  var cacheKey = id ? 'pubmed-medline:v1:' + id : '';
-  var text = cacheKey ? cache.get(cacheKey) : null;
-  if (!text) {
-    text = publicationFetchText_(url, 'PubMed');
-    var parsed = publicationMedline_(text);
-    if (!parsed.PMID || !parsed.TI) throw new Error('PubMed returned no valid MEDLINE citation');
-    // Script Cache has a per-item size limit. Large abstracts can be rendered without caching.
-    if (cacheKey && text.length < 30000) {
-      try { cache.put(cacheKey, text, 21600); }
-      catch (error) { /* Optional cache quota must not prevent a valid citation from rendering. */ }
-    }
-    return parsed;
+function publicationValidatedMedline_(text, expectedId) {
+  var parsed = publicationMedline_(text);
+  // Multiple records must not merge authors/titles into one citation.
+  if (typeof parsed.PMID !== 'string' || !/^\d+$/.test(parsed.PMID.trim()) || typeof parsed.TI !== 'string' || !parsed.TI.trim()) {
+    throw new Error('PubMed returned no valid MEDLINE citation');
   }
-  return publicationMedline_(text);
+  var actualId = parsed.PMID.trim().replace(/^0+(?=\d)/, '');
+  if (expectedId && actualId !== expectedId) throw new Error('PubMed returned a PMID different from the requested citation');
+  return parsed;
+}
+
+function publicationDiscardMedline_(cache, key, required) {
+  if (cache && typeof cache.remove === 'function') {
+    try { cache.remove(key); return; }
+    catch (error) { /* Ordinary rendering still works without optional caching. */ }
+  }
+  if (required) throw new Error('PubMed cache could not be cleared for forced refresh; retry the update.');
+}
+
+function pmid_bibdict(url) {
+  var requested = (sheetString_(url).match(/[?&]id=([^&]+)/) || [])[1];
+  var id = '';
+  try { id = requested ? decodeURIComponent(requested).trim() : ''; }
+  catch (error) { throw new Error('Invalid PubMed citation ID'); }
+  if (id && !/^\d+$/.test(id)) throw new Error('Invalid PubMed citation ID');
+  id = id.replace(/^0+(?=\d)/, '');
+  var cache = null, cacheKey = id ? 'pubmed-medline:v1:' + id : '';
+  var refresh = cmsContext_().refreshData === true;
+  try { cache = CacheService.getScriptCache(); }
+  catch (error) { /* Script Cache is optional; a valid live response still renders. */ }
+  if (!refresh && cache && cacheKey) {
+    var cached = null;
+    try { cached = cache.get(cacheKey); }
+    catch (error) { /* A cache service failure falls back to the source. */ }
+    if (cached) {
+      try { return publicationValidatedMedline_(cached, id); }
+      catch (error) { /* A corrupt/mismatched cache entry is not a valid citation. */ }
+    }
+  }
+  // Forced refresh never reads/falls back to old metadata. Failed responses
+  // propagate without touching the previous validated cache entry.
+  var text = publicationFetchText_(url, 'PubMed');
+  var parsed = publicationValidatedMedline_(text, id);
+  // A validated replacement must evict old data even if the new text is too
+  // large to cache or cache.put fails. Otherwise later HTML rebuilds can roll
+  // the successfully refreshed citation back to its old metadata.
+  if (cacheKey) publicationDiscardMedline_(cache, cacheKey, refresh);
+  // Script Cache has a per-item size limit. Large abstracts render without it.
+  if (cache && cacheKey && text.length < 30000) {
+    try { cache.put(cacheKey, text, 21600); }
+    catch (error) { publicationDiscardMedline_(cache, cacheKey, false); }
+  }
+  return parsed;
 }
 
 function biorxiv_bibdict(url) {

@@ -6,6 +6,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
 const assert = require('node:assert/strict');
+const crypto = require('node:crypto');
 const { test } = require('node:test');
 const root = path.resolve(__dirname, '../..');
 const PREVIEW_SHEET = '1TRYhl0WmqhEykYCvFtZzJG4J17YChKiqausAxT8iwHk';
@@ -36,13 +37,13 @@ function fixture(options = {}) {
   const state = {
     io: [], activeId: options.activeId || PREVIEW_SHEET, head: HEAD, tree: TREE,
     treeUnchanged: false, status: options.status || 200,
-    reads: {}, mutations: [], menuItems: [], menusAdded: 0, activeSheet: 'contact',
+    reads: {}, mutations: [], menuItems: [], menusAdded: 0, activeSheet: 'contact', toasts: [], logs: [],
     entries: [
       {path: 'contact.html', type: 'blob', mode: '100644', sha: BLOB},
       {path: 'research.html', type: 'blob', mode: '100644', sha: '1'.repeat(40)},
       {path: 'img/existing.jpg', type: 'blob', mode: '100644', sha: '2'.repeat(40)}
     ],
-    downloads: new Map(), drives: new Map()
+    downloads: new Map(), drives: new Map(), contents: new Map()
   };
   const values = {
     header: [['Lab', 'Language', 'Function', 'Direction', 'ID', 'Style'], ['All', 'Common', 'div', 'v', 'head', '']],
@@ -65,26 +66,54 @@ function fixture(options = {}) {
     research: [['Lab', 'Language', 'Function', 'Title', 'Style'], ['All', 'English', 'H1', 'Research', '']]
   };
   Object.assign(values, options.sheetRows || {});
+  state.values = values;
   function getSheet(name) {
     if (!values[name]) return null;
-    const range = {
-      getDisplayValues() { state.reads[name + ':values'] = (state.reads[name + ':values'] || 0) + 1; return values[name]; },
-      getValues() { state.reads[name + ':values'] = (state.reads[name + ':values'] || 0) + 1; return values[name]; },
-      getRichTextValues() { state.reads[name + ':rich'] = (state.reads[name + ':rich'] || 0) + 1; return values[name].map(row => row.map(() => null)); },
+    function range(startRow, startColumn, rowCount, columnCount) {
+      const matrix = () => Array.from({length: rowCount}, (_, r) => Array.from({length: columnCount}, (_, c) => values[name][startRow + r - 1]?.[startColumn + c - 1] ?? ''));
+      return {
+      getDisplayValues() { state.reads[name + ':values'] = (state.reads[name + ':values'] || 0) + 1; return matrix(); },
+      getValues() { state.reads[name + ':values'] = (state.reads[name + ':values'] || 0) + 1; return matrix(); },
+      getRichTextValues() { state.reads[name + ':rich'] = (state.reads[name + ':rich'] || 0) + 1; return matrix().map(row => row.map(() => null)); },
+      setValues(rows) {
+        assert.equal(name, '_cms_cache', 'Cache writes must not alter source content tabs');
+        if (options.cacheWriteFailure) throw new Error('Mock cache storage failure');
+        state.mutations.push(['setValues', name, rows.length]);
+        rows.forEach((row, r) => row.forEach((cell, c) => {
+          const target = values[name][startRow + r - 1] ||= [];
+          target[startColumn + c - 1] = cell;
+        }));
+        return this;
+      },
+      clearContent() { state.mutations.push(['clearContent', name]); for (let r = 0; r < rowCount; r++) if (values[name][startRow + r - 1]) values[name][startRow + r - 1].splice(startColumn - 1, columnCount, ...Array(columnCount).fill('')); return this; },
+      clear() { return this.clearContent(); },
       setFontColors(value) { state.mutations.push(['setFontColors', name, value]); },
       setFontColor(value) { state.mutations.push(['setFontColor', name, value]); },
-      getFontColors() { return values[name].map(row => row.map(() => '#000000')); }
+      getFontColors() { return matrix().map(row => row.map(() => '#000000')); }
+    }; }
+    const sheet = {
+      getName: () => name,
+      getDataRange: () => range(1, 1, Math.max(1, values[name].length), Math.max(1, ...values[name].map(row => row.length))),
+      getRange: (row = 1, column = 1, rows = values[name].length, columns = Math.max(1, ...values[name].map(value => value.length))) => range(row, column, rows, columns),
+      getLastRow: () => values[name].reduce((last, row, index) => row.some(cell => cell !== '' && cell != null) ? index + 1 : last, 0),
+      getLastColumn: () => Math.max(1, ...values[name].map(row => row.length)),
+      getMaxRows: () => 1000, getMaxColumns: () => 26,
+      clearContents() { state.mutations.push(['clearContents', name]); values[name] = []; return sheet; },
+      hideSheet() { state.mutations.push(['hideSheet', name]); return sheet; },
+      setFrozenRows() { return sheet; },
+      insertRowsAfter() { return sheet; }, insertColumnsAfter() { return sheet; }
     };
-    return { getName: () => name, getDataRange: () => range, getRange: () => range };
+    return sheet;
   }
   const spreadsheet = {
     getId: () => state.activeId, getSheetByName: getSheet,
     getActiveSheet: () => getSheet(state.activeSheet),
-    toast() {}
+    insertSheet(name) { assert.equal(name, '_cms_cache'); values[name] = []; state.mutations.push(['insertSheet', name]); return getSheet(name); },
+    toast(...args) { state.toasts.push(args); }
   };
   const menu = { addItem(label, handler) { state.menuItems.push([label, handler]); return menu; }, addSeparator() { return menu; }, addToUi() { state.menusAdded++; return menu; } };
   const context = {
-    console, GITHUB_TOKEN: options.token === undefined ? 'test-preview-token' : options.token,
+    console: Object.fromEntries(['log', 'info', 'warn', 'error'].map(level => [level, (...args) => state.logs.push([level, ...args])])), GITHUB_TOKEN: options.token === undefined ? 'test-preview-token' : options.token,
     REPO_NAME: options.repo || PREVIEW_REPO, BRANCH: options.branch || PREVIEW_BRANCH,
     PropertiesService: { getScriptProperties: () => ({ getProperty: () => options.token === undefined ? 'test-preview-token' : options.token }) },
     SpreadsheetApp: {
@@ -94,6 +123,8 @@ function fixture(options = {}) {
     LockService: { getDocumentLock: () => ({ tryLock: () => true, waitLock() {}, releaseLock() {} }), getScriptLock: () => ({ tryLock: () => true, waitLock() {}, releaseLock() {} }) },
     Utilities: {
       Charset: { UTF_8: 'UTF-8' },
+      DigestAlgorithm: { SHA_1: 'SHA_1', SHA_256: 'SHA_256' },
+      computeDigest: (algorithm, value) => bytes(crypto.createHash(String(algorithm).replace(/[-_]/g, '').toLowerCase()).update(Buffer.from(typeof value === 'string' ? value : value.map(byte => (byte + 256) % 256))).digest()),
       newBlob: value => blob(value),
       base64Decode: value => bytes(Buffer.from(value, 'base64')),
       base64Encode: value => Buffer.from(typeof value === 'string' ? value : value.map(byte => (byte + 256) % 256)).toString('base64')
@@ -118,13 +149,29 @@ function fixture(options = {}) {
       if (method === 'get' && endpoint.startsWith('git/commits/')) return response({ sha: HEAD, tree: { sha: state.tree } });
       if (method === 'get' && endpoint.startsWith('git/trees/')) return response({ sha: state.tree, tree: state.entries, truncated: Boolean(state.truncated) });
       if (method === 'get' && endpoint.startsWith('contents/site-settings.json')) return response({sha: BLOB, content: Buffer.from(JSON.stringify({logoActiveOpacity: 1, logoInactiveOpacity: 0.5, logoTransitionMs: 300})).toString('base64')});
-      if (method === 'get' && endpoint.startsWith('contents/')) return response({ sha: BLOB, content: Buffer.from(html).toString('base64') });
+      if (method === 'get' && endpoint.startsWith('contents/')) {
+        const name = endpoint.slice('contents/'.length).split('?')[0];
+        const entry = state.entries.find(value => value.path === name);
+        return response({ sha: entry ? entry.sha : BLOB, content: Buffer.from(state.contents.get(name) || html).toString('base64') });
+      }
       if (method === 'post' && endpoint === 'git/blobs') return response({ sha: '3'.repeat(40) }, 201);
-      if (method === 'post' && endpoint === 'git/trees') return response({ sha: state.treeUnchanged ? state.tree : NEW_TREE }, 201);
-      if (method === 'post' && endpoint === 'git/commits') return response({ sha: COMMIT }, 201);
+      if (method === 'post' && endpoint === 'git/trees') {
+        state.preparedEntries = payload.tree;
+        return response({ sha: state.treeUnchanged ? state.tree : NEW_TREE }, 201);
+      }
+      if (method === 'post' && endpoint === 'git/commits') {
+        if (state.changeHeadBeforeFinalRef) state.head = CHANGED_HEAD;
+        return response({ sha: COMMIT }, 201);
+      }
       if (method === 'patch' && endpoint === 'git/refs/heads/' + PREVIEW_BRANCH) {
         if (state.head !== HEAD) return response({ message: 'not fast forward' }, 422);
         state.head = payload.sha;
+        state.tree = NEW_TREE;
+        for (const entry of state.preparedEntries || []) {
+          const sha = entry.sha || gitBlobSha(entry.content);
+          state.entries = state.entries.filter(previous => previous.path !== entry.path).concat([{path: entry.path, type: 'blob', mode: '100644', sha}]);
+          if (entry.content !== undefined) state.contents.set(entry.path, entry.content);
+        }
         return response({ object: { sha: state.head } });
       }
       return response({ ok: true });
@@ -139,7 +186,7 @@ function fixture(options = {}) {
     }
     vm.runInContext(source, context, { filename: name });
   }
-  ['PreviewIsolation.gs', 'SheetRepository.gs', 'SheetStyles.gs', 'GitHub.gs', 'AssetStore.gs'].forEach(load);
+  ['PreviewIsolation.gs', 'SheetRepository.gs', 'SheetStyles.gs', 'Hashes.gs', 'RenderCache.gs', 'GitHub.gs', 'AssetStore.gs'].forEach(load);
   state.context = context;
   state.load = load;
   state.github = (endpoint, method = 'get', payload) => context.previewFetch_('https://api.github.com/repos/' + PREVIEW_REPO + '/' + endpoint, {method, payload: payload === undefined ? undefined : JSON.stringify(payload)});
@@ -152,6 +199,14 @@ function blockedWithoutIo(state, action) {
 }
 function writeEntries() { return [{path: 'contact.html', type: 'blob', mode: '100644', content: html}]; }
 function posts(state, endpoint) { return state.io.filter(call => call.method === 'post' && call.url.endsWith('/' + endpoint)); }
+function gitBlobSha(value) {
+  const content = Buffer.isBuffer(value) ? value : Buffer.from(value);
+  return crypto.createHash('sha1').update(Buffer.from('blob ' + content.length + '\0')).update(content).digest('hex');
+}
+function addCurrentSettings(state) {
+  const content = JSON.stringify({logoActiveOpacity: 1, logoInactiveOpacity: 0.5, logoTransitionMs: 300}, null, 2) + '\n';
+  state.entries.push({path: 'site-settings.json', type: 'blob', mode: '100644', sha: gitBlobSha(content)});
+}
 
 // Guard tests deliberately call the lowest-level network boundary directly.
 test('wrong spreadsheet and wrong repository/constants stop before any network request', () => {
@@ -477,6 +532,8 @@ test('actual shared header rows preserve the language controls after blank Lab w
   ['showdown.gs', 'Renderer.gs', 'Publications.gs', 'Cms.gs'].forEach(state.load);
   assert.ok(fixtureRows.header.some(row => row[0] === '' && row[2] === 'div' && row[4] === 'head-lang-logo'));
   assert.ok(fixtureRows.header.some(row => row[0] === '' && row[2] === '/div'));
+  state.context.cmsGithubSnapshot_(); // Real menu actions capture this before rendering.
+  const initialIo = state.io.length;
   const rendered = state.context.cmsRenderRows_('header');
   assertBalancedMarkup(rendered);
   assert.equal((rendered.match(/<div\b/g) || []).length, 5);
@@ -490,7 +547,7 @@ test('actual shared header rows preserve the language controls after blank Lab w
   assert.ok(languageWrapper > rendered.indexOf('id="top-menu"'));
   assert.ok(rendered.indexOf('id="languages"') > languageWrapper);
   assert.ok(rendered.indexOf('id="ZH"') > languageWrapper);
-  assert.equal(state.io.length, 0, 'Rendering local header rows must not call GitHub or download assets');
+  assert.equal(state.io.length, initialIo, 'Local header rendering reuses the captured repository tree and must not download assets');
 });
 
 test('blank Lab still terminates an independent page even when later rows have valid functions', () => {
@@ -506,4 +563,200 @@ test('blank Lab still terminates an independent page even when later rows have v
   assert.doesNotMatch(rendered, /Blank Lab terminates|Must not leak/);
   assertBalancedMarkup(rendered);
   assert.equal(state.io.length, 0);
+});
+
+test('identical UTF-8 HTML and settings skip all writes while returning page SHAs for cache commit', () => {
+  const state = fixture();
+  addCurrentSettings(state);
+  const expected = gitBlobSha(state.context.previewPrepareHtml_(html));
+  state.entries.find(entry => entry.path === 'contact.html').sha = expected;
+  const result = state.context.cmsPublish_([{path: 'contact.html', html, expectedSha: expected}]);
+  assert.equal(result.changed, false);
+  assert.equal(result.pages, 0);
+  assert.equal(result.pageShas['contact.html'], expected);
+  assert.equal(state.io.filter(call => call.method !== 'get').length, 0);
+  assert.equal(state.io.filter(call => call.url.includes('/git/ref/heads/')).length, 2, 'Snapshot and final no-op lease must both be checked');
+});
+
+test('zero HTML files with unchanged settings avoids tree, commit and ref writes', () => {
+  const state = fixture();
+  addCurrentSettings(state);
+  const result = state.context.cmsPublish_([]);
+  assert.equal(result.changed, false);
+  assert.equal(result.pages, 0);
+  assert.equal(result.commit, HEAD);
+  assert.equal(posts(state, 'git/trees').length, 0);
+  assert.equal(state.io.filter(call => call.method !== 'get').length, 0);
+});
+
+test('unchanged binary assets skip blob uploads as well as publication trees', () => {
+  const state = fixture();
+  addCurrentSettings(state);
+  const content = Buffer.from([255, 216, 255, 224, 0, 16, 255, 217]);
+  const expected = gitBlobSha(content);
+  state.entries.find(entry => entry.path === 'img/existing.jpg').sha = expected;
+  state.context.cmsContext_().pendingAssets.push({path: 'img/existing.jpg', content: content.toString('base64')});
+  const result = state.context.cmsPublish_([]);
+  assert.equal(result.changed, false);
+  assert.equal(result.assets, 0);
+  assert.equal(result.assetShas['img/existing.jpg'], expected);
+  assert.equal(posts(state, 'git/blobs').length, 0);
+  assert.equal(posts(state, 'git/trees').length, 0);
+});
+
+test('a branch change immediately before the final ref update never publishes the prepared commit', () => {
+  const state = fixture();
+  state.changeHeadBeforeFinalRef = true;
+  assert.throws(() => state.context.cmsPublish_([{path: 'contact.html', html, expectedSha: BLOB}]), /changed before publication/i);
+  assert.equal(posts(state, 'git/commits').length, 1, 'An unreferenced prepared commit is safe to leave behind');
+  assert.equal(state.io.filter(call => call.method === 'patch').length, 0);
+});
+
+test('a valid fragment cache hit returns null without Contents GET or Cheerio processing', () => {
+  const state = fixture();
+  state.load('Cms.gs');
+  state.context.cmsCacheCanSkipFragment_ = () => true;
+  state.context.Cheerio = {load() { throw new Error('Cached pages must not be parsed'); }};
+  assert.equal(state.context.cmsReplaceFragment_('contact', '.posts', 'same fragment'), null);
+  assert.equal(state.io.length, 0);
+  assert.equal(state.context.cmsContext_().cacheStats.pagesSkipped, 1);
+});
+
+test('shared-component cache hits render each source once and skip every page Contents GET', () => {
+  const state = fixture();
+  addCurrentSettings(state);
+  state.load('Cms.gs');
+  const rendered = [];
+  state.context.cmsRenderRows_ = name => { rendered.push(name); return '<div>' + name + '</div>'; };
+  state.context.cmsCacheCanSkipFragment_ = () => true;
+  state.context.Cheerio = {load() { throw new Error('Shared cache hits must not be parsed'); }};
+  const result = state.context.update_shared_components();
+  assert.deepEqual(rendered, ['header', 'footer', 'sidebar', 'mobilemenu']);
+  assert.equal(result.changed, false);
+  assert.equal(result.metrics.pagesSkipped, 3, 'Two registered pages plus the homepage are skipped once each');
+  assert.equal(state.io.filter(call => call.url.includes('/contents/')).length, 0);
+  assert.equal(posts(state, 'git/trees').length, 0);
+});
+
+test('mixed shared-component hits fetch and parse a page once and stage all selector SHAs', () => {
+  const state = fixture();
+  state.load('Cms.gs');
+  state.context.cmsCacheCanSkipFragment_ = (name, selector) => selector !== 'footer';
+  const changes = ['#normal_header', 'footer', 'aside', '#mobile-menu'].map(selector => ({selector, fragment: '<div>' + selector + '</div>'}));
+  const appended = [], staged = []; let parsed = 0;
+  state.context.Cheerio = {load() {
+    parsed++;
+    return selector => ({length: 1, attr() { return this; }, empty() { return this; }, append(fragment) { appended.push([selector, fragment]); return this; }, html() { return '<head></head><body><footer>updated</footer></body>'; }});
+  }};
+  state.context.cmsCacheStagePage_ = (file, selector, fragment) => staged.push([file.path, selector, fragment]);
+  const file = state.context.cmsReplaceFragments_('contact', changes);
+  assert.equal(file.path, 'contact.html');
+  assert.equal(parsed, 1);
+  assert.equal(state.io.filter(call => call.url.includes('/contents/')).length, 1);
+  assert.equal(appended.length, 1);
+  assert.equal(appended[0][0], 'footer');
+  assert.deepEqual(staged.map(value => value[1]), changes.map(value => value.selector), 'Cached selectors must inherit the newly published full-page SHA too');
+});
+
+test('cache-save failures after publication remain success and log no cache payload', () => {
+  const state = fixture();
+  state.load('Cms.gs');
+  state.context.cmsCacheCommit_ = () => { throw new Error('PRIVATE CACHE PAYLOAD'); };
+  const result = state.context.cmsRun_(() => state.context.cmsPublish_([{path: 'contact.html', html, expectedSha: BLOB}]), 'update_webpage');
+  assert.equal(result.changed, true);
+  assert.equal(result.cacheSaved, false);
+  assert.equal(result.metrics.cacheWriteErrors, 1);
+  assert.equal(state.head, COMMIT);
+  assert.match(state.toasts.at(-1)[0], /Preview updated/);
+  assert.match(state.toasts.at(-1)[0], /Cache save failed/);
+  assert.doesNotMatch(JSON.stringify(state.logs), /PRIVATE CACHE PAYLOAD/);
+  const metrics = JSON.parse(state.logs.find(entry => entry[0] === 'info')[1].replace('CMS metrics: ', ''));
+  assert.equal(metrics.command, 'update_webpage');
+  assert.ok(Object.entries(metrics).every(([key, value]) => key === 'command' || typeof value === 'number'));
+});
+
+test('member and journal getters stay lazy and read each source tab at most once', () => {
+  const state = fixture();
+  const context = state.context.cmsContext_();
+  assert.deepEqual(Object.keys(state.reads).sort(), ['item list:rich', 'item list:values', 'parameters:rich', 'parameters:values']);
+  assert.equal(context.sheetReads, 2);
+  const members = context.members;
+  assert.equal(context.members, members);
+  assert.equal(state.reads['people:values'], 1);
+  assert.equal(state.reads['alumni:values'], 1);
+  assert.equal(context.sheetReads, 4);
+  const journals = context.journals;
+  assert.equal(context.journals, journals);
+  assert.equal(state.reads['item list:values'], 1);
+});
+
+test('rebuild, fresh-data and asset refresh handlers set distinct flags without leaking them between runs', () => {
+  const state = fixture();
+  state.load('Cms.gs');
+  const flags = [];
+  state.context.cmsUpdateTab_ = () => {
+    const context = state.context.cmsContext_();
+    flags.push([!!context.forceRegenerate, !!context.refreshData, !!context.refreshAssets]);
+    return {changed: false, pages: 0, assets: 0};
+  };
+  state.context.cmsCacheCommit_ = result => { result.cacheSaved = true; };
+  state.context.rebuild_current_page();
+  state.context.refresh_current_data();
+  state.context.refresh_current_assets();
+  assert.deepEqual(flags, [[true, false, false], [false, true, false], [false, false, true]]);
+});
+
+test('a failed publication never commits a performance cache', () => {
+  const state = fixture();
+  state.load('Cms.gs');
+  let cacheCommits = 0;
+  state.context.cmsCacheCommit_ = () => cacheCommits++;
+  assert.throws(() => state.context.cmsRun_(() => {
+    state.head = CHANGED_HEAD;
+    return state.context.cmsPublish_([{path: 'contact.html', html, expectedSha: BLOB}]);
+  }), /changed during rendering/i);
+  assert.equal(cacheCommits, 0);
+  assert.equal(state.mutations.length, 0);
+});
+
+test('an actual cold-then-warm update reuses rows and avoids Contents, trees and cache rewrites', () => {
+  const state = fixture();
+  addCurrentSettings(state);
+  ['showdown.gs', 'Renderer.gs', 'Publications.gs', 'Cms.gs'].forEach(state.load);
+  state.context.Cheerio = {load() {
+    let posts = '';
+    return selector => ({length: 1, attr() { return this; }, empty() { return this; }, append(fragment) { if (selector === '.posts') posts = fragment; return this; },
+      html() { return '<head></head><body data-page="contact"><main><div class="posts">' + posts + '</div></main></body>'; }});
+  }};
+  const cold = state.context.update_webpage();
+  assert.equal(cold.changed, true);
+  assert.equal(cold.metrics.rowsRendered, 1);
+  assert.equal(cold.cacheSaved, true);
+  assert.ok(state.values._cms_cache.length > 1, 'Successful publication creates the disposable cache');
+  assert.equal(state.reads['people:values'], undefined, 'Non-publication rendering must not read member metadata');
+  const mutationCount = state.mutations.length;
+  state.io.length = 0;
+  state.context.Cheerio = {load() { throw new Error('Warm cache must skip the HTML parser'); }};
+  const warm = state.context.update_webpage();
+  assert.equal(warm.changed, false);
+  assert.equal(warm.metrics.rowsRendered, 0);
+  assert.equal(warm.metrics.rowsReused, 1);
+  assert.equal(warm.metrics.pagesSkipped, 1);
+  assert.equal(state.io.filter(call => call.url.includes('/contents/')).length, 0);
+  assert.equal(state.io.filter(call => call.method !== 'get').length, 0);
+  assert.equal(state.mutations.length, mutationCount, 'Unchanged cache records need no Sheet write');
+});
+
+test('rebuild bypasses both row reuse and the full-page fragment skip', () => {
+  const state = fixture();
+  state.load('Cms.gs');
+  state.context.cmsContext_().forceRegenerate = true;
+  state.context.cmsCacheCanSkipFragment_ = () => { throw new Error('Rebuild must not consult the page skip cache'); };
+  state.context.cmsCacheStagePage_ = () => {};
+  let parsed = 0;
+  state.context.Cheerio = {load() { parsed++; return () => ({length: 1, attr() { return this; }, empty() { return this; }, append() { return this; }, html() { return '<body></body>'; }}); }};
+  const file = state.context.cmsReplaceFragment_('contact', '.posts', 'unchanged');
+  assert.equal(file.path, 'contact.html');
+  assert.equal(parsed, 1);
+  assert.equal(state.io.filter(call => call.url.includes('/contents/')).length, 1);
 });

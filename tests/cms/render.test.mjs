@@ -12,28 +12,28 @@ function check(name, callback) {
   console.log(`PASS ${name}`);
 }
 function setup(overrides = {}) {
-  const calls = [], sleeps = [], cache = new Map(), uploads = [];
+  const calls = [], sleeps = [], cache = new Map(), cacheReads = [], cacheWrites = [], cacheRemovals = [], uploads = [];
   let reads = 0;
   const parameters = {
     H1: ['Lab', 'Language', 'Function', '/* Title', '/* ID', '/* Style'],
     Content: ['Lab', 'Language', 'Function', '/* Text', '/* img url', '/* img width', '/* img height', '/* insta filter', '/* img style', '/* img hyperlink', '/* ID', '/* Style'],
     Member: ['Lab', 'Language', 'Function', '/* Name', '/* Personal links', '/* Position', '/* Start Date', '/* End Date', '/* Name in publication', '/* Photo url', '/* insta filter', '/* Biosketch', '/* Project', '/* E-mail', '/* Hobby or fun fact', '/* Twitter', '/* Others', '/* Margin top', '/* Margin bottom', '/* ID'],
   };
-  const context = { parameters, members: ['Lab A'], journals: { 'Long journal': 'Journal' } };
+  const context = { parameters, members: ['Lab A'], journals: { 'Long journal': 'Journal' }, refreshData: false, refreshAssets: false, forceRegenerate: false };
   const sandbox = {
     console: { log() { throw new Error('Renderer must not log raw row values'); } },
     cmsContext_: () => { reads++; return context; },
     PreElement: 'START', PostElement: 'END', PubRepDict: {}, MDLINKREG: /\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g,
     uploadImg: url => { uploads.push(url); return './img/' + new URL(url).pathname.split('/').pop(); },
     Utilities: { sleep: milliseconds => sleeps.push(milliseconds) },
-    CacheService: { getScriptCache: () => ({ get: key => cache.get(key) || null, put: (key, value, ttl) => { assert.equal(ttl, 21600); cache.set(key, value); } }) },
+    CacheService: { getScriptCache: () => ({ get: key => { cacheReads.push(key); return cache.get(key) || null; }, remove: key => { cacheRemovals.push(key); cache.delete(key); }, put: (key, value, ttl) => { assert.equal(ttl, 21600); cacheWrites.push({key, value, ttl}); cache.set(key, value); } }) },
     PropertiesService: { getScriptProperties: () => ({ getProperty: () => null }) },
     previewFetch_: (url, options) => { calls.push({ url, options }); return { getResponseCode: () => 200, getContentText: () => 'PMID- 123\nTI  - A title - with a hyphen\n      continued title\nAU  - Lab A\nJT  - Long journal\nVI  - 2\nDP  - 2026 Oct\n' }; },
     ...overrides,
   };
   const runtime = vm.createContext(sandbox);
   for (const filename of modules) vm.runInContext(fs.readFileSync(path.join(root, 'cms', filename), 'utf8'), runtime, { filename });
-  return { runtime, context, calls, sleeps, cache, uploads, reads: () => reads };
+  return { runtime, context, calls, sleeps, cache, cacheReads, cacheWrites, cacheRemovals, uploads, reads: () => reads };
 }
 
 check('Explicit Sheet values win; motion and generated layout keep normal priority', () => {
@@ -166,6 +166,143 @@ check('MEDLINE preserves multiline hyphenated titles, caches only valid results 
   assert.equal(calls.length, 1); assert.deepEqual(sleeps, [350]);
   const html = r.pmid_html(first, ['Lab A'], '123', '', '', '', '', [], [], '', 'All', 'Common', 'pub');
   assert(html.includes('2, 2026')); assert(!html.includes('undefined')); assert(!html.includes(' & <span'));
+});
+check('Forced data refresh bypasses old PubMed cache and saves only validated fresh metadata', () => {
+  let requests = 0;
+  const fresh = 'PMID- 123\nTI  - Fresh title\nAU  - Lab A\n';
+  const state = setup({ previewFetch_: () => { requests++; return {getResponseCode: () => 200, getContentText: () => fresh}; } });
+  const key = 'pubmed-medline:v1:123';
+  state.cache.set(key, 'PMID- 123\nTI  - Previous title\n');
+  state.context.refreshData = true;
+  assert.equal(state.runtime.pmid_bibdict('https://eutils.ncbi.nlm.nih.gov/?id=123').TI, 'Fresh title');
+  assert.equal(requests, 1);
+  assert.deepEqual(state.cacheReads, []);
+  assert.deepEqual(state.cacheWrites, [{key, value: fresh, ttl: 21600}]);
+  assert.equal(state.cache.get(key), fresh);
+  assert.deepEqual(state.cacheRemovals, [key]);
+});
+check('A successful force refresh with cache.put failure cannot roll the next normal render back', () => {
+  let requests = 0;
+  const fresh = 'PMID- 123\nTI  - Fresh title after failed put\n';
+  const state = setup({previewFetch_: () => { requests++; return {getResponseCode: () => 200, getContentText: () => fresh}; }});
+  const key = 'pubmed-medline:v1:123';
+  state.cache.set(key, 'PMID- 123\nTI  - Previous title\n');
+  state.runtime.CacheService = {getScriptCache: () => ({
+    get: name => { state.cacheReads.push(name); return state.cache.get(name) || null; },
+    remove: name => { state.cacheRemovals.push(name); state.cache.delete(name); },
+    put: () => { throw new Error('cache quota'); },
+  })};
+  state.context.refreshData = true;
+  assert.equal(state.runtime.pmid_bibdict('https://eutils.ncbi.nlm.nih.gov/?id=123').TI, 'Fresh title after failed put');
+  assert.equal(state.cache.has(key), false);
+  assert.deepEqual(state.cacheRemovals, [key, key]);
+  state.context.refreshData = false;
+  assert.equal(state.runtime.pmid_bibdict('https://eutils.ncbi.nlm.nih.gov/?id=123').TI, 'Fresh title after failed put');
+  assert.equal(requests, 2);
+  assert.equal(state.cache.has(key), false);
+});
+check('An oversized validated force refresh evicts old metadata before the next normal render', () => {
+  let requests = 0;
+  const fresh = 'PMID- 123\nTI  - Fresh large title\nAB  - ' + 'x'.repeat(30000);
+  const state = setup({previewFetch_: () => { requests++; return {getResponseCode: () => 200, getContentText: () => fresh}; }});
+  const key = 'pubmed-medline:v1:123';
+  state.cache.set(key, 'PMID- 123\nTI  - Previous title\n');
+  state.context.refreshData = true;
+  assert.equal(state.runtime.pmid_bibdict('https://eutils.ncbi.nlm.nih.gov/?id=123').TI, 'Fresh large title');
+  assert.equal(state.cache.has(key), false);
+  assert.deepEqual(state.cacheWrites, []);
+  state.context.refreshData = false;
+  assert.equal(state.runtime.pmid_bibdict('https://eutils.ncbi.nlm.nih.gov/?id=123').TI, 'Fresh large title');
+  assert.equal(requests, 2);
+  assert.deepEqual(state.cacheWrites, []);
+});
+check('Forced refresh fails explicitly when old metadata cannot be invalidated', () => {
+  const state = setup();
+  const key = 'pubmed-medline:v1:123';
+  const old = 'PMID- 123\nTI  - Previous title\n';
+  state.cache.set(key, old);
+  state.runtime.CacheService = {getScriptCache: () => ({
+    get: () => { throw new Error('Forced refresh must not read the cache'); },
+    remove: () => { throw new Error('cache removal unavailable'); },
+    put: () => { throw new Error('Must not publish/cache after failed invalidation'); },
+  })};
+  state.context.refreshData = true;
+  assert.throws(() => state.runtime.pmid_bibdict('https://eutils.ncbi.nlm.nih.gov/?id=123'), /cache could not be cleared for forced refresh/);
+  assert.equal(state.cache.get(key), old);
+  assert.deepEqual(state.cacheWrites, []);
+});
+check('Normal rendering, HTML rebuild and asset refresh reuse valid metadata without forcing new data', () => {
+  const state = setup();
+  state.cache.set('pubmed-medline:v1:123', 'PMID- 123\nTI  - Cached title\n');
+  for (const flags of [{refreshData: false}, {refreshData: undefined}, {forceRegenerate: true}, {refreshAssets: true}]) {
+    Object.assign(state.context, flags);
+    assert.equal(state.runtime.pmid_bibdict('https://eutils.ncbi.nlm.nih.gov/?id=123').TI, 'Cached title');
+  }
+  assert.equal(state.calls.length, 0);
+  assert.equal(state.cacheReads.length, 4);
+  assert.equal(state.cacheWrites.length, 0);
+});
+check('Failed forced refresh never reads or returns the old citation and never caches the failure', () => {
+  const old = 'PMID- 123\nTI  - Previous valid title\n';
+  for (const [status, text] of [[503, 'error'], [200, '<html>not MEDLINE</html>'], [200, 'PMID- 999\nTI  - Wrong article\n']]) {
+    let requests = 0;
+    const state = setup({ previewFetch_: () => { requests++; return {getResponseCode: () => status, getContentText: () => text}; } });
+    state.cache.set('pubmed-medline:v1:123', old);
+    state.context.refreshData = true;
+    assert.throws(() => state.runtime.pmid_bibdict('https://eutils.ncbi.nlm.nih.gov/?id=123'), /PubMed/);
+    assert.deepEqual(state.cacheReads, []);
+    assert.deepEqual(state.cacheWrites, []);
+    assert.equal(state.cache.get('pubmed-medline:v1:123'), old, 'Failure must not overwrite the last validated entry');
+    assert.equal(requests, status === 503 ? 3 : 1);
+  }
+});
+check('Corrupt or mismatched cached records fall back to the source instead of rendering mixed metadata', () => {
+  for (const cached of ['<html>broken cache</html>', 'PMID- 999\nTI  - Wrong article\n', 'PMID- 123\nTI  - First\nPMID- 999\nTI  - Second\n']) {
+    const state = setup();
+    state.cache.set('pubmed-medline:v1:123', cached);
+    const parsed = state.runtime.pmid_bibdict('https://eutils.ncbi.nlm.nih.gov/?id=123');
+    assert.equal(parsed.PMID, '123');
+    assert.equal(parsed.TI, 'A title - with a hyphen continued title');
+    assert.equal(state.calls.length, 1);
+    assert.equal(state.cacheReads.length, 1);
+    assert.equal(state.cacheWrites.length, 1);
+  }
+});
+check('Fresh MEDLINE requires one matching PMID and one nonempty title before it can be cached', () => {
+  for (const text of ['PMID- 999\nTI  - Wrong article\n', 'PMID- 123\nTI  - First\nPMID- 999\nTI  - Second\n', 'PMID- 123\nTI  - First\nPMID- 123\nTI  - Duplicate record\n', 'PMID- invalid\nTI  - Title\n', 'PMID- 123\nTI  - \n']) {
+    const state = setup({ previewFetch_: () => ({getResponseCode: () => 200, getContentText: () => text}) });
+    assert.throws(() => state.runtime.pmid_bibdict('https://eutils.ncbi.nlm.nih.gov/?id=123'), /PubMed/);
+    assert.equal(state.cache.size, 0);
+    assert.equal(state.cacheWrites.length, 0);
+  }
+});
+check('Optional cache failures and oversized abstracts cannot prevent valid citations from rendering', () => {
+  for (const CacheService of [
+    {getScriptCache: () => { throw new Error('cache service unavailable'); }},
+    {getScriptCache: () => ({get: () => { throw new Error('cache read failed'); }, remove: () => { throw new Error('cache removal failed'); }, put: () => { throw new Error('cache quota'); }})},
+  ]) {
+    const state = setup({CacheService});
+    assert.equal(state.runtime.pmid_bibdict('https://eutils.ncbi.nlm.nih.gov/?id=123').PMID, '123');
+    assert.equal(state.calls.length, 1);
+  }
+  const large = 'PMID- 123\nTI  - Title\nAB  - ' + 'x'.repeat(30000);
+  const state = setup({ previewFetch_: () => ({getResponseCode: () => 200, getContentText: () => large}) });
+  assert.equal(state.runtime.pmid_bibdict('https://eutils.ncbi.nlm.nih.gov/?id=123').TI, 'Title');
+  assert.equal(state.cacheWrites.length, 0);
+});
+check('PubMed cache keys normalize equivalent numeric IDs and reject malformed query IDs before I/O', () => {
+  const state = setup();
+  state.cache.set('pubmed-medline:v1:123', 'PMID- 123\nTI  - Cached matched title\n');
+  assert.equal(state.runtime.pmid_bibdict('https://eutils.ncbi.nlm.nih.gov/?id=%30%30%31%32%33').TI, 'Cached matched title');
+  assert.deepEqual(state.cacheReads, ['pubmed-medline:v1:123']);
+  assert.equal(state.calls.length, 0);
+  for (const id of ['123invalid', '%ZZ']) {
+    const invalid = setup();
+    assert.throws(() => invalid.runtime.pmid_bibdict('https://eutils.ncbi.nlm.nih.gov/?id=' + id), /Invalid PubMed citation ID/);
+    assert.equal(invalid.calls.length, 0);
+    assert.deepEqual(invalid.cacheReads, []);
+    assert.deepEqual(invalid.cacheWrites, []);
+  }
 });
 check('HTTP 429 and 5xx retry at most three times; permanent failures do not cache', () => {
   let requests = 0;

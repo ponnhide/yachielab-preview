@@ -22,9 +22,8 @@ function cmsContext_() {
     }));
   });
   context.pages = getIndependentPages();
-  context.journals = get_publications();
-  context.members = getMembers();
-  PubRepDict = context.journals;
+  Object.defineProperty(context, 'journals', {enumerable: true, get: function() { return get_publications(); }});
+  Object.defineProperty(context, 'members', {enumerable: true, get: function() { return getMembers(); }});
   return context;
 }
 
@@ -34,6 +33,7 @@ function cmsSheetRows_(name) {
   var sheet = context.spreadsheet.getSheetByName(name);
   if (!sheet) throw new Error('Missing CMS tab: ' + name);
   var range = sheet.getDataRange();
+  context.sheetReads = (context.sheetReads || 0) + 1;
   return context.sheets[name] = {sheet: sheet, values: range.getDisplayValues(), rich: range.getRichTextValues()};
 }
 
@@ -53,16 +53,18 @@ function getIndependentPages() {
 
 function get_publications() {
   if (!CMS_CONTEXT_) return cmsContext_().journals;
+  if (CMS_CONTEXT_._journals) return CMS_CONTEXT_._journals;
   var journals = {};
   cmsSheetRows_('item list').values.slice(1).forEach(function(row) {
     if (row[8] && row[9]) journals[row[8]] = row[9];
   });
-  return journals;
+  return CMS_CONTEXT_._journals = journals;
 }
 
 function getMembers() {
   if (!CMS_CONTEXT_) return cmsContext_().members;
   var context = CMS_CONTEXT_;
+  if (context._members) return context._members;
   var aliases = [];
   ['people', 'alumni'].forEach(function(name) {
     cmsSheetRows_(name).values.slice(1).forEach(function(row) {
@@ -74,5 +76,5 @@ function getMembers() {
       if (value && value.indexOf('/*') !== 0) aliases = aliases.concat(value.split(/,\s*/));
     });
   });
-  return aliases.filter(function(value, index, list) { return value && list.indexOf(value) === index; });
+  return context._members = aliases.filter(function(value, index, list) { return value && list.indexOf(value) === index; });
 }
