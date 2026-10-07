@@ -77,6 +77,37 @@ class AuditTests(unittest.TestCase):
         self.assertEqual(missing, {("cms/template.gs", "pdf/missing.pdf"), ("index.html", "pdf/$1")})
         self.assertEqual(len(report["errors"]), 2)
 
+    def test_concatenated_prefixes_do_not_hide_real_literal_or_complete_paths(self):
+        for affiliation in ("ubc", "osaka"):
+            for color in ("white", "teal"):
+                (self.root / "img" / ("header-" + affiliation + "-" + color + ".svg")).write_text('<svg xmlns="http://www.w3.org/2000/svg"></svg>')
+        (self.root / "cms/builder.gs").write_text("const logo = './img/header-ubc-' /* variant */ + color + '.svg'; const generated = './img/generated-' + name + '.png'; const literal = './img/not-real-'; const complete = './img/missing.jpg' + '?v=3';")
+        (self.root / "js/fallback.js").write_text("const logo = './img/header-' // affiliation follows\n + affiliation + '-' + color + '.svg';")
+        (self.root / "index.html").write_text('<html><head><meta name="robots" content="noindex"></head><body><img src="./img/header-"></body></html>')
+        report = audit(self.root, [])
+        missing = {(item["source"], item["target"]) for item in report["errors"] if item["code"] == "missing-local-file"}
+        self.assertEqual(missing, {("cms/builder.gs", "img/not-real-"), ("cms/builder.gs", "img/missing.jpg"), ("index.html", "img/header-")})
+        self.assertEqual(len(report["errors"]), 3)
+
+    def test_finite_header_family_is_referenced_and_missing_members_are_checked(self):
+        paths = ["img/header-" + affiliation + "-" + color + ".svg" for affiliation in ("ubc", "osaka") for color in ("white", "teal")]
+        for name in paths + ["img/unused.svg"]:
+            (self.root / name).write_text('<svg xmlns="http://www.w3.org/2000/svg"></svg>')
+        (self.root / "cms/builder.gs").write_text("const ubc = './img/header-ubc-' + color + '.svg'; const osaka = './img/header-osaka-' + color + '.svg';")
+        (self.root / "js/fallback.js").write_text("const logo = './img/header-' + affiliation + '-' + color + '.svg';")
+        report = audit(self.root, [])
+        self.assertEqual(report["errors"], [])
+        by_path = {item["path"]: item for item in report["assets"]}
+        for name in paths:
+            self.assertEqual(by_path[name]["status"], "referenced")
+            self.assertIn("cms/builder.gs:code-header-svg-family", by_path[name]["reference_evidence"])
+            self.assertIn("js/fallback.js:code-header-svg-family", by_path[name]["reference_evidence"])
+        self.assertEqual(by_path["img/unused.svg"]["status"], "review-candidate")
+        (self.root / "img/header-osaka-teal.svg").unlink()
+        missing = audit(self.root, [])["errors"]
+        self.assertEqual({item["target"] for item in missing}, {"img/header-osaka-teal.svg"})
+        self.assertEqual({item["source"] for item in missing}, {"cms/builder.gs", "js/fallback.js"})
+
 
 if __name__ == "__main__":
     unittest.main()

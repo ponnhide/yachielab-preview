@@ -263,7 +263,7 @@ test('mobile language controls share state and resizing changes mode without rel
   assert.equal(browser.element('mobile-menu').style.display, '');
   assert.equal(browser.element('mobile-menu').style.visibility, 'hidden');
   assert.equal(browser.reloads, 0);
-  assert.equal(browser.document.querySelector('aside').style.display, 'flex');
+  assert.equal(browser.document.querySelector('aside').style.display, 'flex', 'The homepage with .posts retains its existing desktop setup');
   assert.equal(browser.element('menu-icon').getAttribute('onclick'), null);
 });
 
@@ -360,6 +360,10 @@ function installSplitLogos(browser) {
   const stacks = {};
   for (const id of ['frontlogo', 'backlogo', 'frontlogo2', 'backlogo2']) {
     const section = browser.element(id);
+    // The current Sheet removes the deprecated second pair. Older page fixtures
+    // may still contain it; both shapes must exercise the same stable pair.
+    if (!section && id.endsWith('2')) continue;
+    assert.ok(section, 'Missing required header logo region: ' + id);
     section.querySelectorAll('img, .logo-stack').forEach(element => element.remove());
     const anchor = section.querySelector('a') || section;
     const stack = browser.document.createElement('span');
@@ -687,4 +691,70 @@ test('legacy mobile menus gain one lab selector group and its choices stay on th
   for (const layer of ['frontlogo', 'backlogo']) {
     assert.equal(logoControl(browser, layer, 'UBC').getAttribute('tabindex'), '-1', 'Hidden desktop header controls are not keyboard targets on mobile');
   }
+});
+
+
+test('homepage without .posts has exactly two visible keyboard stops and keeps the clipped back layer hidden', () => {
+  const browser = createBrowser('index.html');
+  // Some saved snapshots retain an empty .posts node; the actual homepage
+  // can omit it. Remove only fixture DOM nodes to exercise that variant.
+  browser.document.querySelectorAll('.posts').forEach(element => element.remove());
+  assert.equal(browser.document.querySelector('.posts') === null, true);
+  browser.run('common.js');
+  browser.flush();
+  const assertHomeLayers = height => {
+    const front = controlledLogo(browser, 'frontlogo');
+    const back = controlledLogo(browser, 'backlogo');
+    assert.equal(front.style.position, 'relative');
+    assert.equal(front.style.height, 'auto');
+    assert.equal(back.style.clipPath, 'inset(' + height + 'px 0px 0px)');
+    for (const affiliation of ['UBC', 'Osaka']) {
+      assert.equal(logoControl(browser, 'frontlogo', affiliation).getAttribute('tabindex'), '0');
+      assert.equal(logoControl(browser, 'frontlogo', affiliation).getAttribute('aria-hidden'), 'false');
+      assert.equal(logoControl(browser, 'backlogo', affiliation).getAttribute('tabindex'), '-1');
+      assert.equal(logoControl(browser, 'backlogo', affiliation).getAttribute('aria-hidden'), 'true');
+    }
+    assert.notEqual(browser.document.querySelector('aside').style.display, 'flex');
+    assert.notEqual(browser.element('languages').style.position, 'fixed');
+  };
+  assertHomeLayers(110);
+  logoControl(browser, 'frontlogo', 'Osaka').dispatch('click');
+  browser.flush();
+  assertHomeLayers(110);
+  browser.metrics.logoHeight = 130;
+  browser.window.dispatch('resize');
+  browser.flush();
+  assertHomeLayers(130);
+  browser.window.dispatch('scroll');
+  browser.flush();
+  assertHomeLayers(130);
+});
+
+
+test('homepage with its empty .posts retains language sticking and desktop setup without interior logo motion', () => {
+  const browser = createBrowser('index.html');
+  assert.equal(browser.document.querySelector('.posts') !== null, true);
+  browser.run('common.js');
+  browser.flush();
+  assert.equal(browser.document.querySelector('aside').style.display, 'flex');
+  assert.equal(browser.element('languages').style.position, 'relative');
+  const front = controlledLogo(browser, 'frontlogo');
+  const back = controlledLogo(browser, 'backlogo');
+  browser.metrics.mainTop = 80;
+  browser.window.dispatch('scroll');
+  browser.flush();
+  assert.equal(browser.element('languages').style.position, 'fixed');
+  assert.equal(front.style.position, 'relative', 'The homepage must not activate the interior logo crop/retreat');
+  assert.equal(front.style.height, 'auto');
+  assert.equal(front.style.top, '0px');
+  assert.equal(back.style.clipPath, 'inset(110px 0px 0px)');
+  for (const affiliation of ['UBC', 'Osaka']) {
+    assert.equal(logoControl(browser, 'frontlogo', affiliation).getAttribute('tabindex'), '0');
+    assert.equal(logoControl(browser, 'backlogo', affiliation).getAttribute('tabindex'), '-1');
+  }
+  browser.metrics.mainTop = -4500;
+  browser.window.dispatch('scroll');
+  browser.flush();
+  assert.equal(front.style.top, '0px');
+  assert.equal(front.style.height, 'auto');
 });

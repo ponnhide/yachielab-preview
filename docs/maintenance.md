@@ -29,7 +29,35 @@ CSS は安定した入口ファイルから基礎・レイアウト・共通部�
 
 白と teal はそれぞれ `.logo-stack` / `.logo-canvas` にまとめ、JS は白の親レイヤーを切り取ります。子 SVG を個別に拡大・移動して色境界を作りません。間隔は `css/components.css` の `.logo-stack` にある `--header-logo-extra-gap: 28.41425`（SVG座標単位）で一括管理します。元の実描画範囲の隙間56.8285へ、その半分28.41425を加えています。キャンバスの高さと下側の開始位置はこの値から同時に計算し、白と teal に同じ間隔を適用します。この値を0に戻すと元の間隔になります。内部キャンバスは幅に比例した自然高を保持するため、スクロールで白の親レイヤーを切り取っても子 SVG の大きさや配置は変わりません。
 
-Sheet のヘッダーで使っている `two_logos_on_white_on_black.svg` と `two_logos_teal_on_white.svg` の指定は維持します。生成時に `Renderer.gs` が `frontlogo` / `backlogo` / `frontlogo2` / `backlogo2` の対象だけを2画像の DOM に変換するため、Sheet から共通部品を再生成しても分離した構造が残ります。その他の画像は従来の1画像として扱います。元の合成 SVG の公開 URL も残しています。
+Sheet のヘッダーで使っている `two_logos_on_white_on_black.svg` と `two_logos_teal_on_white.svg` の指定は維持します。生成時に `Renderer.gs` が対象を個別 SVG と `button.logo-control[data-affiliation]` に変換します。描画は `frontlogo` / `backlogo` の安定した1組とし、描画用の行は `All / Common` で両方の所属ロゴを表示します。以前の `frontlogo2` / `backlogo2` は重複して描画しません。その他の画像は従来の1画像として扱い、元の合成 SVG の公開 URL も残しています。
+
+ロゴをクリックすると、ページを再読み込みせずに所属を切り替えます。選択した所属は URL と内部リンクに反映します。URL に有効な `affil` の指定がない初期表示は、日本語では Osaka、英語・中国語では UBC です。明示的な選択がある場合はその所属を保ちます。`yuka` は引き続き GAS の更新対象外ですが、共通 JS が旧ヘッダーを実行時に補完して同じ選択操作に対応します。
+
+## ロゴの透明度と切り替え時間
+
+専用 Sheet の `header!F2`（ID が `head` の行の Style）で、次の3つの CSS custom properties を設定します。他のレイアウト設定も同じセルに残せます。
+
+```css
+--lab-logo-active-opacity: 1;
+--lab-logo-inactive-opacity: 0.5;
+--lab-logo-transition-duration: 300ms;
+```
+
+| 設定 | 初期値・許容値 |
+| --- | --- |
+| `--lab-logo-active-opacity` | 選択中のロゴ。初期値1、有限の数値0〜1。 |
+| `--lab-logo-inactive-opacity` | 非選択のロゴ。初期値0.5、有限の数値0〜1。 |
+| `--lab-logo-transition-duration` | 透明度の切り替え時間。初期値300ms、`ms` / `s` 単位で0〜10000ms。 |
+
+値を変更した後は、header タブで `Update the current page`、または `Update shared components` を実行します。GAS はこの3項目だけを数値にした公開 `site-settings.json` を、HTML・資産と同じコミットへ保存します。各ページの JS がこの JSON を取得するため、GAS で本文やヘッダーを更新していない `yuka` にも設定が反映されます。公開 JSON に Sheet の本文や認証情報は含めません。不正値・範囲外・単位のない時間指定は、API 通信前に明示的なエラーとします。
+
+## 所属ごとのコンテンツとモバイル操作
+
+表示対象は Sheet の Lab セルを基準にします。`UBC` は UBC 選択時、`Osaka` は Osaka 選択時、`All` は両方で表示します。言語の条件は Language セルで別に指定します。URL や本文の単語から所属を推測して上書きしません。
+
+Join us の UBC 向け本文は Lab=`UBC`、大阪向け本文は Lab=`Osaka`、共通タイトルは Lab=`All` です。冒頭の所属へのジャンプリンクとそのラッパー行は、Sheet に内容を残したまま Function=`Pass` として出力対象から外しています。所属の切り替えはロゴの操作へまとめています。
+
+モバイル用の所属選択は、`mobilemenu` タブの `mobile-lab-switch` ラッパー内にある2つの Content 行で管理します。ID は `mobile-ubc-lab` / `mobile-osaka-lab`、Lab / Language は `All / Common` とし、両方の選択ボタンを常に表示します。生成処理がこれらの行を通常のリンクではなく所属選択のボタンに変換します。大学の外部リンクやホームへのリンクは別に維持します。
 
 ## 安全に GAS を更新する
 
@@ -43,7 +71,7 @@ Sheet のヘッダーで使っている `two_logos_on_white_on_black.svg` と `t
 | `SheetStyles.gs` | Sheet の属性・単位・見た目設定を明示的に HTML へ反映。 |
 | `Publications.gs` | 論文データの取得・解析・引用表示。 |
 | `AssetStore.gs` | 画像・PDF の取得と検証、更新する資産の収集。 |
-| `GitHub.gs` | 生成した HTML と資産をまとめてコミット。 |
+| `GitHub.gs` | 生成した HTML・資産・数値の `site-settings.json` をまとめてコミット。 |
 | `PreviewIsolation.gs` | 検証用の Sheet・リポジトリ・ブランチ・書き込み先の検査と、プレビュー HTML の正規化。 |
 | `showdown.gs` | 同梱した Markdown ライブラリ Showdown 2.0.0。 |
 | `appsscript.json` | 実行環境、依存ライブラリ、OAuth 権限。 |
@@ -69,7 +97,7 @@ Sheet のヘッダーで使っている `two_logos_on_white_on_black.svg` と `t
 
 Sheets の例としては画像の幅・高さ、余白、配置、文字サイズなどがあります。定義があるだけで生成関数が読み取っていなければ反映されないため、変更時には生成結果とブラウザの計算後スタイルの両方を確認します。CSS の整理後も、対応する Sheet 設定を実際に変えるテストを行ってください。
 
-論文行の `/* img width` は、論文行全体を基準に画像欄の幅へ反映します。`Publication (custom)` は P 列、`Publication` は K 列です。例えば `clamp(60px, 50%, 480px)` は行の50%（最小60px・最大480px）を確保し、本文は残りの幅へ折り返します。画像自身は欄の幅を使い、`/* img height` が空なら縦横比を保持します。高さ指定は画像自身へ反映します。幅指定のない行は従来の画像欄（PC約20%・モバイル約25%）を維持します。Sheet の値を保存した後、`Update the current page` を実行して公開HTMLを再生成してください。
+論文行の `/* img width` は、論文行全体を基準に画像欄の幅へ反映します。`Publication (custom)` は P 列、`Publication` は K 列です。現在の `publications!P8:P9` は `clamp(60px, 50%, 350px)` です。行の50%（最小60px・最大350px）を確保し、本文は残りの幅へ折り返します。画像自身は欄の幅を使い、`/* img height` が空なら縦横比を保持します。高さ指定は画像自身へ反映します。幅指定のない行は従来の画像欄（PC約20%・モバイル約25%）を維持します。Sheet の値を保存した後、`Update the current page` を実行して公開HTMLを再生成してください。
 
 ## 動作の確認
 

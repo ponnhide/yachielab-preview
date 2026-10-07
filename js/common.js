@@ -369,6 +369,16 @@
 
   function layout() {
     layoutFrame = null;
+    // Older homepage templates may omit .posts. Their logos still need the shared
+    // clipping/focus policy, without activating interior-page scroll behavior.
+    if (homePage && !main) {
+      const front = logoElement('frontlogo');
+      const back = logoElement('backlogo');
+      const height = back ? back.getBoundingClientRect().height || back.height || 0 : 0;
+      resetLogo(front, back);
+      syncLogoLayers(front, back, height, height);
+      return;
+    }
     if (aside) aside.style.display = isMobile() ? 'none' : 'flex';
     if (!main || !header) return;
     const mainRect = main.getBoundingClientRect();
@@ -401,6 +411,8 @@
     const back = logoElement('backlogo');
     const naturalLogoHeight = back ? back.getBoundingClientRect().height || back.height || 0 : 0;
     if (homePage || isMobile()) {
+      // Homepage language/sidebar setup above is retained, but its logo artwork
+      // has always stayed in normal flow rather than using interior scroll crop.
       resetLogo(front, back);
       syncLogoLayers(front, back, naturalLogoHeight, naturalLogoHeight);
       if (sidebar) sidebar.style.top = originalSidebarTop;

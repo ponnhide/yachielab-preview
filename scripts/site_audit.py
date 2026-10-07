@@ -27,6 +27,11 @@ CSS_URL = re.compile(r"url\(\s*(['\"]?)(.*?)\1\s*\)", re.I)
 CSS_IMPORT = re.compile(r"@import\s+(['\"])(.*?)\1", re.I)
 QUOTED = re.compile(r"(['\"`])((?:\\.|(?!\1).)*?)\1", re.S)
 DYNAMIC_CODE_PATH = re.compile(r"\$(?:[1-9]|\{)")
+CONCAT_AFTER_LITERAL = re.compile(r"(?:\s|/\*[\s\S]*?\*/|//[^\n]*(?:\n|$))*\+")
+HEADER_SVG_FAMILY = tuple(
+    "img/header-" + affiliation + "-" + color + ".svg"
+    for affiliation in ("ubc", "osaka") for color in ("white", "teal")
+)
 
 
 class Page(HTMLParser):
@@ -203,6 +208,17 @@ def audit(root: Path, sheet_sources: list[Path]) -> dict:
                 if DYNAMIC_CODE_PATH.search(value):
                     continue
                 if re.match(r"(?:\./|\.\./|/)?(?:img|img_new|pdf)/[^\n]+$", value):
+                    # A quoted prefix immediately concatenated with a filename
+                    # is not a literal resource. A complete filename remains a
+                    # real reference even when a query string is added to it.
+                    fragment = not Path(urlsplit(value).path).suffix
+                    if fragment and CONCAT_AFTER_LITERAL.match(content, match.end()):
+                        prefix, _ = local_target(root, root / "index.html", value)
+                        if prefix in {"img/header-", "img/header-ubc-", "img/header-osaka-"}:
+                            for member in HEADER_SVG_FAMILY:
+                                if member.startswith(prefix):
+                                    add_ref(name, root / "index.html", member, "code-header-svg-family")
+                        continue
                     # Browser-side JS resolves relative URLs against the page.
                     add_ref(name, root / "index.html", value, "code-literal")
                 elif path.suffix == ".js" and re.match(r"(?:\./|\.\./)?(?:css|js)/[^\n]+$", value):

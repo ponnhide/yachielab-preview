@@ -6,8 +6,8 @@
       "img_new",
       "pdf"
     ],
-    "source_files": 78,
-    "secret_text_files": 85,
+    "source_files": 79,
+    "secret_text_files": 86,
     "html_pages": 24,
     "sheet_sources_supplied": 1,
     "sheet_tabs_supplied": 38,
@@ -16,9 +16,9 @@
   "summary": {
     "asset_files": 480,
     "asset_bytes": 607484828,
-    "referenced_assets": 209,
-    "review_candidates": 271,
-    "review_candidate_bytes": 227885991,
+    "referenced_assets": 211,
+    "review_candidates": 269,
+    "review_candidate_bytes": 226562923,
     "duplicate_groups": 64,
     "errors": 0,
     "warnings": 3
@@ -127,8 +127,10 @@
       "bytes": 661534,
       "sha256": "102f2d0949e7b8767415f4ed341587bfefa7ac235fca9315bec56b4cf545f3f9",
       "kind": "png",
-      "reference_evidence": [],
-      "status": "review-candidate",
+      "reference_evidence": [
+        "source:dynamic-png-stem"
+      ],
+      "status": "referenced",
       "source_asset": false
     },
     {
@@ -2329,6 +2331,7 @@
       "reference_evidence": [
         "alumni.html:src",
         "blank.html:src",
+        "cms/Renderer.gs:code-header-svg-family",
         "collab.html:src",
         "contact.html:src",
         "download.html:src",
@@ -2339,6 +2342,7 @@
         "jikkenigaku.html:src",
         "jikkenigaku2.html:src",
         "joinus.html:src",
+        "js/common.js:code-header-svg-family",
         "news.html:src",
         "nzmyachie.html:src",
         "pd_recruit.html:src",
@@ -2362,6 +2366,7 @@
       "reference_evidence": [
         "alumni.html:src",
         "blank.html:src",
+        "cms/Renderer.gs:code-header-svg-family",
         "collab.html:src",
         "contact.html:src",
         "download.html:src",
@@ -2372,6 +2377,7 @@
         "jikkenigaku.html:src",
         "jikkenigaku2.html:src",
         "joinus.html:src",
+        "js/common.js:code-header-svg-family",
         "news.html:src",
         "nzmyachie.html:src",
         "pd_recruit.html:src",
@@ -2379,6 +2385,7 @@
         "publications.html:src",
         "research.html:src",
         "resources.html:src",
+        "sheet:filename-match",
         "software.html:src",
         "source:filename-match",
         "summercamp_2026.html:src",
@@ -2395,6 +2402,7 @@
       "reference_evidence": [
         "alumni.html:src",
         "blank.html:src",
+        "cms/Renderer.gs:code-header-svg-family",
         "collab.html:src",
         "contact.html:src",
         "download.html:src",
@@ -2405,6 +2413,7 @@
         "jikkenigaku.html:src",
         "jikkenigaku2.html:src",
         "joinus.html:src",
+        "js/common.js:code-header-svg-family",
         "news.html:src",
         "nzmyachie.html:src",
         "pd_recruit.html:src",
@@ -2428,6 +2437,7 @@
       "reference_evidence": [
         "alumni.html:src",
         "blank.html:src",
+        "cms/Renderer.gs:code-header-svg-family",
         "collab.html:src",
         "contact.html:src",
         "download.html:src",
@@ -2438,6 +2448,7 @@
         "jikkenigaku.html:src",
         "jikkenigaku2.html:src",
         "joinus.html:src",
+        "js/common.js:code-header-svg-family",
         "news.html:src",
         "nzmyachie.html:src",
         "pd_recruit.html:src",
@@ -2445,6 +2456,7 @@
         "publications.html:src",
         "research.html:src",
         "resources.html:src",
+        "sheet:filename-match",
         "software.html:src",
         "source:filename-match",
         "summercamp_2026.html:src",
@@ -4149,8 +4161,10 @@
       "bytes": 661534,
       "sha256": "102f2d0949e7b8767415f4ed341587bfefa7ac235fca9315bec56b4cf545f3f9",
       "kind": "png",
-      "reference_evidence": [],
-      "status": "review-candidate",
+      "reference_evidence": [
+        "source:dynamic-png-stem"
+      ],
+      "status": "referenced",
       "source_asset": false
     },
     {
@@ -5185,7 +5199,7 @@
       "sha256": "0cdea03d45d0453fdf2006d3248591c8123d5ae9640fabf23daab915f94b7835",
       "kind": "pdf",
       "reference_evidence": [
-        "joinus.html:href"
+        "source:filename-match"
       ],
       "status": "referenced",
       "source_asset": false
