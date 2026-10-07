@@ -198,23 +198,23 @@ test('publisher PDFs retain existing published or external links with explicit w
   const s=fixture(),url='https://www.nature.com/articles/paper.pdf';
   s.entries['pdf/paper.pdf']={type:'blob',sha:gitSha('%PDF-published')};
   assert.equal(s.run.sandbox.uploadImg(url),'./pdf/paper.pdf?v='+gitSha('%PDF-published').slice(0,12));
-  assert.equal(s.fetches.length,0);assert.equal(s.run.context.pendingAssets.length,0);assert.deepEqual([...s.run.context.assetWarnings],['publisher-pdf-not-synchronized']);
+  assert.equal(s.fetches.length,0);assert.equal(s.run.context.pendingAssets.length,0);assert.deepEqual([...s.run.context.assetWarnings],['pdf-sync-manual']);
   assert.equal(s.run.sandbox.uploadImg(url),'./pdf/paper.pdf?v='+gitSha('%PDF-published').slice(0,12));assert.equal(s.run.context.assetWarnings.length,1);
   s.newRun({refreshAssets:true});assert.equal(s.run.sandbox.uploadImg('https://www.science.org/new.pdf'),'https://www.science.org/new.pdf');
   assert.equal(s.fetches.length,0);assert.equal(s.grid,null);assert.equal(s.run.context.assetWarnings.length,1);
 });
 
-test('Dropbox PDFs remain managed assets and save only after validated publication',()=>{
+test('explicitly refreshed Dropbox PDFs remain managed assets and save only after validated publication',()=>{
   const s=fixture(),url='https://www.dropbox.com/x/paper.pdf?rlkey=private-key&dl=0';s.http(url,Buffer.from('%PDF-1.7\nbody'),{etag:'"PDF"'});
-  const output=s.run.sandbox.uploadImg(url);assert.match(output,/^\.\/pdf\/paper--[a-f0-9]{12}\.pdf\?v=[a-f0-9]{12}$/);
+  s.newRun({refreshAssets:true});const output=s.run.sandbox.uploadImg(url);assert.match(output,/^\.\/pdf\/paper--[a-f0-9]{12}\.pdf\?v=[a-f0-9]{12}$/);
   assert.equal(s.run.context.assetWarnings,undefined);assert.equal(s.run.context.pendingAssets.length,1);assert.equal(s.publish().assetsSaved,true);
 });
 
 test('supported GET Range detects oversized Dropbox PDF without full-body download or fresh registry',()=>{
-  for (const force of [false,true]) {
+  for (const flags of [{refreshAssets:true},{refreshAssets:true,forceRegenerate:true}]) {
     const s=fixture(),url='https://www.dropbox.com/x/large.pdf?rlkey=private-key&dl=0';
     s.http(url,Buffer.from('%PDF-small'),{rangeStatus:206,rangeLength:16*1024*1024+1});s.entries['pdf/large.pdf']={type:'blob',sha:gitSha('%PDF-old')};
-    s.newRun({refreshAssets:force});const output=s.run.sandbox.uploadImg(url);
+    s.newRun(flags);const output=s.run.sandbox.uploadImg(url);
     assert.equal(output,'./pdf/large.pdf?v='+gitSha('%PDF-old').slice(0,12));assert.equal(s.fetches.length,1);assert.equal(s.fetches[0].options.method,'get');assert.equal(s.fetches[0].options.headers.Range,'bytes=0-0');
     assert.equal(s.run.context.pendingAssets.length,0);assert.equal(Object.keys(s.run.context.assetRegistry.staged).length,0);
     assert.deepEqual([...s.run.context.assetWarnings],['oversized-pdf-kept']);s.run.sandbox.uploadImg(url);assert.equal(s.run.context.assetWarnings.length,1);
@@ -224,10 +224,10 @@ test('supported GET Range detects oversized Dropbox PDF without full-body downlo
 
 test('oversized PDF keeps an actual source-owned published link, preserves its old verification, and a missing link stays external',()=>{
   const s=fixture(),url='https://www.dropbox.com/x/large.pdf?rlkey=private-key&dl=0';const endpoint=s.http(url,Buffer.from('%PDF-small'),{rangeStatus:206,rangeLength:10,etag:'"old"'});
-  const owned=s.run.sandbox.uploadImg(url);s.publish();const record=JSON.stringify(s.grid);
-  s.servers.set(endpoint,{body:Buffer.from('%PDF-new'),rangeStatus:206,rangeLength:20*1024*1024,etag:'"new"'});s.now+=1000;s.newRun();
+  s.newRun({refreshAssets:true});const owned=s.run.sandbox.uploadImg(url);s.publish();const record=JSON.stringify(s.grid);
+  s.servers.set(endpoint,{body:Buffer.from('%PDF-new'),rangeStatus:206,rangeLength:20*1024*1024,etag:'"new"'});s.now+=1000;s.newRun({refreshAssets:true});
   assert.equal(s.run.sandbox.uploadImg(url),owned);assert.equal(Object.keys(s.run.context.assetRegistry.staged).length,0);s.publish();assert.equal(JSON.stringify(s.grid),record);
-  const absent=fixture();absent.http(url,Buffer.from('%PDF-unused'),{rangeStatus:206,rangeLength:20*1024*1024});assert.equal(absent.run.sandbox.uploadImg(url),url);
+  const absent=fixture();absent.http(url,Buffer.from('%PDF-unused'),{rangeStatus:206,rangeLength:20*1024*1024});absent.newRun({refreshAssets:true});assert.equal(absent.run.sandbox.uploadImg(url),url);
   assert.equal(absent.run.context.pendingAssets.length,0);assert.equal(absent.fetches.length,1);assert.deepEqual([...absent.run.context.assetWarnings],['oversized-pdf-kept']);
 });
 
@@ -235,27 +235,27 @@ test('an ignored Range response is reused once and an actual oversized PDF body 
   const size=16*1024*1024+1,body=Buffer.alloc(size);body.write('%PDF-1.7');
   for(const options of [{rangeLength:size},{}]) {
     const s=fixture(),url='https://www.dropbox.com/x/large.pdf?dl=0';s.http(url,body,options);s.entries['pdf/large.pdf']={type:'blob',sha:gitSha('%PDF-old')};
-    const output=s.run.sandbox.uploadImg(url);assert.match(output,/^\.\/pdf\/large\.pdf\?v=/);assert.equal(s.fetches.length,1);
+    s.newRun({refreshAssets:true});const output=s.run.sandbox.uploadImg(url);assert.match(output,/^\.\/pdf\/large\.pdf\?v=/);assert.equal(s.fetches.length,1);
     assert.equal(s.fetches[0].options.headers.Range,'bytes=0-0');assert.equal(s.run.context.pendingAssets.length,0);assert.equal(Object.keys(s.run.context.assetRegistry.staged).length,0);
     assert.deepEqual([...s.run.context.assetWarnings],['oversized-pdf-kept']);
   }
 });
 
-test('small 206 probes fetch the complete PDF while a trusted 304 probe avoids a second GET',()=>{
+test('manual small 206 probes fetch complete PDF; later ordinary updates keep it without checking documents',()=>{
   const s=fixture(),url='https://www.dropbox.com/x/paper.pdf?dl=0',body=Buffer.from('%PDF-1.7\nsmall');
-  s.http(url,body,{rangeStatus:206,rangeLength:body.length,etag:'"PDF"'});const output=s.run.sandbox.uploadImg(url);
+  s.http(url,body,{rangeStatus:206,rangeLength:body.length,etag:'"PDF"'});s.newRun({refreshAssets:true});const output=s.run.sandbox.uploadImg(url);
   assert.match(output,/paper--[a-f0-9]{12}\.pdf\?v=/);assert.equal(s.fetches.length,2);assert.equal(s.fetches[0].options.headers.Range,'bytes=0-0');assert.equal(s.fetches[1].options.headers.Range,undefined);
-  s.publish();s.fetches=[];s.newRun();assert.equal(s.run.sandbox.uploadImg(url),output);assert.equal(s.fetches.length,1);
-  assert.equal(s.fetches[0].options.headers['If-None-Match'],'"PDF"');assert.equal(s.run.context.assetStats.downloaded,0);assert.equal(s.run.context.assetStats.notModified,1);
+  s.publish();s.fetches=[];s.newRun();assert.equal(s.run.sandbox.uploadImg(url),output);assert.equal(s.fetches.length,0);
+  assert.equal(s.run.context.pendingAssets.length,0);assert.deepEqual([...s.run.context.assetWarnings],['pdf-sync-manual']);
 });
 
 test('a small complete 200 Range response is reused and PDF metadata errors retain links with explicit non-fresh warnings',()=>{
   const url='https://www.dropbox.com/x/paper.pdf?dl=0',body=Buffer.from('%PDF-1.7\nsmall');
-  const complete=fixture();complete.http(url,body,{rangeLength:body.length});complete.run.sandbox.uploadImg(url);assert.equal(complete.fetches.length,1);assert.equal(complete.run.context.pendingAssets.length,1);
+  const complete=fixture();complete.http(url,body,{rangeLength:body.length});complete.newRun({refreshAssets:true});complete.run.sandbox.uploadImg(url);assert.equal(complete.fetches.length,1);assert.equal(complete.run.context.pendingAssets.length,1);
   for(const options of [{rangeStatus:403},{rangeError:true},{rangeStatus:206}, {rangeStatus:304}]) {
     for(const existing of [false,true]) {
       const s=fixture();s.http(url,body,options);if(existing)s.entries['pdf/paper.pdf']={type:'blob',sha:gitSha('%PDF-old')};
-      const output=s.run.sandbox.uploadImg(url);assert(existing ? /^\.\/pdf\/paper\.pdf\?v=/.test(output) : output===url);
+      s.newRun({refreshAssets:true});const output=s.run.sandbox.uploadImg(url);assert(existing ? /^\.\/pdf\/paper\.pdf\?v=/.test(output) : output===url);
       assert.deepEqual([...s.run.context.assetWarnings],['pdf-metadata-unavailable']);assert.equal(s.run.context.pendingAssets.length,0);assert.equal(Object.keys(s.run.context.assetRegistry.staged).length,0);assert.equal(s.fetches.length,1);
     }
   }
@@ -264,10 +264,28 @@ test('a small complete 200 Range response is reused and PDF metadata errors reta
 test('Drive PDF size metadata avoids oversized blob download while image size overflow still aborts',()=>{
   const s=fixture(),url='https://drive.google.com/file/d/document/view';
   s.drives.set('document',{name:'large.pdf',body:Buffer.from('%PDF-unused'),size:20*1024*1024,modified:s.now});
-  s.entries['pdf/large.pdf']={type:'blob',sha:gitSha('%PDF-old')};assert.match(s.run.sandbox.uploadImg(url),/^\.\/pdf\/large\.pdf\?v=/);
+  s.entries['pdf/large.pdf']={type:'blob',sha:gitSha('%PDF-old')};s.newRun({refreshAssets:true});assert.match(s.run.sandbox.uploadImg(url),/^\.\/pdf\/large\.pdf\?v=/);
   assert.equal(s.blobReads,0);assert.equal(s.run.context.pendingAssets.length,0);assert.deepEqual([...s.run.context.assetWarnings],['oversized-pdf-kept']);
   const image=fixture(),body=Buffer.alloc(16*1024*1024+1);body[0]=255;body[1]=216;image.http(remote,body);
   assert.throws(()=>image.run.sandbox.uploadImg(remote),/16 MiB/);assert.equal(image.run.context.pendingAssets.length,0);assert.equal(image.run.context.assetWarnings,undefined);
+});
+
+test('ordinary/rebuild/data updates preserve PDF legacy or external links without HTTP requests or Drive blob reads',()=>{
+  const url='https://www.dropbox.com/x/paper.pdf?dl=0',drive='https://drive.google.com/file/d/document/view';
+  for(const flags of [{},{forceRegenerate:true},{refreshData:true}]) {
+    const s=fixture();s.entries['pdf/paper.pdf']={type:'blob',sha:gitSha('%PDF-old')};s.drives.set('document',{name:'drive.pdf',body:Buffer.from('%PDF-unused'),size:30*1024*1024,modified:s.now});
+    s.newRun(flags);assert.match(s.run.sandbox.uploadImg(url),/^\.\/pdf\/paper\.pdf\?v=/);assert.equal(s.run.sandbox.uploadImg(drive),drive);
+    assert.equal(s.run.sandbox.uploadImg('https://www.dropbox.com/x/missing.pdf?dl=0'),'https://www.dropbox.com/x/missing.pdf?dl=0');
+    assert.equal(s.fetches.length,0);assert.equal(s.blobReads,0);assert.equal(s.run.context.pendingAssets.length,0);assert.equal(Object.keys(s.run.context.assetRegistry.staged).length,0);
+    assert.deepEqual([...s.run.context.assetWarnings],['pdf-sync-manual','pdf-sync-manual','pdf-sync-manual']);s.publish();assert.equal(s.grid,null);
+  }
+});
+
+test('external asset HTTP calls have a bounded timeout and progress logs contain only quantitative values',()=>{
+  const s=fixture(),logs=[];s.run.sandbox.console.log=value=>logs.push(value);
+  for(let i=0;i<5;i++){const url=remote.replace('/example/','/source'+i+'/');s.http(url);s.run.sandbox.uploadImg(url);}
+  assert(s.fetches.every(call=>call.options.timeoutSeconds===20));assert.equal(logs.length,1);assert.doesNotMatch(JSON.stringify(logs),/dropbox|private-key|photo|source/);
+  assert.match(logs[0],/"checked":5/);
 });
 
 test('byte validation covers images/PDFs, rejects mislabeled files and enforces the size limit',()=>{

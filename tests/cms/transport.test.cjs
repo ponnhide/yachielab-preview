@@ -470,6 +470,7 @@ test('asset signatures reject HTML and extension mismatches and accept PDF/JPEG 
 
 test('asset downloads and native Drive uploads validate actual bytes and queue once per source', () => {
   const state = fixture();
+  state.context.cmsContext_().refreshAssets = true;
   state.downloads.set('https://example.org/bad.jpg', Buffer.from('<html><head>Access denied</head></html>'));
   assert.throws(() => state.context.uploadImg('https://example.org/bad.jpg'), /HTML page/i);
   assert.equal(state.context.cmsContext_().pendingAssets.length, 0);

@@ -36,17 +36,23 @@ function cmsAssetHeader_(response, name) {
 
 function cmsAssetPdfFallback_(value, source, key, name, path, store, reason) {
   var context = cmsContext_(), entries = cmsGithubSnapshot_().entries;
-  var owner = store.records[key], owned = entries[path];
+  var owner = store.records[key], ownedPath = owner && owner.identity === source.identity ? owner.path : path, owned = entries[ownedPath];
   var legacyPath = 'pdf/' + name, legacy = entries[legacyPath];
   context.assetWarnings = context.assetWarnings || [];
   context.assetWarnings.push(reason || 'oversized-pdf-kept');
-  var savedPath = owner && owner.identity === source.identity && owner.path === path && owned && owned.type === 'blob' ? path :
+  var savedPath = owner && owner.identity === source.identity && owned && owned.type === 'blob' ? ownedPath :
     legacy && legacy.type === 'blob' ? legacyPath : '';
   var saved = savedPath && entries[savedPath];
   // This result describes the old published link, not successfully fetched
   // source bytes. Do not stage validators or a fresh ownership record.
   return context.preparedAssets[key] = saved ? {key: 'local:' + savedPath, path: savedPath, sha: saved.sha, url: cmsAssetUrl_(savedPath, saved.sha)} :
     {key: key, path: '', sha: '', url: value};
+}
+
+function cmsAssetProgress_(phase, byteCount) {
+  if (typeof console === 'undefined' || typeof console.log !== 'function') return;
+  var stats = cmsAssetStats_();
+  console.log('CMS asset progress: ' + JSON.stringify({phase: phase, checked: stats.checked, downloaded: stats.downloaded, staged: stats.staged, bytes: byteCount || 0}));
 }
 
 function cmsAssetPrepare_(value) {
@@ -65,6 +71,9 @@ function cmsAssetPrepare_(value) {
   var path = cmsAssetPath_(name, key);
   if (!context.preparedAssets) context.preparedAssets = {};
   if (!path) return context.preparedAssets[key] = {key: key, path: '', sha: '', url: value};
+  // Ordinary page updates automatically verify images. PDF synchronization is
+  // explicit so many large document mirrors cannot exhaust the GAS time limit.
+  if (/\.pdf$/i.test(name) && !context.refreshAssets) return cmsAssetPdfFallback_(value, source, key, name, path, cmsAssetRegistry_(), 'pdf-sync-manual');
   // Publisher PDF download endpoints commonly reject unattended requests. Only
   // Drive/Dropbox PDFs are synchronized; retain existing publisher links with
   // an explicit per-update warning rather than claiming their content is fresh.
@@ -82,6 +91,7 @@ function cmsAssetPrepare_(value) {
   var published = old && old.path === path && actual && actual.type === 'blob' && actual.sha === old.sha;
   var record = {key: key, identity: source.identity, sourceUrl: source.sourceUrl, path: path, sha: '', etag: '', lastModified: '', sourceModifiedAt: '', checkedAt: new Date().toISOString()};
   var bytes, unchanged = false, pdf = /\.pdf$/i.test(name), maximum = 16 * 1024 * 1024, pdfResponse; stats.checked++;
+  if (stats.checked % 5 === 0) cmsAssetProgress_('check', 0);
   if (pdf && file && typeof file.getSize === 'function') {
     var size = 0;
     try { size = Number(file.getSize()); } catch (sizeError) { /* Fall through to the blob when size metadata is unavailable. */ }
@@ -95,7 +105,7 @@ function cmsAssetPrepare_(value) {
       else if (old.lastModified) rangeHeaders['If-Modified-Since'] = old.lastModified;
     }
     try {
-      var probe = previewFetch_(source.downloadUrl, {method: 'get', muteHttpExceptions: true, followRedirects: true, headers: rangeHeaders});
+      var probe = previewFetch_(source.downloadUrl, {method: 'get', muteHttpExceptions: true, followRedirects: true, timeoutSeconds: 20, headers: rangeHeaders});
       var probeStatus = probe.getResponseCode();
       if (probeStatus === 304 && published && !context.refreshAssets && (old.etag || old.lastModified)) pdfResponse = probe;
       else if (probeStatus === 206) {
@@ -124,11 +134,11 @@ function cmsAssetPrepare_(value) {
       if (old.etag) headers['If-None-Match'] = old.etag;
       else if (old.lastModified) headers['If-Modified-Since'] = old.lastModified;
     }
-    var response = pdfResponse || previewFetch_(source.downloadUrl, {muteHttpExceptions: true, followRedirects: true, headers: headers});
+    var response = pdfResponse || previewFetch_(source.downloadUrl, {muteHttpExceptions: true, followRedirects: true, timeoutSeconds: 20, headers: headers});
     var status = response.getResponseCode();
     // A 304 is usable only when the exact validated bytes still exist in GitHub.
     if (status === 304 && (!published || !Object.keys(headers).length)) {
-      response = previewFetch_(source.downloadUrl, {muteHttpExceptions: true, followRedirects: true, headers: {}}); status = response.getResponseCode();
+      response = previewFetch_(source.downloadUrl, {muteHttpExceptions: true, followRedirects: true, timeoutSeconds: 20, headers: {}}); status = response.getResponseCode();
     }
     if (status !== 200 && status !== 304) throw new Error('Asset download failed: HTTP ' + status);
     if (status === 304 && (!published || !Object.keys(headers).length)) throw new Error('Asset download returned 304 without validated published bytes.');
@@ -140,7 +150,9 @@ function cmsAssetPrepare_(value) {
   if (unchanged) { record.sha = old.sha; stats.notModified++; }
   else {
     if (pdf && bytes.length > maximum) return cmsAssetPdfFallback_(value, source, key, name, path, store);
-    cmsValidateAsset_(name, bytes); record.sha = cmsGitBlobSha_(bytes);
+    cmsValidateAsset_(name, bytes);
+    if (bytes.length > 1024 * 1024) cmsAssetProgress_('hash', bytes.length);
+    record.sha = cmsGitBlobSha_(bytes);
     if (!actual || actual.type !== 'blob' || actual.sha !== record.sha) cmsQueueAsset_(path, Utilities.base64Encode(bytes));
   }
   // CheckedAt is the last persisted verification timestamp. Verification still
