@@ -14,26 +14,26 @@
     "external_direct_links_checked": false
   },
   "summary": {
-    "asset_files": 480,
-    "asset_bytes": 607484828,
-    "referenced_assets": 211,
-    "published_reference_assets": 178,
-    "source_only_reference_assets": 33,
-    "review_candidates": 269,
-    "review_candidate_bytes": 226562923,
-    "duplicate_groups": 64,
+    "asset_files": 491,
+    "asset_bytes": 612963830,
+    "referenced_assets": 216,
+    "published_reference_assets": 179,
+    "source_only_reference_assets": 37,
+    "review_candidates": 275,
+    "review_candidate_bytes": 227681850,
+    "duplicate_groups": 73,
     "errors": 0,
     "warnings": 2
   },
   "asset_directory_summary": [
     {
       "directory": "img",
-      "files": 360,
-      "referenced": 150,
-      "review_candidates": 210,
-      "image_files": 357,
-      "image_referenced": 150,
-      "image_review_candidates": 207
+      "files": 371,
+      "referenced": 155,
+      "review_candidates": 216,
+      "image_files": 368,
+      "image_referenced": 155,
+      "image_review_candidates": 213
     },
     {
       "directory": "img_new",
@@ -122,7 +122,7 @@
       "source_asset": false
     },
     {
-      "path": "img/4.cover-source_thumb.jpg",
+      "path": "img/4.cover-source_thumb--77054d8571a6.jpg",
       "bytes": 79570,
       "sha256": "64a73b1396c8e47e4836e3d782394b2771a48fdfeebbc3c839054333fdaf9247",
       "kind": "jpeg",
@@ -135,6 +135,17 @@
       ],
       "reference_class": "published-reference",
       "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/4.cover-source_thumb.jpg",
+      "bytes": 79570,
+      "sha256": "64a73b1396c8e47e4836e3d782394b2771a48fdfeebbc3c839054333fdaf9247",
+      "kind": "jpeg",
+      "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
+      "status": "review-candidate",
       "source_asset": false
     },
     {
@@ -809,7 +820,7 @@
       "source_asset": false
     },
     {
-      "path": "img/FRACTAL_cover_small.jpg",
+      "path": "img/FRACTAL_cover_small--586b28563c44.jpg",
       "bytes": 197184,
       "sha256": "ccb31621d1e99f237afaa2aa0a8002e4199437113d2f54cce74526ab6c98af4d",
       "kind": "jpeg",
@@ -822,6 +833,17 @@
       ],
       "reference_class": "published-reference",
       "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/FRACTAL_cover_small.jpg",
+      "bytes": 197184,
+      "sha256": "ccb31621d1e99f237afaa2aa0a8002e4199437113d2f54cce74526ab6c98af4d",
+      "kind": "jpeg",
+      "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
+      "status": "review-candidate",
       "source_asset": false
     },
     {
@@ -931,9 +953,36 @@
       "source_asset": false
     },
     {
+      "path": "img/Greenstreet500x605--e52a4ca1be35.jpg",
+      "bytes": 442265,
+      "sha256": "a437348148c8df92162781029a93fcfd0551f07949c5b77e6fdab946f98dc1b2",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "publications.html:src",
+        "source:filename-match"
+      ],
+      "published_reference_evidence": [
+        "publications.html:src"
+      ],
+      "reference_class": "published-reference",
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
       "path": "img/Greenstreet500x605.jpg",
       "bytes": 442265,
       "sha256": "a437348148c8df92162781029a93fcfd0551f07949c5b77e6fdab946f98dc1b2",
+      "kind": "jpeg",
+      "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/HGHrdslWQAEmByC--6cac04569de8.jpg",
+      "bytes": 355818,
+      "sha256": "390dab1983e901f9b8428ebf998c77f239f1776de8fb9b8dfff6f73de230b805",
       "kind": "jpeg",
       "reference_evidence": [
         "publications.html:src",
@@ -952,14 +1001,10 @@
       "sha256": "390dab1983e901f9b8428ebf998c77f239f1776de8fb9b8dfff6f73de230b805",
       "kind": "jpeg",
       "reference_evidence": [
-        "publications.html:src",
-        "sheet:filename-match",
-        "source:filename-match"
+        "sheet:filename-match"
       ],
-      "published_reference_evidence": [
-        "publications.html:src"
-      ],
-      "reference_class": "published-reference",
+      "published_reference_evidence": [],
+      "reference_class": "source-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -1712,7 +1757,7 @@
       "source_asset": false
     },
     {
-      "path": "img/NBT-cover.jpg",
+      "path": "img/NBT-cover--9cc10c8d0dec.jpg",
       "bytes": 88627,
       "sha256": "deb71239bd0a78657eeb3ad513e7c642fa0f6f658a95a06737edda3348115442",
       "kind": "jpeg",
@@ -1725,6 +1770,17 @@
       ],
       "reference_class": "published-reference",
       "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/NBT-cover.jpg",
+      "bytes": 88627,
+      "sha256": "deb71239bd0a78657eeb3ad513e7c642fa0f6f658a95a06737edda3348115442",
+      "kind": "jpeg",
+      "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
+      "status": "review-candidate",
       "source_asset": false
     },
     {
@@ -2649,19 +2705,31 @@
       "source_asset": false
     },
     {
-      "path": "img/cgRNA_thumbnail.jpg",
+      "path": "img/cgRNA_thumbnail--a9f29f168e5e.jpg",
       "bytes": 129291,
       "sha256": "0562212e3767666c4abd043d73ae12b4f8f68c0ddf3fc9e17598e6e647bf8f1b",
       "kind": "jpeg",
       "reference_evidence": [
         "publications.html:src",
-        "sheet:filename-match",
         "source:filename-match"
       ],
       "published_reference_evidence": [
         "publications.html:src"
       ],
       "reference_class": "published-reference",
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/cgRNA_thumbnail.jpg",
+      "bytes": 129291,
+      "sha256": "0562212e3767666c4abd043d73ae12b4f8f68c0ddf3fc9e17598e6e647bf8f1b",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "sheet:filename-match"
+      ],
+      "published_reference_evidence": [],
+      "reference_class": "source-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -2760,19 +2828,31 @@
       "source_asset": false
     },
     {
-      "path": "img/de-shachie-2021.JPG",
+      "path": "img/de-shachie-2021--40dc4bd9a59f.jpg",
       "bytes": 3122891,
       "sha256": "b4fd98b8f2bdedbe33cf16896a82631a53671e8a6d306d5d10ce574d775bf55e",
       "kind": "jpeg",
       "reference_evidence": [
         "joinus.html:src",
-        "sheet:filename-match",
         "source:filename-match"
       ],
       "published_reference_evidence": [
         "joinus.html:src"
       ],
       "reference_class": "published-reference",
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/de-shachie-2021.JPG",
+      "bytes": 3122891,
+      "sha256": "b4fd98b8f2bdedbe33cf16896a82631a53671e8a6d306d5d10ce574d775bf55e",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "sheet:filename-match"
+      ],
+      "published_reference_evidence": [],
+      "reference_class": "source-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -3442,7 +3522,7 @@
       "source_asset": false
     },
     {
-      "path": "img/labmeeting2021.jpg",
+      "path": "img/labmeeting2021--c8ce4f4fe69d.jpg",
       "bytes": 236020,
       "sha256": "21a15d421ea3171e464c0c7d47d97d1e43cc67e314600c34867a74d8b83707e0",
       "kind": "jpeg",
@@ -3452,6 +3532,33 @@
       ],
       "published_reference_evidence": [
         "joinus.html:src"
+      ],
+      "reference_class": "published-reference",
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/labmeeting2021.jpg",
+      "bytes": 236020,
+      "sha256": "21a15d421ea3171e464c0c7d47d97d1e43cc67e314600c34867a74d8b83707e0",
+      "kind": "jpeg",
+      "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
+      "status": "review-candidate",
+      "source_asset": false
+    },
+    {
+      "path": "img/logo--d7ae2a3b3f77.jpg",
+      "bytes": 78475,
+      "sha256": "07de0fe6144a550873ca0358a38d49e0db92c1b2430685a36a63382af3a14b57",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "publications.html:src",
+        "source:filename-match"
+      ],
+      "published_reference_evidence": [
+        "publications.html:src"
       ],
       "reference_class": "published-reference",
       "status": "referenced",
@@ -3669,14 +3776,10 @@
       "sha256": "ec35318b71c8b70d224e6d8b8a40d58e9582ad33095bd61be3a5496beb782758",
       "kind": "jpeg",
       "reference_evidence": [
-        "publications.html:src",
-        "sheet:filename-match",
-        "source:filename-match"
+        "sheet:filename-match"
       ],
-      "published_reference_evidence": [
-        "publications.html:src"
-      ],
-      "reference_class": "published-reference",
+      "published_reference_evidence": [],
+      "reference_class": "source-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -4316,19 +4419,31 @@
       "source_asset": false
     },
     {
-      "path": "img/osaka-university.jpg",
+      "path": "img/osaka-university--353240b53bd0.jpg",
       "bytes": 673600,
       "sha256": "c6a92424a3a104b8c283d0b5695490e4872d6cd44f4fe564afa7b49e77f54d2f",
       "kind": "jpeg",
       "reference_evidence": [
         "joinus.html:src",
-        "sheet:filename-match",
         "source:filename-match"
       ],
       "published_reference_evidence": [
         "joinus.html:src"
       ],
       "reference_class": "published-reference",
+      "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/osaka-university.jpg",
+      "bytes": 673600,
+      "sha256": "c6a92424a3a104b8c283d0b5695490e4872d6cd44f4fe564afa7b49e77f54d2f",
+      "kind": "jpeg",
+      "reference_evidence": [
+        "sheet:filename-match"
+      ],
+      "published_reference_evidence": [],
+      "reference_class": "source-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -4433,7 +4548,7 @@
       "source_asset": false
     },
     {
-      "path": "img/sciadv_small.jpg",
+      "path": "img/sciadv_small--4473f87c36aa.jpg",
       "bytes": 75261,
       "sha256": "be6ae1b7fe2f0c9330a41c46e21a93e5ae3bb4008280c6d44bb6709cc0627c25",
       "kind": "jpeg",
@@ -4446,6 +4561,17 @@
       ],
       "reference_class": "published-reference",
       "status": "referenced",
+      "source_asset": false
+    },
+    {
+      "path": "img/sciadv_small.jpg",
+      "bytes": 75261,
+      "sha256": "be6ae1b7fe2f0c9330a41c46e21a93e5ae3bb4008280c6d44bb6709cc0627c25",
+      "kind": "jpeg",
+      "reference_evidence": [],
+      "published_reference_evidence": [],
+      "reference_class": "review-candidate",
+      "status": "review-candidate",
       "source_asset": false
     },
     {
@@ -6865,10 +6991,12 @@
       "sha256": "0cdea03d45d0453fdf2006d3248591c8123d5ae9640fabf23daab915f94b7835",
       "kind": "pdf",
       "reference_evidence": [
-        "source:filename-match"
+        "joinus.html:href"
       ],
-      "published_reference_evidence": [],
-      "reference_class": "source-reference",
+      "published_reference_evidence": [
+        "joinus.html:href"
+      ],
+      "reference_class": "published-reference",
       "status": "referenced",
       "source_asset": false
     },
@@ -7279,6 +7407,14 @@
   ],
   "duplicate_groups": [
     {
+      "sha256": "0562212e3767666c4abd043d73ae12b4f8f68c0ddf3fc9e17598e6e647bf8f1b",
+      "paths": [
+        "img/cgRNA_thumbnail--a9f29f168e5e.jpg",
+        "img/cgRNA_thumbnail.jpg"
+      ],
+      "bytes_each": 129291
+    },
+    {
       "sha256": "102f2d0949e7b8767415f4ed341587bfefa7ac235fca9315bec56b4cf545f3f9",
       "paths": [
         "img/A.png",
@@ -7325,6 +7461,14 @@
         "img_new/KK.png"
       ],
       "bytes_each": 451441
+    },
+    {
+      "sha256": "21a15d421ea3171e464c0c7d47d97d1e43cc67e314600c34867a74d8b83707e0",
+      "paths": [
+        "img/labmeeting2021--c8ce4f4fe69d.jpg",
+        "img/labmeeting2021.jpg"
+      ],
+      "bytes_each": 236020
     },
     {
       "sha256": "25f52d0379aceb9b864ad3adb10c594aef0eabd5d4473e2de371e283bdc387fd",
@@ -7381,6 +7525,14 @@
         "img_new/E.png"
       ],
       "bytes_each": 747786
+    },
+    {
+      "sha256": "390dab1983e901f9b8428ebf998c77f239f1776de8fb9b8dfff6f73de230b805",
+      "paths": [
+        "img/HGHrdslWQAEmByC--6cac04569de8.jpg",
+        "img/HGHrdslWQAEmByC.jpg"
+      ],
+      "bytes_each": 355818
     },
     {
       "sha256": "39c35f801127fe7cfa23b20998dcbf0568407df265d6484b7b3baf8863a960d2",
@@ -7471,6 +7623,14 @@
       "bytes_each": 430193
     },
     {
+      "sha256": "64a73b1396c8e47e4836e3d782394b2771a48fdfeebbc3c839054333fdaf9247",
+      "paths": [
+        "img/4.cover-source_thumb--77054d8571a6.jpg",
+        "img/4.cover-source_thumb.jpg"
+      ],
+      "bytes_each": 79570
+    },
+    {
       "sha256": "672fb3705369340532348938eb0c2c5aa3cb8324145901d2608f0d3615358e93",
       "paths": [
         "img/L_1.png",
@@ -7559,6 +7719,14 @@
       "bytes_each": 1068697
     },
     {
+      "sha256": "a437348148c8df92162781029a93fcfd0551f07949c5b77e6fdab946f98dc1b2",
+      "paths": [
+        "img/Greenstreet500x605--e52a4ca1be35.jpg",
+        "img/Greenstreet500x605.jpg"
+      ],
+      "bytes_each": 442265
+    },
+    {
       "sha256": "a5bbf8e32e1077c3c7fd3aa3be04489ae93150d5861351f9c458b870972deae2",
       "paths": [
         "img/NN_1.png",
@@ -7599,6 +7767,14 @@
       "bytes_each": 355279
     },
     {
+      "sha256": "b4fd98b8f2bdedbe33cf16896a82631a53671e8a6d306d5d10ce574d775bf55e",
+      "paths": [
+        "img/de-shachie-2021--40dc4bd9a59f.jpg",
+        "img/de-shachie-2021.JPG"
+      ],
+      "bytes_each": 3122891
+    },
+    {
       "sha256": "b80f44f799cea94857c66a33df5e468beaec8e4173492ba7a2204f964b653b06",
       "paths": [
         "img/EE.png",
@@ -7629,6 +7805,14 @@
         "img/navy_ubclogo.svg"
       ],
       "bytes_each": 6274
+    },
+    {
+      "sha256": "be6ae1b7fe2f0c9330a41c46e21a93e5ae3bb4008280c6d44bb6709cc0627c25",
+      "paths": [
+        "img/sciadv_small--4473f87c36aa.jpg",
+        "img/sciadv_small.jpg"
+      ],
+      "bytes_each": 75261
     },
     {
       "sha256": "bfb8292e737430347f5f3651011415d8a8923ff551f8f01af706cb9db934f948",
@@ -7666,9 +7850,18 @@
       "sha256": "c6a92424a3a104b8c283d0b5695490e4872d6cd44f4fe564afa7b49e77f54d2f",
       "paths": [
         "img/F1i1URkaUAA0p3s.jpeg",
+        "img/osaka-university--353240b53bd0.jpg",
         "img/osaka-university.jpg"
       ],
       "bytes_each": 673600
+    },
+    {
+      "sha256": "ccb31621d1e99f237afaa2aa0a8002e4199437113d2f54cce74526ab6c98af4d",
+      "paths": [
+        "img/FRACTAL_cover_small--586b28563c44.jpg",
+        "img/FRACTAL_cover_small.jpg"
+      ],
+      "bytes_each": 197184
     },
     {
       "sha256": "cddb788604ebcd7c1865500dd8220007e34dc588780ef92213e1c39c543092e0",
@@ -7693,6 +7886,14 @@
         "img_new/I.png"
       ],
       "bytes_each": 500336
+    },
+    {
+      "sha256": "deb71239bd0a78657eeb3ad513e7c642fa0f6f658a95a06737edda3348115442",
+      "paths": [
+        "img/NBT-cover--9cc10c8d0dec.jpg",
+        "img/NBT-cover.jpg"
+      ],
+      "bytes_each": 88627
     },
     {
       "sha256": "df00f97bd7e6a3c9ae78736d323c3156a46c90c5fbf8adb4d85c7f0f8014e1f5",

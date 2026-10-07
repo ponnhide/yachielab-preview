@@ -2,7 +2,7 @@
  * happen until the complete GitHub publish has succeeded (including no-change).
  * Bump this version after changing Renderer, SheetStyles, Showdown or HTML normalization.
  */
-var CMS_CACHE_RENDERER_VERSION_ = '2026-10-08.1';
+var CMS_CACHE_RENDERER_VERSION_ = '2026-10-08.2';
 var CMS_CACHE_SHEET_ = '_cms_cache';
 var CMS_CACHE_TTL_MS_ = 6 * 60 * 60 * 1000;
 var CMS_CACHE_CELL_LIMIT_ = 40000;

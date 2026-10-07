@@ -6,13 +6,13 @@
 
 ## 公開ページから辿れる参照
 
-178 件。
+179 件。
 
 | 公開パス | 実体 | MiB | 参照証拠 |
 | --- | --- | ---: | --- |
 | [img/00001056-copy.JPG](../../img/00001056-copy.JPG) | jpeg | 0.245 | people.html:src |
 | [img/1538750937671.jpg](../../img/1538750937671.jpg) | jpeg | 0.023 | alumni.html:src, intern_recruit.html:src, internexp.html:src |
-| [img/4.cover-source_thumb.jpg](../../img/4.cover-source_thumb.jpg) | jpeg | 0.076 | publications.html:src |
+| [img/4.cover-source_thumb--77054d8571a6.jpg](../../img/4.cover-source_thumb--77054d8571a6.jpg) | jpeg | 0.076 | publications.html:src |
 | [img/9784758121446_02.jpg](../../img/9784758121446_02.jpg) | jpeg | 0.329 | jikkenigaku2.html:src |
 | [img/9784758122528.jpg](../../img/9784758122528.jpg) | jpeg | 0.163 | jikkenigaku.html:src |
 | [img/A.png](../../img/A.png) | png | 0.631 | js/common.js:dynamic-png-stem |
@@ -32,12 +32,12 @@
 | [img/Er.png](../../img/Er.png) | png | 0.286 | index.html:src |
 | [img/FF_1_cropped.png](../../img/FF_1_cropped.png) | png | 0.257 | css/pages/index.css:css-url |
 | [img/FF_2_cropped.png](../../img/FF_2_cropped.png) | png | 0.283 | css/pages/index.css:css-url |
-| [img/FRACTAL_cover_small.jpg](../../img/FRACTAL_cover_small.jpg) | jpeg | 0.188 | publications.html:src |
+| [img/FRACTAL_cover_small--586b28563c44.jpg](../../img/FRACTAL_cover_small--586b28563c44.jpg) | jpeg | 0.188 | publications.html:src |
 | [img/F_1r.png](../../img/F_1r.png) | png | 0.162 | index.html:src, js/index.js:dynamic-png-stem |
 | [img/F_2r.png](../../img/F_2r.png) | png | 0.178 | js/index.js:dynamic-png-stem |
 | [img/Gr.png](../../img/Gr.png) | png | 0.140 | index.html:src |
-| [img/Greenstreet500x605.jpg](../../img/Greenstreet500x605.jpg) | jpeg | 0.422 | publications.html:src |
-| [img/HGHrdslWQAEmByC.jpg](../../img/HGHrdslWQAEmByC.jpg) | jpeg | 0.339 | publications.html:src |
+| [img/Greenstreet500x605--e52a4ca1be35.jpg](../../img/Greenstreet500x605--e52a4ca1be35.jpg) | jpeg | 0.422 | publications.html:src |
+| [img/HGHrdslWQAEmByC--6cac04569de8.jpg](../../img/HGHrdslWQAEmByC--6cac04569de8.jpg) | jpeg | 0.339 | publications.html:src |
 | [img/H_1r.png](../../img/H_1r.png) | png | 0.355 | index.html:src, js/index.js:dynamic-png-stem |
 | [img/H_2r.png](../../img/H_2r.png) | png | 0.424 | js/index.js:dynamic-png-stem |
 | [img/Herbert.jpg](../../img/Herbert.jpg) | jpeg | 0.102 | people.html:src |
@@ -56,7 +56,7 @@
 | [img/Lu2.JPG](../../img/Lu2.JPG) | jpeg | 2.082 | people.html:src |
 | [img/M_1r.png](../../img/M_1r.png) | png | 0.115 | index.html:src, js/index.js:dynamic-png-stem |
 | [img/M_2r.png](../../img/M_2r.png) | png | 0.165 | js/index.js:dynamic-png-stem |
-| [img/NBT-cover.jpg](../../img/NBT-cover.jpg) | jpeg | 0.085 | publications.html:src |
+| [img/NBT-cover--9cc10c8d0dec.jpg](../../img/NBT-cover--9cc10c8d0dec.jpg) | jpeg | 0.085 | publications.html:src |
 | [img/N_1r.png](../../img/N_1r.png) | png | 0.253 | index.html:src, js/index.js:dynamic-png-stem |
 | [img/N_2r.png](../../img/N_2r.png) | png | 0.326 | js/index.js:dynamic-png-stem |
 | [img/Nanami.jpg](../../img/Nanami.jpg) | jpeg | 0.081 | people.html:src |
@@ -78,9 +78,9 @@
 | [img/blank_person.jpg](../../img/blank_person.jpg) | jpeg | 0.002 | intern_recruit.html:src, internexp.html:src |
 | [img/blue_chrr.png](../../img/blue_chrr.png) | png | 0.072 | index.html:src |
 | [img/blue_yachielablogo.svg](../../img/blue_yachielablogo.svg) | svg | 0.015 | blank.html:src, contact.html:src, download.html:src ほか12件 |
-| [img/cgRNA_thumbnail.jpg](../../img/cgRNA_thumbnail.jpg) | jpeg | 0.123 | publications.html:src |
+| [img/cgRNA_thumbnail--a9f29f168e5e.jpg](../../img/cgRNA_thumbnail--a9f29f168e5e.jpg) | jpeg | 0.123 | publications.html:src |
 | [img/cloneselect-highcontrast.jpg](../../img/cloneselect-highcontrast.jpg) | jpeg | 0.293 | research.html:src |
-| [img/de-shachie-2021.JPG](../../img/de-shachie-2021.JPG) | jpeg | 2.978 | joinus.html:src |
+| [img/de-shachie-2021--40dc4bd9a59f.jpg](../../img/de-shachie-2021--40dc4bd9a59f.jpg) | jpeg | 2.978 | joinus.html:src |
 | [img/dji_fly_20260219_105720_0204_1771527692287_photo.jpg](../../img/dji_fly_20260219_105720_0204_1771527692287_photo.jpg) | jpeg | 1.930 | people.html:src |
 | [img/dji_fly_20260611_130824_0005_1781151221305_photo.jpg](../../img/dji_fly_20260611_130824_0005_1781151221305_photo.jpg) | jpeg | 2.029 | people.html:src |
 | [img/eric.jpg](../../img/eric.jpg) | jpeg | 0.646 | news.html:src, people.html:src |
@@ -101,10 +101,10 @@
 | [img/kazuki.jpg](../../img/kazuki.jpg) | jpeg | 3.355 | people.html:src |
 | [img/lablogosquare.jpg](../../img/lablogosquare.jpg) | jpeg | 0.159 | download.html:href, news.html:src, resources.html:href |
 | [img/lablogosquare200x200.jpg](../../img/lablogosquare200x200.jpg) | jpeg | 0.028 | download.html:src, resources.html:src |
-| [img/labmeeting2021.jpg](../../img/labmeeting2021.jpg) | jpeg | 0.225 | joinus.html:src |
+| [img/labmeeting2021--c8ce4f4fe69d.jpg](../../img/labmeeting2021--c8ce4f4fe69d.jpg) | jpeg | 0.225 | joinus.html:src |
+| [img/logo--d7ae2a3b3f77.jpg](../../img/logo--d7ae2a3b3f77.jpg) | jpeg | 0.075 | publications.html:src |
 | [img/logo-cdb-osaka-white-on-black.svg](../../img/logo-cdb-osaka-white-on-black.svg) | svg | 0.030 | alumni.html:src, blank.html:src, collab.html:src ほか19件 |
 | [img/logo-yachielab-ubc-white-on-black.svg](../../img/logo-yachielab-ubc-white-on-black.svg) | svg | 0.030 | alumni.html:src, blank.html:src, collab.html:src ほか19件 |
-| [img/logo.jpg](../../img/logo.jpg) | jpeg | 0.107 | publications.html:src |
 | [img/logo_joinus.png](../../img/logo_joinus.png) | png | 0.043 | index.html:src |
 | [img/logo_news.png](../../img/logo_news.png) | png | 0.033 | index.html:src |
 | [img/logo_people_osak.png](../../img/logo_people_osak.png) | png | 0.030 | index.html:src |
@@ -114,10 +114,10 @@
 | [img/logo_resources.png](../../img/logo_resources.png) | png | 0.034 | index.html:src |
 | [img/nophoto.jpg](../../img/nophoto.jpg) | jpeg | 0.056 | alumni.html:src, news.html:src, people.html:src |
 | [img/obi2.jpg](../../img/obi2.jpg) | jpeg | 0.823 | jikkenigaku2.html:src |
-| [img/osaka-university.jpg](../../img/osaka-university.jpg) | jpeg | 0.642 | joinus.html:src |
+| [img/osaka-university--353240b53bd0.jpg](../../img/osaka-university--353240b53bd0.jpg) | jpeg | 0.642 | joinus.html:src |
 | [img/pfp.png](../../img/pfp.png) | png | 19.762 | people.html:src |
 | [img/sanchit_profilePic.png](../../img/sanchit_profilePic.png) | png | 12.760 | people.html:src |
-| [img/sciadv_small.jpg](../../img/sciadv_small.jpg) | jpeg | 0.072 | publications.html:src |
+| [img/sciadv_small--4473f87c36aa.jpg](../../img/sciadv_small--4473f87c36aa.jpg) | jpeg | 0.072 | publications.html:src |
 | [img/setsubun_1_2026.jpg](../../img/setsubun_1_2026.jpg) | jpeg | 1.888 | news.html:src |
 | [img/sign_white.svg](../../img/sign_white.svg) | svg | 0.032 | alumni.html:src, blank.html:src, collab.html:src ほか20件 |
 | [img/tatsuya.jpg](../../img/tatsuya.jpg) | jpeg | 0.074 | intern_recruit.html:src, internexp.html:src |
@@ -169,6 +169,7 @@
 | [pdf/breakthrough02.pdf](../../pdf/breakthrough02.pdf) | pdf | 12.449 | jikkenigaku.html:href, publications.html:href |
 | [pdf/breakthrough04.pdf](../../pdf/breakthrough04.pdf) | pdf | 12.632 | jikkenigaku.html:href, publications.html:href |
 | [pdf/elife-46754-v1.pdf](../../pdf/elife-46754-v1.pdf) | pdf | 2.398 | publications.html:href |
+| [pdf/for sharing Nearly everything about the Yachie lab v3.pdf](../../pdf/for%20sharing%20Nearly%20everything%20about%20the%20Yachie%20lab%20v3.pdf) | pdf | 0.661 | joinus.html:href |
 | [pdf/gky890.pdf](../../pdf/gky890.pdf) | pdf | 2.278 | hideto.html:href, publications.html:href, research.html:href ほか3件 |
 | [pdf/growingtree01122019.pdf](../../pdf/growingtree01122019.pdf) | pdf | 4.459 | download.html:href, resources.html:href |
 | [pdf/lablogo.pdf](../../pdf/lablogo.pdf) | pdf | 0.780 | download.html:href, resources.html:href |
@@ -191,7 +192,7 @@
 
 ## 入力・ソースだけの参照
 
-33 件。
+37 件。
 
 | 公開パス | 実体 | MiB | 参照証拠 |
 | --- | --- | ---: | --- |
@@ -200,6 +201,7 @@
 | [img/David_Mackay.png](../../img/David_Mackay.png) | png | 0.564 | sheet:filename-match |
 | [img/E.png](../../img/E.png) | png | 0.713 | source:dynamic-png-stem |
 | [img/Endger.jpg](../../img/Endger.jpg) | jpeg | 0.127 | sheet:filename-match |
+| [img/HGHrdslWQAEmByC.jpg](../../img/HGHrdslWQAEmByC.jpg) | jpeg | 0.339 | sheet:filename-match |
 | [img/Headshot_Chaehyeon-Lee.jpg](../../img/Headshot_Chaehyeon-Lee.jpg) | jpeg | 1.019 | sheet:filename-match |
 | [img/Headshot_low.jpg](../../img/Headshot_low.jpg) | jpeg | 0.079 | sheet:filename-match |
 | [img/Jing.jpg](../../img/Jing.jpg) | jpeg | 0.034 | sheet:filename-match |
@@ -211,6 +213,9 @@
 | [img/ahmed.jpg](../../img/ahmed.jpg) | jpeg | 0.057 | sheet:filename-match |
 | [img/anushka.jpg](../../img/anushka.jpg) | jpeg | 0.131 | sheet:filename-match |
 | [img/blank.png](../../img/blank.png) | png | 0.018 | source:dynamic-png-stem |
+| [img/cgRNA_thumbnail.jpg](../../img/cgRNA_thumbnail.jpg) | jpeg | 0.123 | sheet:filename-match |
+| [img/de-shachie-2021.JPG](../../img/de-shachie-2021.JPG) | jpeg | 2.978 | sheet:filename-match |
+| [img/logo.jpg](../../img/logo.jpg) | jpeg | 0.107 | sheet:filename-match |
 | [img/louis.jpg](../../img/louis.jpg) | jpeg | 0.066 | sheet:filename-match |
 | [img/navy_addgene.svg](../../img/navy_addgene.svg) | svg | 0.003 | sheet:filename-match |
 | [img/navy_github.svg](../../img/navy_github.svg) | svg | 0.001 | sheet:filename-match |
@@ -220,6 +225,7 @@
 | [img/navy_x.svg](../../img/navy_x.svg) | svg | 0.001 | sheet:filename-match |
 | [img/navy_yachielablogo.svg](../../img/navy_yachielablogo.svg) | svg | 0.015 | sheet:filename-match |
 | [img/navy_yachielablogo2.svg](../../img/navy_yachielablogo2.svg) | html | 0.071 | source:filename-match |
+| [img/osaka-university.jpg](../../img/osaka-university.jpg) | jpeg | 0.642 | sheet:filename-match |
 | [img/stephanie.jpg](../../img/stephanie.jpg) | jpeg | 0.052 | sheet:filename-match |
 | [img/thumbnail2.png](../../img/thumbnail2.png) | png | 1.265 | source:filename-match |
 | [img/two_logos_on_white_on_black.svg](../../img/two_logos_on_white_on_black.svg) | svg | 0.074 | sheet:filename-match, source:filename-match |
@@ -227,14 +233,14 @@
 | [img_new/C.png](../../img_new/C.png) | png | 0.230 | source:dynamic-png-stem |
 | [img_new/E.png](../../img_new/E.png) | png | 0.713 | source:dynamic-png-stem |
 | [img_new/K.png](../../img_new/K.png) | png | 0.403 | source:dynamic-png-stem |
-| [pdf/for sharing Nearly everything about the Yachie lab v3.pdf](../../pdf/for%20sharing%20Nearly%20everything%20about%20the%20Yachie%20lab%20v3.pdf) | pdf | 0.661 | source:filename-match |
 
 ## 参照未確認・確認を保留
 
-269 件。
+275 件。
 
 | 公開パス | 実体 | MiB | 参照証拠 |
 | --- | --- | ---: | --- |
+| [img/4.cover-source_thumb.jpg](../../img/4.cover-source_thumb.jpg) | jpeg | 0.076 | 参照未確認 |
 | [img/AA.png](../../img/AA.png) | png | 0.700 | 参照未確認 |
 | [img/AAr.png](../../img/AAr.png) | png | 0.326 | 参照未確認 |
 | [img/All_member.png](../../img/All_member.png) | png | 2.268 | 参照未確認 |
@@ -263,11 +269,13 @@
 | [img/FF_1r.png](../../img/FF_1r.png) | png | 0.172 | 参照未確認 |
 | [img/FF_2.png](../../img/FF_2.png) | png | 0.410 | 参照未確認 |
 | [img/FF_2r.png](../../img/FF_2r.png) | png | 0.179 | 参照未確認 |
+| [img/FRACTAL_cover_small.jpg](../../img/FRACTAL_cover_small.jpg) | jpeg | 0.188 | 参照未確認 |
 | [img/F_1.png](../../img/F_1.png) | png | 0.376 | 参照未確認 |
 | [img/F_2.png](../../img/F_2.png) | png | 0.406 | 参照未確認 |
 | [img/G.png](../../img/G.png) | png | 0.320 | 参照未確認 |
 | [img/GG.png](../../img/GG.png) | png | 0.339 | 参照未確認 |
 | [img/GGr.png](../../img/GGr.png) | png | 0.157 | 参照未確認 |
+| [img/Greenstreet500x605.jpg](../../img/Greenstreet500x605.jpg) | jpeg | 0.422 | 参照未確認 |
 | [img/HH_1.png](../../img/HH_1.png) | png | 0.895 | 参照未確認 |
 | [img/HH_1r.png](../../img/HH_1r.png) | png | 0.394 | 参照未確認 |
 | [img/HH_2.png](../../img/HH_2.png) | png | 1.029 | 参照未確認 |
@@ -302,6 +310,7 @@
 | [img/M_1.png](../../img/M_1.png) | png | 0.257 | 参照未確認 |
 | [img/M_2.png](../../img/M_2.png) | png | 0.332 | 参照未確認 |
 | [img/Madina.jpg](../../img/Madina.jpg) | jpeg | 0.021 | 参照未確認 |
+| [img/NBT-cover.jpg](../../img/NBT-cover.jpg) | jpeg | 0.085 | 参照未確認 |
 | [img/NN_1.png](../../img/NN_1.png) | png | 0.677 | 参照未確認 |
 | [img/NN_1r.png](../../img/NN_1r.png) | png | 0.274 | 参照未確認 |
 | [img/NN_2.png](../../img/NN_2.png) | png | 0.714 | 参照未確認 |
@@ -357,6 +366,7 @@
 | [img/gray_yachielablogo.svg](../../img/gray_yachielablogo.svg) | svg | 0.015 | 参照未確認 |
 | [img/instagram.jpg](../../img/instagram.jpg) | jpeg | 0.183 | 参照未確認 |
 | [img/joinus_test.png](../../img/joinus_test.png) | png | 0.816 | 参照未確認 |
+| [img/labmeeting2021.jpg](../../img/labmeeting2021.jpg) | jpeg | 0.225 | 参照未確認 |
 | [img/logo-cdb-osaka-black-on-white (blue).svg](../../img/logo-cdb-osaka-black-on-white%20%28blue%29.svg) | svg | 0.030 | 参照未確認 |
 | [img/logo-cdb-osaka-black-on-white.svg](../../img/logo-cdb-osaka-black-on-white.svg) | svg | 0.030 | 参照未確認 |
 | [img/logo-cdb-osaka-white-on-black (blue).svg](../../img/logo-cdb-osaka-white-on-black%20%28blue%29.svg) | svg | 0.030 | 参照未確認 |
@@ -404,6 +414,7 @@
 | [img/publication_test.png](../../img/publication_test.png) | png | 0.510 | 参照未確認 |
 | [img/research_test.png](../../img/research_test.png) | png | 0.564 | 参照未確認 |
 | [img/rina2.jpg](../../img/rina2.jpg) | jpeg | 0.039 | 参照未確認 |
+| [img/sciadv_small.jpg](../../img/sciadv_small.jpg) | jpeg | 0.072 | 参照未確認 |
 | [img/setsubun_2_2026.jpg](../../img/setsubun_2_2026.jpg) | jpeg | 0.339 | 参照未確認 |
 | [img/sign.png](../../img/sign.png) | png | 0.031 | 参照未確認 |
 | [img/sign.svg](../../img/sign.svg) | svg | 0.037 | 参照未確認 |
