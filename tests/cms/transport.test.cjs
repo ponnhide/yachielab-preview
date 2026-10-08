@@ -815,7 +815,8 @@ test('cache-save failures after publication remain success and log no cache payl
   assert.equal(result.cacheSaved, false);
   assert.equal(result.metrics.cacheWriteErrors, 1);
   assert.equal(state.head, COMMIT);
-  assert.match(state.toasts.at(-1)[0], /Preview updated/);
+  assert.match(state.toasts.at(-1)[0], /Saved to GitHub/);
+  assert.match(state.toasts.at(-1)[0], /deployment is pending/);
   assert.match(state.toasts.at(-1)[0], /Cache save failed/);
   assert.doesNotMatch(JSON.stringify(state.logs), /PRIVATE CACHE PAYLOAD/);
   const metrics = JSON.parse(state.logs.find(entry => entry[0] === 'info')[1].replace('CMS metrics: ', ''));

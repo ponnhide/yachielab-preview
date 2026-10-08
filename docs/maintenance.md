@@ -24,6 +24,16 @@ CSS は安定した入口ファイルから基礎・レイアウト・共通部�
 
 通常メニューの `Update the current page` は `update_webpage` を実行します。それ以外は保守用関数で、通常メニューには表示しません。
 
+### 保存・公開・ブラウザ表示のタイミング
+
+Sheetの通知 `Saved to GitHub` は生成した変更の保存完了です。その後、GitHub Actionsが検査・画像処理・Pages公開を行います。通常はさらに2〜3分かかり、直近のContact更新では保存から公開完了まで約2分でした。`No new changes to save` でも、前回保存した変更の公開処理が続いている場合があります。公開の成否は [previewのActions](https://github.com/ponnhide/yachielab-preview/actions) で確認します。
+
+CSS・JSとCSSのimportにはビルド時の内容ハッシュをURLへ付けます。ただしGitHub PagesのHTML本体は `Cache-Control: max-age=600` で配信されるため、古いHTMLがブラウザに残る可能性があります。公開ビルドはページ別の内容ハッシュを `site-version.json` と各HTMLの `js/freshness.js` 読み込みタグに付けます。HTML本文・参照するCSS/JS・資産一覧・表示設定が判定対象で、元のHTMLやSheetにはビルド用タグを書き戻しません。
+
+ページを開くと、一度だけ同一サイトの版情報を `cache: no-store` で確認します。新しい公開版があれば、同じページのURLに `_sitev` を付けて読み直し、言語・People所属・その他のクエリとハッシュを保持します。既に最新の場合、通信失敗、5秒を超える応答、操作開始後には自動で読み直しません。URLとsessionStorageで連続リロードを防ぎ、同じページでの自動再取得は1分に1回までです。sessionStorageが使えない場合も現在のページは表示し続けます。閲覧中の定期ポーリングは行いません。
+
+この対策を含まない古いHTMLをすでに開いている場合は、一度だけ強制再読み込みまたは新しい確認用URLを使います。公開処理が未完了の間は、キャッシュ対策をしても新しい内容にはなりません。
+
 | GAS関数 | 用途 |
 | --- | --- |
 | `update_webpage` | 選択タブを差分更新します。新規本文タブの初回生成・登録、共通部品の反映もこの関数で行います。 |

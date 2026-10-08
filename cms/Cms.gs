@@ -45,7 +45,7 @@ function cmsRun_(work, command) {
     };
     result.metrics = metrics;
     console.info('CMS metrics: ' + JSON.stringify(metrics));
-    var status = result.changed ? 'Preview updated: ' + (result.pages || 0) + ' page(s).' : 'No changes to publish.';
+    var status = result.changed ? 'Saved to GitHub: ' + (result.pages || 0) + ' page(s). Site deployment is pending; usually 2–3 minutes.' : 'No new changes to save. An earlier site deployment may still be running.';
     if (result.cacheSaved === false) status += ' Cache save failed; next update will regenerate.';
     if (result.assetsSaved === false) status += ' Asset registry save failed; next update will check sources again.';
     if (result.registrationSaved === false) status += ' Sheet/Page registration is pending. Run Update the current page again.';

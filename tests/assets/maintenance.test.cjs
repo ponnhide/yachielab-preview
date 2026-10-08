@@ -91,3 +91,28 @@ test('frontend fingerprint is stable, changes with JS, and versions scripts/styl
  const result=b.versionFrontendHtml(html,'index.html',hash);assert(result.includes('src="js/index.js?x=2&amp;v='+hash+'#run"'));assert(result.includes('href="css/base.css?v='+hash+'"'));assert(result.includes('src="https://external.example/js/index.js"'));assert(result.includes('<a href="css/base.css">'));
  const css=b.versionFrontendCss('@import "base.css?x=3";@import url("other.css");/* @import "comment.css"; */body{content:"@import x.css"}','css/common.css',hash);assert(css.includes('base.css?x=3&v='+hash));assert(css.includes('other.css?v='+hash));assert(css.includes('/* @import "comment.css"; */'));
 });
+
+test('built page versions follow Sheet HTML changes independently and include settings/assets without touching source HTML',()=>{
+ const root=fixture();try{
+  const output=path.join(root,'dist/site');fs.mkdirSync(path.join(output,'js'),{recursive:true});
+  fs.writeFileSync(path.join(output,'js/freshness.js'),'// controller');
+  const original='<html><head><title>Page</title></head><body>Original</body></html>';
+  const seed=(contact=original,settings='{}',assets='{}')=>{
+   for(const name of ['contact.html','joinus.html','404.html'])fs.writeFileSync(path.join(output,name),name==='contact.html'?contact:original);
+   fs.writeFileSync(path.join(output,'site-settings.json'),settings);fs.writeFileSync(path.join(output,'asset-versions.json'),assets);
+   return b.stampPageVersions(output,'1'.repeat(12));
+  };
+  fs.writeFileSync(path.join(root,'contact.html'),original);
+  const first=seed(),repeat=seed();assert.deepEqual(first,repeat);assert.deepEqual(Object.keys(first),['contact.html','joinus.html']);
+  const compiled=fs.readFileSync(path.join(output,'contact.html'),'utf8');
+  assert(compiled.includes('data-page="contact.html" data-page-version="'+first['contact.html']+'"'));
+  assert(compiled.includes('./js/freshness.js?v=111111111111'));assert(compiled.indexOf('freshness.js')<compiled.indexOf('</head>'));
+  assert.equal(fs.readFileSync(path.join(root,'contact.html'),'utf8'),original);
+  assert.equal(fs.readFileSync(path.join(output,'404.html'),'utf8'),original);
+  const changed=seed(original.replace('Original','Sheet change'));
+  assert.notEqual(changed['contact.html'],first['contact.html']);assert.equal(changed['joinus.html'],first['joinus.html']);
+  const settings=seed(original,'{"logoInactiveOpacity":0.4}');assert.notEqual(settings['contact.html'],first['contact.html']);
+  const assets=seed(original,'{}','{"assets":{"img/a.png":"new"}}');assert.notEqual(assets['joinus.html'],first['joinus.html']);
+  assert.deepEqual(JSON.parse(fs.readFileSync(path.join(output,'site-version.json'))),{version:1,pages:assets});
+ }finally{fs.rmSync(root,{recursive:true,force:true});}
+});

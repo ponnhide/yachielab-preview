@@ -36,6 +36,20 @@ function versionFrontendHtml(html,relative,fingerprint) {
     if(/^<link\b/i.test(token)&&/(?:^|\s)stylesheet(?:\s|$)/i.test(assets.attributes(token).rel||''))return tag(token,'href');return token;
   });
 }
+function stampPageVersions(output,fingerprint) {
+  const pages={},settings=fs.readFileSync(path.join(output,'site-settings.json'),'utf8'),versions=fs.readFileSync(path.join(output,'asset-versions.json'),'utf8');
+  if(!fs.existsSync(path.join(output,'js/freshness.js')))throw new Error('Missing HTML freshness controller.');
+  for(const name of fs.readdirSync(output).filter(name=>/^[\w-]+\.html$/.test(name)&&name!=='404.html').sort()) {
+    const filename=path.join(output,name),html=fs.readFileSync(filename,'utf8');
+    if(!/<\/head\s*>/i.test(html))throw new Error('Missing page head: '+name);
+    const revision=crypto.createHash('sha256').update(html+'\0'+settings+'\0'+versions).digest('hex');
+    pages[name]=revision;
+    const loader='<script src="./js/freshness.js?v='+fingerprint+'" data-page="'+name+'" data-page-version="'+revision+'" defer></script>\n';
+    fs.writeFileSync(filename,html.replace(/<\/head\s*>/i,loader+'</head>'));
+  }
+  fs.writeFileSync(path.join(output,'site-version.json'),JSON.stringify({version:1,pages},null,2)+'\n');
+  return pages;
+}
 function allFiles(root) {
   const results=[];
   function walk(folder){for(const entry of fs.readdirSync(folder,{withFileTypes:true})){const name=path.join(folder,entry.name);if(entry.isSymbolicLink())throw new Error('Public files cannot be symlinks.');if(entry.isDirectory())walk(name);else if(entry.isFile())results.push(name);}}
@@ -121,6 +135,7 @@ async function build(root,output) {
   const frontend=allFiles(output).filter(f=>/\.(?:css|js)$/.test(f)),fingerprint=frontendFingerprint(frontend.map(f=>[path.relative(output,f).split(path.sep).join('/'),fs.readFileSync(f)]));
   for(const filename of allFiles(output).filter(f=>/\.(?:html|css)$/.test(f))){const relative=path.relative(output,filename).split(path.sep).join('/'),old=fs.readFileSync(filename,'utf8');fs.writeFileSync(filename,/\.html$/.test(relative)?versionFrontendHtml(old,relative,fingerprint):versionFrontendCss(old,relative,fingerprint));}
   fs.writeFileSync(path.join(output,'asset-versions.json'),JSON.stringify(versions,null,2)+'\n');
+  stampPageVersions(output,fingerprint);
   const summary=verify(root,output),adopted=generated.report.results.filter(r=>r.adopted);
   const report={...generated.report,summary:{...summary,frontendFingerprint:fingerprint,originalDisplayBytes:adopted.reduce((n,r)=>n+r.originalBytes,0),derivativeDisplayBytes:adopted.reduce((n,r)=>n+r.targetBytes,0),optimizedImages:adopted.length}};
   fs.writeFileSync(path.join(root,'dist/asset-build-report.json'),JSON.stringify(report,null,2)+'\n');
@@ -130,5 +145,5 @@ async function main(args=process.argv.slice(2)) {
   const i=args.indexOf('--output'),relative=i>=0?args[i+1]:'dist/site',output=outputDirectory(ROOT,relative,!args.includes('--verify'));
   console.log(JSON.stringify(args.includes('--verify')?verify(ROOT,output):await build(ROOT,output)));
 }
-module.exports={rewriteUrl,rewriteCss,rewriteHtml,rewriteSrcset,frontendTarget,frontendUrl,frontendFingerprint,versionFrontendCss,versionFrontendHtml,outputDirectory,verify,build};
+module.exports={rewriteUrl,rewriteCss,rewriteHtml,rewriteSrcset,frontendTarget,frontendUrl,frontendFingerprint,versionFrontendCss,versionFrontendHtml,stampPageVersions,outputDirectory,verify,build};
 if(require.main===module)main().catch(error=>{console.error(error.message);process.exitCode=1;});
