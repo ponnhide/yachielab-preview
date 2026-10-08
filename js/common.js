@@ -8,23 +8,16 @@
   const languages = { EN: 'English', JA: 'Japanese', ZH: 'Chinese' };
   const mobileWidth = 600;
   const homePage = Boolean(document.getElementById('main_menu'));
-  // Shared chrome contains both labs on every page; only authored body rows
-  // determine whether the logos need to show a campus selection.
-  const hasAffiliationContent = !homePage && Array.from(document.querySelectorAll('.posts, .posts .UBC, .posts .Osaka')).some(function (element) {
-    const classes = element.classList;
-    return !classes.contains('All') && classes.contains('UBC') !== classes.contains('Osaka');
-  });
+  const labs = ['UBC', 'Osaka'];
   const originalDisplay = new WeakMap();
   const subscribers = new Set();
   upgradeLogoMarkup();
   const elements = Array.from(document.querySelectorAll('.English, .Japanese, .Chinese, .Common, .UBC, .Osaka, .All'));
   const authoredPeopleAffiliations = new WeakMap();
   const initialUrl = new URL(window.location.href);
-  const initialAffiliation = initialUrl.searchParams.get('affil');
   const state = {
     language: languages[initialUrl.searchParams.get('lang')] ? initialUrl.searchParams.get('lang') : 'EN',
-    affiliation: initialAffiliation === 'UBC' || initialAffiliation === 'Osaka' ? initialAffiliation : (initialUrl.searchParams.get('lang') === 'JA' ? 'Osaka' : 'UBC'),
-    hasAffiliation: initialAffiliation === 'Osaka' || initialAffiliation === 'UBC'
+    affiliations: initialAffiliations(initialUrl)
   };
 
   elements.forEach(function (element) {
@@ -36,7 +29,17 @@
 
   function isMobile() { return window.innerWidth <= mobileWidth; }
   function assetUrl(value) { return window.YachieAssets ? window.YachieAssets.versionUrl(value) : value; }
-  function getState() { return Object.assign({}, state); }
+  function peopleAffiliation(url) {
+    const affiliation = url.searchParams.get('affil');
+    return /\/people\.html$/i.test(url.pathname) && labs.includes(affiliation) ? affiliation : null;
+  }
+  function initialAffiliations(url) {
+    // People Osaka/UBC are entry links to one page. All other entries start
+    // with both labs, even when an old link still carries an affil parameter.
+    const selected = peopleAffiliation(url);
+    return { UBC: !selected || selected === 'UBC', Osaka: !selected || selected === 'Osaka' };
+  }
+  function getState() { return { language: state.language, affiliations: Object.assign({}, state.affiliations) }; }
   function subscribe(callback) {
     subscribers.add(callback);
     return function () { subscribers.delete(callback); };
@@ -53,11 +56,12 @@
     try { url = new URL(href, window.location.href); } catch (_) { return; }
     if (url.origin !== window.location.origin || !(/\.html$/i.test(url.pathname) || /\/$/.test(url.pathname))) return;
     if (!authoredPeopleAffiliations.has(link)) {
-      const originalAffiliation = url.searchParams.get('affil');
-      authoredPeopleAffiliations.set(link, /\/people\.html$/i.test(url.pathname) && /^(UBC|Osaka)$/.test(originalAffiliation || '') ? originalAffiliation : null);
+      authoredPeopleAffiliations.set(link, peopleAffiliation(url));
     }
     url.searchParams.set('lang', state.language);
-    url.searchParams.set('affil', affiliation || authoredPeopleAffiliations.get(link) || state.affiliation);
+    const entryAffiliation = affiliation || authoredPeopleAffiliations.get(link);
+    if (/\/people\.html$/i.test(url.pathname) && labs.includes(entryAffiliation)) url.searchParams.set('affil', entryAffiliation);
+    else url.searchParams.delete('affil');
     // Preserve relative paths (including project Pages paths), other query keys and hashes.
     if (/^(https?:)?\/\//i.test(href)) {
       link.setAttribute('href', url.href);
@@ -112,7 +116,7 @@
       const languageMatches = !hasLanguage || classes.contains(languages[state.language]);
       const stableLogo = element.id === 'frontlogo' || element.id === 'backlogo';
       const oldDuplicate = element.id === 'frontlogo2' || element.id === 'backlogo2';
-      const affiliationMatches = stableLogo || !hasAffiliation || classes.contains('All') || classes.contains(state.affiliation);
+      const affiliationMatches = stableLogo || !hasAffiliation || classes.contains('All') || labs.some(function (lab) { return state.affiliations[lab] && classes.contains(lab); });
       element.style.display = !oldDuplicate && languageMatches && affiliationMatches ? originalDisplay.get(element) : 'none';
     });
     document.documentElement.lang = { EN: 'en', JA: 'ja', ZH: 'zh' }[state.language];
@@ -121,7 +125,11 @@
     updateLinks();
     const url = new URL(window.location.href);
     url.searchParams.set('lang', state.language);
-    url.searchParams.set('affil', state.affiliation);
+    // Toggles belong to the current visit; navigation/reload uses the page's
+    // initial state. Keep only the authored People entry, not a global filter.
+    const entryAffiliation = peopleAffiliation(url);
+    if (entryAffiliation) url.searchParams.set('affil', entryAffiliation);
+    else url.searchParams.delete('affil');
     window.history.replaceState(null, '', url);
     subscribers.forEach(function (callback) { callback(getState()); });
     requestLayout();
@@ -130,15 +138,23 @@
   function setLanguage(language) {
     if (!languages[language]) return;
     state.language = language;
-    // Language and affiliation are independent after the initial URL defaults.
+    // Language changes preserve both independent lab toggles.
     renderLanguage();
   }
 
-  function setAffiliation(affiliation) {
-    if (affiliation !== 'UBC' && affiliation !== 'Osaka') return;
-    state.affiliation = affiliation;
-    state.hasAffiliation = true;
+  function setAffiliationEnabled(affiliation, enabled) {
+    if (!labs.includes(affiliation) || typeof enabled !== 'boolean') return;
+    state.affiliations[affiliation] = enabled;
     renderLanguage();
+  }
+
+  function toggleAffiliation(affiliation) {
+    if (!labs.includes(affiliation)) return;
+    setAffiliationEnabled(affiliation, !state.affiliations[affiliation]);
+  }
+
+  function logoLabel(affiliation) {
+    return 'Show ' + (affiliation === 'UBC' ? 'UBC' : 'The University of Osaka') + ' lab content';
   }
 
   function bindButton(control, handler) {
@@ -162,7 +178,7 @@
     control.classList.add('logo-control');
     control.classList.add(affiliation === 'UBC' ? 'logo-ubc' : 'logo-osaka');
     control.setAttribute('data-affiliation', affiliation);
-    control.setAttribute('aria-label', 'Switch to ' + (affiliation === 'UBC' ? 'UBC' : 'The University of Osaka') + ' lab');
+    control.setAttribute('aria-label', logoLabel(affiliation));
     control.setAttribute('aria-pressed', 'false');
     if (image) control.appendChild(image);
     return control;
@@ -274,8 +290,9 @@
       Object.keys(variables).forEach(function (property) { element.style.setProperty(property, variables[property]); });
     });
     document.querySelectorAll('.logo-control[data-affiliation]').forEach(function (control) {
-      control.setAttribute('data-affiliation-content', hasAffiliationContent ? 'specific' : 'shared');
-      control.setAttribute('aria-pressed', String(control.getAttribute('data-affiliation') === state.affiliation));
+      const affiliation = control.getAttribute('data-affiliation');
+      control.setAttribute('aria-label', logoLabel(affiliation));
+      control.setAttribute('aria-pressed', String(state.affiliations[affiliation]));
       const withinHeader = header && header.contains(control);
       control.setAttribute('tabindex', withinHeader && isMobile() ? '-1' : '0');
     });
@@ -473,7 +490,7 @@
 
   window.YachieSite = Object.freeze({
     isHomePage: homePage, isMobile: isMobile, getState: getState,
-    setLanguage: setLanguage, setAffiliation: setAffiliation,
+    setLanguage: setLanguage, setAffiliationEnabled: setAffiliationEnabled, toggleAffiliation: toggleAffiliation,
     subscribe: subscribe, updateLink: updateLink, bindButton: bindButton,
     assetUrl: assetUrl,
     requestLayout: requestLayout, calculateInteriorGeometry: calculateInteriorGeometry
@@ -492,9 +509,8 @@
   window.addEventListener('load', function () { requestLayout(true); });
   window.addEventListener('popstate', function () {
     const url = new URL(window.location.href);
-    state.hasAffiliation = /^(UBC|Osaka)$/.test(url.searchParams.get('affil') || '');
-    state.affiliation = state.hasAffiliation ? url.searchParams.get('affil') : (url.searchParams.get('lang') === 'JA' ? 'Osaka' : 'UBC');
-    setLanguage(url.searchParams.get('lang') || 'EN');
+    state.affiliations = initialAffiliations(url);
+    setLanguage(languages[url.searchParams.get('lang')] ? url.searchParams.get('lang') : 'EN');
   });
   document.querySelectorAll('#normal_header img').forEach(function (image) {
     image.addEventListener('load', function () { requestLayout(true); });
@@ -505,7 +521,7 @@
     [main, sidebar, header].filter(Boolean).forEach(function (element) { contentObserver.observe(element); });
   }
   document.querySelectorAll('.logo-control[data-affiliation]').forEach(function (control) {
-    bindButton(control, function (event) { event.preventDefault(); setAffiliation(control.getAttribute('data-affiliation')); });
+    bindButton(control, function (event) { event.preventDefault(); toggleAffiliation(control.getAttribute('data-affiliation')); });
   });
   setLanguage(state.language);
   fetchLogoSettings();

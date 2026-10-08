@@ -182,7 +182,7 @@ function rendererLabControl_(affiliation, image, attributes) {
   var university = affiliation === 'UBC' ? 'University of British Columbia' : 'The University of Osaka';
   var name = affiliation === 'UBC' ? 'Yachie Lab, ' + university : 'Laboratory of Creative Destruction Biology, ' + university;
   return '<button type="button" class="logo-control logo-' + affiliation.toLowerCase() + '" data-affiliation="' + affiliation +
-    '" aria-label="Switch to ' + university + ' lab" aria-pressed="false"' + attributes + '>' +
+    '" aria-label="Show ' + university + ' lab content" aria-pressed="true"' + attributes + '>' +
     '<img src="' + sheetAttribute_(image) + '" alt="' + name + '"></button>';
 }
 

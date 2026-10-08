@@ -108,7 +108,8 @@ check('Header pair presets produce independent lab buttons without a home-link w
       assert.equal((html.match(/<button type="button"/g) || []).length, 2);
       assert(html.includes('class="logo-control logo-ubc" data-affiliation="UBC"'));
       assert(html.includes('class="logo-control logo-osaka" data-affiliation="Osaka"'));
-      assert.equal((html.match(/aria-pressed="false"/g) || []).length, 2);
+      assert.equal((html.match(/aria-pressed="true"/g) || []).length, 2);
+      assert.equal((html.match(/aria-label="Show [^"]+ lab content"/g) || []).length, 2);
       assert(!html.includes('<a '));
       assert(!/<img[^>]*class="logo-/.test(html));
       assert(!html.includes(filename));
