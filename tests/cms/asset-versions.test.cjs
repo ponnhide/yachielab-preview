@@ -192,3 +192,17 @@ test('an unchanged returned tree exposes only the existing asset SHAs to success
   assert.equal(result.assetShas['img/a.png'], A, 'Unpublished pending bytes must not be recorded as deployed');
   assert.equal(state.io.filter(call => call.method === 'patch').length, 0);
 });
+
+test('SHA-only known repository assets version and publish without decoding, base64 uploads or private source data',()=>{
+  const {runtime:r,context,io,decodes}=publisherFixture();context.pendingAssets.push({path:'img/large--source.jpg',sha:A});
+  assert.equal(r.cmsAssetVersionUrl_('./img/large--source.jpg'),'./img/large--source.jpg?v='+A.slice(0,12));assert.equal(decodes(),0);
+  const result=r.cmsPublish_([]);assert.equal(result.assetShas['img/large--source.jpg'],A);
+  assert.equal(io.filter(call=>call.endpoint==='git/blobs').length,0);
+  const tree=io.find(call=>call.endpoint==='git/trees');assert.deepEqual(JSON.parse(JSON.stringify(tree.payload.tree.find(item=>item.path==='img/large--source.jpg'))),{path:'img/large--source.jpg',mode:'100644',type:'blob',sha:A});
+});
+test('unknown or ambiguous SHA-only pending entries fail before any tree, commit or ref publication',()=>{
+  for(const asset of [{path:'img/new.jpg',sha:'f'.repeat(40)},{path:'img/new.jpg',sha:'bad'},{path:'img/new.jpg',sha:A,content:'eA=='}]) {
+    const {runtime:r,context,io}=publisherFixture();context.pendingAssets.push(asset);assert.throws(()=>r.cmsPublish_([]),/Unverified known asset SHA/);
+    assert.equal(io.filter(call=>call.method==='post'||call.method==='patch').length,0);
+  }
+});

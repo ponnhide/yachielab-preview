@@ -115,6 +115,9 @@ function cmsPublish_(files, message) {
     assetShas[asset.path] = computedSha;
     var actual = snapshot.entries[asset.path];
     if (actual && actual.sha === computedSha) return;
+    // SHA-only pending entries are permitted only for verified repository bytes.
+    // They must never fall through to an upload with no content.
+    if (asset.sha !== undefined && (asset.content !== undefined || asset.sha !== computedSha || !repositoryBlobs[computedSha])) throw new Error('Unverified known asset SHA.');
     // A source-specific filename may still refer to bytes already stored under
     // a legacy name. Reuse that Git object while keeping the new path intact.
     var blob = repositoryBlobs[computedSha] ? {sha: computedSha} :

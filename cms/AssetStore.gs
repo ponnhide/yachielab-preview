@@ -1,9 +1,33 @@
 /** Synchronize selected-page sources before HTML cache lookup; preserve old assets. */
 function cmsAssetSha_(path) {
   var context = cmsContext_(), pending = (context.pendingAssets || []).filter(function(asset) { return asset.path === path; })[0];
-  if (pending) return cmsGitBlobSha_(Utilities.base64Decode(pending.content));
+  if (pending) {
+    if (pending.sha !== undefined) {
+      if (pending.content !== undefined || !cmsAssetKnownSha_(pending.sha)) throw new Error('Unverified known asset SHA.');
+      return pending.sha;
+    }
+    return cmsGitBlobSha_(Utilities.base64Decode(pending.content));
+  }
   var entry = cmsGithubSnapshot_().entries[path];
   return entry && entry.type === 'blob' ? entry.sha : '';
+}
+
+function cmsAssetKnownSha_(sha) {
+  if (!/^[a-f0-9]{40}$/.test(sha || '')) return false;
+  var entries = cmsGithubSnapshot_().entries;
+  return Object.keys(entries).some(function(path) { return entries[path].type === 'blob' && entries[path].sha === sha; });
+}
+
+function cmsQueueKnownAsset_(path, sha) {
+  if (!previewWritablePath_(path) || !/^img\//.test(path) || !cmsAssetKnownSha_(sha)) throw new Error('Unverified known asset SHA.');
+  var context = cmsContext_(), existing = context.pendingAssets.filter(function(asset) { return asset.path === path; })[0];
+  if (existing) {
+    var existingSha = existing.sha !== undefined ? existing.sha : cmsGitBlobSha_(Utilities.base64Decode(existing.content));
+    if (existingSha !== sha) throw new Error('Two different assets share the filename: ' + path);
+    return;
+  }
+  context.pendingAssets.push({path: path, sha: sha});
+  cmsAssetStats_().staged++;
 }
 
 function cmsAssetUrl_(path, sha) {
@@ -131,7 +155,10 @@ function cmsAssetPrepare_(value) {
       record.sourceModifiedAt = modified && typeof modified.toISOString === 'function' ? modified.toISOString() : String(modified || '');
     }
     if (!context.refreshAssets && published && record.sourceModifiedAt && record.sourceModifiedAt === old.sourceModifiedAt) unchanged = true;
-    else { bytes = file.getBlob().getBytes(); stats.downloaded++; }
+    else {
+      if (!pdf && typeof file.getSize === 'function' && Number(file.getSize()) > 32 * 1024 * 1024) throw new Error('Image exceeds the 32 MiB verification limit; add it through GitHub instead.');
+      bytes = file.getBlob().getBytes(); stats.downloaded++;
+    }
   } else {
     var headers = {};
     if (!context.refreshAssets && published) {
@@ -149,15 +176,22 @@ function cmsAssetPrepare_(value) {
     record.etag = cmsAssetHeader_(response, 'ETag') || (status === 304 ? old.etag : '');
     record.lastModified = cmsAssetHeader_(response, 'Last-Modified') || (status === 304 ? old.lastModified : '');
     if (status === 304) unchanged = true;
-    else { bytes = response.getBlob().getBytes(); stats.downloaded++; }
+    else {
+      var advertised = cmsAssetHeader_(response, 'Content-Length');
+      if (!pdf && /^\d+$/.test(advertised) && Number(advertised) > 32 * 1024 * 1024) throw new Error('Image exceeds the 32 MiB verification limit; add it through GitHub instead.');
+      bytes = response.getBlob().getBytes(); stats.downloaded++;
+    }
   }
   if (unchanged) { record.sha = old.sha; stats.notModified++; }
   else {
     if (pdf && bytes.length > maximum) return cmsAssetPdfFallback_(value, source, key, name, path, store);
-    cmsValidateAsset_(name, bytes);
+    cmsValidateAsset_(name, bytes, !pdf);
     if (bytes.length > 1024 * 1024) cmsAssetProgress_('hash', bytes.length);
     record.sha = cmsGitBlobSha_(bytes);
-    if (!actual || actual.type !== 'blob' || actual.sha !== record.sha) cmsQueueAsset_(path, Utilities.base64Encode(bytes));
+    if (bytes.length > maximum) {
+      if (!cmsAssetKnownSha_(record.sha)) throw new Error('New or changed image exceeds the 16 MiB CMS upload limit; add it through GitHub instead.');
+      if (!actual || actual.type !== 'blob' || actual.sha !== record.sha) cmsQueueKnownAsset_(path, record.sha);
+    } else if (!actual || actual.type !== 'blob' || actual.sha !== record.sha) cmsQueueAsset_(path, Utilities.base64Encode(bytes));
   }
   // CheckedAt is the last persisted verification timestamp. Verification still
   // occurs every execution, but an identical record needs no Sheet rewrite.
@@ -210,9 +244,10 @@ function cmsAssetsPrepareRow_(row, parameters, options) {
 }
 function cmsAssetRowFingerprint_(row, parameters, options) { return cmsAssetsPrepareRow_(row, parameters, options); }
 
-function cmsValidateAsset_(name, bytes) {
+function cmsValidateAsset_(name, bytes, verifyExistingImage) {
   if (!bytes.length) throw new Error('Downloaded asset is empty.');
-  if (bytes.length > 16 * 1024 * 1024) throw new Error('Asset exceeds the 16 MiB CMS upload limit; add it through GitHub instead.');
+  var limit = verifyExistingImage && !/\.pdf$/i.test(name) ? 32 : 16;
+  if (bytes.length > limit * 1024 * 1024) throw new Error(limit === 32 ? 'Image exceeds the 32 MiB verification limit; add it through GitHub instead.' : 'Asset exceeds the 16 MiB CMS upload limit; add it through GitHub instead.');
   var start = bytes.slice(0, 512).map(function(value) { return String.fromCharCode((value + 256) % 256); }).join('');
   if (/<(?:!doctype\s+html|html|head|body)\b/i.test(start)) throw new Error('Downloaded asset is an HTML page, not an image/PDF: ' + name);
   var signature = bytes.slice(0, 12).map(function(value) { return (value + 256) % 256; });
@@ -231,7 +266,7 @@ function cmsQueueAsset_(path, content) {
   cmsValidateAsset_(path.slice(path.lastIndexOf('/') + 1), Utilities.base64Decode(content));
   var existing = cmsContext_().pendingAssets.filter(function(asset) { return asset.path === path; })[0];
   if (existing) {
-    if (existing.content !== content) throw new Error('Two different assets share the filename: ' + path);
+    if (existing.sha !== undefined ? existing.sha !== cmsGitBlobSha_(Utilities.base64Decode(content)) : existing.content !== content) throw new Error('Two different assets share the filename: ' + path);
     return;
   }
   cmsContext_().pendingAssets.push({path: path, content: content});

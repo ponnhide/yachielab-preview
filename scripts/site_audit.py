@@ -365,7 +365,7 @@ def markdown_report(report: dict) -> str:
         f"| Sheet JSON の入力ファイル | {report['scope']['sheet_sources_supplied']} |",
         f"| 入力された Sheet のタブ | {report['scope']['sheet_tabs_supplied']} |",
         f"| 具体的な検査エラー | {summary['errors']} |", "",
-        "**確認候補は削除候補の確定ではありません。** Sheet、生成処理、組み立てた URL、過去の公開資料、外部リンクの確認が必要です。この整理では既存の画像・PDF を削除・移動していません。公開ページから辿れる参照も、画面上での表示や利用回数を測定したものではありません。Sheet は指定された書き出し時点の内容だけを確認しています。", "",
+        "**確認候補は削除候補の確定ではありません。** Sheet、生成処理、組み立てた URL、過去の公開資料、外部リンクの確認が必要です。preview での保管先変更と復元情報は [整理記録](maintenance.md) を確認してください。公開ページから辿れる参照も、画面上での表示や利用回数を測定したものではありません。Sheet は指定された書き出し時点の内容だけを確認しています。", "",
         "## ディレクトリ別の画像数", "",
         "画像数は拡張子を基準とし、HEIC や形式不一致のファイルも含みます。PDF や作業元を含む全ファイル数と区別します。", "",
         "| ディレクトリ | 全ファイル | 画像拡張子 | 画像の参照証拠あり | 画像の参照未確認 |", "| --- | ---: | ---: | ---: | ---: |",
@@ -374,7 +374,7 @@ def markdown_report(report: dict) -> str:
         rows.append(f"| `{item['directory']}/` | {item['files']} | {item['image_files']} | {item['image_referenced']} | {item['image_review_candidates']} |")
     rows += ["",
         "## 作業元のファイル", "",
-        "ブラウザ向け配信物以外の形式を個別に記録します。元の公開パスは維持しています。", "",
+        "現在の公開ディレクトリにある、ブラウザ向け配信物以外の形式を個別に記録します。退避した作業元は archive-manifest.json を確認してください。", "",
     ]
     for asset in report["assets"]:
         if asset["source_asset"]:
@@ -402,7 +402,7 @@ def markdown_report(report: dict) -> str:
 def catalogue_report(report: dict) -> str:
     rows = ["# 資産の参照一覧", "",
             "監査時点の公開 HTML と、そこから読み込まれるローカル CSS / JS を基準に分けています。入力・ソースだけの参照には Sheet の書き出し、未読込 CSS、旧 GAS、コメント内のファイル名も含みます。動的な全 URL と外部からの直接リンクは網羅していません。", "",
-            "参照未確認のファイルも公開パスを維持します。重複や古い版を含め、この一覧から自動削除しません。ハッシュ付きファイル名と `?v=` は元のローカルファイルへ解決します。詳細な SHA と全参照証拠は [manifest.json](manifest.json) を参照してください。", ""]
+            "この一覧は現在の配信資産を対象とし、一覧だけを根拠に自動削除しません。preview でアーカイブしたパスと復元情報は [整理記録](maintenance.md) を参照してください。ハッシュ付きファイル名と `?v=` は元のローカルファイルへ解決します。詳細な SHA と全参照証拠は [manifest.json](manifest.json) を参照してください。", ""]
     labels = [("published-reference", "公開ページから辿れる参照"),
               ("source-reference", "入力・ソースだけの参照"),
               ("review-candidate", "参照未確認・確認を保留")]

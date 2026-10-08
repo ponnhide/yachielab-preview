@@ -1,0 +1,21 @@
+{
+  "name": "yachielab-preview-checks",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Offline regression and static checks for the Yachie Lab preview",
+  "engines": {
+    "node": ">=22.0.0",
+    "npm": ">=10.0.0"
+  },
+  "scripts": {
+    "check": "node scripts/check.cjs",
+    "test": "node scripts/check.cjs node",
+    "test:python": "node scripts/check.cjs python",
+    "check:css": "node scripts/check.cjs css",
+    "check:audit": "node scripts/check.cjs audit"
+  },
+  "devDependencies": {
+    "@google/clasp": "3.4.1",
+    "sharp": "0.35.4"
+  }
+}

@@ -17,6 +17,12 @@ function cmsAssetVersionMap_() {
   }
   (context.pendingAssets || []).forEach(function(asset) {
     if (!cmsPublicAssetPath_(asset.path)) return;
+    if (asset.sha !== undefined) {
+      var snapshot = cmsGithubSnapshot_().entries;
+      if (asset.content !== undefined || !/^[a-f0-9]{40}$/.test(asset.sha || '') || !Object.keys(snapshot).some(function(path) { return snapshot[path].type === 'blob' && snapshot[path].sha === asset.sha; })) throw new Error('Unverified known asset SHA.');
+      context.publicAssetVersions[asset.path] = asset.sha;
+      return;
+    }
     var cached = context.publicAssetHashCache[asset.path];
     if (!cached || cached.content !== asset.content) {
       cached = context.publicAssetHashCache[asset.path] = {content: asset.content, sha: cmsGitBlobSha_(Utilities.base64Decode(asset.content))};

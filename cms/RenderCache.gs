@@ -1,8 +1,12 @@
 /** Disposable render cache. Source tabs remain authoritative; no cache writes
  * happen until the complete GitHub publish has succeeded (including no-change).
- * Bump this version after changing Renderer, SheetStyles, Showdown or HTML normalization.
+ * Synced builds use the generated source fingerprint; this version is the fallback
+ * for a manual deployment without BuildInfo.gs.
  */
 var CMS_CACHE_RENDERER_VERSION_ = '2026-10-08.2';
+function cmsRendererVersion_() {
+  return typeof CMS_SOURCE_FINGERPRINT_ === 'string' && /^[a-f0-9]{64}$/.test(CMS_SOURCE_FINGERPRINT_) ? 'source:' + CMS_SOURCE_FINGERPRINT_ : CMS_CACHE_RENDERER_VERSION_;
+}
 var CMS_CACHE_SHEET_ = '_cms_cache';
 var CMS_CACHE_TTL_MS_ = 6 * 60 * 60 * 1000;
 var CMS_CACHE_CELL_LIMIT_ = 40000;
@@ -63,6 +67,11 @@ function cmsCacheDependencies_(html) {
 function cmsCachePendingSha_(context, path) {
   var pending = context.pendingAssets.filter(function(asset) { return asset.path === path; })[0];
   if (!pending) return '';
+  if (pending.sha !== undefined) {
+    var entries = cmsGithubSnapshot_().entries;
+    if (pending.content !== undefined || !/^[a-f0-9]{40}$/.test(pending.sha) || !Object.keys(entries).some(function(name) { var entry = entries[name]; return entry.type === 'blob' && entry.sha === pending.sha; })) throw new Error('Unknown pending asset blob.');
+    return pending.sha;
+  }
   if (!context.cacheAssetShas) context.cacheAssetShas = {};
   var cached = context.cacheAssetShas[path];
   if (!cached || cached.content !== pending.content) {
@@ -171,7 +180,7 @@ function cmsCacheFingerprint_(context, sourceId, row, richrow) {
     // These are common in citation rows; avoid a service call per unused cell.
     if (richKeys.indexOf(key) >= 0 && text && text.trim().indexOf('/*') !== 0) rich[index] = cmsCacheRich_(richrow && richrow[index]);
   });
-  var input = {version: CMS_CACHE_RENDERER_VERSION_, source: sourceId, row: row, rich: rich, parameters: parameters};
+  var input = {version: cmsRendererVersion_(), source: sourceId, row: row, rich: rich, parameters: parameters};
   // Check linked source assets before deciding whether the row HTML is reusable.
   // A stable Sheet URL can point to new bytes without any cell edit.
   if (typeof cmsAssetRowFingerprint_ === 'function') {
@@ -204,7 +213,7 @@ function cmsCacheSourceState_(context, cache, name) {
     if (!record) { reusable = false; return; }
     if (!entries) entries = cmsGithubSnapshot_().entries;
     var entry = entries[page + '.html'];
-    if (record.version !== CMS_CACHE_RENDERER_VERSION_ || !entry || entry.type !== 'blob' || record.sha !== entry.sha) reusable = false;
+    if (record.version !== cmsRendererVersion_() || !entry || entry.type !== 'blob' || record.sha !== entry.sha) reusable = false;
     if (!entry || entry.type !== 'blob' || record.sha !== entry.sha) changed = true;
   });
   return {reusable: reusable, refreshData: changed || !!context.cacheStats.cacheReadErrors};
@@ -230,7 +239,7 @@ function cmsCacheRenderRows_(name) {
       var record = cache.stagedRows[key] || cache.records[key];
       var timed = kind === 'Publication' || /https:\/\/drive\.google\.com\//i.test(cmsCacheCanonical_(row));
       var forced = context.refreshAssets || context.forceRegenerate || (context.refreshData && kind === 'Publication');
-      var reusable = sourceState.reusable && !forced && record && record.type === 'row' && record.version === CMS_CACHE_RENDERER_VERSION_ &&
+      var reusable = sourceState.reusable && !forced && record && record.type === 'row' && record.version === cmsRendererVersion_() &&
         (!timed || Date.now() - Date.parse(record.generatedAt) < CMS_CACHE_TTL_MS_) && record.dependencies.every(function(dependency) {
           return cmsCacheAssetSha_(context, dependency.path) === dependency.sha;
         });
@@ -247,7 +256,7 @@ function cmsCacheRenderRows_(name) {
         context.cacheStats.rowsRendered++;
         if (typeof cmsVersionAssetHtml_ === 'function') rendered = cmsVersionAssetHtml_(rendered);
         record = {type: 'row', key: key, source: name, sourceId: sourceId, row: index + 1, fingerprint: fingerprint,
-          version: CMS_CACHE_RENDERER_VERSION_, generatedAt: new Date().toISOString(), html: rendered,
+          version: cmsRendererVersion_(), generatedAt: new Date().toISOString(), html: rendered,
           dependencies: cmsCacheManifest_(context, rendered), sha: cmsGitBlobSha_(rendered)};
       }
       html += record.html;
@@ -265,7 +274,7 @@ function cmsCacheCanSkipFragment_(pageName, selector, fragment) {
   if (context.forceRegenerate) return false;
   var record = cache.records[cmsCachePageKey_(pageName, selector)];
   var entry = cmsGithubSnapshot_().entries[pageName + '.html'];
-  var match = record && record.type === 'page' && record.version === CMS_CACHE_RENDERER_VERSION_ && entry && entry.type === 'blob' &&
+  var match = record && record.type === 'page' && record.version === cmsRendererVersion_() && entry && entry.type === 'blob' &&
     record.sha === entry.sha && record.fingerprint === cmsCacheHash_(String(fragment));
   if (match) context.cacheStats.fragmentsSkipped++;
   return !!match;
@@ -276,7 +285,7 @@ function cmsCacheStagePage_(file, selector, fragment) {
   var cache = cmsCacheStore_(), pageName = file.path.slice(0, -5);
   var key = cmsCachePageKey_(pageName, selector);
   cache.stagedPages[key] = {type: 'page', key: key, source: pageName, sourceId: selector, row: 0,
-    fingerprint: cmsCacheHash_(String(fragment)), version: CMS_CACHE_RENDERER_VERSION_, generatedAt: new Date().toISOString(),
+    fingerprint: cmsCacheHash_(String(fragment)), version: cmsRendererVersion_(), generatedAt: new Date().toISOString(),
     html: '', dependencies: [], sha: '', file: file};
 }
 

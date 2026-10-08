@@ -103,7 +103,7 @@ function fixture(initialRows = {}) {
     if (!wrongSha) state.entries[page + '.html'] = {type: 'blob', sha: actualSha};
     const assetShas = {};
     context.pendingAssets.forEach(asset => {
-      const sha = sandbox.cmsGitBlobSha_(sandbox.Utilities.base64Decode(asset.content));
+      const sha = asset.sha || sandbox.cmsGitBlobSha_(sandbox.Utilities.base64Decode(asset.content));
       state.entries[asset.path] = {type: 'blob', sha}; assetShas[asset.path] = sha;
     });
     const result = {changed: !wrongSha, pageShas: {[file.path]: actualSha}, assetShas};
@@ -361,4 +361,26 @@ test('source asset checks happen before row reuse and changed bytes invalidate o
   run();
   assert.equal(counters(state).rowsRendered, 1);
   assert.equal(counters(state).rowsReused, 1);
+});
+
+test('known SHA-only queued assets enter cache dependencies without decoding bytes and reuse after publication',()=>{
+  const state=fixture({page:[HEAD,['All','Common','Content','Large picture','./img/new-large.jpg']]});state.entries['img/legacy-large.jpg']={type:'blob',sha:'a'.repeat(40)};
+  const {context,sandbox:r}=state.newRun();context.pendingAssets.push({path:'img/new-large.jpg',sha:'a'.repeat(40)});
+  r.Utilities.base64Decode=()=>{throw new Error('A SHA-only asset has no base64 content');};
+  assert.equal(r.cmsCachePendingSha_(context,'img/new-large.jpg'),'a'.repeat(40));
+  r.uploadImg=value=>value;const html=state.render();state.publish(html);
+  assert.equal(JSON.parse(state.grid.find(row=>row[0]==='row')[9])[0].sha,'a'.repeat(40));
+  state.newRun();assert.equal(state.render(),html);assert.equal(counters(state).rowsReused,1);
+  state.run.context.pendingAssets.push({path:'img/unverified.jpg',sha:'f'.repeat(40)});assert.throws(()=>state.run.sandbox.cmsCachePendingSha_(state.run.context,'img/unverified.jpg'),/Unknown pending asset blob/);
+});
+
+test('cache SHA-only assets reject mixed bytes and empty SHA fields while reading one captured snapshot',()=>{
+  const state=fixture(),{context,sandbox:r}=state.newRun();state.entries['img/known.jpg']={type:'blob',sha:'a'.repeat(40)};
+  let snapshots=0;r.cmsGithubSnapshot_=()=>{snapshots++;return{entries:state.entries};};
+  r.Utilities.base64Decode=()=>{throw new Error('A declared SHA-only record must not fall through to content decoding');};
+  for(const asset of [{path:'img/mixed.jpg',sha:'a'.repeat(40),content:'eA=='},{path:'img/empty.jpg',sha:'',content:'eA=='},{path:'img/null.jpg',sha:null,content:'eA=='}]) {
+    context.pendingAssets=[asset];assert.throws(()=>r.cmsCachePendingSha_(context,asset.path),/Unknown pending asset blob/);
+  }
+  context.pendingAssets=[{path:'img/clone.jpg',sha:'a'.repeat(40)}];snapshots=0;
+  assert.equal(r.cmsCachePendingSha_(context,'img/clone.jpg'),'a'.repeat(40));assert.equal(snapshots,1,'Verify the captured repository snapshot once, not once per tree entry');
 });

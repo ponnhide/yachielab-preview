@@ -60,7 +60,7 @@ function fixture() {
   state.http = (url,body=jpegA,options={}) => {const source=state.run.sandbox.cmsAssetSource_(url);state.servers.set(source.downloadUrl,{body,...options});return source.downloadUrl;};
   state.publish = ({wrongSha=false}={}) => {
     const {sandbox,context}=state.run;const assetShas={};
-    context.pendingAssets.forEach(asset=>{state.entries[asset.path]={type:'blob',sha:gitSha(Buffer.from(asset.content,'base64'))};});
+    context.pendingAssets.forEach(asset=>{state.entries[asset.path]={type:'blob',sha:asset.sha || gitSha(Buffer.from(asset.content,'base64'))};});
     Object.keys(state.entries).forEach(name=>assetShas[name]=state.entries[name].sha);
     if(wrongSha)Object.keys(context.assetRegistry?.staged||{}).forEach(key=>assetShas[context.assetRegistry.staged[key].path]='f'.repeat(40));
     const result={changed:context.pendingAssets.length>0,assetShas};sandbox.cmsAssetsCommit_(result);return result;
@@ -267,6 +267,7 @@ test('Drive PDF size metadata avoids oversized blob download while image size ov
   s.entries['pdf/large.pdf']={type:'blob',sha:gitSha('%PDF-old')};s.newRun({refreshAssets:true});assert.match(s.run.sandbox.uploadImg(url),/^\.\/pdf\/large\.pdf\?v=/);
   assert.equal(s.blobReads,0);assert.equal(s.run.context.pendingAssets.length,0);assert.deepEqual([...s.run.context.assetWarnings],['oversized-pdf-kept']);
   const image=fixture(),body=Buffer.alloc(16*1024*1024+1);body[0]=255;body[1]=216;image.http(remote,body);
+  image.run.sandbox.cmsGitBlobSha_=value=>{const data=Buffer.from(value);return crypto.createHash('sha1').update(Buffer.from('blob '+data.length+'\0')).update(data).digest('hex');};
   assert.throws(()=>image.run.sandbox.uploadImg(remote),/16 MiB/);assert.equal(image.run.context.pendingAssets.length,0);assert.equal(image.run.context.assetWarnings,undefined);
 });
 
@@ -299,6 +300,35 @@ test('PDF recovery never chooses a deterministic path owned by a conflicting sou
     else store.owners[target]='different-source-key';
     assert.equal(r.uploadImg(url),'./pdf/paper.pdf?v='+gitSha('%PDF-legacy').slice(0,12));assert.equal(s.fetches.length,0);assert.equal(s.run.context.pendingAssets.length,0);
   }
+});
+
+test('a validated 17 MiB image already stored in the repository reuses its Git SHA without base64, while new large bytes fail',()=>{
+  const body=Buffer.alloc(17*1024*1024);body[0]=255;body[1]=216;body[2]=255;body[3]=224;
+  const expected=crypto.createHash('sha1').update(Buffer.from('blob '+body.length+'\0')).update(body).digest('hex');
+  for(const known of [true,false]) {
+    const s=fixture();s.http(remote,body);if(known)s.entries['img/legacy-large.jpg']={type:'blob',sha:expected};
+    // Node's native implementation computes the real Git hash of the large
+    // fixture; the pure V8 implementation is checked independently in hashes tests.
+    const nativeHash=value=>{const data=Buffer.from(value);return crypto.createHash('sha1').update(Buffer.from('blob '+data.length+'\0')).update(data).digest('hex');};
+    s.run.sandbox.cmsGitBlobSha_=nativeHash;
+    s.run.sandbox.Utilities.base64Encode=()=>{throw new Error('Known large bytes must not be base64 encoded');};
+    if(known) {
+      const output=s.run.sandbox.uploadImg(remote),asset=s.run.context.pendingAssets[0];assert.equal(asset.sha,expected);assert.equal(asset.content,undefined);
+      assert.equal(output,'./'+asset.path+'?v='+expected.slice(0,12));assert.equal(s.run.sandbox.cmsAssetSha_(asset.path),expected);
+      assert.equal(s.publish().assetsSaved,true);assert.equal(s.grid[1][4],expected);assert.equal(s.entries['img/legacy-large.jpg'].sha,expected);
+      s.newRun();s.run.sandbox.cmsGitBlobSha_=nativeHash;assert.equal(s.run.sandbox.uploadImg(remote),output);assert.equal(s.run.context.pendingAssets.length,0);
+    } else {
+      assert.throws(()=>s.run.sandbox.uploadImg(remote),/New or changed image exceeds the 16 MiB/);assert.equal(s.run.context.pendingAssets.length,0);assert.equal(Object.keys(s.run.context.assetRegistry.staged).length,0);assert.equal(s.grid,null);
+    }
+  }
+});
+
+test('known-image verification rejects invalid signatures, unverified SHA-only entries and images above 32 MiB',()=>{
+  const s=fixture(),r=s.run.sandbox;
+  assert.throws(()=>r.cmsValidateAsset_('photo.jpg',new Array(32*1024*1024+1),true),/32 MiB/);
+  assert.throws(()=>r.cmsValidateAsset_('photo.png',[255,216,1],true),/match/);
+  assert.throws(()=>r.cmsQueueKnownAsset_('img/new.jpg','f'.repeat(40)),/Unverified/);
+  s.run.context.pendingAssets.push({path:'img/new.jpg',sha:'f'.repeat(40)});assert.throws(()=>r.cmsAssetSha_('img/new.jpg'),/Unverified/);
 });
 
 test('external asset HTTP calls have a bounded timeout and progress logs contain only quantitative values',()=>{

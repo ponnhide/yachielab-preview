@@ -1,0 +1,946 @@
+{
+  "version": 1,
+  "sharpVersion": "0.35.4",
+  "policy": "Only proven personal_photo roles use aspect-preserving 1024px maximum. Other images preserve full display pixels. Original source bytes are unchanged.",
+  "results": [
+    {
+      "path": "img/00001056-copy.JPG",
+      "sourceSha": "8da8e31c2e157f6f03ef117a5e1972c0298b8cb4",
+      "originalBytes": 257103,
+      "transform": "profile-1024",
+      "profilePages": [
+        "people.html"
+      ],
+      "adopted": false,
+      "reason": "no-size-reduction"
+    },
+    {
+      "path": "img/1538750937671.jpg",
+      "adopted": false,
+      "reason": "non-profile-jpeg-keeps-original"
+    },
+    {
+      "path": "img/4.cover-source_thumb--77054d8571a6.jpg",
+      "adopted": false,
+      "reason": "non-profile-jpeg-keeps-original"
+    },
+    {
+      "path": "img/9784758121446_02.jpg",
+      "adopted": false,
+      "reason": "non-profile-jpeg-keeps-original"
+    },
+    {
+      "path": "img/9784758122528.jpg",
+      "adopted": false,
+      "reason": "non-profile-jpeg-keeps-original"
+    },
+    {
+      "path": "img/A.png",
+      "sourceSha": "7ba5b2de7dbff7e077e36918349f9509668636e0",
+      "originalBytes": 661534,
+      "transform": "lossless-full",
+      "profilePages": [],
+      "adopted": false,
+      "reason": "pixel-mismatch"
+    },
+    {
+      "path": "img/All_member_cropped.png",
+      "sourceSha": "dc25a6e6ca2493903a32e47eeaec9219b126f743",
+      "originalBytes": 1907019,
+      "transform": "lossless-full",
+      "profilePages": [],
+      "adopted": true,
+      "targetPath": "img/optimized/All_member_cropped--dc25a6e6ca24-full.webp",
+      "targetSha": "5d488b556218f7031b2c48258517be1ff666056c",
+      "targetBytes": 997636,
+      "width": 1937,
+      "height": 1227,
+      "pixelSha256": "68fde91d06b137b8aa3c94668ba4e9baa449d5bd19b3d8864318dcc302a8fabb",
+      "pixelProof": "exact-original-display-pixels"
+    },
+    {
+      "path": "img/All_member_cropped2.png",
+      "sourceSha": "71f4620d189d5560b9ff498ff49ee0b9fe06779c",
+      "originalBytes": 2047888,
+      "transform": "lossless-full",
+      "profilePages": [],
+      "adopted": true,
+      "targetPath": "img/optimized/All_member_cropped2--71f4620d189d-full.webp",
+      "targetSha": "a1c44425dbeb71dc7bf721f7f3e3bd46c20783d0",
+      "targetBytes": 1066646,
+      "width": 1939,
+      "height": 1500,
+      "pixelSha256": "34d0ef85652a5594e12d54e3b512bb71f8664ce7bc29d54db76bec4d6b34ec8a",
+      "pixelProof": "exact-original-display-pixels"
+    },
+    {
+      "path": "img/Ar.png",
+      "sourceSha": "937b94550b0a00a426ac55aa92f42c5cdf6b4c6b",
+      "originalBytes": 302004,
+      "transform": "lossless-full",
+      "profilePages": [],
+      "adopted": false,
+      "reason": "pixel-mismatch"
+    },
+    {
+      "path": "img/Arman2021.jpg",
+      "sourceSha": "d0156689ed25f91ceb8b9e84e383decdb09587f7",
+      "originalBytes": 22247,
+      "transform": "profile-1024",
+      "profilePages": [
+        "people.html"
+      ],
+      "adopted": false,
+      "reason": "no-size-reduction"
+    },
+    {
+      "path": "img/BGr.png",
+      "sourceSha": "7b9e8ea23b55f04ff70125e88243c94e5d2759ab",
+      "originalBytes": 1537828,
+      "transform": "lossless-full",
+      "profilePages": [],
+      "adopted": true,
+      "targetPath": "img/optimized/BGr--7b9e8ea23b55-full.webp",
+      "targetSha": "eb25b69121941b7f1d6b4117eb52a0513301301d",
+      "targetBytes": 919764,
+      "width": 2309,
+      "height": 2147,
+      "pixelSha256": "5ca335a503189982882b9782ffc2616affc38cf52b6168480cbd9b84ed682734",
+      "pixelProof": "exact-original-display-pixels"
+    },
+    {
+      "path": "img/Br.png",
+      "sourceSha": "de974d9274beea8d43085f74b3587e8da5b6ac2b",
+      "originalBytes": 564256,
+      "transform": "lossless-full",
+      "profilePages": [],
+      "adopted": false,
+      "reason": "pixel-mismatch"
+    },
+    {
+      "path": "img/Chengyu_Ye.jpg",
+      "sourceSha": "346aeb3c40dadf01a8d52fb875159959d6152077",
+      "originalBytes": 2196299,
+      "transform": "profile-1024",
+      "profilePages": [
+        "people.html"
+      ],
+      "adopted": true,
+      "targetPath": "img/optimized/Chengyu_Ye--346aeb3c40da-profile1024.webp",
+      "targetSha": "0ea2aab4f3a3482088613bdf5084886837ee48d1",
+      "targetBytes": 628682,
+      "width": 768,
+      "height": 1024,
+      "pixelSha256": "b00e79d288b18d44da6b2d13ddbd96028f6008e79877b4581598fb01d98cd8ba",
+      "pixelProof": "exact-resized-reference"
+    },
+    {
+      "path": "img/Cr.png",
+      "sourceSha": "da787ddffebbe2b3d08954f688ae2c46293a0344",
+      "originalBytes": 100228,
+      "transform": "lossless-full",
+      "profilePages": [],
+      "adopted": false,
+      "reason": "pixel-mismatch"
+    },
+    {
+      "path": "img/DNA event recording.jpg",
+      "adopted": false,
+      "reason": "non-profile-jpeg-keeps-original"
+    },
+    {
+      "path": "img/DSCF0584.jpg",
+      "sourceSha": "c43d96f8b7e24eb8c9f88414cd78e40597f89b33",
+      "originalBytes": 210158,
+      "transform": "profile-1024",
+      "profilePages": [
+        "people.html"
+      ],
+      "adopted": false,
+      "reason": "no-size-reduction"
+    },
+    {
+      "path": "img/D_1r.png",
+      "sourceSha": "a405a46a600bf691b6224d944ada3d7b6c9354a2",
+      "originalBytes": 205479,
+      "transform": "lossless-full",
+      "profilePages": [],
+      "adopted": false,
+      "reason": "pixel-mismatch"
+    },
+    {
+      "path": "img/D_2r.png",
+      "sourceSha": "e06a15791ae98f0a74cc8b89d50b9396e0dab501",
+      "originalBytes": 339850,
+      "transform": "lossless-full",
+      "profilePages": [],
+      "adopted": false,
+      "reason": "pixel-mismatch"
+    },
+    {
+      "path": "img/Dustin_Ameis.png",
+      "sourceSha": "cd49231878d7390794211c627bb089de93f6bcf0",
+      "originalBytes": 366558,
+      "transform": "profile-1024",
+      "profilePages": [
+        "people.html"
+      ],
+      "adopted": true,
+      "targetPath": "img/optimized/Dustin_Ameis--cd49231878d7-profile1024.webp",
+      "targetSha": "73840ac9432787f0d008ebacfcd74ba847f2762e",
+      "targetBytes": 210190,
+      "width": 395,
+      "height": 412,
+      "pixelSha256": "0bc2c84294591113d29d0bc1a5a684e58ba4d62d9aa3080be66d5851c0950d84",
+      "pixelProof": "exact-resized-reference"
+    },
+    {
+      "path": "img/Er.png",
+      "sourceSha": "adcadb7b603905d22547d45bb23f509cc9950b94",
+      "originalBytes": 299803,
+      "transform": "lossless-full",
+      "profilePages": [],
+      "adopted": false,
+      "reason": "pixel-mismatch"
+    },
+    {
+      "path": "img/FF_1_cropped.png",
+      "sourceSha": "30839864e993231d21afb6942ba02e45d8c1b0cb",
+      "originalBytes": 269674,
+      "transform": "lossless-full",
+      "profilePages": [],
+      "adopted": true,
+      "targetPath": "img/optimized/FF_1_cropped--30839864e993-full.webp",
+      "targetSha": "eb086e955c9af03ef551fd081ddc6d323ad38ba6",
+      "targetBytes": 127264,
+      "width": 1094,
+      "height": 1054,
+      "pixelSha256": "3e130df99bf2f9cb900e9d4d741d885ff451879248f6c0619dc279b73063b7c4",
+      "pixelProof": "exact-original-display-pixels"
+    },
+    {
+      "path": "img/FF_2_cropped.png",
+      "sourceSha": "e60d13b3df8a1cd50246f0aca57b6a2c6f728526",
+      "originalBytes": 296798,
+      "transform": "lossless-full",
+      "profilePages": [],
+      "adopted": true,
+      "targetPath": "img/optimized/FF_2_cropped--e60d13b3df8a-full.webp",
+      "targetSha": "321fa134519c8eb68aa34791b1b326fb489a75b4",
+      "targetBytes": 143558,
+      "width": 1094,
+      "height": 1054,
+      "pixelSha256": "2f627b56c18e37dd920e608353b10faee838485fba43fa2a42ee00f524a11b37",
+      "pixelProof": "exact-original-display-pixels"
+    },
+    {
+      "path": "img/FRACTAL_cover_small--586b28563c44.jpg",
+      "adopted": false,
+      "reason": "non-profile-jpeg-keeps-original"
+    },
+    {
+      "path": "img/F_1r.png",
+      "sourceSha": "91d280cc858c3c35c79d1c6a0f87b9767ad882b5",
+      "originalBytes": 169817,
+      "transform": "lossless-full",
+      "profilePages": [],
+      "adopted": false,
+      "reason": "pixel-mismatch"
+    },
+    {
+      "path": "img/F_2r.png",
+      "sourceSha": "20beebb4444f732e9c00994a9e34cb342b4b96bf",
+      "originalBytes": 186848,
+      "transform": "lossless-full",
+      "profilePages": [],
+      "adopted": false,
+      "reason": "pixel-mismatch"
+    },
+    {
+      "path": "img/Gr.png",
+      "sourceSha": "c052e7562126891182f65ac9f308880df2592ede",
+      "originalBytes": 147028,
+      "transform": "lossless-full",
+      "profilePages": [],
+      "adopted": false,
+      "reason": "pixel-mismatch"
+    },
+    {
+      "path": "img/Greenstreet500x605--e52a4ca1be35.jpg",
+      "adopted": false,
+      "reason": "non-profile-jpeg-keeps-original"
+    },
+    {
+      "path": "img/HGHrdslWQAEmByC--6cac04569de8.jpg",
+      "adopted": false,
+      "reason": "non-profile-jpeg-keeps-original"
+    },
+    {
+      "path": "img/H_1r.png",
+      "sourceSha": "1a5b147f8088ea13d8039c6a43e09bc5904d3e20",
+      "originalBytes": 372765,
+      "transform": "lossless-full",
+      "profilePages": [],
+      "adopted": false,
+      "reason": "pixel-mismatch"
+    },
+    {
+      "path": "img/H_2r.png",
+      "sourceSha": "2ff03e0c716e3d1ff16c0c347ae8e8227c4e4810",
+      "originalBytes": 445005,
+      "transform": "lossless-full",
+      "profilePages": [],
+      "adopted": false,
+      "reason": "pixel-mismatch"
+    },
+    {
+      "path": "img/Herbert.jpg",
+      "sourceSha": "7b522112a3acd9afa58f15763e0e6101b0ddc9db",
+      "originalBytes": 107333,
+      "transform": "profile-1024",
+      "profilePages": [
+        "people.html"
+      ],
+      "adopted": false,
+      "reason": "no-size-reduction"
+    },
+    {
+      "path": "img/IMG-20250913-WA0005.jpg",
+      "sourceSha": "551da9fa125ca9934c41079294fd044b90ba080f",
+      "originalBytes": 470758,
+      "transform": "profile-1024",
+      "profilePages": [
+        "people.html"
+      ],
+      "adopted": false,
+      "reason": "no-size-reduction"
+    },
+    {
+      "path": "img/IMG_2959.jpg",
+      "sourceSha": "67c85a13367488797b4dad4a0329c60a451317fb",
+      "originalBytes": 1576240,
+      "transform": "profile-1024",
+      "profilePages": [
+        "people.html"
+      ],
+      "adopted": true,
+      "targetPath": "img/optimized/IMG_2959--67c85a133674-profile1024.webp",
+      "targetSha": "0d95ee25cb40ef2ceda6d1ccecbe79f995c858e2",
+      "targetBytes": 864818,
+      "width": 768,
+      "height": 1024,
+      "pixelSha256": "e2c027c850e8e5d50f80702ca022c749f0641f9255fa0bd6a7a822417ec98192",
+      "pixelProof": "exact-resized-reference"
+    },
+    {
+      "path": "img/IMG_3031.jpeg",
+      "sourceSha": "2c9303509a985836eb44910d90175d0c1841aa30",
+      "originalBytes": 1082958,
+      "transform": "profile-1024",
+      "profilePages": [
+        "people.html"
+      ],
+      "adopted": true,
+      "targetPath": "img/optimized/IMG_3031--2c9303509a98-profile1024.webp",
+      "targetSha": "eacfb7c5ef55f971c2b347ea94bf40ebbf873a50",
+      "targetBytes": 721958,
+      "width": 768,
+      "height": 1024,
+      "pixelSha256": "310fc0d70b8e78a5b25d6f45c0774ddf456b9b1d0d8106975de26600443053ab",
+      "pixelProof": "exact-resized-reference"
+    },
+    {
+      "path": "img/IMG_6865.jpg",
+      "sourceSha": "a4ea9f5dfdae19d925c592987ae3a08008df948b",
+      "originalBytes": 2717547,
+      "transform": "profile-1024",
+      "profilePages": [
+        "people.html"
+      ],
+      "adopted": true,
+      "targetPath": "img/optimized/IMG_6865--a4ea9f5dfdae-profile1024.webp",
+      "targetSha": "17f6bc0f2b9f9bf215f562b365f64e68c00f7e65",
+      "targetBytes": 772268,
+      "width": 1024,
+      "height": 960,
+      "pixelSha256": "a2feee43c2c5db6870682ab639285c23a035bdb726df70ba5bab66592c30177f",
+      "pixelProof": "exact-resized-reference"
+    },
+    {
+      "path": "img/INTERSTELLAR.jpg",
+      "adopted": false,
+      "reason": "non-profile-jpeg-keeps-original"
+    },
+    {
+      "path": "img/Ir.png",
+      "sourceSha": "b92c2555b7122c6389ac4764ae8d2f9e7d46358c",
+      "originalBytes": 251125,
+      "transform": "lossless-full",
+      "profilePages": [],
+      "adopted": false,
+      "reason": "pixel-mismatch"
+    },
+    {
+      "path": "img/J_1r.png",
+      "sourceSha": "013deb082ee9177ef653dc04a05d48be752d8ddd",
+      "originalBytes": 212051,
+      "transform": "lossless-full",
+      "profilePages": [],
+      "adopted": false,
+      "reason": "pixel-mismatch"
+    },
+    {
+      "path": "img/J_2r.png",
+      "sourceSha": "b843ae673e83ce5ae1526ccef03df5c1284ffff7",
+      "originalBytes": 279006,
+      "transform": "lossless-full",
+      "profilePages": [],
+      "adopted": false,
+      "reason": "pixel-mismatch"
+    },
+    {
+      "path": "img/Keiran_Maskell.jpg",
+      "sourceSha": "0365356c042168e96e15409cf1442df675100811",
+      "originalBytes": 385930,
+      "transform": "profile-1024",
+      "profilePages": [
+        "people.html"
+      ],
+      "adopted": false,
+      "reason": "no-size-reduction"
+    },
+    {
+      "path": "img/Kr.png",
+      "sourceSha": "9ae9c84001abaab3f42d84bf325f5aa9321ff9f2",
+      "originalBytes": 180222,
+      "transform": "lossless-full",
+      "profilePages": [],
+      "adopted": false,
+      "reason": "pixel-mismatch"
+    },
+    {
+      "path": "img/L_1r.png",
+      "sourceSha": "a4e172759fae765a08501520181182a43ca0b348",
+      "originalBytes": 151452,
+      "transform": "lossless-full",
+      "profilePages": [],
+      "adopted": false,
+      "reason": "pixel-mismatch"
+    },
+    {
+      "path": "img/L_2r.png",
+      "sourceSha": "733ba6a76759c90ac3b5679f074d5f4aa1cfb8c4",
+      "originalBytes": 209300,
+      "transform": "lossless-full",
+      "profilePages": [],
+      "adopted": false,
+      "reason": "pixel-mismatch"
+    },
+    {
+      "path": "img/Lu2.JPG",
+      "sourceSha": "613ca4908bdd8b622ff0778bb7ecd94d2f3134b0",
+      "originalBytes": 2183078,
+      "transform": "profile-1024",
+      "profilePages": [
+        "people.html",
+        "people.html"
+      ],
+      "adopted": true,
+      "targetPath": "img/optimized/Lu2--613ca4908bdd-profile1024.webp",
+      "targetSha": "34148cd50493dfc94ef23a8026b043ba76c91f42",
+      "targetBytes": 532064,
+      "width": 1024,
+      "height": 1024,
+      "pixelSha256": "45fb374a802ad3095a8c1a7e3fee99b24a368589a6790e66f26c24674af301d6",
+      "pixelProof": "exact-resized-reference"
+    },
+    {
+      "path": "img/M_1r.png",
+      "sourceSha": "7ab2649256b47473f778b5c8d528a08f3a00a6fa",
+      "originalBytes": 120483,
+      "transform": "lossless-full",
+      "profilePages": [],
+      "adopted": false,
+      "reason": "pixel-mismatch"
+    },
+    {
+      "path": "img/M_2r.png",
+      "sourceSha": "f7a2127a4056cc0b5a56cd0f515ef2ea3b6821c3",
+      "originalBytes": 173428,
+      "transform": "lossless-full",
+      "profilePages": [],
+      "adopted": false,
+      "reason": "pixel-mismatch"
+    },
+    {
+      "path": "img/NBT-cover--9cc10c8d0dec.jpg",
+      "adopted": false,
+      "reason": "non-profile-jpeg-keeps-original"
+    },
+    {
+      "path": "img/N_1r.png",
+      "sourceSha": "c39b17bc59d7b565063aabde4dc7bfa7a2175648",
+      "originalBytes": 264823,
+      "transform": "lossless-full",
+      "profilePages": [],
+      "adopted": false,
+      "reason": "pixel-mismatch"
+    },
+    {
+      "path": "img/N_2r.png",
+      "sourceSha": "4377c3f65758eecbc53f37964ef16b61865e7c58",
+      "originalBytes": 341800,
+      "transform": "lossless-full",
+      "profilePages": [],
+      "adopted": false,
+      "reason": "pixel-mismatch"
+    },
+    {
+      "path": "img/Nanami.jpg",
+      "sourceSha": "83256d1faae17533043e5b10a6ead03a8e09b100",
+      "originalBytes": 84745,
+      "transform": "profile-1024",
+      "profilePages": [
+        "people.html"
+      ],
+      "adopted": false,
+      "reason": "no-size-reduction"
+    },
+    {
+      "path": "img/Nozomu_Yachie2015_crop.jpg",
+      "adopted": false,
+      "reason": "non-profile-jpeg-keeps-original"
+    },
+    {
+      "path": "img/Nozomu_Yachie2_low2.jpg",
+      "sourceSha": "0048f97b34ae08cf76cc2daba0854fcde3d41777",
+      "originalBytes": 215829,
+      "transform": "profile-1024",
+      "profilePages": [
+        "people.html",
+        "people.html",
+        "people.html",
+        "people.html"
+      ],
+      "adopted": false,
+      "reason": "no-size-reduction"
+    },
+    {
+      "path": "img/Picture_Madhu_Rangesa2.jpeg",
+      "sourceSha": "5e22fe5e9f9db558d01f82d39930fd2f6d4df6d7",
+      "originalBytes": 314923,
+      "transform": "profile-1024",
+      "profilePages": [
+        "people.html"
+      ],
+      "adopted": false,
+      "reason": "no-size-reduction"
+    },
+    {
+      "path": "img/QUEEN.jpg",
+      "adopted": false,
+      "reason": "non-profile-jpeg-keeps-original"
+    },
+    {
+      "path": "img/Ren.jpg",
+      "sourceSha": "3495f7657c0eb1168c7edf9414f8b2b2144fb45a",
+      "originalBytes": 32104,
+      "transform": "profile-1024",
+      "profilePages": [
+        "people.html"
+      ],
+      "adopted": false,
+      "reason": "no-size-reduction"
+    },
+    {
+      "path": "img/Sean.jpg",
+      "sourceSha": "c4f644b39a9dc75d22e460fddeafcdc30570c7bc",
+      "originalBytes": 121416,
+      "transform": "profile-1024",
+      "profilePages": [
+        "people.html"
+      ],
+      "adopted": false,
+      "reason": "no-size-reduction"
+    },
+    {
+      "path": "img/Shoma_Matsumoto.jpeg",
+      "adopted": false,
+      "reason": "non-profile-jpeg-keeps-original"
+    },
+    {
+      "path": "img/Sofia2.jpg",
+      "sourceSha": "aa3889e80f5989e8a1cca861ebf1e6d5f0c81221",
+      "originalBytes": 2737590,
+      "transform": "profile-1024",
+      "profilePages": [
+        "people.html"
+      ],
+      "adopted": true,
+      "targetPath": "img/optimized/Sofia2--aa3889e80f59-profile1024.webp",
+      "targetSha": "2fda6334e97fcde47debabf82d7ce34355a63407",
+      "targetBytes": 667622,
+      "width": 1024,
+      "height": 768,
+      "pixelSha256": "d23af768d201d522cda341cc4bc639224762be96df2344237c68df45330ed324",
+      "pixelProof": "exact-resized-reference"
+    },
+    {
+      "path": "img/Yin.jpg",
+      "sourceSha": "88b47ba4f09d267413b875181a7439423a21326c",
+      "originalBytes": 46592,
+      "transform": "profile-1024",
+      "profilePages": [
+        "people.html"
+      ],
+      "adopted": false,
+      "reason": "no-size-reduction"
+    },
+    {
+      "path": "img/Yuka_Nakada.jpg",
+      "adopted": false,
+      "reason": "non-profile-jpeg-keeps-original"
+    },
+    {
+      "path": "img/Yuka_Nakatani.jpeg",
+      "adopted": false,
+      "reason": "non-profile-jpeg-keeps-original"
+    },
+    {
+      "path": "img/Yuka_v2.jpg",
+      "sourceSha": "03a679a59e1895b8796980a338789efaa380f574",
+      "originalBytes": 416206,
+      "transform": "profile-1024",
+      "profilePages": [
+        "people.html",
+        "people.html"
+      ],
+      "adopted": false,
+      "reason": "no-size-reduction"
+    },
+    {
+      "path": "img/Yusuke.jpg",
+      "sourceSha": "d68c492726a202e20ae744116e52eafeaddb5201",
+      "originalBytes": 106506,
+      "transform": "profile-1024",
+      "profilePages": [
+        "alumni.html"
+      ],
+      "adopted": false,
+      "reason": "no-size-reduction"
+    },
+    {
+      "path": "img/Yusuke_Ozaki_low.jpg",
+      "sourceSha": "f6a7e81cf7e7d751d23986c2b76bf9867f677cca",
+      "originalBytes": 265096,
+      "transform": "profile-1024",
+      "profilePages": [
+        "alumni.html"
+      ],
+      "adopted": false,
+      "reason": "no-size-reduction"
+    },
+    {
+      "path": "img/blank_person.jpg",
+      "adopted": false,
+      "reason": "non-profile-jpeg-keeps-original"
+    },
+    {
+      "path": "img/blue_chrr.png",
+      "sourceSha": "6234c98d9a7f07fa57ea0cec497b5d3e27379c92",
+      "originalBytes": 75650,
+      "transform": "lossless-full",
+      "profilePages": [],
+      "adopted": false,
+      "reason": "pixel-mismatch"
+    },
+    {
+      "path": "img/cgRNA_thumbnail--a9f29f168e5e.jpg",
+      "adopted": false,
+      "reason": "non-profile-jpeg-keeps-original"
+    },
+    {
+      "path": "img/cloneselect-highcontrast.jpg",
+      "adopted": false,
+      "reason": "non-profile-jpeg-keeps-original"
+    },
+    {
+      "path": "img/de-shachie-2021--40dc4bd9a59f.jpg",
+      "adopted": false,
+      "reason": "non-profile-jpeg-keeps-original"
+    },
+    {
+      "path": "img/dji_fly_20260219_105720_0204_1771527692287_photo.jpg",
+      "adopted": false,
+      "reason": "non-profile-jpeg-keeps-original"
+    },
+    {
+      "path": "img/dji_fly_20260611_130824_0005_1781151221305_photo.jpg",
+      "adopted": false,
+      "reason": "non-profile-jpeg-keeps-original"
+    },
+    {
+      "path": "img/eric.jpg",
+      "adopted": false,
+      "reason": "non-profile-jpeg-keeps-original"
+    },
+    {
+      "path": "img/fractal_concept.jpg",
+      "adopted": false,
+      "reason": "non-profile-jpeg-keeps-original"
+    },
+    {
+      "path": "img/genomeediting.jpg",
+      "adopted": false,
+      "reason": "non-profile-jpeg-keeps-original"
+    },
+    {
+      "path": "img/github_PRESUME.jpg",
+      "adopted": false,
+      "reason": "non-profile-jpeg-keeps-original"
+    },
+    {
+      "path": "img/headshot-mod.png",
+      "sourceSha": "64d33257e08b632362e128bd3a5fbfceb1629065",
+      "originalBytes": 1830537,
+      "transform": "profile-1024",
+      "profilePages": [
+        "people.html"
+      ],
+      "adopted": true,
+      "targetPath": "img/optimized/headshot-mod--64d33257e08b-profile1024.webp",
+      "targetSha": "31ef506dff19ca4f96b71c0b46658f4cfdf9756c",
+      "targetBytes": 769712,
+      "width": 819,
+      "height": 1024,
+      "pixelSha256": "558adc9d2032b1b6cd24c18319ec4d1e6e267eb2cdb80c58854f37c0a753ce5b",
+      "pixelProof": "exact-resized-reference"
+    },
+    {
+      "path": "img/hideto2.jpg",
+      "sourceSha": "d07910458f8d82d6eb762932c6a8c077b8de535b",
+      "originalBytes": 251113,
+      "transform": "profile-1024",
+      "profilePages": [
+        "people.html",
+        "people.html"
+      ],
+      "adopted": false,
+      "reason": "no-size-reduction"
+    },
+    {
+      "path": "img/hideto3.jpeg",
+      "adopted": false,
+      "reason": "non-profile-jpeg-keeps-original"
+    },
+    {
+      "path": "img/hitoshi.jpg",
+      "adopted": false,
+      "reason": "non-profile-jpeg-keeps-original"
+    },
+    {
+      "path": "img/jutapat.jpg",
+      "adopted": false,
+      "reason": "non-profile-jpeg-keeps-original"
+    },
+    {
+      "path": "img/kawasaki-shunsuke.jpg",
+      "sourceSha": "0e794716591c1b1b1153b2dbc72954d03d0dac0f",
+      "originalBytes": 88107,
+      "transform": "profile-1024",
+      "profilePages": [
+        "people.html",
+        "people.html"
+      ],
+      "adopted": false,
+      "reason": "no-size-reduction"
+    },
+    {
+      "path": "img/kazuki.jpg",
+      "sourceSha": "27c7c233a0b999c9358312ee5399f4cafab78ef5",
+      "originalBytes": 3517848,
+      "transform": "profile-1024",
+      "profilePages": [
+        "people.html"
+      ],
+      "adopted": true,
+      "targetPath": "img/optimized/kazuki--27c7c233a0b9-profile1024.webp",
+      "targetSha": "1c44dfceff55e680f9ef157ba77c5da6586afede",
+      "targetBytes": 824642,
+      "width": 768,
+      "height": 1024,
+      "pixelSha256": "cfacfe5e39c9e0d04f2ff58959fb03bfe10128793e755d570f0fb7e1d4f311ce",
+      "pixelProof": "exact-resized-reference"
+    },
+    {
+      "path": "img/lablogosquare.jpg",
+      "adopted": false,
+      "reason": "non-profile-jpeg-keeps-original"
+    },
+    {
+      "path": "img/lablogosquare200x200.jpg",
+      "adopted": false,
+      "reason": "non-profile-jpeg-keeps-original"
+    },
+    {
+      "path": "img/labmeeting2021--c8ce4f4fe69d.jpg",
+      "adopted": false,
+      "reason": "non-profile-jpeg-keeps-original"
+    },
+    {
+      "path": "img/logo--d7ae2a3b3f77.jpg",
+      "adopted": false,
+      "reason": "non-profile-jpeg-keeps-original"
+    },
+    {
+      "path": "img/logo_joinus.png",
+      "sourceSha": "f293374cedba9aa9792ae3e4d0496bb263337694",
+      "originalBytes": 45534,
+      "transform": "lossless-full",
+      "profilePages": [],
+      "adopted": false,
+      "reason": "pixel-mismatch"
+    },
+    {
+      "path": "img/logo_news.png",
+      "sourceSha": "e564791c506adc4914f897e46d4249f4223538c0",
+      "originalBytes": 34559,
+      "transform": "lossless-full",
+      "profilePages": [],
+      "adopted": false,
+      "reason": "pixel-mismatch"
+    },
+    {
+      "path": "img/logo_people_osak.png",
+      "sourceSha": "b2327a88f063d1ad9245d45c708d9ffa82ea3725",
+      "originalBytes": 31966,
+      "transform": "lossless-full",
+      "profilePages": [],
+      "adopted": false,
+      "reason": "pixel-mismatch"
+    },
+    {
+      "path": "img/logo_people_ubc.png",
+      "sourceSha": "9ed681992db0ddf9e848eec58f515c9307816126",
+      "originalBytes": 30615,
+      "transform": "lossless-full",
+      "profilePages": [],
+      "adopted": false,
+      "reason": "pixel-mismatch"
+    },
+    {
+      "path": "img/logo_publications.png",
+      "sourceSha": "ca24c2ac8d25b9f3468c20a9f442c10c1ee6b570",
+      "originalBytes": 33437,
+      "transform": "lossless-full",
+      "profilePages": [],
+      "adopted": false,
+      "reason": "pixel-mismatch"
+    },
+    {
+      "path": "img/logo_research.png",
+      "sourceSha": "39846089eb6f608ff66f2c834dcc5c7d8c8af0a6",
+      "originalBytes": 31017,
+      "transform": "lossless-full",
+      "profilePages": [],
+      "adopted": false,
+      "reason": "pixel-mismatch"
+    },
+    {
+      "path": "img/logo_resources.png",
+      "sourceSha": "07672f26db77cdd4427ca08eb226f938f2b336fa",
+      "originalBytes": 35996,
+      "transform": "lossless-full",
+      "profilePages": [],
+      "adopted": false,
+      "reason": "pixel-mismatch"
+    },
+    {
+      "path": "img/nophoto.jpg",
+      "adopted": false,
+      "reason": "non-profile-jpeg-keeps-original"
+    },
+    {
+      "path": "img/obi2.jpg",
+      "adopted": false,
+      "reason": "non-profile-jpeg-keeps-original"
+    },
+    {
+      "path": "img/osaka-university--353240b53bd0.jpg",
+      "adopted": false,
+      "reason": "non-profile-jpeg-keeps-original"
+    },
+    {
+      "path": "img/pfp.png",
+      "sourceSha": "40032a8463253fea9c1a727af50d5bef37ccf428",
+      "originalBytes": 20721618,
+      "transform": "profile-1024",
+      "profilePages": [
+        "people.html"
+      ],
+      "adopted": true,
+      "targetPath": "img/optimized/pfp--40032a846325-profile1024.webp",
+      "targetSha": "cf09ba6ebf6eea83c66e722cfc0c9c32bef0f8c6",
+      "targetBytes": 874214,
+      "width": 683,
+      "height": 1024,
+      "pixelSha256": "583267f9dab50644bd4ad5ecace7a86f51448f379e080b95d14748f6e831649c",
+      "pixelProof": "exact-resized-reference"
+    },
+    {
+      "path": "img/sanchit_profilePic.png",
+      "sourceSha": "c5bbed8695e2f9e4064dc344ab749baaad16bae9",
+      "originalBytes": 13380083,
+      "transform": "profile-1024",
+      "profilePages": [
+        "people.html"
+      ],
+      "adopted": true,
+      "targetPath": "img/optimized/sanchit_profilePic--c5bbed8695e2-profile1024.webp",
+      "targetSha": "c6b947da8e671d40639c77d932f8c6c1b10e9035",
+      "targetBytes": 747064,
+      "width": 757,
+      "height": 1024,
+      "pixelSha256": "d2ff49367918a35c5bfd6da545913a2efdeeccecaa160fe67b71c848a481103c",
+      "pixelProof": "exact-resized-reference"
+    },
+    {
+      "path": "img/sciadv_small--4473f87c36aa.jpg",
+      "adopted": false,
+      "reason": "non-profile-jpeg-keeps-original"
+    },
+    {
+      "path": "img/setsubun_1_2026.jpg",
+      "adopted": false,
+      "reason": "non-profile-jpeg-keeps-original"
+    },
+    {
+      "path": "img/tatsuya.jpg",
+      "adopted": false,
+      "reason": "non-profile-jpeg-keeps-original"
+    },
+    {
+      "path": "img/yusuke2.jpg",
+      "adopted": false,
+      "reason": "non-profile-jpeg-keeps-original"
+    },
+    {
+      "path": "img_new/A.png",
+      "sourceSha": "7ba5b2de7dbff7e077e36918349f9509668636e0",
+      "originalBytes": 661534,
+      "transform": "lossless-full",
+      "profilePages": [],
+      "adopted": false,
+      "reason": "pixel-mismatch"
+    }
+  ],
+  "summary": {
+    "displayAliases": 16,
+    "publicFiles": 297,
+    "publicBytes": 397325710,
+    "frontendFingerprint": "e870f59aa579",
+    "originalDisplayBytes": 58369563,
+    "derivativeDisplayBytes": 10868102,
+    "optimizedImages": 16
+  }
+}

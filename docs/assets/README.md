@@ -8,19 +8,19 @@ HTML / CSS / JS / GAS のローカルソースを確認しました。ファイ�
 
 | 項目 | 結果 |
 | --- | --- |
-| 画像・PDF のファイル | 491 |
-| 総容量 | 584.6 MiB |
+| 画像・PDF のファイル | 216 |
+| 総容量 | 367.4 MiB |
 | 参照証拠あり | 216 |
 | 公開ページから辿れる参照 | 179 |
 | 入力・ソースだけの参照 | 37 |
-| 参照証拠なしの確認候補 | 275 |
-| 候補の容量 | 217.1 MiB |
-| SHA-256 が同一のグループ | 73 |
+| 参照証拠なしの確認候補 | 0 |
+| 候補の容量 | 0.0 MiB |
+| SHA-256 が同一のグループ | 10 |
 | Sheet JSON の入力ファイル | 1 |
 | 入力された Sheet のタブ | 38 |
 | 具体的な検査エラー | 0 |
 
-**確認候補は削除候補の確定ではありません。** Sheet、生成処理、組み立てた URL、過去の公開資料、外部リンクの確認が必要です。この整理では既存の画像・PDF を削除・移動していません。公開ページから辿れる参照も、画面上での表示や利用回数を測定したものではありません。Sheet は指定された書き出し時点の内容だけを確認しています。
+**確認候補は削除候補の確定ではありません。** Sheet、生成処理、組み立てた URL、過去の公開資料、外部リンクの確認が必要です。preview での保管先変更と復元情報は [整理記録](maintenance.md) を確認してください。公開ページから辿れる参照も、画面上での表示や利用回数を測定したものではありません。Sheet は指定された書き出し時点の内容だけを確認しています。
 
 ## ディレクトリ別の画像数
 
@@ -28,23 +28,19 @@ HTML / CSS / JS / GAS のローカルソースを確認しました。ファイ�
 
 | ディレクトリ | 全ファイル | 画像拡張子 | 画像の参照証拠あり | 画像の参照未確認 |
 | --- | ---: | ---: | ---: | ---: |
-| `img/` | 371 | 368 | 155 | 213 |
-| `img_new/` | 49 | 49 | 4 | 45 |
-| `pdf/` | 71 | 0 | 0 | 0 |
+| `img/` | 155 | 155 | 155 | 0 |
+| `img_new/` | 4 | 4 | 4 | 0 |
+| `pdf/` | 57 | 0 | 0 | 0 |
 
 ## 作業元のファイル
 
-ブラウザ向け配信物以外の形式を個別に記録します。元の公開パスは維持しています。
+現在の公開ディレクトリにある、ブラウザ向け配信物以外の形式を個別に記録します。退避した作業元は archive-manifest.json を確認してください。
 
-- `img/IMG_1416.HEIC` (1.7 MiB)
-- `img/gray_yachielablogo.afdesign` (0.0 MiB)
-- `img/logo_research_w.afdesign` (0.0 MiB)
 
 ## 形式が一致しないファイル
 
 画像拡張子なのに HTML になっているものなどを記録します。未参照のファイルは公開表示の不具合と断定しません。
 
-- `img/Picture_Madhu_Rangesa.jpeg`: 拡張子から期待する形式 `jpeg`、実体 `html`
 - `img/navy_yachielablogo2.svg`: 拡張子から期待する形式 `svg`、実体 `html`
 
 ## 容量の大きい確認候補
@@ -53,26 +49,6 @@ HTML / CSS / JS / GAS のローカルソースを確認しました。ファイ�
 
 | パス | MiB |
 | --- | ---: |
-| `img/top-image.jpg` | 19.4 |
-| `img/■清書.jpg` | 19.4 |
-| `pdf/Pooled CRISPR screening of high-content...lular phenotypes using ghost cytometry.pdf` | 14.4 |
-| `img/IMG_1691-copy.jpg` | 8.4 |
-| `img/生物物理海外だより (2).pdf` | 7.9 |
-| `img/background.jpg` | 5.8 |
-| `img/BG.png` | 4.8 |
-| `pdf/2023.01.26.525784v1.full.pdf` | 4.7 |
-| `img/位置参考.png` | 4.4 |
-| `img_new/位置参考.png` | 4.4 |
-| `img_new/_BG.png` | 3.9 |
-| `img/cover_ol3.png` | 3.7 |
-| `img/Osaka_top.jpg` | 3.2 |
-| `img/DSC_0530.jpg` | 3.2 |
-| `img/dji_fly_20240530_103042_838_1717090252846_photo_optimized.JPG` | 3.2 |
-| `img/Chengyu2.jpg` | 2.9 |
-| `img/osaka-group-March-2024.jpg` | 2.9 |
-| `pdf/Advanced Optical Materials - 2023 - Kawasaki - Computational Design of Synthetic Optical Barcodes in Microdroplets.pdf` | 2.7 |
-| `pdf/2023.12.10.570953v1.full.pdf` | 2.4 |
-| `pdf/2022.08.04.502727v1.full.pdf` | 2.3 |
 
 ## 参照が見つからない CSS
 

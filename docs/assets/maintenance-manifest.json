@@ -1,0 +1,52 @@
+{
+  "version": 1,
+  "previewOnly": true,
+  "snapshotTabs": 38,
+  "snapshotRows": 1639,
+  "before": {
+    "asset_files": 491,
+    "asset_bytes": 612963830,
+    "referenced_assets": 216,
+    "published_reference_assets": 179,
+    "source_only_reference_assets": 37,
+    "review_candidates": 275,
+    "review_candidate_bytes": 227681850,
+    "duplicate_groups": 73,
+    "errors": 0,
+    "warnings": 2
+  },
+  "after": {
+    "asset_files": 216,
+    "asset_bytes": 385281980,
+    "referenced_assets": 216,
+    "published_reference_assets": 179,
+    "source_only_reference_assets": 37,
+    "review_candidates": 0,
+    "review_candidate_bytes": 0,
+    "duplicate_groups": 10,
+    "errors": 0,
+    "warnings": 1
+  },
+  "archive": {
+    "records": 275,
+    "bytes": 227681850,
+    "uniqueObjects": 225,
+    "uniqueObjectBytes": 178908943,
+    "allRecoveryObjectsVerified": true,
+    "changedRetained": 0,
+    "manifest": "archive-manifest.json"
+  },
+  "build": {
+    "displayAliases": 16,
+    "publicFiles": 297,
+    "publicBytes": 397325710,
+    "frontendFingerprint": "e870f59aa579",
+    "originalDisplayBytes": 58369563,
+    "derivativeDisplayBytes": 10868102,
+    "optimizedImages": 16
+  },
+  "notes": [
+    "Candidates are not proven unused by external direct links. Archived Preview URLs become unavailable; original production URLs are unchanged.",
+    "Retained source assets keep their original bytes and paths. Display aliases apply only in the build artifact."
+  ]
+}

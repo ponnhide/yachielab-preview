@@ -28,7 +28,7 @@
     const anyActive = highlights.some(function (entry) { return entry.active; });
     highlights.forEach(function (entry) {
       const filename = entry.active ? entry.highlightedName : entry.normalName;
-      entry.image.src = assetUrl(entry.image.src.replace(/[^/]+\.png(?=([?#].*)?$)/, filename + '.png'));
+      entry.image.src = assetUrl(new URL('./img/' + filename + '.png', window.location.href).href);
       entry.image.style.animationPlayState = entry.active ? 'paused' : 'running';
       entry.image.style.zIndex = entry.active ? '21' : '0';
       entry.control.style.zIndex = anyActive ? '23' : '19';
@@ -44,7 +44,7 @@
       if (!entry.control.contains(event.relatedTarget)) { entry.active = false; renderHighlights(); }
     });
     const preload = new Image();
-    preload.src = assetUrl(entry.image.src.replace(entry.normalName + '.png', entry.highlightedName + '.png'));
+    preload.src = assetUrl(new URL('./img/' + entry.highlightedName + '.png', window.location.href).href);
   });
   ['FF_1_cropped.png', 'FF_2_cropped.png'].forEach(function (filename) {
     const image = new Image();

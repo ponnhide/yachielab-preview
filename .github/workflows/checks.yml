@@ -1,0 +1,73 @@
+name: Preview checks and Pages
+
+on:
+  push:
+    branches: ['codex/preview']
+  pull_request:
+    branches: ['codex/preview']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: preview-pages-${{ github.event.pull_request.number || github.ref }}
+  # Preserve a deployment already in progress; newer PR checks can replace old ones.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  checks:
+    if: github.repository == 'ponnhide/yachielab-preview'
+    name: Check and build public site
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - name: Check out the proposed files
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - name: Set up Node 24 LTS
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
+        with:
+          python-version: '3.13'
+      - name: Reproduce the checked-in dependency lock
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Run all offline checks
+        run: npm run check
+      - name: Validate asset maintenance records
+        run: node scripts/asset_maintenance.cjs --check
+      - name: Build only the public static files
+        run: node scripts/build_site.cjs --output dist/site
+      - name: Upload the checked Pages artifact
+        if: github.event_name == 'push' && github.ref == 'refs/heads/codex/preview'
+        uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4
+        with:
+          path: dist/site
+
+  deploy:
+    if: github.repository == 'ponnhide/yachielab-preview' && github.event_name == 'push' && github.ref == 'refs/heads/codex/preview'
+    name: Deploy checked preview
+    needs: checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Read the configured preview Pages site
+        uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5
+        with:
+          enablement: false
+      - name: Deploy the artifact produced by the successful checks
+        id: deployment
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4

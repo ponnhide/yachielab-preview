@@ -6,7 +6,7 @@
 | --- | --- |
 | 公開サイト | https://ponnhide.github.io/yachielab-preview/ |
 | リポジトリ | `ponnhide/yachielab-preview` |
-| GitHub Pages | `codex/preview` ブランチ、リポジトリ直下 |
+| GitHub Pages | `codex/preview` の検査・組み立て成功後に GitHub Actions から配信 |
 | コピー元 | `yachielab/yachielab.github.io`、`fe9429cd9a0fee84ae23f40e33a20af708ff71fd` |
 | コンテンツ | コピーした専用 Google Sheets と、その専用の Apps Script |
 
@@ -17,11 +17,11 @@
 | パス | 役割と編集方法 |
 | --- | --- |
 | `*.html` | 公開するページ。コンテンツと共通部品は Sheets / GAS から更新されます。手作業で直した本文は次の生成で置き換わります。 |
-| `cms/` | 検証 GAS の編集元。Git で差分を確認してから専用 GAS に反映します。認証情報は含めません。 |
+| `cms/` | 検証 GAS の編集元。[同期ツール](docs/gas-sync.md)が検査・送信前の保存・送信後の再取得照合を行います。初回のGoogle認証が必要です。 |
 | `js/` | 表示言語、所属、ロゴの境界、メニュー、ニュースなどのブラウザ側処理。 |
 | `css/` | サイトの基本レイアウトとコンポーネント。Sheets が指定する見た目との関係もここで管理します。 |
-| `img/`, `img_new/`, `pdf/` | 配信する画像・PDFと作業元。既存の公開 URL を維持し、参照未確認のファイルも削除・移動しません。[参照一覧](docs/assets/catalogue.md)で確認します。 |
-| `scripts/` | オフライン検査と資産一覧を生成する開発用ツール。 |
+| `img/`, `img_new/`, `pdf/` | 参照のある画像・PDFと作業元。216件の原本とURLを維持し、未参照候補275件は復元可能な非公開保管へ移動しました。[整理と復元](docs/assets/maintenance.md)を参照してください。 |
+| `scripts/` | 検査、資産監査、配信物の組み立て、プレビューGAS同期の開発用ツール。 |
 | `docs/` | 運用手順・構造の説明・資産監査。 |
 
 登録ページと共通部品の生成対象は、Sheets の登録と GAS で管理します。`yuka` など、現在の更新対象に含めていないページは意図的なものとして扱います。新規ページ追加と、既存ページを更新対象に入れる操作を混同しないでください。
@@ -30,7 +30,7 @@
 
 1. 専用の検証 Sheets でコンテンツや対応する見た目の設定を変更します。
 2. 専用 GAS / Sheets メニューから対象ページまたは共通部品を更新します。
-3. コミット先が `ponnhide/yachielab-preview` の `codex/preview` であることと、Pages の公開結果を確認します。
+3. コミット先が `ponnhide/yachielab-preview` の `codex/preview` であることと、Actions の検査・配信の成功を確認します。GitHubへの保存完了と公開完了は別です。
 4. 公開サイトで EN / JA / ZH、UBC / Osaka、画面幅、メニュー、ロゴ境界、ページリンクを確認します。
 
 | メニュー | 更新範囲 |
@@ -54,7 +54,18 @@ GAS はメニュー、Sheet の読み取り、HTML 生成、見た目設定、�
 
 ## ローカルで確認する
 
-Python 3.9 以降の標準ライブラリだけで検査できます。追加パッケージは不要です。
+全検査は Node 24 LTS と Python で実行します。依存定義はlockfileに固定しています。[自動検査と公開](docs/ci.md)を参照してください。
+
+```sh
+npm ci --ignore-scripts --no-audit --no-fund
+npm run check
+node scripts/asset_maintenance.cjs --check
+node scripts/build_site.cjs --output dist/site
+```
+
+配信物には公開ページ・CSS・JS・資産だけを含めます。人物写真などの表示用軽量版をビルドで生成し、元画像のダウンロード先は維持します。`cms/`、`docs/`、テスト、認証情報、非公開保管物は配信しません。ビルド先は空の `dist/site` が必要です。
+
+資産監査だけなら Python 3.9 以降の標準ライブラリで実行できます。
 
 ```sh
 python3 scripts/test_site_audit.py
