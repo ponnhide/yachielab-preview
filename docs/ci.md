@@ -1,6 +1,6 @@
 # preview の自動検査
 
-ローカルと GitHub Actions は同じ入口を使います。推奨環境は Node 24 LTS と Python 3.13 です。既存の CMS / JS テストとブラウザ用の模擬環境は標準ライブラリのみを使います。Python の監査も標準ライブラリだけで実行します。画像検証ツール用に Sharp 0.35.4 を開発依存として用意します。
+ローカルと GitHub Actions は同じ入口を使います。推奨環境は Node 24 LTS と Python 3.13 です。CMS / JS テストには標準ライブラリの模擬環境と、生成HTMLを実解析する固定版Cheerio 1.2.0を使います。Python の監査は標準ライブラリだけで実行します。画像検証ツール用に Sharp 0.35.4 を開発依存として用意します。
 
 ```sh
 npm ci --ignore-scripts --no-audit --no-fund

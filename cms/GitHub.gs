@@ -100,6 +100,7 @@ function cmsPublish_(files, message) {
     if (!previewWritablePath_(file.path) || !/\.html$/.test(file.path) || seen[file.path]) throw new Error('Invalid generated file path.');
     seen[file.path] = true;
     var actual = snapshot.entries[file.path];
+    if (file.expectedAbsent && actual) throw new Error('A page already exists at the new path: ' + file.path);
     if (file.expectedSha && (!actual || actual.sha !== file.expectedSha)) throw new Error('Page changed during rendering: ' + file.path);
     var content = cmsVersionAssetHtml_(previewPrepareHtml_(file.html)), sha = cmsGitBlobSha_(content);
     pageShas[file.path] = sha;

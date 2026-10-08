@@ -7,6 +7,7 @@ function onOpen() {
     .addItem('Rebuild current page (ignore HTML cache)', 'rebuild_current_page')
     .addItem('Refresh external data on current page', 'refresh_current_data')
     .addItem('Refresh linked assets on current page', 'refresh_current_assets')
+    .addItem('Create a new page', 'create_page')
     .addItem('Add missing registered pages', 'addNewpage')
     .addToUi();
 }
@@ -105,8 +106,12 @@ function update_shared_components() {
     var shared = {header: '#normal_header', footer: 'footer', sidebar: 'aside', mobilemenu: '#mobile-menu'};
     var fragments = {};
     Object.keys(shared).forEach(function(name) { fragments[name] = cmsRenderRows_(name); });
+    context.newPageSharedFragments = fragments;
     var changes = Object.keys(shared).map(function(component) { return {selector: shared[component], fragment: fragments[component]}; });
-    var files = cmsSharedPages_().map(function(name) { return cmsReplaceFragments_(name, changes); }).filter(function(file) { return !!file; });
+    var files = cmsSharedPages_().map(function(name) {
+      return context.pages.indexOf(name) !== -1 && !cmsGithubSnapshot_().entries[name + '.html'] ?
+        cmsCreatePage_(name) : cmsReplaceFragments_(name, changes);
+    }).filter(function(file) { return !!file; });
     return cmsPublish_(files, 'Update all preview shared components from Google Sheets');
   }, 'update_shared_components');
 }
@@ -124,8 +129,11 @@ function cmsUpdateTab_(name) {
   var shared = {header: '#normal_header', footer: 'footer', sidebar: 'aside', mobilemenu: '#mobile-menu'};
   if (!shared[name]) throw new Error('This tab is intentionally outside the website updater: ' + name);
   var fragment = cmsRenderRows_(name);
+  context.newPageSharedFragments = {};
+  context.newPageSharedFragments[name] = fragment;
   var files = cmsSharedPages_().map(function(page) {
-    return cmsReplaceFragment_(page, shared[name], fragment);
+    return context.pages.indexOf(page) !== -1 && !cmsGithubSnapshot_().entries[page + '.html'] ?
+      cmsCreatePage_(page) : cmsReplaceFragment_(page, shared[name], fragment);
   }).filter(function(file) { return !!file; });
   return cmsPublish_(files, 'Update preview shared component: ' + name);
 }
@@ -135,6 +143,7 @@ function cmsRenderRows_(name) {
 }
 
 function cmsRenderPage_(name) {
+  if (!cmsGithubSnapshot_().entries[name + '.html']) return cmsCreatePage_(name);
   return cmsReplaceFragment_(name, '.posts', cmsRenderRows_(name));
 }
 
@@ -160,6 +169,9 @@ function cmsReplaceFragments_(name, changes) {
     if ($(change.selector).length !== 1) throw new Error('Template must contain exactly one ' + change.selector + ': ' + name);
     $(change.selector).empty().append(change.fragment);
   });
+  if (needed.some(function(change) { return change.selector === '.posts'; }) && $('head meta[name="cms-generated-page"][content="true"]').length) {
+    cmsUpdateGeneratedPageMetadata_($, name);
+  }
   // Keep the original doctype and html attributes; legacy pages intentionally use quirks mode.
   var opening = original.match(/<html\b[^>]*>/i);
   var doctype = original.match(/^\s*(<!doctype[^>]*>)/i);
@@ -170,33 +182,67 @@ function cmsReplaceFragments_(name, changes) {
   return rendered;
 }
 
+function cmsCreatePage_(name) {
+  if (typeof cmsAssertPageName_ === 'function') cmsAssertPageName_(name, false);
+  else if (typeof name !== 'string' || !/^[a-zA-Z0-9_-]+$/.test(name)) throw new Error('Invalid page name.');
+  var context = cmsContext_();
+  if (context.pages.indexOf(name) === -1) throw new Error('This tab is intentionally outside the website updater: ' + name);
+  if (cmsGithubSnapshot_().entries[name + '.html']) throw new Error('Page already exists: ' + name);
+  // Validate the registered source before collecting shared content or assets.
+  cmsSheetRows_(name);
+  if (!context.newPageTemplate) {
+    var template = getGithubFileContent(GITHUB_TOKEN, REPO_NAME, 'blank.html', BRANCH);
+    if (!template || !template.content) throw new Error('Missing blank.html template.');
+    context.newPageTemplate = Utilities.newBlob(Utilities.base64Decode(template.content)).getDataAsString('UTF-8');
+  }
+  var blank = context.newPageTemplate, $ = Cheerio.load(blank);
+  var components = {header: '#normal_header', footer: 'footer', sidebar: 'aside', mobilemenu: '#mobile-menu'};
+  var selectors = Object.keys(components).map(function(key) { return components[key]; }).concat(['.posts']);
+  selectors.forEach(function(selector) {
+    if ($(selector).length !== 1) throw new Error('New-page template must contain exactly one ' + selector + '.');
+  });
+  $('body').attr('data-page', name);
+  var shared = context.newPageSharedFragments || (context.newPageSharedFragments = {});
+  Object.keys(components).forEach(function(component) {
+    if (!Object.prototype.hasOwnProperty.call(shared, component)) shared[component] = cmsRenderRows_(component);
+    $(components[component]).empty().append(shared[component]);
+  });
+  var fragment = cmsRenderRows_(name);
+  $('.posts').empty().append(fragment);
+  selectors.forEach(function(selector) {
+    if ($(selector).length !== 1) throw new Error('New-page output must contain exactly one ' + selector + '.');
+  });
+  if (!$('head meta[name="cms-generated-page"]').length) $('head').append('<meta name="cms-generated-page">');
+  $('head meta[name="cms-generated-page"]').attr('content', 'true');
+  cmsUpdateGeneratedPageMetadata_($, name);
+  var opening = blank.match(/<html\b[^>]*>/i), doctype = blank.match(/^\s*(<!doctype[^>]*>)/i);
+  var file = {path: name + '.html', expectedAbsent: true, html: (doctype ? doctype[1] + '\n' : '') + (opening ? opening[0] : '<html>') + '\n' + $('html').html() + '</html>'};
+  cmsCacheStagePage_(file, '.posts', fragment);
+  Object.keys(components).forEach(function(component) { cmsCacheStagePage_(file, components[component], shared[component]); });
+  return file;
+}
+
+function cmsUpdateGeneratedPageMetadata_($, name) {
+  var title = '';
+  $('.posts h1').each(function(index, element) {
+    if (!title) title = $(element).text().trim();
+  });
+  if (title) {
+    if (!$('head title').length) $('head').append('<title></title>');
+    $('head title').text(title);
+    if (!$('head meta[property="og:title"]').length) $('head').append('<meta property="og:title">');
+    $('head meta[property="og:title"]').attr('content', title);
+    if (!$('head meta[name="twitter:title"], head meta[property="twitter:title"]').length) $('head').append('<meta name="twitter:title">');
+    $('head meta[name="twitter:title"], head meta[property="twitter:title"]').attr('content', title);
+  }
+  if (!$('head meta[property="og:url"]').length) $('head').append('<meta property="og:url">');
+  $('head meta[property="og:url"]').attr('content', PREVIEW_SITE_URL + '/' + name + '.html');
+}
+
 function addNewpage() {
   return cmsRun_(function(context) {
     var entries = cmsGithubSnapshot_().entries;
-    var missing = context.pages.filter(function(name) { return !entries[name + '.html']; });
-    if (!missing.length) return cmsPublish_([], 'Add missing registered preview pages');
-    var template = getGithubFileContent(GITHUB_TOKEN, REPO_NAME, 'blank.html', BRANCH);
-    if (!template) throw new Error('Missing blank.html template.');
-    var blank = Utilities.newBlob(Utilities.base64Decode(template.content)).getDataAsString('UTF-8');
-    var components = {header: '#normal_header', footer: 'footer', sidebar: 'aside', mobilemenu: '#mobile-menu'};
-    var shared = {};
-    Object.keys(components).forEach(function(component) { shared[component] = cmsRenderRows_(component); });
-    var files = missing.map(function(name) {
-      var $ = Cheerio.load(blank);
-      $('body').attr('data-page', name);
-      Object.keys(components).forEach(function(component) {
-        var selector = components[component];
-        if ($(selector).length !== 1) throw new Error('New-page template is incomplete: ' + selector);
-        $(selector).empty().append(shared[component]);
-      });
-      var fragment = cmsRenderRows_(name);
-      $('.posts').empty().append(fragment);
-      var opening = blank.match(/<html\b[^>]*>/i), doctype = blank.match(/^\s*(<!doctype[^>]*>)/i);
-      var file = {path: name + '.html', html: (doctype ? doctype[1] + '\n' : '') + (opening ? opening[0] : '<html>') + '\n' + $('html').html() + '</html>'};
-      cmsCacheStagePage_(file, '.posts', fragment);
-      Object.keys(components).forEach(function(component) { cmsCacheStagePage_(file, components[component], shared[component]); });
-      return file;
-    });
+    var files = context.pages.filter(function(name) { return !entries[name + '.html']; }).map(function(name) { return cmsCreatePage_(name); });
     return cmsPublish_(files, 'Add missing registered preview pages');
   }, 'addNewpage');
 }

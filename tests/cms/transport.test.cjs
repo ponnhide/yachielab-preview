@@ -192,7 +192,7 @@ function fixture(options = {}) {
     }
     vm.runInContext(source, context, { filename: name });
   }
-  ['PreviewIsolation.gs', 'SheetRepository.gs', 'SheetStyles.gs', 'Hashes.gs', 'RenderCache.gs', 'AssetVersions.gs', 'GitHub.gs', 'AssetRegistry.gs', 'AssetStore.gs'].forEach(load);
+  ['PreviewIsolation.gs', 'SheetRepository.gs', 'SheetStyles.gs', 'Hashes.gs', 'RenderCache.gs', 'AssetVersions.gs', 'GitHub.gs', 'AssetRegistry.gs', 'AssetStore.gs', 'Pages.gs'].forEach(load);
   state.context = context;
   state.load = load;
   state.github = (endpoint, method = 'get', payload) => context.previewFetch_('https://api.github.com/repos/' + PREVIEW_REPO + '/' + endpoint, {method, payload: payload === undefined ? undefined : JSON.stringify(payload)});
@@ -439,6 +439,12 @@ test('a contents blob SHA mismatch and an incomplete GitHub tree stop before wri
   const incomplete = fixture();
   incomplete.truncated = true;
   assert.throws(() => incomplete.context.cmsGithubSnapshot_(), /incomplete/i);
+});
+
+test('a new-page publication cannot replace an existing file', () => {
+  const state = fixture();
+  assert.throws(() => state.context.cmsPublish_([{path: 'contact.html', html, expectedAbsent: true}]), /already exists/);
+  assert.equal(state.io.filter(call => call.method !== 'get').length, 0);
 });
 
 test('Sheet rows, journal/member metadata and GitHub snapshot are cached within one execution', () => {
@@ -827,7 +833,7 @@ test('an actual cold-then-warm update reuses rows and avoids Contents, trees and
   ['showdown.gs', 'Renderer.gs', 'Publications.gs', 'Cms.gs'].forEach(state.load);
   state.context.Cheerio = {load() {
     let posts = '';
-    return selector => ({length: 1, attr() { return this; }, empty() { return this; }, append(fragment) { if (selector === '.posts') posts = fragment; return this; },
+    return selector => ({length: selector.includes('cms-generated-page') ? 0 : 1, attr() { return this; }, empty() { return this; }, append(fragment) { if (selector === '.posts') posts = fragment; return this; },
       html() { return '<head></head><body data-page="contact"><main><div class="posts">' + posts + '</div></main></body>'; }});
   }};
   const cold = state.context.update_webpage();
@@ -856,7 +862,7 @@ test('rebuild bypasses both row reuse and the full-page fragment skip', () => {
   state.context.cmsCacheCanSkipFragment_ = () => { throw new Error('Rebuild must not consult the page skip cache'); };
   state.context.cmsCacheStagePage_ = () => {};
   let parsed = 0;
-  state.context.Cheerio = {load() { parsed++; return () => ({length: 1, attr() { return this; }, empty() { return this; }, append() { return this; }, html() { return '<body></body>'; }}); }};
+  state.context.Cheerio = {load() { parsed++; return selector => ({length: selector.includes('cms-generated-page') ? 0 : 1, attr() { return this; }, empty() { return this; }, append() { return this; }, html() { return '<body></body>'; }}); }};
   const file = state.context.cmsReplaceFragment_('contact', '.posts', 'unchanged');
   assert.equal(file.path, 'contact.html');
   assert.equal(parsed, 1);

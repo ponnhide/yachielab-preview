@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { createRequire } from 'node:module';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const cssRoot = path.join(root, 'css');
@@ -34,6 +35,29 @@ for (const name of htmlFiles) {
   const html = fs.readFileSync(path.join(root, name), 'utf8');
   for (const match of html.matchAll(/href=["']\.\/css\/([^"']+\.css)["']/g)) entrypoints.add(match[1]);
 }
+// Every new page inherits this skeleton, independent of its eventual name.
+const blankHtml = fs.readFileSync(path.join(root, 'blank.html'), 'utf8');
+assert(!/href=["']\.\/css\/(?:pages\/)?contact\.css["']/.test(blankHtml), 'Generic pages must not inherit Contact iframe dimensions');
+const { createBrowser } = createRequire(import.meta.url)('../js/browser-harness.cjs');
+const blank = createBrowser(blankHtml, { url: 'https://ponnhide.github.io/yachielab-preview/new_page.html?lang=JA&affil=UBC' });
+for (const selector of ['.posts', '#normal_header', 'footer', 'aside', '#mobile-menu']) {
+  assert.equal(blank.document.querySelectorAll(selector).length, 1, `Generic template needs exactly one ${selector}`);
+}
+const scripts = blank.document.querySelectorAll('script[src]');
+const newsScript = scripts.filter(script => script.getAttribute('src') === './js/news.js');
+assert.equal(newsScript.length, 1, 'Generic Post rows require the SNS controller');
+assert.notEqual(newsScript[0].getAttribute('defer'), null, 'SNS controller must run after the page markup');
+const commonScriptIndex = scripts.findIndex(script => script.getAttribute('src') === './js/common.js');
+assert(commonScriptIndex >= 0 && commonScriptIndex < scripts.indexOf(newsScript[0]), 'Common state must initialize before SNS subscriptions');
+// Loading the controller on an ordinary new page must not contact SNS providers.
+let notifyLanguage;
+blank.window.YachieSite = { subscribe(callback) { notifyLanguage = callback; } };
+const scriptSources = scripts.map(script => script.getAttribute('src'));
+blank.run('news.js');
+notifyLanguage();
+assert.deepEqual(blank.document.querySelectorAll('script[src]').map(script => script.getAttribute('src')), scriptSources, 'No widgets means no external provider scripts');
+assert(blank.observers.every(observer => observer.targets.size === 0), 'An ordinary page has no SNS visibility targets');
+
 for (const filename of entrypoints) expand(filename);
 for (const legacy of ['common_01222024.css', 'index_new.css', 'joinus.css', 'resources.css']) {
   assert.deepEqual(imports(fs.readFileSync(path.join(cssRoot, legacy), 'utf8')), [`./legacy/${legacy}`]);

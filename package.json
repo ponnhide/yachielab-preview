@@ -16,6 +16,7 @@
   },
   "devDependencies": {
     "@google/clasp": "3.4.1",
+    "cheerio": "1.2.0",
     "sharp": "0.35.4"
   }
 }

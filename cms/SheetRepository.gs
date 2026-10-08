@@ -46,6 +46,7 @@ function getIndependentPages() {
   }).filter(function(name) {
     if (!name || seen[name]) return false;
     if (!/^[a-zA-Z0-9_-]+$/.test(name)) throw new Error('Invalid page name in item list.');
+    if (typeof cmsAssertPageName_ === 'function') cmsAssertPageName_(name, false);
     seen[name] = true;
     return true;
   });
