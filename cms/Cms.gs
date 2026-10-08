@@ -48,7 +48,7 @@ function cmsRun_(work, command) {
     var status = result.changed ? 'Preview updated: ' + (result.pages || 0) + ' page(s).' : 'No changes to publish.';
     if (result.cacheSaved === false) status += ' Cache save failed; next update will regenerate.';
     if (result.assetsSaved === false) status += ' Asset registry save failed; next update will check sources again.';
-    if (result.registrationSaved === false) status += ' Page registration is pending. Run Update the current page again.';
+    if (result.registrationSaved === false) status += ' Sheet/Page registration is pending. Run Update the current page again.';
     if (metrics.pdfLinksPreserved) status += ' ' + metrics.pdfLinksPreserved + ' PDF link(s) kept; not re-fetched.';
     var summary = ' Generated ' + metrics.rowsRendered + ', reused ' + metrics.rowsReused + ' rows; skipped ' + metrics.pagesSkipped + ' pages; ' + (metrics.elapsedMs / 1000).toFixed(1) + 's.';
     // A UI notification failure must not turn a successful publication into a failure.
@@ -117,9 +117,10 @@ function cmsSharedPages_() {
 function cmsUpdateTab_(name) {
   var context = cmsContext_();
   if (context.pages.indexOf(name) !== -1) {
-    if (typeof cmsClearPendingPageRegistration_ === 'function') cmsClearPendingPageRegistration_(name);
     var page = cmsRenderPage_(name);
-    return cmsPublish_(page ? [page] : [], 'Update preview page: ' + name);
+    var result = cmsPublish_(page ? [page] : [], 'Update preview page: ' + name);
+    if (typeof cmsRepairPageRegistration_ === 'function') cmsRepairPageRegistration_(name, result);
+    return result;
   }
   var shared = {header: '#normal_header', footer: 'footer', sidebar: 'aside', mobilemenu: '#mobile-menu'};
   if (!shared[name]) return cmsUpdateNewTab_(name);

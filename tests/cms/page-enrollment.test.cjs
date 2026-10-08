@@ -7,11 +7,15 @@ function blobSha(content) { const bytes = Buffer.from(content); return crypto.cr
 function normalized(html) { return 'preview:' + html + '<!--versioned-->'; }
 
 function fixture(options = {}) {
-  const state = {events: [], writes: [], published: [], rendered: [], props: {...options.props}, propertyCalls: [], warnings: []};
-  state.registryRows = Array.from({length: 12}, (_, index) => ['Affiliation ' + index, 'Language ' + index, 'Project ' + index, 'Sheet ' + index, '', 'Common ' + index, '', '', 'Journal ' + index, 'Replacement ' + index]);
-  state.registryRows[0][4] = 'Page'; state.registryRows[1][4] = 'research'; state.registryRows[2][4] = 'contact';
+  const state = {events: [], writes: [], registrationAttempts: [], published: [], rendered: [], props: {...options.props}, propertyCalls: [], warnings: [], failRegistration: Boolean(options.registrationFailure), failRegistrationColumns: new Set(options.registrationFailureColumns || []), failFlush: Boolean(options.flushFailure)};
+  state.registryRows = Array.from({length: 12}, (_, index) => ['Affiliation ' + index, 'Language ' + index, 'Project ' + index, '', '', 'Common ' + index, '', '', 'Journal ' + index, 'Replacement ' + index]);
+  state.registryRows[0][3] = 'Sheet'; state.registryRows[0][4] = 'Page';
+  for (const [column, names] of [[4, options.registrySheetNames || ['research', 'contact']], [5, options.registryPageNames || ['research', 'contact']]]) {
+    names.forEach((name, index) => {state.registryRows[index + 1][column - 1] = name;});
+  }
   state.sourceRows = options.rows || [['Lab', 'Language', 'Function', 'Parameter1'], ['All', 'Common', 'H1', 'New page'], ['', '', '', '=parameter-placeholder']];
-  const formulaRows = new Set(options.formulaRows || []), validationRows = new Set(options.validationRows || []);
+  const formulaRows = {4: new Set(options.sheetFormulaRows || []), 5: new Set(options.formulaRows || [])};
+  const validationRows = {4: new Set(options.sheetValidationRows || []), 5: new Set(options.validationRows || [])};
   let sourceName = options.name || 'fresh', sourceId = options.id ?? ID;
   const source = {getName: () => sourceName, getSheetId: () => sourceId, setName(name) { sourceName = name; return source; }, getMaxRows: () => state.sourceRows.length,
     getDataRange: () => ({getDisplayValues: () => state.sourceRows, getValues: () => state.sourceRows, getRichTextValues: () => state.sourceRows.map(row => row.map(() => null))}),
@@ -19,13 +23,13 @@ function fixture(options = {}) {
   };
   const registry = {getName: () => 'item list', getSheetId: () => 891529442, getMaxRows: () => state.registryRows.length,
     getRange(row, column, height = 1, width = 1) {
-      assert.equal(column, 5, 'Enrollment may address only the Page column'); assert.equal(width, 1);
-      return {getValues: () => Array.from({length: height}, (_, i) => [state.registryRows[row + i - 1]?.[4] || '']),
-        getDisplayValues: () => Array.from({length: height}, (_, i) => [state.registryRows[row + i - 1]?.[4] || '']),
-        getFormulas: () => Array.from({length: height}, (_, i) => [formulaRows.has(row + i) ? '=empty()' : '']),
-        getValue: () => state.registryRows[row - 1]?.[4] || '', getFormula: () => formulaRows.has(row) ? '=empty()' : '',
-        getDataValidation: () => validationRows.has(row) ? {criteria: 'restricted'} : null,
-        setValue(value) {state.events.push('register'); if (options.registrationFailure) throw Error('Registry write failed'); state.registryRows[row - 1][4] = value; state.writes.push({row, column, value});}
+      assert([4, 5].includes(column), 'Enrollment may address only independent Sheet/Page columns'); assert.equal(width, 1);
+      return {getValues: () => Array.from({length: height}, (_, i) => [state.registryRows[row + i - 1]?.[column - 1] || '']),
+        getDisplayValues: () => Array.from({length: height}, (_, i) => [state.registryRows[row + i - 1]?.[column - 1] || '']),
+        getFormulas: () => Array.from({length: height}, (_, i) => [formulaRows[column].has(row + i) ? '=empty()' : '']),
+        getValue: () => state.registryRows[row - 1]?.[column - 1] || '', getFormula: () => formulaRows[column].has(row) ? '=empty()' : '',
+        getDataValidation: () => validationRows[column].has(row) ? {criteria: 'restricted'} : null,
+        setValue(value) {state.events.push('register'); state.registrationAttempts.push({row, column, value}); if (state.failRegistration || state.failRegistrationColumns.has(column)) throw Error('Registry write failed'); state.registryRows[row - 1][column - 1] = value; state.writes.push({row, column, value});}
       };
     }
   };
@@ -40,7 +44,7 @@ function fixture(options = {}) {
     getProperties() {throw Error('Credential enumeration is forbidden');}
   };
   const sandbox = {PREVIEW_SPREADSHEET_ID: 'preview', PREVIEW_SITE_URL: SITE, CMS_CONTEXT_: context,
-    SpreadsheetApp: {getActiveSpreadsheet: () => book, flush() {state.events.push('flush');}},
+    SpreadsheetApp: {getActiveSpreadsheet: () => book, flush() {state.events.push('flush'); if (state.failFlush) throw Error('Flush failed');}},
     PropertiesService: {getScriptProperties: () => properties},
     console: {warn: message => state.warnings.push(message), error: message => state.warnings.push(message), info() {}},
     cmsContext_: () => context, cmsGithubSnapshot_: () => ({entries}), cmsSiteSettings_() {state.events.push('settings'); return {};},
@@ -55,10 +59,11 @@ function fixture(options = {}) {
   state.run = sandbox; state.context = context; state.source = source; state.entries = entries; return state;
 }
 
-test('a new content tab publishes once, then enrolls only its free Page cell', () => {
+test('a new content tab publishes once, then enrolls its independent Page and Sheet cells', () => {
   const state = fixture(), before = structuredClone(state.registryRows), result = state.run.cmsUpdateNewTab_('fresh');
   assert.equal(result.changed, true); assert.equal(state.published.length, 1); assert.equal(state.published[0][0].path, 'fresh.html');
-  assert.equal(state.published[0][0].expectedAbsent, true); assert.equal(state.writes.length, 1); before[3][4] = 'fresh';
+  assert.equal(state.published[0][0].expectedAbsent, true); assert.equal(state.writes.length, 2); before[3][4] = 'fresh'; before[3][3] = 'fresh';
+  assert.deepEqual(state.writes.map(write => write.column), [5, 4], 'Register Page first so a partial Sheet failure remains recoverable');
   assert.deepEqual(state.registryRows, before); assert(state.events.indexOf('intent') < state.events.indexOf('publish'));
   assert(state.events.indexOf('publish') < state.events.indexOf('register')); assert.equal(state.props['CMS_PENDING_PAGE_' + ID], undefined);
   assert(state.propertyCalls.every(([, key]) => key === 'CMS_PENDING_PAGE_' + ID));
@@ -110,7 +115,7 @@ test('a registry write failure reports the completed publication and preserves r
 test('matching same-sheet pending intent repairs enrollment and then updates the latest content', () => {
   const sha = 'd'.repeat(40), key = 'CMS_PENDING_PAGE_' + ID;
   const state = fixture({entries: {'fresh.html': {type: 'blob', sha}}, props: {[key]: JSON.stringify({sheetId: ID, name: 'fresh', sha})}});
-  const result = state.run.cmsUpdateNewTab_('fresh'); assert.equal(result.changed, true); assert.equal(state.writes.length, 1);
+  const result = state.run.cmsUpdateNewTab_('fresh'); assert.equal(result.changed, true); assert.equal(state.writes.length, 2);
   assert.equal(state.rendered.length, 1); assert.equal(state.published[0][0].expectedAbsent, undefined); assert.equal(state.published[0][0].expectedSha, sha);
   assert(state.events.indexOf('register') < state.events.indexOf('render-existing')); assert.equal(state.props[key], undefined);
 });
@@ -132,7 +137,7 @@ test('pending ownership cannot adopt another sheet, slug, case path or changed H
 
 test('a failed earlier attempt with no HTML can create a fresh page on retry', () => {
   const key = 'CMS_PENDING_PAGE_' + ID, state = fixture({props: {[key]: JSON.stringify({sheetId: ID, name: 'fresh', sha: 'd'.repeat(40)})}});
-  state.run.cmsUpdateNewTab_('fresh'); assert.equal(state.published[0][0].expectedAbsent, true); assert.equal(state.writes.length, 1); assert.equal(state.props[key], undefined);
+  state.run.cmsUpdateNewTab_('fresh'); assert.equal(state.published[0][0].expectedAbsent, true); assert.equal(state.writes.length, 2); assert.equal(state.props[key], undefined);
 });
 
 test('renaming a tab with a pending publication cannot create a second URL or overwrite its ownership record', () => {
@@ -143,9 +148,10 @@ test('renaming a tab with a pending publication cannot create a second URL or ov
   assert.equal(state.props[key], intent);
 });
 
-test('registration skips formula and validated cells and preserves other independent lists', () => {
-  const state = fixture({formulaRows: [4], validationRows: [5]}), before = structuredClone(state.registryRows);
-  state.run.cmsUpdateNewTab_('fresh'); assert.deepEqual(state.writes, [{row: 6, column: 5, value: 'fresh'}]); before[5][4] = 'fresh'; assert.deepEqual(state.registryRows, before);
+test('registration skips formula and validated cells independently and preserves every other list cell', () => {
+  const state = fixture({formulaRows: [4], validationRows: [5], sheetFormulaRows: [4, 5], sheetValidationRows: [6]}), before = structuredClone(state.registryRows);
+  state.run.cmsUpdateNewTab_('fresh'); assert.deepEqual(state.writes, [{row: 6, column: 5, value: 'fresh'}, {row: 7, column: 4, value: 'fresh'}]);
+  before[5][4] = 'fresh'; before[6][3] = 'fresh'; assert.deepEqual(state.registryRows, before);
 });
 
 test('renaming the source during publication retains successful result and prevents stale E registration', () => {
@@ -162,5 +168,91 @@ test('renaming the source before publication stops before pending intent and rem
 
 test('a cleanup failure cannot turn completed publication and registration into a failed update', () => {
   const state = fixture({deleteFailure: true}), result = state.run.cmsUpdateNewTab_('fresh');
-  assert.equal(result.changed, true); assert.equal(result.registrationSaved, true); assert.equal(state.writes.length, 1); assert.equal(state.registryRows[3][4], 'fresh');
+  assert.equal(result.changed, true); assert.equal(result.registrationSaved, true); assert.equal(state.writes.length, 2); assert.equal(state.registryRows[3][4], 'fresh'); assert.equal(state.registryRows[3][3], 'fresh');
+});
+
+test('different Sheet and Page list lengths append independently without replacing existing names', () => {
+  const state = fixture({registrySheetNames: ['research', 'contact', 'header', 'footer', 'joinus'], registryPageNames: ['research', 'contact']}), before = structuredClone(state.registryRows);
+  state.run.cmsUpdateNewTab_('fresh'); assert.deepEqual(state.writes, [{row: 4, column: 5, value: 'fresh'}, {row: 7, column: 4, value: 'fresh'}]);
+  before[3][4] = 'fresh'; before[6][3] = 'fresh'; assert.deepEqual(state.registryRows, before);
+});
+
+test('an existing exact name in either independent list is reused without duplicate writes', () => {
+  for (const options of [
+    {registrySheetNames: ['research', 'fresh', 'contact']},
+    {registryPageNames: ['research', 'contact', 'fresh']},
+    {registrySheetNames: ['research', 'fresh'], registryPageNames: ['fresh', 'contact']}
+  ]) {
+    const state = fixture(options), before = structuredClone(state.registryRows);
+    state.run.cmsEnsurePageRegistrationLists_('fresh', state.context.spreadsheet.getSheetByName('item list'));
+    const expectedMissing = [4, 5].filter(column => !before.some(row => row[column - 1] === 'fresh'));
+    assert.deepEqual(state.writes.map(write => write.column).sort(), expectedMissing);
+    for (const column of [4, 5]) assert.equal(state.registryRows.filter(row => row[column - 1] === 'fresh').length, 1);
+    state.run.cmsEnsurePageRegistrationLists_('fresh', state.context.spreadsheet.getSheetByName('item list'));
+    assert.equal(state.writes.length, expectedMissing.length, 'Retry must not add duplicate list entries');
+    for (let row = 0; row < before.length; row++) for (let column = 0; column < before[row].length; column++) {
+      if (before[row][column] !== '' || ![3, 4].includes(column)) assert.equal(state.registryRows[row][column], before[row][column]);
+    }
+  }
+});
+
+test('case-only names in either list conflict before either registration cell is written', () => {
+  for (const options of [{registrySheetNames: ['research', 'Fresh']}, {registryPageNames: ['research', 'Fresh']}]) {
+    const state = fixture(options);
+    assert.equal(typeof state.run.cmsEnsurePageRegistrationLists_, 'function');
+    assert.throws(() => state.run.cmsEnsurePageRegistrationLists_('fresh', state.context.spreadsheet.getSheetByName('item list')));
+    assert.equal(state.writes.length, 0);
+  }
+});
+
+test('both missing entries are preflighted before writing if either list has no unrestricted free cell', () => {
+  for (const column of [4, 5]) {
+    const options = column === 4 ? {sheetValidationRows: Array.from({length: 9}, (_, index) => index + 4)} : {validationRows: Array.from({length: 9}, (_, index) => index + 4)};
+    const state = fixture(options), before = structuredClone(state.registryRows);
+    assert.equal(typeof state.run.cmsEnsurePageRegistrationLists_, 'function');
+    assert.throws(() => state.run.cmsEnsurePageRegistrationLists_('fresh', state.context.spreadsheet.getSheetByName('item list')));
+    assert.equal(state.registrationAttempts.length, 0); assert.deepEqual(state.registryRows, before);
+  }
+});
+
+test('a partial Sheet write failure retains Page registration and retries only the missing Sheet cell', () => {
+  const key = 'CMS_PENDING_PAGE_' + ID, state = fixture({registrationFailureColumns: [4]});
+  const result = state.run.cmsUpdateNewTab_('fresh');
+  assert.equal(result.changed, true); assert.equal(result.registrationSaved, false);
+  assert.deepEqual(state.writes, [{row: 4, column: 5, value: 'fresh'}]); assert(state.props[key]);
+  state.failRegistrationColumns.clear();
+  state.run.cmsRepairPageRegistration_('fresh', result);
+  assert.equal(result.registrationSaved, true); assert.equal(state.props[key], undefined);
+  assert.deepEqual(state.writes, [{row: 4, column: 5, value: 'fresh'}, {row: 4, column: 4, value: 'fresh'}]);
+  state.run.cmsRepairPageRegistration_('fresh', result);
+  assert.equal(state.writes.length, 2);
+});
+
+test('normal registered-page repair backfills Sheet membership after an unchanged publication', () => {
+  const state = fixture({pages: ['research', 'contact', 'fresh'], registryPageNames: ['research', 'contact', 'fresh']}), before = structuredClone(state.registryRows);
+  const result = {changed: false, pages: 0, assets: 0};
+  state.run.cmsRepairPageRegistration_('fresh', result);
+  assert.equal(result.changed, false); assert.equal(result.registrationSaved, true);
+  assert.equal(state.published.length, 0); assert.equal(state.rendered.length, 0);
+  assert.deepEqual(state.writes, [{row: 4, column: 4, value: 'fresh'}]); before[3][3] = 'fresh'; assert.deepEqual(state.registryRows, before);
+});
+
+test('Page write failure preserves an existing Sheet entry and stops before any second write', () => {
+  const state = fixture({registrySheetNames: ['research', 'fresh', 'contact'], registrationFailureColumns: [5]}), before = structuredClone(state.registryRows);
+  const result = state.run.cmsUpdateNewTab_('fresh');
+  assert.equal(result.changed, true); assert.equal(result.registrationSaved, false);
+  assert.deepEqual(state.registrationAttempts.map(write => write.column), [5]);
+  assert.equal(state.writes.length, 0); assert.deepEqual(state.registryRows, before);
+  assert(state.props['CMS_PENDING_PAGE_' + ID]);
+});
+
+test('a flush failure retains recovery intent until both list entries are confirmed without duplicates', () => {
+  const key = 'CMS_PENDING_PAGE_' + ID, state = fixture({flushFailure: true});
+  const result = state.run.cmsUpdateNewTab_('fresh');
+  assert.equal(result.changed, true); assert.equal(result.registrationSaved, false);
+  assert.equal(state.writes.length, 2); assert(state.props[key]);
+  state.failFlush = false; state.run.cmsRepairPageRegistration_('fresh', result);
+  assert.equal(result.registrationSaved, true); assert.equal(state.props[key], undefined);
+  assert.equal(state.writes.length, 2);
+  assert(state.events.lastIndexOf('flush') >= state.events.lastIndexOf('register'));
 });

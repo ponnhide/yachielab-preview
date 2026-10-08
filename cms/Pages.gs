@@ -21,16 +21,43 @@ function cmsAssertPageName_(name, creating) {
   return name;
 }
 
-function cmsNewPageRegistrationCell_(sheet) {
+function cmsNewPageRegistrationCell_(sheet, column) {
+  column = column || 5;
+  if (column !== 4 && column !== 5) throw new Error('Invalid registration column.');
+  var label = column === 4 ? 'Sheet' : 'Page';
   var size = Math.max(0, sheet.getMaxRows() - 1);
-  if (!size) throw new Error('No free page registration cell in item list column E.');
-  var range = sheet.getRange(2, 5, size, 1), values = range.getValues(), formulas = range.getFormulas();
+  if (!size) throw new Error('No free registration cell in item list: ' + label);
+  var range = sheet.getRange(2, column, size, 1), values = range.getValues(), formulas = range.getFormulas();
   for (var i = 0; i < size; i++) {
     if (values[i][0] !== '' || formulas[i][0]) continue;
-    var cell = sheet.getRange(i + 2, 5);
+    var cell = sheet.getRange(i + 2, column);
     if (!cell.getDataValidation()) return cell;
   }
-  throw new Error('No unrestricted empty cell in item list column E.');
+  throw new Error('No unrestricted empty cell in item list: ' + label);
+}
+
+function cmsEnsurePageRegistrationLists_(name, registry) {
+  // D and E are independent lists; their free cells need not share a row.
+  // Plan both entries before any write, and keep formulas/validation intact.
+  var plans = [5, 4].map(function(column) {
+    var label = column === 4 ? 'Sheet' : 'Page';
+    if (String(registry.getRange(1, column).getValue()).trim() !== label) throw new Error('Unexpected item list header: ' + label);
+    var size = Math.max(0, registry.getMaxRows() - 1);
+    var values = size ? registry.getRange(2, column, size, 1).getValues() : [];
+    var present = false;
+    values.forEach(function(row) {
+      var value = String(row[0] || '').trim();
+      if (value === name) present = true;
+      else if (value.toLowerCase() === name.toLowerCase()) throw new Error('Registration names differ only by letter case: ' + name);
+    });
+    return present ? null : cmsNewPageRegistrationCell_(registry, column);
+  });
+  plans.forEach(function(cell) {
+    if (!cell) return;
+    if (cell.getValue() !== '' || cell.getFormula() || cell.getDataValidation()) throw new Error('The registration cell changed during the update.');
+    cell.setValue(name);
+  });
+  return plans.some(function(cell) { return !!cell; });
 }
 
 function cmsAssertNewPageSource_(name, sheet) {
@@ -43,22 +70,29 @@ function cmsCompletePageRegistration_(name, sheet, properties, key) {
   cmsAssertNewPageSource_(name, sheet);
   var registry = cmsContext_().spreadsheet.getSheetByName('item list');
   if (!registry) throw new Error('The page registry is missing.');
-  var cell = cmsNewPageRegistrationCell_(registry);
-  if (cell.getValue() !== '' || cell.getFormula() || cell.getDataValidation()) throw new Error('The page registration cell changed during the update.');
-  cell.setValue(name); // Independent lists in other columns remain untouched.
-  SpreadsheetApp.flush();
-  try { properties.deleteProperty(key); }
-  catch (error) { console.warn('Optional page registration cleanup will retry on the next update.'); }
+  var changed = cmsEnsurePageRegistrationLists_(name, registry), pending = properties.getProperty(key);
+  if (changed || pending) SpreadsheetApp.flush();
+  if (pending) {
+    try { properties.deleteProperty(key); }
+    catch (error) { console.warn('Optional page registration cleanup will retry on the next update.'); }
+  }
 }
 
-function cmsClearPendingPageRegistration_(name) {
-  // Successful enrollment is also finalized after an ambiguous Sheet/flush failure.
+function cmsRepairPageRegistration_(name, result) {
+  // This also repairs older Page-only entries, but only after publication succeeds.
   try {
-    var sheet = cmsContext_().spreadsheet.getSheetByName(name);
-    if (!sheet) return;
+    if (!result || typeof result.changed !== 'boolean') throw new Error('Page registration requires a successful publish result.');
+    var book = cmsContext_().spreadsheet, sheet = book.getSheetByName(name), registry = book.getSheetByName('item list');
+    if (!sheet || !registry) throw new Error('The page source or registry is missing.');
+    var size = Math.max(0, registry.getMaxRows() - 1);
+    if (!size || !registry.getRange(2, 5, size, 1).getValues().some(function(row) { return String(row[0] || '').trim() === name; })) throw new Error('This page is not registered: ' + name);
     var properties = PropertiesService.getScriptProperties(), key = 'CMS_PENDING_PAGE_' + sheet.getSheetId();
-    if (properties.getProperty(key)) properties.deleteProperty(key);
-  } catch (error) { console.warn('Optional page registration cleanup will retry on the next update.'); }
+    cmsCompletePageRegistration_(name, sheet, properties, key);
+    result.registrationSaved = true;
+  } catch (error) {
+    result.registrationSaved = false;
+    console.warn('Page published; its Sheet/Page registration will be completed by the next Update.');
+  }
 }
 
 function cmsUpdateNewTab_(name) {

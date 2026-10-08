@@ -44,7 +44,7 @@ function fixture(options = {}) {
       {path: 'research.html', type: 'blob', mode: '100644', sha: '1'.repeat(40)},
       {path: 'img/existing.jpg', type: 'blob', mode: '100644', sha: '2'.repeat(40)}
     ],
-    downloads: new Map(), drives: new Map(), contents: new Map()
+    downloads: new Map(), drives: new Map(), contents: new Map(), events: [], propertyCalls: [], props: {...options.props}
   };
   const values = {
     header: [['Lab', 'Language', 'Function', 'Direction', 'ID', 'Style'], ['All', 'Common', 'div', 'v', 'head', '']],
@@ -75,7 +75,21 @@ function fixture(options = {}) {
       return {
       getDisplayValues() { state.reads[name + ':values'] = (state.reads[name + ':values'] || 0) + 1; return matrix(); },
       getValues() { state.reads[name + ':values'] = (state.reads[name + ':values'] || 0) + 1; return matrix(); },
+      getValue() { return matrix()[0]?.[0] ?? ''; },
+      getFormulas() { return matrix().map(row => row.map(() => '')); },
+      getFormula() { return ''; }, getDataValidation() { return null; },
       getRichTextValues() { state.reads[name + ':rich'] = (state.reads[name + ':rich'] || 0) + 1; return matrix().map(row => row.map(() => null)); },
+      setValue(value) {
+        assert.equal(name, 'item list', 'Registration may write only the independent item list columns');
+        assert.ok([4, 5].includes(startColumn)); assert.ok(startRow >= 2);
+        assert.equal(rowCount, 1); assert.equal(columnCount, 1);
+        const target = values[name][startRow - 1] ||= [];
+        assert.equal(target[startColumn - 1] || '', '', 'Registration must not overwrite an existing entry');
+        state.events.push(['register', name, startRow, startColumn, value]);
+        state.mutations.push(['setValue', name, startRow, startColumn, value]);
+        target[startColumn - 1] = value;
+        return this;
+      },
       setValues(rows) {
         assert.ok(['_cms_cache','_cms_assets'].includes(name), 'Technical writes must not alter source content tabs');
         if (options.cacheWriteFailure) throw new Error('Mock cache storage failure');
@@ -94,8 +108,9 @@ function fixture(options = {}) {
     }; }
     const sheet = {
       getName: () => name,
+      getSheetId: () => options.sheetIds?.[name] ?? 900000000 + Object.keys(values).indexOf(name),
       getDataRange: () => range(1, 1, Math.max(1, values[name].length), Math.max(1, ...values[name].map(row => row.length))),
-      getRange: (row = 1, column = 1, rows = values[name].length, columns = Math.max(1, ...values[name].map(value => value.length))) => range(row, column, rows, columns),
+      getRange: (row = 1, column = 1, rows = 1, columns = 1) => range(row, column, rows, columns),
       getLastRow: () => values[name].reduce((last, row, index) => row.some(cell => cell !== '' && cell != null) ? index + 1 : last, 0),
       getLastColumn: () => Math.max(1, ...values[name].map(row => row.length)),
       getMaxRows: () => 1000, getMaxColumns: () => 26,
@@ -116,9 +131,15 @@ function fixture(options = {}) {
   const context = {
     console: Object.fromEntries(['log', 'info', 'warn', 'error'].map(level => [level, (...args) => state.logs.push([level, ...args])])), GITHUB_TOKEN: options.token === undefined ? 'test-preview-token' : options.token,
     REPO_NAME: options.repo || PREVIEW_REPO, BRANCH: options.branch || PREVIEW_BRANCH,
-    PropertiesService: { getScriptProperties: () => ({ getProperty: () => options.token === undefined ? 'test-preview-token' : options.token }) },
+    PropertiesService: { getScriptProperties: () => ({
+      getProperty(key) {state.propertyCalls.push(['get', key]); return key === 'PREVIEW_GITHUB_TOKEN' ? (options.token === undefined ? 'test-preview-token' : options.token) : state.props[key] || null;},
+      setProperty(key, value) {assert.match(key, /^CMS_PENDING_PAGE_\d+$/); state.propertyCalls.push(['set', key]); state.props[key] = value;},
+      deleteProperty(key) {assert.match(key, /^CMS_PENDING_PAGE_\d+$/); state.propertyCalls.push(['delete', key]); delete state.props[key];},
+      getProperties() {throw new Error('Credential enumeration is forbidden');}
+    }) },
     SpreadsheetApp: {
       getActiveSpreadsheet: () => spreadsheet, getActiveSheet: () => getSheet(state.activeSheet),
+      flush() {state.events.push(['flush']);},
       getUi: () => ({ createMenu: () => menu, alert() {} })
     },
     LockService: { getDocumentLock: () => ({ tryLock: () => true, waitLock() {}, releaseLock() {} }), getScriptLock: () => ({ tryLock: () => true, waitLock() {}, releaseLock() {} }) },
@@ -172,6 +193,7 @@ function fixture(options = {}) {
       if (method === 'patch' && endpoint === 'git/refs/heads/' + PREVIEW_BRANCH) {
         if (state.head !== HEAD) return response({ message: 'not fast forward' }, 422);
         state.head = payload.sha;
+        state.events.push(['publish', payload.sha]);
         state.tree = NEW_TREE;
         for (const entry of state.preparedEntries || []) {
           const sha = entry.sha || gitBlobSha(entry.content);
@@ -217,6 +239,15 @@ function addCurrentSettings(state) {
   const manifest = JSON.stringify({version:1,assets}, null, 2) + '\n';
   state.entries = state.entries.filter(entry => entry.path !== 'asset-versions.json');
   state.entries.push({path: 'asset-versions.json', type:'blob', mode:'100644', sha:gitBlobSha(manifest)});
+}
+
+function loadCurrentPagePipeline(state) {
+  ['showdown.gs', 'Renderer.gs', 'Publications.gs', 'Cms.gs'].forEach(state.load);
+  state.context.Cheerio = {load() {
+    let posts = '';
+    return selector => ({length: selector.includes('cms-generated-page') ? 0 : 1, attr() { return this; }, empty() { return this; }, append(fragment) { if (selector === '.posts') posts = fragment; return this; },
+      html() { return '<head></head><body data-page="contact"><main><div class="posts">' + posts + '</div></main></body>'; }});
+  }};
 }
 
 // Guard tests deliberately call the lowest-level network boundary directly.
@@ -839,12 +870,8 @@ test('a failed publication never commits a performance cache', () => {
 test('an actual cold-then-warm update reuses rows and avoids Contents, trees and cache rewrites', () => {
   const state = fixture();
   addCurrentSettings(state);
-  ['showdown.gs', 'Renderer.gs', 'Publications.gs', 'Cms.gs'].forEach(state.load);
-  state.context.Cheerio = {load() {
-    let posts = '';
-    return selector => ({length: selector.includes('cms-generated-page') ? 0 : 1, attr() { return this; }, empty() { return this; }, append(fragment) { if (selector === '.posts') posts = fragment; return this; },
-      html() { return '<head></head><body data-page="contact"><main><div class="posts">' + posts + '</div></main></body>'; }});
-  }};
+  loadCurrentPagePipeline(state);
+  const sourceBefore = structuredClone(state.values);
   const cold = state.context.update_webpage();
   assert.equal(cold.changed, true);
   assert.equal(cold.metrics.rowsRendered, 1);
@@ -862,6 +889,45 @@ test('an actual cold-then-warm update reuses rows and avoids Contents, trees and
   assert.equal(state.io.filter(call => call.url.includes('/contents/')).length, 0);
   assert.equal(state.io.filter(call => call.method !== 'get').length, 0);
   assert.equal(state.mutations.length, mutationCount, 'Unchanged cache records need no Sheet write');
+  assert.equal(state.mutations.filter(mutation => mutation[0] === 'setValue').length, 0, 'Seeded Sheet/Page entries must not be rewritten');
+  for (const [name, rows] of Object.entries(sourceBefore)) assert.deepEqual(state.values[name], rows, 'Source content and independent lists must remain intact: ' + name);
+});
+
+test('a registered warm update repairs only missing Sheet membership after successful unchanged publication', () => {
+  const state = fixture(); addCurrentSettings(state); loadCurrentPagePipeline(state);
+  const cold = state.context.update_webpage(); assert.equal(cold.changed, true);
+  state.values['item list'][1][3] = ''; // Simulate the earlier Page-only enrollment.
+  const before = structuredClone(state.values), mutationCount = state.mutations.length;
+  state.io.length = 0; state.events.length = 0; state.propertyCalls.length = 0;
+  state.context.Cheerio = {load() {throw new Error('Warm repair must not parse or regenerate page HTML');}};
+  const publish = state.context.cmsPublish_;
+  state.context.cmsPublish_ = (...args) => {const result = publish(...args); state.events.push(['publish-complete', result.changed]); return result;};
+  const repaired = state.context.update_webpage();
+  assert.equal(repaired.changed, false); assert.equal(repaired.registrationSaved, true);
+  assert.equal(repaired.metrics.rowsRendered, 0); assert.equal(repaired.metrics.rowsReused, 1); assert.equal(repaired.metrics.pagesSkipped, 1);
+  assert.equal(state.io.filter(call => call.method !== 'get').length, 0, 'Registry repair must not create another HTML commit');
+  assert.deepEqual(state.mutations.slice(mutationCount), [['setValue', 'item list', 2, 4, 'contact']]);
+  assert(state.events.findIndex(event => event[0] === 'publish-complete') < state.events.findIndex(event => event[0] === 'register'));
+  before['item list'][1][3] = 'contact'; assert.deepEqual(state.values, before, 'Only the missing D cell changes');
+  assert(state.propertyCalls.every(([, key]) => key === 'PREVIEW_GITHUB_TOKEN' || /^CMS_PENDING_PAGE_\d+$/.test(key)));
+  const afterRepairCount = state.mutations.length;
+  state.io.length = 0;
+  const repeated = state.context.update_webpage();
+  assert.equal(repeated.changed, false); assert.equal(repeated.registrationSaved, true);
+  assert.equal(state.mutations.length, afterRepairCount, 'Repeated updates must not duplicate list entries');
+  assert.equal(state.io.filter(call => call.method !== 'get').length, 0);
+});
+
+test('a registered-page publication failure leaves a missing Sheet entry unrepaired', () => {
+  const state = fixture(); addCurrentSettings(state); loadCurrentPagePipeline(state);
+  state.values['item list'][1][3] = '';
+  const before = structuredClone(state.values);
+  state.changeHeadBeforeFinalRef = true;
+  assert.throws(() => state.context.update_webpage(), /changed before publication/i);
+  assert.equal(posts(state, 'git/commits').length, 1, 'The fixture must reach the publication boundary');
+  assert.equal(state.events.filter(event => event[0] === 'register').length, 0);
+  assert.equal(state.mutations.length, 0, 'Failed publication cannot repair registration or save caches');
+  assert.deepEqual(state.values, before);
 });
 
 test('rebuild bypasses both row reuse and the full-page fragment skip', () => {
