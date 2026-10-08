@@ -90,7 +90,7 @@ function run(command,args,options={}) {
   const result=spawnSync(command,args,{cwd:ROOT,encoding:'utf8',shell:false,env,...options});
   if(result.error||result.status!==0) {
     const output=String(result.stderr||'')+String(result.stdout||'');
-    const reason=/not logged in|No credentials|not authorized|login/i.test(output)?'Google authorization required':/403|disabled|not been used|accessNotConfigured/i.test(output)?'Apps Script API or account permission unavailable':'command failed';
+    const reason=/not logged in|No credentials|not authorized|login/i.test(output)?'Google authorization required':/403|not enabled|disabled|not been used|accessNotConfigured/i.test(output)?'Apps Script API or account permission unavailable; check https://script.google.com/home/usersettings':'command failed';
     throw Error(reason+' (output withheld).');
   }
   return String(result.stdout||'').trim();
@@ -109,6 +109,7 @@ function main(mode) {
   const authFile=path.join(home,'.clasprc.json'),clasp=path.join(ROOT,'node_modules','@google','clasp','build','src','index.js');
   if(mode==='auth') {
     const login=path.join(home,'login');writeProject(login,{'appsscript.json':JSON.stringify({oauthScopes:['https://www.googleapis.com/auth/script.projects']})});
+    console.log('Manual callback: after Google consent, localhost may display a connection error. Keep this terminal open and paste the returned URL here, never into chat.');
     // The human completes consent and pastes the returned URL into this local
     // terminal, never into chat. No broad default clasp scopes or CI secrets.
     run(process.execPath,[clasp,'-A',authFile,'-P',path.join(login,'.clasp.json'),'login','--use-project-scopes','--no-localhost'],{stdio:'inherit',cwd:login});return;

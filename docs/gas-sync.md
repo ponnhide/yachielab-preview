@@ -14,6 +14,10 @@ node scripts/gas_sync.cjs verify
 
 初回だけ、Google Apps Script APIをGoogleのユーザー設定で有効にし、`auth` のGoogle認証を人が完了します。追加する権限は `script.projects`（Apps Scriptソースの読み書き）のみです。Googleの権限自体はアカウントのApps Scriptプロジェクトを対象にしますが、このツールの操作先はプレビュー1件に固定しています。Drive、Gmail、Cloud管理の権限は要求しません。ブラウザーから戻るURLはローカルの認証用ターミナルへ入力し、チャットやGitHubには送らないでください。
 
+`auth` は `--no-localhost` の手動受け取り方式です。Googleで承認後、`localhost` に戻って「接続できません」と表示されても、Googleの承認に失敗したとは限りません。受け取り用サーバーを起動しない方式のため、アドレス欄にある戻りURL全体を、待機中の同じ認証用ターミナルへ貼り付けて完了させます。そのターミナルを閉じたり別の認証を始めたりしないでください。URLには認証コードが含まれるため、チャット・Git・ログへのコピーは避けます。
+
+Googleへのログインと、[Apps Script APIのユーザー設定](https://script.google.com/home/usersettings)は別です。APIがオフだと、認証完了後もGASのソース送信は拒否されます。このAPI設定はアカウント全体に適用され、API利用を許可したアプリがApps Scriptを変更できるようになります。同期ツールの対象固定は維持します。
+
 認証情報と実行前後のスナップショットはGit対象外の `private/gas-sync/` に保存します。CIやGitHub SecretsへGoogle認証情報を移す運用は行いません。
 
 `sync` の前に変更をレビューしてコミットしてください。未コミットの変更がある場合は停止します。処理は次の順です。
