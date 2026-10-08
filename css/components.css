@@ -181,6 +181,9 @@
 .logo-control[aria-pressed="false"] > img {
   opacity: var(--lab-logo-inactive-opacity, 0.5);
 }
+.logo-control[data-affiliation-content="shared"] > img {
+  opacity: 1;
+}
 #normal_header .logo-stack .logo-canvas > .logo-control {
   display: block;
   position: absolute;

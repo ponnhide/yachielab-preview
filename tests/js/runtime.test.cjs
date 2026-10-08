@@ -476,6 +476,144 @@ function mobileLogoControl(browser, affiliation) {
   return element.getAttribute('data-affiliation') ? element : element.querySelector('.logo-control');
 }
 
+function assertLogoContentMode(browser, expected, description) {
+  for (const affiliation of ['UBC', 'Osaka']) {
+    const controls = ['frontlogo', 'backlogo'].map(layer => logoControl(browser, layer, affiliation));
+    controls.push(mobileLogoControl(browser, affiliation));
+    controls.forEach(control => assert.equal(control.getAttribute('data-affiliation-content'), expected, description));
+  }
+}
+
+test('shared content keeps both logo layers and mobile controls in shared mode while retaining link affiliation', () => {
+  for (const page of ['index.html', 'research.html', 'publications.html', 'news.html', 'contact.html', 'collab.html', 'yuka.html']) {
+    for (const width of [1280, 390]) {
+      const browser = createBrowser(page, {width, url: 'https://ponnhide.github.io/yachielab-preview/' + page + '?lang=EN&affil=UBC'});
+      const peopleLink = browser.document.createElement('a');
+      peopleLink.setAttribute('href', './people.html');
+      browser.document.body.appendChild(peopleLink);
+      browser.run('common.js');
+      browser.flush();
+      const description = page + ' at ' + width + 'px';
+      assertLogoContentMode(browser, 'shared', description);
+      const control = width <= 600 ? mobileLogoControl(browser, 'Osaka') : logoControl(browser, 'frontlogo', 'Osaka');
+      control.dispatch('click');
+      browser.window.YachieSite.setLanguage('JA');
+      browser.flush();
+      assertLogoContentMode(browser, 'shared', description + ' after switching');
+      assert.equal(browser.window.YachieSite.getState().affiliation, 'Osaka');
+      assert.equal(browser.window.location.pathname, '/yachielab-preview/' + page);
+      assert.equal(peopleLink.getAttribute('href'), './people.html?lang=JA&affil=Osaka', 'Shared artwork must preserve the selected lab for navigation');
+      assert.equal(logoControl(browser, 'frontlogo', 'Osaka').getAttribute('aria-pressed'), 'true');
+      assert.equal(logoControl(browser, 'frontlogo', 'UBC').getAttribute('aria-pressed'), 'false');
+    }
+  }
+});
+
+test('actual campus-specific content retains selected-lab logo mode and filtering in desktop and mobile controls', () => {
+  for (const page of ['joinus.html', 'people.html', 'cms-new-page-demo.html']) {
+    for (const width of [1280, 390]) {
+      const browser = createBrowser(page, {width});
+      browser.run('common.js');
+      browser.flush();
+      assertLogoContentMode(browser, 'specific', page + ' at ' + width + 'px');
+      const control = width <= 600 ? mobileLogoControl(browser, 'Osaka') : logoControl(browser, 'frontlogo', 'Osaka');
+      control.dispatch('click');
+      browser.window.YachieSite.setLanguage('JA');
+      browser.flush();
+      assertLogoContentMode(browser, 'specific', page + ' after switching');
+      const posts = browser.document.querySelector('.posts');
+      const ubc = posts.querySelector('.UBC');
+      const osakaJapanese = posts.querySelector('.Osaka.Japanese') || posts.querySelector('.Osaka.Common');
+      assert.equal(ubc.style.display, 'none', 'UBC content remains filtered on ' + page);
+      assert.notEqual(osakaJapanese.style.display, 'none', 'Osaka content remains available on ' + page);
+      assert.equal(mobileLogoControl(browser, 'Osaka').getAttribute('aria-pressed'), 'true');
+      assert.equal(mobileLogoControl(browser, 'UBC').getAttribute('aria-pressed'), 'false');
+    }
+  }
+});
+
+test('body classification follows exclusive lab tags including one-campus rows, rather than current language or All ancestors', () => {
+  const cases = [
+    {root: ['UBC'], child: [], mode: 'specific'},
+    {root: ['Osaka'], child: [], mode: 'specific'},
+    {root: [], child: ['UBC', 'English'], mode: 'specific'},
+    {root: [], child: ['Osaka', 'Japanese'], mode: 'specific'},
+    {root: ['All'], child: ['UBC'], mode: 'specific'},
+    {root: ['All'], child: ['Osaka'], mode: 'specific'},
+    {root: [], child: ['All', 'UBC'], mode: 'shared'},
+    {root: [], child: ['All', 'Osaka'], mode: 'shared'},
+    {root: [], child: ['UBC', 'Osaka'], mode: 'shared'},
+    {root: ['All', 'UBC'], child: ['Common'], mode: 'shared'},
+    {root: ['UBC', 'Osaka'], child: ['Common'], mode: 'shared'},
+    {root: [], child: ['All', 'Common'], mode: 'shared'},
+    {removePosts: true, root: [], child: [], mode: 'shared'}
+  ];
+  for (const fixture of cases) {
+    const browser = createBrowser('research.html');
+    const posts = browser.document.querySelector('.posts');
+    fixture.root.forEach(name => posts.classList.add(name));
+    const child = browser.document.createElement('section');
+    fixture.child.forEach(name => child.classList.add(name));
+    child.textContent = 'A Sheet-authored lab row';
+    posts.appendChild(child);
+    if (fixture.removePosts) posts.remove();
+    browser.run('common.js');
+    browser.flush();
+    const description = JSON.stringify(fixture);
+    assertLogoContentMode(browser, fixture.mode, description);
+    browser.window.YachieSite.setAffiliation('Osaka');
+    browser.window.YachieSite.setLanguage('JA');
+    browser.flush();
+    assertLogoContentMode(browser, fixture.mode, description + ' after switching');
+    if (!fixture.removePosts && fixture.child.includes('Osaka') && !fixture.child.includes('UBC') && !fixture.child.includes('All')) {
+      assert.notEqual(child.style.display, 'none', 'A Japanese-only Osaka row must remain selectable');
+    }
+  }
+});
+
+test('home artwork is always shared and campus tags in shared template regions do not activate body switching', () => {
+  const home = createBrowser('index.html');
+  const homeRow = home.document.createElement('section');
+  homeRow.classList.add('UBC');
+  home.document.querySelector('.posts').appendChild(homeRow);
+  home.run('common.js');
+  home.flush();
+  assertLogoContentMode(home, 'shared', 'The homepage remains shared even with a campus-specific tile');
+  const interior = createBrowser('research.html');
+  for (const selector of ['#normal_header', 'footer', 'aside', '#mobile-menu']) {
+    const row = interior.document.createElement('section');
+    row.classList.add(selector === 'footer' ? 'Osaka' : 'UBC');
+    interior.document.querySelector(selector).appendChild(row);
+  }
+  interior.run('common.js');
+  interior.flush();
+  assertLogoContentMode(interior, 'shared', 'Shared navigation and footer lab rows are not body content');
+});
+
+test('Sheet logo settings keep their values while asynchronous repaint preserves shared or specific body mode', async () => {
+  for (const [page, mode] of [['index.html', 'shared'], ['contact.html', 'shared'], ['joinus.html', 'specific']]) {
+    const browser = createBrowser(page);
+    let resolveSettings;
+    browser.window.fetch = () => new Promise(resolve => { resolveSettings = resolve; });
+    browser.run('common.js');
+    browser.window.YachieSite.setAffiliation('Osaka');
+    browser.window.YachieSite.setLanguage('JA');
+    browser.flush();
+    assertLogoContentMode(browser, mode, page + ' before settings arrive');
+    resolveSettings({ok: true, json: () => Promise.resolve({logoActiveOpacity: 0.85, logoInactiveOpacity: 0.2, logoTransitionMs: 725})});
+    await tick();
+    browser.flush();
+    assertLogoContentMode(browser, mode, page + ' after settings repaint');
+    browser.document.querySelectorAll('.logo-control[data-affiliation]').forEach(control => {
+      assert.equal(control.style['--lab-logo-active-opacity'], '0.85');
+      assert.equal(control.style['--lab-logo-inactive-opacity'], '0.2');
+      assert.equal(control.style['--lab-logo-transition-duration'], '725ms');
+    });
+    assert.equal(browser.window.YachieSite.getState().affiliation, 'Osaka');
+    assert.equal(browser.window.YachieSite.getState().language, 'JA');
+  }
+});
+
 test('every ordinary page uses URL affiliation first and language-based defaults only at initialization', () => {
   for (const page of ['index.html', 'research.html', 'contact.html', 'people.html', 'yuka.html']) {
     for (const language of ['EN', 'JA', 'ZH']) {

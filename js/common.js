@@ -8,6 +8,12 @@
   const languages = { EN: 'English', JA: 'Japanese', ZH: 'Chinese' };
   const mobileWidth = 600;
   const homePage = Boolean(document.getElementById('main_menu'));
+  // Shared chrome contains both labs on every page; only authored body rows
+  // determine whether the logos need to show a campus selection.
+  const hasAffiliationContent = !homePage && Array.from(document.querySelectorAll('.posts, .posts .UBC, .posts .Osaka')).some(function (element) {
+    const classes = element.classList;
+    return !classes.contains('All') && classes.contains('UBC') !== classes.contains('Osaka');
+  });
   const originalDisplay = new WeakMap();
   const subscribers = new Set();
   upgradeLogoMarkup();
@@ -268,6 +274,7 @@
       Object.keys(variables).forEach(function (property) { element.style.setProperty(property, variables[property]); });
     });
     document.querySelectorAll('.logo-control[data-affiliation]').forEach(function (control) {
+      control.setAttribute('data-affiliation-content', hasAffiliationContent ? 'specific' : 'shared');
       control.setAttribute('aria-pressed', String(control.getAttribute('data-affiliation') === state.affiliation));
       const withinHeader = header && header.contains(control);
       control.setAttribute('tabindex', withinHeader && isMobile() ? '-1' : '0');
