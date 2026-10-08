@@ -21,6 +21,7 @@ function fixture(options = {}) {
     LockService:{getScriptLock:()=>({tryLock:()=>true,releaseLock:()=>state.released++})},
     Utilities:{base64Decode:content=>Buffer.from(content,'base64'),newBlob:bytes=>({getDataAsString:()=>Buffer.from(bytes).toString('utf8')})},
     cmsContext_:()=>context, cmsGithubSnapshot_:()=>({entries}),
+    cmsUpdateNewTab_(name) {throw Error('This tab is intentionally outside the website updater: '+name);},
     cmsAssertPageName_(name,creating) {state.validations.push([name,creating]);if(typeof name!=='string'||!/^[a-zA-Z0-9_-]{1,64}$/.test(name)||/^(?:index|blank|404|header|footer|sidebar|mobilemenu)$/.test(name))throw Error('Invalid page name.');},
     cmsSheetRows_(name) {if(!sources.has(name))throw Error('Missing CMS tab: '+name);return {values:[['Lab','Language','Function']]};},
     cmsCacheRenderRows_(name) {state.rendered.push(name);if(!sources.has(name))throw Error('Missing CMS tab: '+name);return fragments[name] || '';},

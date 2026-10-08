@@ -1,4 +1,17 @@
-/** Explicit page enrollment. Ordinary updates never enroll unrelated tabs. */
+/** Normal update also enrolls a newly added content tab. Existing exclusions stay explicit. */
+// Preview tab IDs present when single-action enrollment was introduced.
+// Registered/shared tabs use their normal routes. A renamed legacy tab is
+// never mistaken for a newly added page; native copies receive fresh IDs.
+var CMS_PREEXISTING_SHEET_IDS_ = [
+  891529442, 1383008879, 1892986748, 1270575022, 79350886, 588600951,
+  645887040, 1208649566, 1190999410, 1497198979, 38769922, 253840139,
+  143130958, 827644563, 1588263365, 497949789, 1546463026, 1758026765,
+  482430529, 1944633353, 1987003837, 1230099545, 0, 1941032681,
+  2131379417, 773628871, 961509489, 1517576547, 2065146884, 2115798030,
+  676106234, 1171229402, 202586212, 1581970876, 638901759, 861727411,
+  1141366659, 464460364, 1015195737, 1412691921, 950727283
+];
+
 function cmsAssertPageName_(name, creating) {
   if (typeof name !== 'string' || !/^[a-zA-Z0-9_-]{1,64}$/.test(name)) throw new Error('Page name must be a flat ASCII name, at most 64 characters.');
   var reserved = ['index', 'blank', '404', 'template', 'parameters', 'header', 'footer', 'sidebar', 'mobilemenu', 'test', 'task'];
@@ -15,64 +28,89 @@ function cmsNewPageRegistrationCell_(sheet) {
   for (var i = 0; i < size; i++) {
     if (values[i][0] !== '' || formulas[i][0]) continue;
     var cell = sheet.getRange(i + 2, 5);
-    // A registration formula or restricted cell remains user-owned.
     if (!cell.getDataValidation()) return cell;
   }
   throw new Error('No unrestricted empty cell in item list column E.');
 }
 
-function cmsCreatePageTab_(name, title) {
-  cmsAssertPageName_(name, true);
-  title = String(title || name).trim();
-  if (!title || title.length > 200 || /[\x00-\x1f\x7f]/.test(title)) throw new Error('Page title must be 1–200 characters without control characters.');
-  CMS_CONTEXT_ = null;
-  var context = cmsContext_(), book = context.spreadsheet, lower = name.toLowerCase();
-  if (book.getSheets().some(function(sheet) { return sheet.getName().toLowerCase() === lower; }) ||
-      context.pages.some(function(page) { return page.toLowerCase() === lower; })) throw new Error('A tab or registered page already uses this name: ' + name);
-  var entries = cmsGithubSnapshot_().entries;
-  if (Object.keys(entries).some(function(path) { return path.toLowerCase() === lower + '.html'; })) throw new Error('A public HTML file already uses this name: ' + name);
-  var template = book.getSheetByName('template'), registry = book.getSheetByName('item list');
-  if (!template || !registry) throw new Error('The content template or page registry is missing.');
-  var header = template.getRange(1, 1, 1, 3).getDisplayValues()[0];
-  if (header.join(',') !== 'Lab,Language,Function' || !context.parameters.H1 || context.parameters.H1.indexOf('/* Title') !== 3) throw new Error('The content template or H1 parameter definition is incompatible.');
-  var options = cmsSheetRows_('item list').values.slice(1);
-  if (!options.some(function(row) { return row[0] === 'All'; }) || !options.some(function(row) { return row[1] === 'Common'; })) throw new Error('The template requires All and Common dropdown choices.');
-  var cell = cmsNewPageRegistrationCell_(registry), copy;
-  try {
-    // Native copy retains formulas, validation, formatting, and column widths.
-    copy = template.copyTo(book);
-    copy.setName(name).showSheet();
-    copy.getRange(2, 1, 1, 3).setValues([['All', 'Common', 'H1']]);
-    copy.getRange(3, 1, 1, 3).clearContent();
-    // Literal text, including an initial '=', must never execute as a formula.
-    copy.getRange(2, 4).setRichTextValue(SpreadsheetApp.newRichTextValue().setText(title).build());
-    if (cell.getValue() !== '' || cell.getFormula() || cell.getDataValidation()) throw new Error('The registration cell changed while the tab was being created.');
-    cell.setValue(name); // Other independent lists on this row remain untouched.
-    SpreadsheetApp.flush();
-    book.setActiveSheet(copy);
-    return {name: name, sheetId: copy.getSheetId(), url: PREVIEW_SITE_URL + '/' + name + '.html'};
-  } catch (error) {
-    if (copy) throw new Error('The new tab was kept for recovery. Check item list column E before updating it. ' + error.message);
-    throw error;
-  } finally { CMS_CONTEXT_ = null; }
+function cmsAssertNewPageSource_(name, sheet) {
+  var book = cmsContext_().spreadsheet;
+  var current = book.getSheetByName(name);
+  if (!current || current.getSheetId() !== sheet.getSheetId() || sheet.getName() !== name) throw new Error('The source tab changed during the update. Restore its name and run Update again.');
 }
 
-function create_page() {
-  var book = SpreadsheetApp.getActiveSpreadsheet();
-  if (!book || book.getId() !== PREVIEW_SPREADSHEET_ID) throw new Error('Page creation is restricted to the preview workbook.');
-  var ui = SpreadsheetApp.getUi();
-  // UI prompts suspend execution; acquire the lock only after both close.
-  var namePrompt = ui.prompt('Create a new page', 'URL name, for example seminars. Use lowercase letters, numbers, hyphens or underscores.', ui.ButtonSet.OK_CANCEL);
-  if (namePrompt.getSelectedButton() !== ui.Button.OK) return;
-  var name = String(namePrompt.getResponseText()).trim();
+function cmsCompletePageRegistration_(name, sheet, properties, key) {
+  cmsAssertNewPageSource_(name, sheet);
+  var registry = cmsContext_().spreadsheet.getSheetByName('item list');
+  if (!registry) throw new Error('The page registry is missing.');
+  var cell = cmsNewPageRegistrationCell_(registry);
+  if (cell.getValue() !== '' || cell.getFormula() || cell.getDataValidation()) throw new Error('The page registration cell changed during the update.');
+  cell.setValue(name); // Independent lists in other columns remain untouched.
+  SpreadsheetApp.flush();
+  try { properties.deleteProperty(key); }
+  catch (error) { console.warn('Optional page registration cleanup will retry on the next update.'); }
+}
+
+function cmsClearPendingPageRegistration_(name) {
+  // Successful enrollment is also finalized after an ambiguous Sheet/flush failure.
+  try {
+    var sheet = cmsContext_().spreadsheet.getSheetByName(name);
+    if (!sheet) return;
+    var properties = PropertiesService.getScriptProperties(), key = 'CMS_PENDING_PAGE_' + sheet.getSheetId();
+    if (properties.getProperty(key)) properties.deleteProperty(key);
+  } catch (error) { console.warn('Optional page registration cleanup will retry on the next update.'); }
+}
+
+function cmsUpdateNewTab_(name) {
+  var context = cmsContext_(), book = context.spreadsheet, sheet = book.getSheetByName(name);
+  if (!sheet) throw new Error('Missing CMS tab: ' + name);
+  if (CMS_PREEXISTING_SHEET_IDS_.indexOf(sheet.getSheetId()) !== -1) throw new Error('This existing tab is intentionally outside the website updater: ' + name);
   cmsAssertPageName_(name, true);
-  var titlePrompt = ui.prompt('Page title', 'Initial heading. You can edit it later in cell D2. Leave empty to use the URL name.', ui.ButtonSet.OK_CANCEL);
-  if (titlePrompt.getSelectedButton() !== ui.Button.OK) return;
-  var lock = LockService.getScriptLock();
-  if (!lock.tryLock(1000)) throw new Error('Another preview update is running. Try again after it finishes.');
+  var lower = name.toLowerCase();
+  if (context.pages.some(function(page) { return page.toLowerCase() === lower; }) ||
+      book.getSheets().some(function(tab) { return tab.getSheetId() !== sheet.getSheetId() && tab.getName().toLowerCase() === lower; })) throw new Error('A tab or registered page already uses this name: ' + name);
+  var rows = cmsSheetRows_(name).values;
+  var header = (rows[0] || []).slice(0, 3).map(function(value) { return String(value).trim(); });
+  var first = rows[1] || [];
+  if (header.join(',') !== 'Lab,Language,Function' || !String(first[0] || '').trim() || !first[2]) throw new Error('Use the content layout: copy the template tab, rename it, enter the content, then choose Update the current page.');
+  var snapshot = cmsGithubSnapshot_(), entries = snapshot.entries;
+  var existing = Object.keys(entries).filter(function(path) { return path.toLowerCase() === lower + '.html'; })[0];
+  var properties = PropertiesService.getScriptProperties(), key = 'CMS_PENDING_PAGE_' + sheet.getSheetId();
+  var text = properties.getProperty(key), pending = null;
+  if (text) {
+    try { pending = JSON.parse(text); } catch (error) { throw new Error('Invalid pending page registration.'); }
+    if (!pending || pending.sheetId !== sheet.getSheetId() || pending.name !== name || !/^[a-f0-9]{40}$/.test(pending.sha || '')) throw new Error('A different or invalid page registration is pending for this tab. Restore its original name before updating.');
+  }
+  if (existing) {
+    // A marker in an unrelated public page is not proof that this tab owns it.
+    if (entries[existing].type !== 'blob' || existing !== name + '.html' || !pending || pending.sheetId !== sheet.getSheetId() ||
+        pending.name !== name || !/^[a-f0-9]{40}$/.test(pending.sha || '') || pending.sha !== entries[existing].sha) throw new Error('A public HTML file already uses this unregistered page name: ' + name);
+    cmsCompletePageRegistration_(name, sheet, properties, key);
+    context.pages.push(name);
+    var updated = cmsRenderPage_(name);
+    return cmsPublish_(updated ? [updated] : [], 'Update preview page: ' + name);
+  }
+  context.pages.push(name); // Rendering/cache rules must treat this as an independent page.
   var result;
-  try { result = cmsCreatePageTab_(name, titlePrompt.getResponseText()); }
-  finally { lock.releaseLock(); }
-  ui.alert('Page tab created', 'Edit the new tab, then choose Update the current page. The first update generates its HTML and the checked Pages workflow publishes it.\n\nURL after successful publication: ' + result.url, ui.ButtonSet.OK);
+  try {
+    var file = cmsCreatePage_(name);
+    cmsSiteSettings_(); // Validate all source settings before recording an enrollment intent.
+    var sha = cmsGitBlobSha_(cmsVersionAssetHtml_(previewPrepareHtml_(file.html)));
+    cmsAssertNewPageSource_(name, sheet);
+    properties.setProperty(key, JSON.stringify({sheetId: sheet.getSheetId(), name: name, sha: sha}));
+    result = cmsPublish_([file], 'Create preview page: ' + name);
+  } catch (error) {
+    context.pages = context.pages.filter(function(page) { return page !== name; });
+    throw error;
+  }
+  try {
+    if (!result.pageShas || result.pageShas[name + '.html'] !== sha) throw new Error('Published page verification failed.');
+    cmsCompletePageRegistration_(name, sheet, properties, key);
+    result.registrationSaved = true;
+  } catch (error) {
+    result.registrationSaved = false;
+    context.pages = context.pages.filter(function(page) { return page !== name; });
+    console.warn('Page published; its registration will be completed by the next Update.');
+  }
   return result;
 }

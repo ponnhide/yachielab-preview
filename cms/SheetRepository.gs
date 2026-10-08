@@ -44,10 +44,15 @@ function getIndependentPages() {
   return cmsSheetRows_('item list').values.slice(1).map(function(row) {
     return String(row[4] || '').trim();
   }).filter(function(name) {
-    if (!name || seen[name]) return false;
+    if (!name) return false;
     if (!/^[a-zA-Z0-9_-]+$/.test(name)) throw new Error('Invalid page name in item list.');
     if (typeof cmsAssertPageName_ === 'function') cmsAssertPageName_(name, false);
-    seen[name] = true;
+    var lower = name.toLowerCase();
+    if (seen[lower]) {
+      if (seen[lower] !== name) throw new Error('Registered page names differ only by letter case: ' + name);
+      return false;
+    }
+    seen[lower] = name;
     return true;
   });
 }

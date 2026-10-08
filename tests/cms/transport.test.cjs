@@ -447,6 +447,15 @@ test('a new-page publication cannot replace an existing file', () => {
   assert.equal(state.io.filter(call => call.method !== 'get').length, 0);
 });
 
+test('page registration rejects case-only collisions while deduplicating identical names', () => {
+  const repeated = fixture();
+  assert.deepEqual(Array.from(repeated.context.getIndependentPages()), ['contact', 'research']);
+  const conflicting = fixture();
+  conflicting.values['item list'].push(['', '', '', '', 'CONTACT']);
+  assert.throws(() => conflicting.context.getIndependentPages(), /differ only by letter case/);
+  assert.equal(conflicting.io.length, 0); assert.equal(conflicting.mutations.length, 0);
+});
+
 test('Sheet rows, journal/member metadata and GitHub snapshot are cached within one execution', () => {
   const state = fixture();
   assert.equal(state.io.length, 0, 'Module evaluation must not read the network');
@@ -505,8 +514,8 @@ test('onOpen only adds menus and does not read or recolor the workbook', () => {
   assert.equal(state.io.length, before.io);
   assert.deepEqual(state.reads, before.reads);
   assert.equal(state.mutations.length, before.mutations);
-  assert.ok(state.menuItems.length > 0);
-  assert.ok(state.menusAdded > 0);
+  assert.deepEqual(state.menuItems, [['Update the current page', 'update_webpage']]);
+  assert.equal(state.menusAdded, 1);
   state.menuItems.forEach(([, handler]) => assert.equal(typeof state.context[handler], 'function', 'Menu handler must exist: ' + handler));
 });
 

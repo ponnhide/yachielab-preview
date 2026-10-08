@@ -2,13 +2,6 @@
 function onOpen() {
   SpreadsheetApp.getUi().createMenu('Custom menu')
     .addItem('Update the current page', 'update_webpage')
-    .addItem('Update shared components', 'update_shared_components')
-    .addItem('Update all registered pages', 'update_all_webpages')
-    .addItem('Rebuild current page (ignore HTML cache)', 'rebuild_current_page')
-    .addItem('Refresh external data on current page', 'refresh_current_data')
-    .addItem('Refresh linked assets on current page', 'refresh_current_assets')
-    .addItem('Create a new page', 'create_page')
-    .addItem('Add missing registered pages', 'addNewpage')
     .addToUi();
 }
 
@@ -55,6 +48,7 @@ function cmsRun_(work, command) {
     var status = result.changed ? 'Preview updated: ' + (result.pages || 0) + ' page(s).' : 'No changes to publish.';
     if (result.cacheSaved === false) status += ' Cache save failed; next update will regenerate.';
     if (result.assetsSaved === false) status += ' Asset registry save failed; next update will check sources again.';
+    if (result.registrationSaved === false) status += ' Page registration is pending. Run Update the current page again.';
     if (metrics.pdfLinksPreserved) status += ' ' + metrics.pdfLinksPreserved + ' PDF link(s) kept; not re-fetched.';
     var summary = ' Generated ' + metrics.rowsRendered + ', reused ' + metrics.rowsReused + ' rows; skipped ' + metrics.pagesSkipped + ' pages; ' + (metrics.elapsedMs / 1000).toFixed(1) + 's.';
     // A UI notification failure must not turn a successful publication into a failure.
@@ -123,11 +117,12 @@ function cmsSharedPages_() {
 function cmsUpdateTab_(name) {
   var context = cmsContext_();
   if (context.pages.indexOf(name) !== -1) {
+    if (typeof cmsClearPendingPageRegistration_ === 'function') cmsClearPendingPageRegistration_(name);
     var page = cmsRenderPage_(name);
     return cmsPublish_(page ? [page] : [], 'Update preview page: ' + name);
   }
   var shared = {header: '#normal_header', footer: 'footer', sidebar: 'aside', mobilemenu: '#mobile-menu'};
-  if (!shared[name]) throw new Error('This tab is intentionally outside the website updater: ' + name);
+  if (!shared[name]) return cmsUpdateNewTab_(name);
   var fragment = cmsRenderRows_(name);
   context.newPageSharedFragments = {};
   context.newPageSharedFragments[name] = fragment;

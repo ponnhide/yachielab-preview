@@ -4,11 +4,11 @@
 
 Sheets は編集するコンテンツと一部の表示設定の入力元、GAS は HTML の生成・共通部品の更新と GitHub への書き込み、GitHub Pages は生成済みファイルの配信を担当します。ブラウザが Sheets を直接読む構造ではありません。
 
-共通部品は header / footer / sidebar / mobile menu、本文は独立したページ用タブから生成されます。ページ登録とパラメータ定義を確認してから新規ページを追加してください。非登録ページを一律に生成対象に足す必要はありません。
+共通部品は header / footer / sidebar / mobile menu、本文は独立したページ用タブから生成されます。普段の更新メニューは `Update the current page` の1項目です。新規ページも本文タブを追加して同じ操作で作成します。意図的に更新対象から外している既存タブは維持します。
 
-`Update all registered pages` は `item list` のE列に登録された全ページの `.posts` 本文を対象にします。`Update shared components` は4つの共通部品を登録ページと index へまとめて反映し、既存ページの本文を維持します。`Update the current page` は登録ページなら本文、共通部品タブならその部品を対象にします。登録済みのHTMLがまだなければ、どの更新経路でも共通レイアウトと本文を含む初回HTMLを生成します。通常は変更がない行やページを再利用し、変更したHTML・資産・公開設定を1コミットにまとめます。
+`Update the current page` は登録ページなら本文、共通部品タブならその部品を対象にします。新しく追加した正しい構造の本文タブなら、共通レイアウトを含むHTMLを初回生成し、GitHubへの保存成功後に `item list` のE列へ登録します。HTML生成・GitHubへの保存に失敗した段階では登録しません。通常は変更がない行やページを再利用し、変更したHTML・資産・公開設定を1コミットにまとめます。
 
-新規タブとページ登録を準備する `Create a new page` の手順は [新規ページ](new-pages.md) にあります。作成時点では公開せず、編集後に更新します。ページ数は登録から決まり、固定の上限はありません。
+新規タブの準備と更新の手順は [新規ページ](new-pages.md) にあります。タブの追加・編集だけでは公開せず、更新ボタンで初回生成します。ページ数は登録から決まり、固定の上限はありません。一括更新や共通部品の更新によって、非登録のタブが一律に新規登録されることはありません。既存の非登録タブは識別子でも保護し、タブ名を変えても自動登録対象にしません。非登録の既存HTMLを同名のタブで自動的に引き継ぐこともありません。
 
 独立ページの空の Lab セルは本文の終了を表します。一方、header などの共通部品には Lab が空の意図したラッパー行があり、空の Lab を終了条件として扱いません。Function とデータを持つラッパー行を、空欄の掃除と一緒に削除しないでください。
 
@@ -22,15 +22,16 @@ CSS は安定した入口ファイルから基礎・レイアウト・共通部�
 
 通常の更新は、入力値・文字の装飾・パラメータ定義・生成処理のバージョンを確認し、同じ内容を生成できる行の HTML を再利用します。論文ではメンバー別名や雑誌名の置換、Member / Alumni では前後の行によるグループの開始・終了も再利用条件に含めます。参照するローカル画像・PDF の SHA が変わった場合も再生成します。新しく保存する資産は、その内容から計算した SHA と公開時の SHA を確認します。
 
-| メニュー・関数 | 用途 |
+通常メニューの `Update the current page` は `update_webpage` を実行します。それ以外は保守用関数で、通常メニューには表示しません。
+
+| GAS関数 | 用途 |
 | --- | --- |
-| `Create a new page` / `create_page` | 本文テンプレートを同じプレビューブックへコピーし、E列の空きセルへ登録。初期見出しを入力し、編集用タブを開きます。 |
-| `Update the current page` / `update_webpage` | 通常の差分更新。条件が同じ行の HTML を再利用します。 |
-| `Update all registered pages` / `update_all_webpages` | 登録ページをまとめて差分更新します。 |
-| `Update shared components` / `update_shared_components` | 共通部品を差分更新し、対象ページへまとめて反映します。 |
-| `Rebuild current page (ignore HTML cache)` / `rebuild_current_page` | HTML 行のキャッシュを使わず再生成します。有効な PubMed のデータキャッシュは利用します。画像の強制再取得とは別の操作です。 |
-| `Refresh external data on current page` / `refresh_current_data` | 外部データを使う `Publication` 行を再生成し、PubMed のデータキャッシュも読まずに取得し直します。手入力の custom 論文は入力値に従います。 |
-| `Refresh linked assets on current page` / `refresh_current_assets` | HTML 行を再生成して画像を再取得し、Drive / Dropbox PDF も上限内で同期を試みます。通常更新では PDF リンクを維持します。外部論文データの強制再取得とは別の操作です。 |
+| `update_webpage` | 選択タブを差分更新します。新規本文タブの初回生成・登録、共通部品の反映もこの関数で行います。 |
+| `update_all_webpages` | 登録ページの `.posts` 本文をまとめて差分更新します。 |
+| `update_shared_components` | 4つの共通部品を登録ページとindexへまとめて反映し、既存ページの本文を維持します。 |
+| `rebuild_current_page` | HTML 行のキャッシュを使わず再生成します。有効な PubMed のデータキャッシュは利用します。画像の強制再取得とは別の操作です。 |
+| `refresh_current_data` | 外部データを使う `Publication` 行を再生成し、PubMed のデータキャッシュも読まずに取得し直します。手入力の custom 論文は入力値に従います。 |
+| `refresh_current_assets` | HTML 行を再生成して画像を再取得し、Drive / Dropbox PDF も上限内で同期を試みます。通常更新では PDF リンクを維持します。外部論文データの強制再取得とは別の操作です。 |
 
 `Publication` 行と Drive URL を含む行の HTML キャッシュは生成から6時間です。再利用しても生成時刻を延長しません。PubMed の取得結果も最大6時間保存しますが、期待する PMID と空でない題名を検証した結果だけを使います。破損したキャッシュや異なる PMID は取得元へ戻って読み直し、強制再取得が失敗した場合は旧データを成功した結果として返しません。bioRxiv は HTML 行を再生成する必要があるときに取得します。
 
@@ -99,7 +100,7 @@ Sheet のヘッダーで使っている `two_logos_on_white_on_black.svg` と `t
 | `--lab-logo-inactive-opacity` | 非選択のロゴ。初期値0.5、有限の数値0〜1。 |
 | `--lab-logo-transition-duration` | 透明度の切り替え時間。初期値300ms、`ms` / `s` 単位で0〜10000ms。 |
 
-値を変更した後は、header タブで `Update the current page`、または `Update shared components` を実行します。GAS はこの3項目だけを数値にした公開 `site-settings.json` を、HTML・資産と同じコミットへ保存します。各ページの JS がこの JSON を取得するため、GAS で本文やヘッダーを更新していない `yuka` にも設定が反映されます。公開 JSON に Sheet の本文や認証情報は含めません。不正値・範囲外・単位のない時間指定は、API 通信前に明示的なエラーとします。
+値を変更した後は、header タブで `Update the current page` を実行します。GAS はこの3項目だけを数値にした公開 `site-settings.json` を、HTML・資産と同じコミットへ保存します。各ページの JS がこの JSON を取得するため、GAS で本文やヘッダーを更新していない `yuka` にも設定が反映されます。公開 JSON に Sheet の本文や認証情報は含めません。不正値・範囲外・単位のない時間指定は、API 通信前に明示的なエラーとします。
 
 ## 所属ごとのコンテンツとモバイル操作
 
@@ -178,15 +179,15 @@ Sheets の例としては画像の幅・高さ、余白、配置、文字サイ�
 
 通常の自動取得対象は、GAS が扱う画像の列と、対応するテキスト項目の Dropbox Markdown リンクの画像です。PDF は下記の扱いでリンクを維持します。通常のリンクや任意の HTML / CSS 内の外部 URL を、一律に画像として取得しません。
 
-通常のページ更新でも、選択ページが使う外部・Drive 画像の変更を確認します。Drive はファイルの更新情報、外部 URL は条件付き GET の ETag / Last-Modified を使い、必要な場合に画像の実体を取得します。HTTP の確認情報がない場合は実体を取得します。HTML 行が再利用できる場合も、その前にこの確認を行います。Rebuild と外部論文データの再取得でも画像の変更確認を行い、元のファイル名を変えずに画像を差し替えた場合も更新対象です。明示的に取り直す場合は `Refresh linked assets on current page` を使い、画像は条件付き GET や更新時刻による省略をせず実体を取得します。リポジトリ内の相対パスを直接指定した資産は外部から取得し直しません。
+通常のページ更新でも、選択ページが使う外部・Drive 画像の変更を確認します。Drive はファイルの更新情報、外部 URL は条件付き GET の ETag / Last-Modified を使い、必要な場合に画像の実体を取得します。HTTP の確認情報がない場合は実体を取得します。HTML 行が再利用できる場合も、その前にこの確認を行います。Rebuild と外部論文データの再取得でも画像の変更確認を行い、元のファイル名を変えずに画像を差し替えた場合も更新対象です。明示的に取り直す場合は保守用GAS関数 `refresh_current_assets` を使い、画像は条件付き GET や更新時刻による省略をせず実体を取得します。リポジトリ内の相対パスを直接指定した資産は外部から取得し直しません。
 
 ### PDF と初回同期の所要時間
 
 通常の更新・Rebuild・外部論文データの再取得では、PDF の内容を取得・自動同期しません。取得元との対応と公開 SHA を確認できる保存済みのファイル、既存の `pdf/元のファイル名`、元の外部 URL の順でリンクを維持します。既存の公開 PDF を削除・移動せず、画像と本文の更新を進めます。
 
-PDF も取得し直したい場合は、`Refresh linked assets on current page` を明示的に使います。Drive / Dropbox PDF が16 MiB以下なら同期を試みます。取得前に Drive の `getSize`、または HTTP GET の `Range: bytes=0-0` と `Content-Range` からサイズを確認します。サイズ上限を超える場合や HTTP のサイズ確認を行えない場合は既存ローカル版または外部リンクを維持します。Range を無視した HTTP 200 の実体は二重ダウンロードせず再利用し、実体の取得後に上限超過と分かった場合もリンク維持とします。
+PDF も取得し直したい場合は、保守用GAS関数 `refresh_current_assets` を明示的に使います。Drive / Dropbox PDF が16 MiB以下なら同期を試みます。取得前に Drive の `getSize`、または HTTP GET の `Range: bytes=0-0` と `Content-Range` からサイズを確認します。サイズ上限を超える場合や HTTP のサイズ確認を行えない場合は既存ローカル版または外部リンクを維持します。Range を無視した HTTP 200 の実体は二重ダウンロードせず再利用し、実体の取得後に上限超過と分かった場合もリンク維持とします。
 
-出版社など、Drive / Dropbox 以外の外部 HTTP PDF は、`Refresh linked assets on current page` でも同期しません。既存の公開ファイルがあればそのリンクを維持し、なければ元の外部 URL を維持します。
+出版社など、Drive / Dropbox 以外の外部 HTTP PDF は、保守用GAS関数 `refresh_current_assets` でも同期しません。既存の公開ファイルがあればそのリンクを維持し、なければ元の外部 URL を維持します。
 
 通常の更新で維持した PDF も含め、PDF リンクを維持した件数は `pdfLinksPreserved` として、元の URL を出さずに実行結果へ通知します。この通知は PDF の内容を最新に同期できたという意味ではありません。必要な場合は元のリンクを確認し、明示的な再取得または手作業で公開版を更新してください。
 
