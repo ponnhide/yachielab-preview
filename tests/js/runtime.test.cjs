@@ -520,7 +520,7 @@ test('every page starts with both labs on except explicitly named People entries
   }
 });
 
-test('desktop and mobile controls independently traverse all four states on shared and campus-specific pages', () => {
+test('desktop and mobile controls keep at least one lab on and switch only when disabling the last active lab', () => {
   for (const page of ['index.html', 'joinus.html', 'people.html', 'cms-new-page-demo.html', 'contact.html', 'yuka.html']) {
     for (const width of [1280, 390]) {
       const browser = createBrowser(page, {width});
@@ -531,7 +531,10 @@ test('desktop and mobile controls independently traverse all four states on shar
         if (['joinus.html', 'people.html', 'cms-new-page-demo.html'].includes(page)) assertBodyLabs(browser, ubc, osaka);
       };
       check(true, true);
-      for (const [lab, ubc, osaka] of [['UBC', false, true], ['Osaka', false, false], ['UBC', true, false], ['Osaka', true, true]]) {
+      for (const [lab, ubc, osaka] of [
+        ['UBC', false, true], ['Osaka', true, false], ['UBC', false, true],
+        ['UBC', true, true], ['Osaka', true, false], ['Osaka', true, true]
+      ]) {
         const control = width <= 600 ? mobileLogoControl(browser, lab) : logoControl(browser, 'frontlogo', lab);
         control.dispatch('click');
         browser.flush();
@@ -555,6 +558,12 @@ test('People Osaka and UBC start with the named lab and both controls remain ind
     browser.run('common.js');
     assertLabs(browser, selected === 'UBC', selected === 'Osaka');
     assertBodyLabs(browser, selected === 'UBC', selected === 'Osaka');
+    logoControl(browser, 'frontlogo', selected).dispatch('click');
+    assertLabs(browser, other === 'UBC', other === 'Osaka');
+    assertBodyLabs(browser, other === 'UBC', other === 'Osaka');
+    logoControl(browser, 'frontlogo', other).dispatch('click');
+    assertLabs(browser, selected === 'UBC', selected === 'Osaka');
+    assertBodyLabs(browser, selected === 'UBC', selected === 'Osaka');
     logoControl(browser, 'frontlogo', other).dispatch('click');
     assertLabs(browser, true, true);
     assertBodyLabs(browser, true, true);
@@ -564,7 +573,7 @@ test('People Osaka and UBC start with the named lab and both controls remain ind
   }
 });
 
-test('All rows remain visible with both labs off and dual-lab rows match either enabled lab', () => {
+test('direct setters prevent both labs being off while common and dual-lab rows remain visible', () => {
   const browser = createBrowser('research.html');
   const sections = {};
   for (const names of [['UBC'], ['Osaka'], ['All'], ['UBC', 'Osaka'], ['All', 'UBC']]) {
@@ -579,9 +588,14 @@ test('All rows remain visible with both labs off and dual-lab rows match either 
   hidden.style.display = 'none';
   browser.document.body.appendChild(hidden);
   browser.run('common.js');
-  for (const [ubc, osaka] of [[true,true], [false,true], [false,false], [true,false]]) {
-    browser.window.YachieSite.setAffiliationEnabled('UBC', ubc);
-    browser.window.YachieSite.setAffiliationEnabled('Osaka', osaka);
+  for (const [lab, enabled, ubc, osaka] of [
+    ['UBC', true, true, true], ['UBC', false, false, true],
+    ['Osaka', false, true, false], ['Osaka', false, true, false],
+    ['UBC', false, false, true], ['UBC', false, false, true],
+    ['UBC', true, true, true], ['Osaka', false, true, false]
+  ]) {
+    browser.window.YachieSite.setAffiliationEnabled(lab, enabled);
+    assertLabs(browser, ubc, osaka);
     for (const [name, row] of Object.entries(sections)) {
       const visible = name.includes('All') || name.includes('UBC') && ubc || name.includes('Osaka') && osaka;
       assert.equal(row.style.display, visible ? 'flex' : 'none');
@@ -626,6 +640,7 @@ test('returning to a page restores its entry defaults and does not preserve anot
     browser.run('common.js');
     browser.window.YachieSite.setAffiliationEnabled('UBC', false);
     browser.window.YachieSite.setAffiliationEnabled('Osaka', false);
+    assertLabs(browser, true, false);
     browser.window.dispatch('popstate');
     assertLabs(browser, ubc, osaka);
     assertBodyLabs(browser, ubc, osaka);

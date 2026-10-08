@@ -145,6 +145,10 @@
   function setAffiliationEnabled(affiliation, enabled) {
     if (!labs.includes(affiliation) || typeof enabled !== 'boolean') return;
     state.affiliations[affiliation] = enabled;
+    // Turning off the last active lab switches to the other lab in one render.
+    if (!labs.some(function (lab) { return state.affiliations[lab]; })) {
+      state.affiliations[labs.find(function (lab) { return lab !== affiliation; })] = true;
+    }
     renderLanguage();
   }
 
