@@ -1,5 +1,28 @@
 /* Document defaults. Keep quirks-mode geometry until a separately tested migration. */
 
+:root {
+  --font-weight-body: 300;
+  --font-weight-regular: 400;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-heading: 800;
+  --header-logo-scale: 1.1;
+  --header-logo-width: calc(clamp(35px, 21vw, 400px) * var(--header-logo-scale));
+  --mobile-header-logo-height: calc(44px * var(--header-logo-scale));
+  --site-sidebar-share: 27.5%;
+  --site-gutter: clamp(5px, 2vw, 38.4px);
+}
+
+/* Markdown and Sheet rich-text bold share the same emphasis weight. */
+strong, b {
+  font-weight: var(--font-weight-bold);
+}
+/* Strong markup inside headings must not reduce their existing weight. */
+h1 strong, h1 b, h2 strong, h2 b, h3 strong, h3 b,
+h4 strong, h4 b, h5 strong, h5 b, h6 strong, h6 b {
+  font-weight: inherit;
+}
+
 html {
   margin: 0;
   padding: 0;

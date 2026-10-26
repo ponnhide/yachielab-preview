@@ -43,6 +43,8 @@ aside {
 }
 
 aside #sidebar {
+  width: calc(var(--site-sidebar-share) - 2 * var(--site-gutter));
+  box-sizing: border-box;
   float: left;
   padding-top: clamp(7.5px, 3vw, calc(60px * 0.96)); 
   margin-left: clamp(5px, 2vw, calc(40px * 0.96));
@@ -63,7 +65,7 @@ main {
 }
 
 main .posts {
-  padding-left: 25%;
+  padding-left: var(--site-sidebar-share);
   padding-right: clamp(5px, 2vw, calc(40px * 0.96));
   padding-bottom: clamp(5px, 8vw, calc(160px * 0.96));
   width: 100%;
@@ -73,7 +75,7 @@ main .posts {
   align-content: flex-start;
   color: #202020;
   font-family: roboto, helvetica, verdana, arial, Sans-Serif;
-  font-weight: 300;
+  font-weight: var(--font-weight-body);
   font-size: clamp(calc(1.1 * 6pt) , calc(1.1 * 1.0vw) , calc(1.1 * 14.4pt));
   line-height: 1.6em;
   min-height: 30em;

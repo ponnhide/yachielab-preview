@@ -71,7 +71,7 @@ const compact = common.replace(/\s+/g, '');
 assert(compact.includes('#frontlogoimg,#backlogoimg,#frontlogo2img,#backlogo2img,'));
 assert(compact.includes('#frontlogo.logo-stack,#backlogo.logo-stack,#frontlogo2.logo-stack,#backlogo2.logo-stack{'));
 assert(compact.includes('object-fit:cover;object-position:top;'));
-assert(compact.includes('width:clamp(35px,calc(25vw-clamp(5px,4vw,4vw)),400px);'));
+assert(compact.includes('width:var(--header-logo-width);'));
 assert(compact.includes('#backlogo,#backlogo2{width:100%;margin-top:0;position:absolute;z-index:1;'));
 // Read the actual CSS geometry: increasing the artwork gap must move Osaka
 // and grow the canvas without scaling either SVG or changing horizontal layout.

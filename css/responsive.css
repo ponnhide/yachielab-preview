@@ -36,9 +36,9 @@
   }
   
   #mobile_header img{
-    margin-top: 12.5px;
+    margin-top: calc((70px - var(--mobile-header-logo-height)) / 2);
     margin-left: 4.5vw;
-    height: 44px;
+    height: var(--mobile-header-logo-height);
     width: auto;
   }
   
@@ -46,9 +46,9 @@
     position: fixed;
     top: 0;
     left: 0;
-    margin-top: 12.5px;
+    margin-top: calc((70px - var(--mobile-header-logo-height)) / 2);
     margin-left: 4.5vw;
-    height: 44px;
+    height: var(--mobile-header-logo-height);
     width: auto;
     z-index: 100;
   }
@@ -123,7 +123,7 @@
     margin-left: 5vw; 
     font-family: raleway, roboto;
     color: #0033CC; 
-    font-weight: 600;
+    font-weight: var(--font-weight-semibold);
   }
 
   #mobile-interlinks .content{
@@ -166,7 +166,7 @@
   
   #mobileEN{
     color: #CD853F;
-    font-weight: 700; 
+    font-weight: var(--font-weight-bold);
   }
   
   #mobileJA{

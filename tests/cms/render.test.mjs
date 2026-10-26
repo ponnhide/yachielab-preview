@@ -95,7 +95,7 @@ check('Content image dimensions and explicit custom style render on the correct 
   assert(html.includes('data-sheet-style="width height object-fit"'));
   assert(html.includes('id="photo" style="color: red !important;" data-sheet-style="color"'));
 });
-check('Header pair presets produce independent lab buttons without a home-link wrapper', () => {
+check('Header pair presets produce independent static lab logos without a home-link wrapper', () => {
   const { runtime: r, uploads } = setup();
   for (const id of ['frontlogo', 'frontlogo2', 'backlogo', 'backlogo2']) {
     for (const [filename, variant] of [['two_logos_on_white_on_black.svg', 'white'], ['two_logos_teal_on_white.svg', 'teal']]) {
@@ -105,11 +105,11 @@ check('Header pair presets produce independent lab buttons without a home-link w
       assert(html.includes('./img/header-ubc-' + variant + '.svg'));
       assert(html.includes('./img/header-osaka-' + variant + '.svg'));
       assert.equal((html.match(/<img /g) || []).length, 2);
-      assert.equal((html.match(/<button type="button"/g) || []).length, 2);
+      assert(!html.includes('<button')); assert(!html.includes('</button>'));
       assert(html.includes('class="logo-control logo-ubc" data-affiliation="UBC"'));
       assert(html.includes('class="logo-control logo-osaka" data-affiliation="Osaka"'));
-      assert.equal((html.match(/aria-pressed="true"/g) || []).length, 2);
-      assert.equal((html.match(/aria-label="Show [^"]+ lab content"/g) || []).length, 2);
+      assert.equal((html.match(/data-lab-active="true"/g) || []).length, 2);
+      assert(!html.includes('aria-pressed')); assert(!html.includes('tabindex'));
       assert(!html.includes('<a '));
       assert(!/<img[^>]*class="logo-/.test(html));
       assert(!html.includes(filename));
@@ -122,7 +122,7 @@ check('Header pair presets produce independent lab buttons without a home-link w
   const ordinary = r.appendSingle(['All', 'Common', 'Content', '', 'https://example.org/two_logos_teal_on_white.svg', '', '', '', '', '', 'photo', ''], []);
   assert(!ordinary.includes('logo-stack'));
 });
-check('Mobile lab buttons preserve Sheet image sizing without replacing home or institution links', () => {
+check('Mobile static lab logos preserve Sheet image sizing without replacing home or institution links', () => {
   const { runtime: r, uploads } = setup();
   for (const [id, affiliation, filename] of [['mobile-ubc-lab', 'UBC', 'header-ubc-white.svg'], ['mobile-osaka-lab', 'Osaka', 'header-osaka-white.svg']]) {
     const html = r.appendSingle(['All', 'Common', 'Content', '', './img/' + filename, 'clamp(140px, 65vw, 300px)', 'auto', '', 'margin:0;float:none;', './index.html', id, 'margin:0;margin-bottom:12px;'], []);

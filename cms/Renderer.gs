@@ -181,9 +181,9 @@ function rendererLogoPair_(adict, image) {
 function rendererLabControl_(affiliation, image, attributes) {
   var university = affiliation === 'UBC' ? 'University of British Columbia' : 'The University of Osaka';
   var name = affiliation === 'UBC' ? 'Yachie Lab, ' + university : 'Laboratory of Creative Destruction Biology, ' + university;
-  return '<button type="button" class="logo-control logo-' + affiliation.toLowerCase() + '" data-affiliation="' + affiliation +
-    '" aria-label="Show ' + university + ' lab content" aria-pressed="true"' + attributes + '>' +
-    '<img src="' + sheetAttribute_(image) + '" alt="' + name + '"></button>';
+  return '<span class="logo-control logo-' + affiliation.toLowerCase() + '" data-affiliation="' + affiliation +
+    '" data-lab-active="true"' + attributes + '>' +
+    '<img src="' + sheetAttribute_(image) + '" alt="' + name + '"></span>';
 }
 
 function rendererMobileLabControl_(adict, image) {

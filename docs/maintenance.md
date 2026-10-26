@@ -86,19 +86,27 @@ CSS・JSとCSSのimportにはビルド時の内容ハッシュをURLへ付けま
 
 白と teal はそれぞれ `.logo-stack` / `.logo-canvas` にまとめ、JS は白の親レイヤーを切り取ります。子 SVG を個別に拡大・移動して色境界を作りません。間隔は `css/components.css` の `.logo-stack` にある `--header-logo-extra-gap: 28.41425`（SVG座標単位）で一括管理します。元の実描画範囲の隙間56.8285へ、その半分28.41425を加えています。キャンバスの高さと下側の開始位置はこの値から同時に計算し、白と teal に同じ間隔を適用します。この値を0に戻すと元の間隔になります。内部キャンバスは幅に比例した自然高を保持するため、スクロールで白の親レイヤーを切り取っても子 SVG の大きさや配置は変わりません。
 
-Sheet のヘッダーで使っている `two_logos_on_white_on_black.svg` と `two_logos_teal_on_white.svg` の指定は維持します。生成時に `Renderer.gs` が対象を個別 SVG と `button.logo-control[data-affiliation]` に変換します。描画は `frontlogo` / `backlogo` の安定した1組とし、描画用の行は `All / Common` で両方の所属ロゴを表示します。以前の `frontlogo2` / `backlogo2` は重複して描画しません。その他の画像は従来の1画像として扱い、元の合成 SVG の公開 URL も残しています。
+Sheet のヘッダーで使っている `two_logos_on_white_on_black.svg` と `two_logos_teal_on_white.svg` の指定は維持します。生成時に `Renderer.gs` が対象を個別 SVG と `span.logo-control[data-affiliation]` に変換します。描画は `frontlogo` / `backlogo` の安定した1組とし、描画用の行は `All / Common` で両方の所属ロゴを表示します。以前の `frontlogo2` / `backlogo2` は重複して描画しません。その他の画像は従来の1画像として扱い、元の合成 SVG の公開 URL も残しています。
 
-ロゴはUBCとOsakaを独立してON/OFFするボタンです。通常はクリックした側の透明度と所属別コンテンツだけを切り替え、もう片方の状態は維持します。ただし最後に残ったONをOFFにする場合は、もう片方を同時にONにします。両方ONは可能ですが、両方OFFにはなりません。このルールはPeopleを含む全ページとモバイルに共通です。初期状態は両方ONです。People Osaka／UBCへのリンク（`people.html?affil=Osaka`／`people.html?affil=UBC`）だけは該当側のみONで開きます。通常ページに残る旧 `affil` 指定は無視し、URLから取り除きます。
+ロゴは表示専用です。クリック・Enter・Spaceで所属や本文は変わりません。生成時は `span.logo-control[data-affiliation]` を出力し、既存HTMLの旧buttonも共通JSでspanへ置き換えます。クリック用のカーソル、ボタンのARIA状態、Tab移動対象は持ちません。
 
-状態は現在のページ内で保持し、言語切り替え・スクロール・レスポンシブ表示・設定再取得でも変えません。別ページへの移動や再読み込みではそのページの初期状態になります。内部リンクは言語と元のクエリ・ハッシュを保ち、所属指定はPeopleへの明示的なリンクだけに残します。`yuka` の旧ヘッダーも共通JSで同じ操作に対応します。
+People Osaka／UBCへのリンク（`people.html?affil=Osaka`／`people.html?affil=UBC`）では、指定した所属の本文を表示し、そのロゴを不透明、もう片方を半透明にします。通常ページと所属指定なしのPeopleでは両所属の本文・ロゴを表示します。通常ページに残る旧 `affil` 指定は無視してURLから取り除きます。所属は言語変更・スクロール・設定再取得で変わりません。
 
-コンテンツの表示対象は引き続きSheetのLab列です。`UBC`／`Osaka` は対応するスイッチ、両所属の指定はどちらかがONなら表示、`All` や所属指定なしの共通コンテンツはロゴの状態によらず表示します。言語の条件は別途適用します。本文が共通だけのページでも同じロゴ操作ができます。
+表示対象はSheetのLab列です。Peopleでの `UBC`／`Osaka` は該当所属、両所属ならどちらかが対象の場合に表示します。`All` と所属指定なしは共通です。言語条件は別途適用します。内部リンクは言語と元のクエリ・ハッシュを保ち、所属指定はPeopleの明示的なリンクだけに残します。
+
+2026-10-26からデスクトップヘッダーロゴのキャンバス全体を1.1倍にしています。`css/base.css` の `--header-logo-scale: 1.1` と `--header-logo-width` で管理し、最大幅は400pxから440pxになります。縦の隙間も同時に1.1倍になるため、SVG座標と既存の `--header-logo-extra-gap` は変えません。白／tealの境界クリッピングは維持します。`--site-sidebar-share: 27.5%` をサイドバー幅と本文の左余白に共用し、モバイルでは従来の1列表示へ戻します。
+
+## 文字の太さ
+
+`css/base.css` に重みの共通設定を集約しています。本文300、標準400、ナビゲーション等の中太600、本文の強調700、見出し800です。Markdownの `**...**` とSheetのリッチテキスト太字はともに `strong` へ変換され、HTMLの `b` と同じ700を使います。Peopleの項目名・人名や論文誌名も同じ強調設定を使います。見出し内の `strong` / `b` は見出しの重みを継承し、かえって細くなるのを防ぎます。言語ボタンの選択中は全言語で700、非選択は300です。
+
+Sheetで明示したインラインスタイルは従来の優先順位を維持します。意図した例外まで共通CSSの `!important` で上書きしません。使用する700・800およびRalewayの600は既存のフォント読み込み範囲内です。
 
 ## ロゴの透明度と切り替え時間
 
 専用 Sheet の `header!F2`（ID が `head` の行の Style）で、次の3つの CSS custom properties を設定します。他のレイアウト設定も同じセルに残せます。
 
-透明度と切り替え時間の設定は全ページの各ロゴに適用します。標準設定ではONは1、OFFは0.5です。
+透明度と表示遷移時間の設定は全ページの各ロゴに適用します。標準は表示対象のロゴが1、Peopleで対象外のロゴが0.5です。
 
 ```css
 --lab-logo-active-opacity: 1;
@@ -116,11 +124,11 @@ Sheet のヘッダーで使っている `two_logos_on_white_on_black.svg` と `t
 
 ## 所属ごとのコンテンツとモバイル操作
 
-表示対象は Sheet の Lab セルを基準にします。`UBC` は UBC 選択時、`Osaka` は Osaka 選択時、`All` は両方で表示します。言語の条件は Language セルで別に指定します。URL や本文の単語から所属を推測して上書きしません。
+Peopleの表示対象は Sheet の Lab セルを基準にします。`UBC` は UBC のPeople、`Osaka` は Osaka のPeople、`All` は両方で表示します。その他のページは両所属を表示します。言語の条件は Language セルで別に指定します。URL や本文の単語から所属を推測して上書きしません。
 
-Join us の UBC 向け本文は Lab=`UBC`、大阪向け本文は Lab=`Osaka`、共通タイトルは Lab=`All` です。冒頭の所属へのジャンプリンクとそのラッパー行は、Sheet に内容を残したまま Function=`Pass` として出力対象から外しています。所属の切り替えはロゴの操作へまとめています。
+Join us の UBC 向け本文は Lab=`UBC`、大阪向け本文は Lab=`Osaka`、共通タイトルは Lab=`All` です。冒頭の所属へのジャンプリンクとそのラッパー行は、Sheet に内容を残したまま Function=`Pass` として出力対象から外しています。両所属の内容を続けて表示し、ロゴ操作による切り替えは行いません。
 
-モバイル用の所属選択は、`mobilemenu` タブの `mobile-lab-switch` ラッパー内にある2つの Content 行で管理します。ID は `mobile-ubc-lab` / `mobile-osaka-lab`、Lab / Language は `All / Common` とし、両方の選択ボタンを常に表示します。生成処理がこれらの行を通常のリンクではなく所属選択のボタンに変換します。大学の外部リンクやホームへのリンクは別に維持します。
+モバイルの所属ロゴは、`mobilemenu` タブの `mobile-lab-switch` ラッパー内にある2つの Content 行で管理します。ID は `mobile-ubc-lab` / `mobile-osaka-lab`、Lab / Language は `All / Common` です。生成処理は表示専用のspanに変換し、Peopleの所属に応じて濃淡を付けます。大学の外部リンクやホームへのリンクは別に維持します。
 
 ## 安全に GAS を更新する
 

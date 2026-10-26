@@ -52,7 +52,7 @@ main #main_menu p{
   margin-top: clamp(calc(1.2 * 1.25px), calc(1.2 * 0.5vw), calc(1.2 * 10px * 0.96));
   text-align: center;
   color: #FFFFFF;
-  font-weight: 600; 
+  font-weight: var(--font-weight-semibold);
   font-family: raleway;
   font-size: clamp(calc(1.05 * 5pt) , calc(1.05 * 1.0vw) , calc(1.05 * 14.4pt));
 }

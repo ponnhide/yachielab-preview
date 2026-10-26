@@ -95,11 +95,11 @@
       const desktop = document.getElementById(language);
       const mobile = document.getElementById('mobile' + language);
       setStyle(desktop, {
-        fontWeight: selected ? (language === 'EN' ? '700' : '600') : (language === 'EN' ? '300' : '100'),
+        fontWeight: selected ? 'var(--font-weight-bold)' : 'var(--font-weight-body)',
         backgroundColor: selected ? '#CD853F' : '#888888'
       });
       setStyle(mobile, {
-        fontWeight: selected ? (language === 'EN' ? '700' : '600') : (language === 'EN' ? '300' : '100'),
+        fontWeight: selected ? 'var(--font-weight-bold)' : 'var(--font-weight-body)',
         color: selected ? '#CD853F' : '#BBBBBB'
       });
       [desktop, mobile].forEach(function (control) {
@@ -121,12 +121,11 @@
     });
     document.documentElement.lang = { EN: 'en', JA: 'ja', ZH: 'zh' }[state.language];
     paintLanguageButtons();
-    paintLogoButtons();
+    paintLogos();
     updateLinks();
     const url = new URL(window.location.href);
     url.searchParams.set('lang', state.language);
-    // Toggles belong to the current visit; navigation/reload uses the page's
-    // initial state. Keep only the authored People entry, not a global filter.
+    // Only explicit People entry links select a lab; other pages show both.
     const entryAffiliation = peopleAffiliation(url);
     if (entryAffiliation) url.searchParams.set('affil', entryAffiliation);
     else url.searchParams.delete('affil');
@@ -138,27 +137,8 @@
   function setLanguage(language) {
     if (!languages[language]) return;
     state.language = language;
-    // Language changes preserve both independent lab toggles.
+    // Language changes preserve the People entry's affiliation.
     renderLanguage();
-  }
-
-  function setAffiliationEnabled(affiliation, enabled) {
-    if (!labs.includes(affiliation) || typeof enabled !== 'boolean') return;
-    state.affiliations[affiliation] = enabled;
-    // Turning off the last active lab switches to the other lab in one render.
-    if (!labs.some(function (lab) { return state.affiliations[lab]; })) {
-      state.affiliations[labs.find(function (lab) { return lab !== affiliation; })] = true;
-    }
-    renderLanguage();
-  }
-
-  function toggleAffiliation(affiliation) {
-    if (!labs.includes(affiliation)) return;
-    setAffiliationEnabled(affiliation, !state.affiliations[affiliation]);
-  }
-
-  function logoLabel(affiliation) {
-    return 'Show ' + (affiliation === 'UBC' ? 'UBC' : 'The University of Osaka') + ' lab content';
   }
 
   function bindButton(control, handler) {
@@ -176,14 +156,12 @@
   }
 
 
-  function makeLogoButton(affiliation, image) {
-    const control = document.createElement('button');
-    control.type = 'button';
+  function makeLogoDisplay(affiliation, image) {
+    const control = document.createElement('span');
     control.classList.add('logo-control');
     control.classList.add(affiliation === 'UBC' ? 'logo-ubc' : 'logo-osaka');
     control.setAttribute('data-affiliation', affiliation);
-    control.setAttribute('aria-label', logoLabel(affiliation));
-    control.setAttribute('aria-pressed', 'false');
+    control.setAttribute('data-lab-active', 'true');
     if (image) control.appendChild(image);
     return control;
   }
@@ -198,7 +176,7 @@
       const image = document.createElement('img');
       image.src = assetUrl('./img/header-' + affiliation.toLowerCase() + '-' + color + '.svg');
       image.alt = affiliation === 'UBC' ? 'Yachie Laboratory at UBC' : 'Yachie Laboratory at The University of Osaka';
-      canvas.appendChild(makeLogoButton(affiliation, image));
+      canvas.appendChild(makeLogoDisplay(affiliation, image));
     });
     stack.appendChild(canvas);
     return stack;
@@ -224,7 +202,7 @@
           const affiliation = image.classList.contains('logo-ubc') || /header-ubc-/.test(image.src) ? 'UBC' :
             image.classList.contains('logo-osaka') || /header-osaka-/.test(image.src) ? 'Osaka' : null;
           if (!affiliation) return;
-          const control = makeLogoButton(affiliation);
+          const control = makeLogoDisplay(affiliation);
           canvas.replaceChild(control, image);
           image.classList.remove('logo-ubc');
           image.classList.remove('logo-osaka');
@@ -257,12 +235,23 @@
         const image = document.createElement('img');
         image.src = assetUrl('./img/header-' + affiliation.toLowerCase() + '-white.svg');
         image.alt = affiliation === 'UBC' ? 'Yachie Laboratory at UBC' : 'Yachie Laboratory at The University of Osaka';
-        const control = makeLogoButton(affiliation, image);
+        const control = makeLogoDisplay(affiliation, image);
         control.setAttribute('id', affiliation === 'UBC' ? 'mobile-ubc-lab' : 'mobile-osaka-lab');
         group.appendChild(control);
       });
       mobileContent.appendChild(group);
     }
+    // Convert previously generated buttons too, preserving Sheet sizes and IDs.
+    document.querySelectorAll('.logo-control[data-affiliation]').forEach(function (control) {
+      if (control.tagName !== 'BUTTON') return;
+      const display = makeLogoDisplay(control.getAttribute('data-affiliation'));
+      ['id', 'class', 'style', 'data-sheet-style'].forEach(function (name) {
+        const value = control.getAttribute(name);
+        if (value !== null) display.setAttribute(name, value);
+      });
+      Array.from(control.children).forEach(function (child) { display.appendChild(child); });
+      control.replaceWith(display);
+    });
   }
 
   let remoteLogoSettings = null;
@@ -283,7 +272,7 @@
     };
   }
 
-  function paintLogoButtons() {
+  function paintLogos() {
     const settings = remoteLogoSettings || initialLogoSettings();
     const variables = {
       '--lab-logo-active-opacity': String(settings.logoActiveOpacity),
@@ -295,10 +284,7 @@
     });
     document.querySelectorAll('.logo-control[data-affiliation]').forEach(function (control) {
       const affiliation = control.getAttribute('data-affiliation');
-      control.setAttribute('aria-label', logoLabel(affiliation));
-      control.setAttribute('aria-pressed', String(state.affiliations[affiliation]));
-      const withinHeader = header && header.contains(control);
-      control.setAttribute('tabindex', withinHeader && isMobile() ? '-1' : '0');
+      control.setAttribute('data-lab-active', String(state.affiliations[affiliation]));
     });
   }
 
@@ -313,7 +299,7 @@
       if (!settings || !validOpacity(settings.logoActiveOpacity) || !validOpacity(settings.logoInactiveOpacity) ||
           typeof settings.logoTransitionMs !== 'number' || !Number.isFinite(settings.logoTransitionMs) || settings.logoTransitionMs < 0 || settings.logoTransitionMs > 10000) return;
       remoteLogoSettings = settings;
-      paintLogoButtons();
+      paintLogos();
       requestLayout();
     }).catch(function () { /* Keep the validated head settings when offline or malformed. */ });
   }
@@ -324,13 +310,11 @@
     // Partially transparent white artwork must never stack over teal artwork.
     back.style.clipPath = 'inset(' + visibleHeight + 'px 0px 0px)';
     const chosen = new Map();
-    const activeBefore = document.activeElement;
     const setVisible = function (control, visible) {
       const affiliation = control.getAttribute('data-affiliation');
-      const focusable = visible && !isMobile() && !chosen.has(affiliation);
-      control.setAttribute('tabindex', focusable ? '0' : '-1');
-      control.setAttribute('aria-hidden', String(!focusable));
-      if (focusable) chosen.set(affiliation, control);
+      const accessible = visible && !isMobile() && !chosen.has(affiliation);
+      control.setAttribute('aria-hidden', String(!accessible));
+      if (accessible) chosen.set(affiliation, control);
     };
     [front, back].forEach(function (layer, index) {
       const origin = layer.getBoundingClientRect().top;
@@ -346,10 +330,6 @@
       const section = document.getElementById(id);
       if (section) section.querySelectorAll('.logo-control[data-affiliation]').forEach(function (control) { setVisible(control, false); });
     });
-    if (activeBefore && activeBefore.getAttribute && activeBefore.getAttribute('aria-hidden') === 'true') {
-      const replacement = chosen.get(activeBefore.getAttribute('data-affiliation'));
-      if (replacement && replacement !== activeBefore) replacement.focus({preventScroll: true});
-    }
   }
 
   const header = document.getElementById('normal_header');
@@ -494,7 +474,7 @@
 
   window.YachieSite = Object.freeze({
     isHomePage: homePage, isMobile: isMobile, getState: getState,
-    setLanguage: setLanguage, setAffiliationEnabled: setAffiliationEnabled, toggleAffiliation: toggleAffiliation,
+    setLanguage: setLanguage,
     subscribe: subscribe, updateLink: updateLink, bindButton: bindButton,
     assetUrl: assetUrl,
     requestLayout: requestLayout, calculateInteriorGeometry: calculateInteriorGeometry
@@ -524,9 +504,6 @@
     const contentObserver = new window.ResizeObserver(function () { requestLayout(); });
     [main, sidebar, header].filter(Boolean).forEach(function (element) { contentObserver.observe(element); });
   }
-  document.querySelectorAll('.logo-control[data-affiliation]').forEach(function (control) {
-    bindButton(control, function (event) { event.preventDefault(); toggleAffiliation(control.getAttribute('data-affiliation')); });
-  });
   setLanguage(state.language);
   fetchLogoSettings();
 })(window, document);

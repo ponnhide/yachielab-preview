@@ -41,6 +41,14 @@ class Element {
   setAttribute(name, value) { this.attributes[name] = String(value); if (name === 'src') this._src = String(value); }
   removeAttribute(name) { delete this.attributes[name]; }
   appendChild(child) { this.children.push(child); child.parentElement = this; child.env = this.env; return child; }
+  replaceWith(replacement) {
+    const parent = this.parentElement;
+    replacement.remove();
+    parent.children[parent.children.indexOf(this)] = replacement;
+    replacement.parentElement = parent;
+    replacement.env = parent.env;
+    this.parentElement = null;
+  }
   remove() { if (this.parentElement) this.parentElement.children = this.parentElement.children.filter(child => child !== this); }
   contains(child) { while (child) { if (child === this) return true; child = child.parentElement; } return false; }
   addEventListener(type, callback, options) {

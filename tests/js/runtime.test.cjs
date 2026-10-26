@@ -120,7 +120,7 @@ test('both People labs default on and Chinese Osaka sections are not lost', () =
   browser.run('common.js');
   browser.element('JA').dispatch('click');
   assertLabs(browser, true, true);
-  browser.window.YachieSite.toggleAffiliation('UBC');
+  logoControl(browser, 'frontlogo', 'UBC').dispatch('click');
   browser.element('ZH').dispatch('click');
   assert.notEqual(browser.element('frontlogo').style.display, 'none');
   if (browser.element('frontlogo2')) assert.equal(browser.element('frontlogo2').style.display, 'none');
@@ -426,7 +426,7 @@ test('split logo scroll, Home, affiliation and language changes use the latest g
   // Rapidly queued actions must draw the newest Home/Osaka state in one frame.
   browser.metrics.mainTop = 192;
   browser.window.dispatch('scroll');
-  browser.window.YachieSite.toggleAffiliation('UBC');
+  stacks.frontlogo.dispatch('click');
   browser.element('ZH').dispatch('click');
   browser.flush();
   for (const id of ['frontlogo', 'backlogo']) {
@@ -436,7 +436,7 @@ test('split logo scroll, Home, affiliation and language changes use the latest g
   assert.equal(stacks.frontlogo.style.height, 'auto');
   assert.notEqual(browser.element('frontlogo').style.display, 'none');
   if (browser.element('frontlogo2')) assert.equal(browser.element('frontlogo2').style.display, 'none');
-  browser.window.YachieSite.toggleAffiliation('Osaka');
+  stacks.frontlogo.dispatch('click');
   browser.flush();
   assert.equal(stacks.frontlogo.style.top, '0px');
   assert.equal(stacks.frontlogo.style.height, 'auto');
@@ -482,8 +482,11 @@ function assertLabs(browser, ubc, osaka) {
   assert.equal(state.affiliations.Osaka, osaka);
   for (const [lab, active] of [['UBC', ubc], ['Osaka', osaka]]) {
     for (const control of browser.document.querySelectorAll('.logo-control[data-affiliation="' + lab + '"]')) {
-      assert.equal(control.getAttribute('aria-pressed'), String(active));
-      assert.match(control.getAttribute('aria-label'), /^Show .+ lab content$/);
+      assert.equal(control.getAttribute('data-lab-active'), String(active));
+      assert.equal(control.tagName, 'SPAN');
+      assert.equal(control.getAttribute('aria-pressed'), null);
+      assert.equal(control.getAttribute('role'), null);
+      assert.equal(control.getAttribute('tabindex'), null);
     }
   }
 }
@@ -520,91 +523,64 @@ test('every page starts with both labs on except explicitly named People entries
   }
 });
 
-test('desktop and mobile controls keep at least one lab on and switch only when disabling the last active lab', () => {
+test('desktop and mobile logo clicks and keys never change page contents or affiliation', () => {
   for (const page of ['index.html', 'joinus.html', 'people.html', 'cms-new-page-demo.html', 'contact.html', 'yuka.html']) {
-    for (const width of [1280, 390]) {
-      const browser = createBrowser(page, {width});
+    for (const width of [1280, 390]) for (const entry of ['', '?affil=UBC', '?affil=Osaka']) {
+      const browser = createBrowser(page, {width, url:'https://ponnhide.github.io/yachielab-preview/' + page + entry});
       browser.run('common.js');
       browser.flush();
-      const check = (ubc, osaka) => {
+      const ubc = page !== 'people.html' || entry !== '?affil=Osaka';
+      const osaka = page !== 'people.html' || entry !== '?affil=UBC';
+      const check = () => {
         assertLabs(browser, ubc, osaka);
         if (['joinus.html', 'people.html', 'cms-new-page-demo.html'].includes(page)) assertBodyLabs(browser, ubc, osaka);
       };
-      check(true, true);
-      for (const [lab, ubc, osaka] of [
-        ['UBC', false, true], ['Osaka', true, false], ['UBC', false, true],
-        ['UBC', true, true], ['Osaka', true, false], ['Osaka', true, true]
-      ]) {
-        const control = width <= 600 ? mobileLogoControl(browser, lab) : logoControl(browser, 'frontlogo', lab);
+      check();
+      const originalUrl = browser.window.location.href;
+      for (const control of browser.document.querySelectorAll('.logo-control[data-affiliation]')) {
         control.dispatch('click');
+        control.dispatch('keydown', {key:'Enter'});
+        control.dispatch('keydown', {key:' '});
         browser.flush();
-        check(ubc, osaka);
-        browser.window.YachieSite.setLanguage('JA');
-        browser.flush();
-        check(ubc, osaka);
-        browser.window.dispatch('resize');
-        browser.flush();
-        check(ubc, osaka);
+        check();
       }
+      assert.equal(browser.window.location.href, originalUrl);
+      browser.window.YachieSite.setLanguage('JA');
+      browser.window.dispatch('resize');
+      browser.flush();
+      check();
+      assert.equal(browser.window.YachieSite.toggleAffiliation, undefined);
+      assert.equal(browser.window.YachieSite.setAffiliationEnabled, undefined);
       assert.equal(browser.reloads, 0);
     }
   }
 });
 
-test('People Osaka and UBC start with the named lab and both controls remain independent afterward', () => {
-  for (const selected of ['UBC', 'Osaka']) {
-    const other = selected === 'UBC' ? 'Osaka' : 'UBC';
-    const browser = createBrowser('people.html', {url: 'https://ponnhide.github.io/yachielab-preview/people.html?lang=EN&affil=' + selected});
+test('People filtering retains common rows and either-lab rows; returned state cannot be mutated', () => {
+  for (const selected of ['', 'UBC', 'Osaka']) {
+    const browser = createBrowser('people.html', {url:'https://ponnhide.github.io/yachielab-preview/people.html?affil=' + selected});
+    const sections = {};
+    for (const names of [['UBC'], ['Osaka'], ['All'], ['UBC', 'Osaka'], ['All', 'UBC']]) {
+      const section = browser.document.createElement('section');
+      names.forEach(name => section.classList.add(name));
+      section.style.display = 'flex';
+      browser.document.querySelector('.posts').appendChild(section);
+      sections[names.join(' ')] = section;
+    }
+    const hidden = browser.document.createElement('section');
+    hidden.classList.add('All'); hidden.style.display = 'none';
+    browser.document.body.appendChild(hidden);
     browser.run('common.js');
-    assertLabs(browser, selected === 'UBC', selected === 'Osaka');
-    assertBodyLabs(browser, selected === 'UBC', selected === 'Osaka');
-    logoControl(browser, 'frontlogo', selected).dispatch('click');
-    assertLabs(browser, other === 'UBC', other === 'Osaka');
-    assertBodyLabs(browser, other === 'UBC', other === 'Osaka');
-    logoControl(browser, 'frontlogo', other).dispatch('click');
-    assertLabs(browser, selected === 'UBC', selected === 'Osaka');
-    assertBodyLabs(browser, selected === 'UBC', selected === 'Osaka');
-    logoControl(browser, 'frontlogo', other).dispatch('click');
-    assertLabs(browser, true, true);
-    assertBodyLabs(browser, true, true);
-    logoControl(browser, 'frontlogo', selected).dispatch('click');
-    assertLabs(browser, other === 'UBC', other === 'Osaka');
-    assertBodyLabs(browser, other === 'UBC', other === 'Osaka');
-  }
-});
-
-test('direct setters prevent both labs being off while common and dual-lab rows remain visible', () => {
-  const browser = createBrowser('research.html');
-  const sections = {};
-  for (const names of [['UBC'], ['Osaka'], ['All'], ['UBC', 'Osaka'], ['All', 'UBC']]) {
-    const section = browser.document.createElement('section');
-    names.forEach(name => section.classList.add(name));
-    section.style.display = 'flex';
-    browser.document.querySelector('.posts').appendChild(section);
-    sections[names.join(' ')] = section;
-  }
-  const hidden = browser.document.createElement('section');
-  hidden.classList.add('All');
-  hidden.style.display = 'none';
-  browser.document.body.appendChild(hidden);
-  browser.run('common.js');
-  for (const [lab, enabled, ubc, osaka] of [
-    ['UBC', true, true, true], ['UBC', false, false, true],
-    ['Osaka', false, true, false], ['Osaka', false, true, false],
-    ['UBC', false, false, true], ['UBC', false, false, true],
-    ['UBC', true, true, true], ['Osaka', false, true, false]
-  ]) {
-    browser.window.YachieSite.setAffiliationEnabled(lab, enabled);
-    assertLabs(browser, ubc, osaka);
+    const ubc = selected !== 'Osaka', osaka = selected !== 'UBC';
     for (const [name, row] of Object.entries(sections)) {
       const visible = name.includes('All') || name.includes('UBC') && ubc || name.includes('Osaka') && osaka;
       assert.equal(row.style.display, visible ? 'flex' : 'none');
     }
     assert.equal(hidden.style.display, 'none');
+    const snapshot = browser.window.YachieSite.getState();
+    snapshot.affiliations.UBC = !ubc;
+    assertLabs(browser, ubc, osaka);
   }
-  const snapshot = browser.window.YachieSite.getState();
-  snapshot.affiliations.UBC = false;
-  assertLabs(browser, true, false);
 });
 
 test('logo clicks preserve the current location while navigation resets labs and retains explicit People destinations', () => {
@@ -620,9 +596,9 @@ test('logo clicks preserve the current location while navigation resets labs and
   browser.flush();
   assert.notEqual(controlledLogo(browser, 'frontlogo').parentElement.tagName, 'A');
   const click = logoControl(browser, 'frontlogo', 'Osaka').dispatch('click');
-  assert.equal(click.defaultPrevented, true);
+  assert.notEqual(click.defaultPrevented, true);
   browser.flush();
-  assertLabs(browser, true, false);
+  assertLabs(browser, true, true);
   assert.equal(browser.window.location.pathname, '/yachielab-preview/contact.html');
   assert.equal(browser.window.location.hash, '#address');
   assert.equal(browser.window.location.searchParams.get('campaign'), 'lab');
@@ -634,31 +610,31 @@ test('logo clicks preserve the current location while navigation resets labs and
   assert.equal(logoControl(browser, 'frontlogo', 'Osaka').listeners.has('keydown'), false);
 });
 
-test('returning to a page restores its entry defaults and does not preserve another visit’s toggles', () => {
+test('history navigation restores the People entry and language', () => {
   for (const [page, query, ubc, osaka] of [['joinus.html', '?lang=JA&affil=UBC', true, true], ['people.html', '?lang=EN&affil=Osaka', false, true]]) {
     const browser = createBrowser(page, {url: 'https://ponnhide.github.io/yachielab-preview/' + page + query});
     browser.run('common.js');
-    browser.window.YachieSite.setAffiliationEnabled('UBC', false);
-    browser.window.YachieSite.setAffiliationEnabled('Osaka', false);
-    assertLabs(browser, true, false);
+    browser.window.history.replaceState(null, '', 'https://ponnhide.github.io/yachielab-preview/' + page + query);
+    browser.window.YachieSite.setLanguage('ZH');
+    browser.window.history.replaceState(null, '', 'https://ponnhide.github.io/yachielab-preview/' + page + query);
     browser.window.dispatch('popstate');
     assertLabs(browser, ubc, osaka);
     assertBodyLabs(browser, ubc, osaka);
   }
 });
 
-test('Sheet settings arriving after interaction preserve each independent toggle on every page type', async () => {
-  for (const page of ['index.html', 'contact.html', 'joinus.html']) {
-    const browser = createBrowser(page);
+test('Sheet settings arriving after interaction preserve page affiliation on every page type', async () => {
+  for (const page of ['index.html', 'contact.html', 'joinus.html', 'people.html']) {
+    const browser = createBrowser(page, {url:'https://ponnhide.github.io/yachielab-preview/' + page + '?affil=Osaka'});
     let resolveSettings;
     browser.window.fetch = () => new Promise(resolve => { resolveSettings = resolve; });
     browser.run('common.js');
-    browser.window.YachieSite.toggleAffiliation('UBC');
+    logoControl(browser, 'frontlogo', 'UBC').dispatch('click');
     browser.window.YachieSite.setLanguage('JA');
     resolveSettings({ok:true, json:() => Promise.resolve({logoActiveOpacity:0.85, logoInactiveOpacity:0.2, logoTransitionMs:725})});
     await tick();
     browser.flush();
-    assertLabs(browser, false, true);
+    assertLabs(browser, page !== 'people.html', true);
     browser.document.querySelectorAll('.logo-control[data-affiliation]').forEach(control => {
       assert.equal(control.style['--lab-logo-active-opacity'], '0.85');
       assert.equal(control.style['--lab-logo-inactive-opacity'], '0.2');
@@ -679,7 +655,7 @@ test('white crop and teal exclusion remain synchronized through scroll, Home, re
   browser.flush();
   assert.equal(front.style.height, '81.2px');
   assert.equal(back.style.clipPath, 'inset(81.2px 0px 0px)', 'Teal must be removed everywhere the translucent white layer exists');
-  browser.window.YachieSite.toggleAffiliation('UBC');
+  logoControl(browser, 'frontlogo', 'UBC').dispatch('click');
   browser.flush();
   assert.equal(back.style.clipPath, 'inset(81.2px 0px 0px)');
   browser.metrics.mainTop = -100;
@@ -696,27 +672,21 @@ test('white crop and teal exclusion remain synchronized through scroll, Home, re
   assert.equal(front.style.top, '0px');
 });
 
-test('a lab has one keyboard stop across its visible white and teal layers, with focus following the visible layer', () => {
+test('static logos expose each visible lab once across white and teal layers without keyboard stops', () => {
   const browser = createBrowser('research.html');
-  browser.run('common.js');
-  browser.flush();
+  browser.run('common.js'); browser.flush();
   const frontUbc = logoControl(browser, 'frontlogo', 'UBC');
   const backUbc = logoControl(browser, 'backlogo', 'UBC');
-  assert.equal(frontUbc.getAttribute('tabindex'), '0');
-  assert.equal(backUbc.getAttribute('tabindex'), '-1');
+  assert.equal(frontUbc.getAttribute('aria-hidden'), 'false');
   assert.equal(backUbc.getAttribute('aria-hidden'), 'true');
-  frontUbc.focus();
   browser.metrics.mainTop = -1;
-  browser.window.dispatch('scroll');
-  browser.flush();
-  assert.equal(frontUbc.getAttribute('tabindex'), '-1');
-  assert.equal(backUbc.getAttribute('tabindex'), '0');
+  browser.window.dispatch('scroll'); browser.flush();
+  assert.equal(frontUbc.getAttribute('aria-hidden'), 'true');
   assert.equal(backUbc.getAttribute('aria-hidden'), 'false');
-  assert.equal(browser.document.activeElement, backUbc);
-  for (const id of ['frontlogo2', 'backlogo2']) {
-    const element = browser.element(id);
-    if (element) element.querySelectorAll('.logo-control').forEach(control => assert.equal(control.getAttribute('tabindex'), '-1'));
-  }
+  browser.document.querySelectorAll('.logo-control').forEach(control => {
+    assert.equal(control.getAttribute('tabindex'), null);
+    assert.equal(control.tagName, 'SPAN');
+  });
 });
 
 test('validated head custom properties reach every desktop and mobile controller', () => {
@@ -781,7 +751,7 @@ test('invalid or offline settings JSON retains the valid head settings as one co
   }
 });
 
-test('legacy mobile menus gain one lab selector group and its choices stay on the current page', () => {
+test('legacy mobile menus gain one static logo group without changing page contents', () => {
   const browser = createBrowser('yuka.html', {width: 390, url: 'https://ponnhide.github.io/yachielab-preview/yuka.html?lang=JA'});
   const bodyPosts = browser.document.querySelector('.posts');
   const bodyChildren = bodyPosts.children.slice();
@@ -790,22 +760,22 @@ test('legacy mobile menus gain one lab selector group and its choices stay on th
   browser.flush();
   assert.deepEqual(bodyPosts.children, bodyChildren, 'Legacy header migration must preserve body nodes');
   assert.equal(browser.document.querySelectorAll('#mobile-lab-switch').length, 1);
-  assert.equal(mobileLogoControl(browser, 'Osaka').getAttribute('aria-pressed'), 'true');
+  assert.equal(mobileLogoControl(browser, 'Osaka').getAttribute('data-lab-active'), 'true');
   browser.element('menu-icon').dispatch('click');
   browser.completeAnimation();
   mobileLogoControl(browser, 'UBC').dispatch('click');
   browser.flush();
   assert.equal(browser.window.location.pathname, '/yachielab-preview/yuka.html');
   assert.equal(browser.window.location.searchParams.get('affil'), null);
-  assert.equal(mobileLogoControl(browser, 'UBC').getAttribute('aria-pressed'), 'false');
+  assert.equal(mobileLogoControl(browser, 'UBC').getAttribute('data-lab-active'), 'true');
   assert.equal(browser.element('mobile-menu').style.visibility, 'visible');
   for (const layer of ['frontlogo', 'backlogo']) {
-    assert.equal(logoControl(browser, layer, 'UBC').getAttribute('tabindex'), '-1', 'Hidden desktop header controls are not keyboard targets on mobile');
+    assert.equal(logoControl(browser, layer, 'UBC').getAttribute('tabindex'), null, 'Static logos are not keyboard targets');
   }
 });
 
 
-test('homepage without .posts has exactly two visible keyboard stops and keeps the clipped back layer hidden', () => {
+test('homepage without .posts exposes two static logos and keeps the clipped back layer hidden', () => {
   const browser = createBrowser('index.html');
   // Some saved snapshots retain an empty .posts node; the actual homepage
   // can omit it. Remove only fixture DOM nodes to exercise that variant.
@@ -820,9 +790,9 @@ test('homepage without .posts has exactly two visible keyboard stops and keeps t
     assert.equal(front.style.height, 'auto');
     assert.equal(back.style.clipPath, 'inset(' + height + 'px 0px 0px)');
     for (const affiliation of ['UBC', 'Osaka']) {
-      assert.equal(logoControl(browser, 'frontlogo', affiliation).getAttribute('tabindex'), '0');
+      assert.equal(logoControl(browser, 'frontlogo', affiliation).getAttribute('tabindex'), null);
       assert.equal(logoControl(browser, 'frontlogo', affiliation).getAttribute('aria-hidden'), 'false');
-      assert.equal(logoControl(browser, 'backlogo', affiliation).getAttribute('tabindex'), '-1');
+      assert.equal(logoControl(browser, 'backlogo', affiliation).getAttribute('tabindex'), null);
       assert.equal(logoControl(browser, 'backlogo', affiliation).getAttribute('aria-hidden'), 'true');
     }
     assert.notEqual(browser.document.querySelector('aside').style.display, 'flex');
@@ -860,8 +830,8 @@ test('homepage with its empty .posts retains language sticking and desktop setup
   assert.equal(front.style.top, '0px');
   assert.equal(back.style.clipPath, 'inset(110px 0px 0px)');
   for (const affiliation of ['UBC', 'Osaka']) {
-    assert.equal(logoControl(browser, 'frontlogo', affiliation).getAttribute('tabindex'), '0');
-    assert.equal(logoControl(browser, 'backlogo', affiliation).getAttribute('tabindex'), '-1');
+    assert.equal(logoControl(browser, 'frontlogo', affiliation).getAttribute('tabindex'), null);
+    assert.equal(logoControl(browser, 'backlogo', affiliation).getAttribute('tabindex'), null);
   }
   browser.metrics.mainTop = -4500;
   browser.window.dispatch('scroll');
