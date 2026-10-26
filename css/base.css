@@ -9,7 +9,7 @@
   --header-logo-scale: 1.1;
   --header-logo-width: calc(clamp(35px, 21vw, 400px) * var(--header-logo-scale));
   --mobile-header-logo-height: calc(44px * var(--header-logo-scale));
-  --site-sidebar-share: 27.5%;
+  --site-sidebar-ratio: 0.275;
   --site-gutter: clamp(5px, 2vw, 38.4px);
 }
 

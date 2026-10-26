@@ -43,7 +43,7 @@ aside {
 }
 
 aside #sidebar {
-  width: calc(var(--site-sidebar-share) - 2 * var(--site-gutter));
+  width: calc(min(100vw, 1920px) * var(--site-sidebar-ratio) - 2 * var(--site-gutter));
   box-sizing: border-box;
   float: left;
   padding-top: clamp(7.5px, 3vw, calc(60px * 0.96)); 
@@ -65,7 +65,7 @@ main {
 }
 
 main .posts {
-  padding-left: var(--site-sidebar-share);
+  padding-left: calc(100% * var(--site-sidebar-ratio));
   padding-right: clamp(5px, 2vw, calc(40px * 0.96));
   padding-bottom: clamp(5px, 8vw, calc(160px * 0.96));
   width: 100%;

@@ -94,7 +94,7 @@ People Osaka／UBCへのリンク（`people.html?affil=Osaka`／`people.html?aff
 
 表示対象はSheetのLab列です。Peopleでの `UBC`／`Osaka` は該当所属、両所属ならどちらかが対象の場合に表示します。`All` と所属指定なしは共通です。言語条件は別途適用します。内部リンクは言語と元のクエリ・ハッシュを保ち、所属指定はPeopleの明示的なリンクだけに残します。
 
-2026-10-26からデスクトップヘッダーロゴのキャンバス全体を1.1倍にしています。`css/base.css` の `--header-logo-scale: 1.1` と `--header-logo-width` で管理し、最大幅は400pxから440pxになります。縦の隙間も同時に1.1倍になるため、SVG座標と既存の `--header-logo-extra-gap` は変えません。白／tealの境界クリッピングは維持します。`--site-sidebar-share: 27.5%` をサイドバー幅と本文の左余白に共用し、モバイルでは従来の1列表示へ戻します。
+2026-10-26からデスクトップヘッダーロゴのキャンバス全体を1.1倍にしています。`css/base.css` の `--header-logo-scale: 1.1` と `--header-logo-width` で管理し、最大幅は400pxから440pxになります。縦の隙間も同時に1.1倍になるため、SVG座標と既存の `--header-logo-extra-gap` は変えません。白／tealの境界クリッピングは維持します。`--site-sidebar-ratio: 0.275` をサイドバー幅と本文の左余白に共用します。固定サイドバーの計算にもサイト本体と同じ1920pxの上限を適用し、モバイルでは従来の1列表示へ戻します。
 
 ## 文字の太さ
 
