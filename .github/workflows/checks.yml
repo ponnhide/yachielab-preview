@@ -18,7 +18,7 @@ jobs:
   checks:
     if: github.repository == 'ponnhide/yachielab-preview'
     name: Check and build public site
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     permissions:
       contents: read
@@ -57,7 +57,7 @@ jobs:
     if: github.repository == 'ponnhide/yachielab-preview' && github.event_name == 'push' && github.ref == 'refs/heads/codex/preview'
     name: Deploy checked preview
     needs: checks
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     permissions:
       contents: read
