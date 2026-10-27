@@ -142,8 +142,19 @@ function cmsProductionAction() {
 /** Editor-only setup check. Does not add a third Sheet menu action or deploy production. */
 function cmsValidateProductionConnection() {
   cmsUnifiedBook_();
-  var record = cmsReleaseStart_(cmsReleaseCandidate_(), true);
-  cmsUnifiedShowStatus_('production'); return record;
+  var existing = cmsReleaseRead_('UNIFIED_PRODUCTION_REQUEST');
+  if (existing && existing.dryRun && !existing.finished) {
+    var progress = cmsReleasePending_(existing);
+    console.info('CMS production validation: ' + JSON.stringify(progress));
+    return progress;
+  }
+  var candidate = cmsReleaseCandidate_();
+  if (existing && existing.dryRun && existing.conclusion === 'validated' && existing.commit === candidate.commit) {
+    return {done:true,message:'接続テスト成功（本番未公開）'};
+  }
+  var record = cmsReleaseStart_(candidate, true);
+  console.info('CMS production validation requested: ' + record.requestId);
+  return record;
 }
 function cmsUnifiedPoll(kind) {
   cmsUnifiedBook_();
@@ -201,8 +212,8 @@ function cmsInitializeUnifiedPreview() {
       console.info('CMS initialization: ' + JSON.stringify({completed:state.next,total:state.pages.length + 1,complete:state.complete}));
       if (!state.complete && Date.now() - started >= 90000) break;
     }
-    if (state.complete) cmsUnifiedShowStatus_('preview');
-    else cmsReleaseCell_('B7','初回生成中：' + state.next + '/' + (state.pages.length + 1) + '（保存済み・次回実行で続行）');
+    // Editor-only setup functions have no spreadsheet UI context.
+    if (!state.complete) cmsReleaseCell_('B7','初回生成中：' + state.next + '/' + (state.pages.length + 1) + '（保存済み・次回実行で続行）');
     return {complete:state.complete,completed:state.next,total:state.pages.length + 1};
   } finally { lock.releaseLock(); }
 }

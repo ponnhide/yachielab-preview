@@ -64,7 +64,7 @@ test('initialization checkpoints pages, retries a failure, and resumes through s
   assert.equal(c.cmsInitializeUnifiedPreview().complete,false);
   assert.equal(c.cmsInitializeUnifiedPreview().complete,true);
   assert.deepEqual(calls,['news','people','people','shared']);
-  assert.equal(shown,1);assert.equal(released,4);
+  assert.equal(shown,0);assert.equal(released,4);
   assert.equal(c.cmsInitializeUnifiedPreview().complete,true);
   assert.deepEqual(calls,['news','people','people','shared']);
 });
@@ -74,4 +74,14 @@ test('initialization rejects a second concurrent setup execution',()=>{
   c.LockService.getDocumentLock=()=>({tryLock:()=>false,releaseLock(){}});
   assert.throws(()=>c.cmsInitializeUnifiedPreview(),/既に実行中/);
   assert.equal(data.UNIFIED_INITIALIZE_STATE,undefined);
+});
+
+test('editor connection check polls its existing dry run without duplicate dispatch or UI',()=>{
+  const {c,data,requests}=setup();data.PRODUCTION_GITHUB_TOKEN='test-only';c.cmsReleaseCandidate_=candidate;
+  c.cmsUnifiedShowStatus_=()=>{throw new Error('No editor UI');};
+  const record=c.cmsValidateProductionConnection();assert.equal(record.dryRun,true);assert.equal(requests.length,1);
+  c.cmsReleasePending_=()=>({done:false,message:'running'});
+  assert.equal(c.cmsValidateProductionConnection().done,false);assert.equal(requests.length,1);
+  data.UNIFIED_PRODUCTION_REQUEST=JSON.stringify({...record,finished:true,conclusion:'validated'});
+  assert.equal(c.cmsValidateProductionConnection().done,true);assert.equal(requests.length,1);
 });
