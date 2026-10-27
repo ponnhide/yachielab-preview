@@ -42,6 +42,9 @@ function rendererRichText_(value, rich) {
     var original = sheetString_(run.getText());
     var trailing = (original.match(/ +$/) || [''])[0];
     var content = original.slice(0, original.length - trailing.length);
+    // Sheets can split a styled trailing space into its own rich-text run.
+    // Empty emphasis markers would be rendered as literal stars by Showdown.
+    if (!content.trim()) return original;
     var style = run.getTextStyle();
     var color = '';
     try {

@@ -85,3 +85,13 @@ test('editor connection check polls its existing dry run without duplicate dispa
   data.UNIFIED_PRODUCTION_REQUEST=JSON.stringify({...record,finished:true,conclusion:'validated'});
   assert.equal(c.cmsValidateProductionConnection().done,true);assert.equal(requests.length,1);
 });
+
+test('native update status distinguishes pending deployment from verified completion',()=>{
+  const {c}=setup(),alerts=[];
+  c.SpreadsheetApp={getUi:()=>({ButtonSet:{OK:'ok'},alert:(...args)=>alerts.push(args)})};
+  c.cmsUnifiedPoll=()=>({done:false,message:'GitHub保存済み'});
+  assert.equal(c.cmsUnifiedShowStatus_('preview').done,false);
+  assert.match(alerts[0][1],/継続しています/);assert.match(alerts[0][1],/ponnhide.github.io/);
+  c.cmsUnifiedPoll=()=>({done:true,message:'プレビュー公開完了',url:'https://ponnhide.github.io/yachielab-preview/'});
+  c.cmsUnifiedShowStatus_('preview');assert.doesNotMatch(alerts[1][1],/継続しています/);
+});

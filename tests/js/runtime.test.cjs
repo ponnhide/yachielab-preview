@@ -291,14 +291,18 @@ test('lazy Twitter processing loads one script for multiple visibility batches a
   assert.equal(browser.document.querySelectorAll('script[src]').filter(script => script.src === 'https://platform.twitter.com/widgets.js').length, 1);
 });
 
-test('Bluesky uses one official script and its scan API for both raw Sheet embeds', async () => {
+test('Bluesky handles raw and deferred Sheet embeds with one official script and scan API', async () => {
   const browser = createBrowser('news.html');
   browser.document.querySelectorAll('script[src]').filter(script => /embed\.js/.test(script.src)).forEach(script => script.remove());
   browser.run('common.js');
   browser.run('news.js');
   const observer = browser.observers[0];
-  const containers = browser.document.querySelectorAll('.sns-post').filter(container => container.querySelector('blockquote.bluesky-embed'));
+  const containers = browser.document.querySelectorAll('.sns-post').filter(container => container.querySelector('blockquote.bluesky-embed, blockquote.pre-bluesky-embed'));
   assert.equal(containers.length, 2);
+  const raw = containers[0].querySelector('blockquote');
+  raw.classList.remove('pre-bluesky-embed');raw.classList.add('bluesky-embed');
+  const deferred = containers[1].querySelector('blockquote');
+  deferred.classList.remove('bluesky-embed');deferred.classList.add('pre-bluesky-embed');
   observer.enter(containers[0]);
   observer.enter(containers[1]);
   let scans = 0;

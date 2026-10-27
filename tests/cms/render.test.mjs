@@ -66,6 +66,12 @@ check('Rich text preserves bold/color runs and converts the email marker', () =>
   assert.equal(r.rendererRichText_('Name ', rich), '**<span style="color:#ff0000">Name</span>** ');
   assert(r.rendererRichText_('name\\@\\example.org', null).includes('alt="[at]"'));
 });
+check('Bold whitespace-only runs do not emit visible Markdown markers', () => {
+  const { runtime: r } = setup();
+  const run = (text, bold) => ({getText: () => text, getTextStyle: () => ({isBold: () => bold, isItalic: () => false, getForegroundColorObject: () => null})});
+  const rich = {getRuns: () => [run('研究課題', true), run(' ', true), run('(研究代表者)', false)]};
+  assert.equal(r.rendererMarkdown_(r.rendererRichText_('研究課題 (研究代表者)', rich)), '<p><strong>研究課題</strong> (研究代表者)</p>');
+});
 check('Showdown renders localized PDF links with spaced local filenames as anchors instead of visible versioned Markdown', () => {
   const destination = './pdf/Graduate application guidelines.pdf?download=1&v=abcdef123456#page=2';
   const { runtime: r } = setup({ uploadImg: () => destination });

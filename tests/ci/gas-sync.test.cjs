@@ -44,6 +44,6 @@ test('readback mismatch cannot report success and whitespace normalization prese
  assert.deepEqual(sync.differences({'x.gs':'x\r\n'},{'x.gs':'x\n'}),[]);assert.deepEqual(sync.differences({'x.gs':'x;'},{'x.gs':'y;'}),['x.gs']);
 });
 test('runtime cache revision is read late and automatically changes with the synchronized source',()=>{
- const context=vm.createContext({});vm.runInContext(fs.readFileSync(path.join(root,'cms','RenderCache.gs'),'utf8'),context);assert.equal(context.cmsRendererVersion_(),'2026-10-26.1');
+ const context=vm.createContext({});vm.runInContext(fs.readFileSync(path.join(root,'cms','RenderCache.gs'),'utf8'),context);assert.equal(context.cmsRendererVersion_(),'2026-10-27.1');
  context.CMS_SOURCE_FINGERPRINT_='a'.repeat(64);assert.equal(context.cmsRendererVersion_(),'source:'+'a'.repeat(64));context.CMS_SOURCE_FINGERPRINT_='b'.repeat(64);assert.equal(context.cmsRendererVersion_(),'source:'+'b'.repeat(64));
 });

@@ -179,10 +179,13 @@ function cmsUnifiedPoll(kind) {
 }
 function cmsUnifiedShowStatus_(kind) {
   if (['preview','production'].indexOf(kind) === -1) throw new Error('Unknown status.');
-  var html = '<!doctype html><html lang="ja"><meta charset="utf-8"><style>body{font:15px system-ui;padding:18px;line-height:1.7}a{color:#1665a2}small{color:#555}</style>' +
-    '<h3>公開状況</h3><p id="status">確認中…</p><p><a id="link" target="_blank" rel="noopener"></a></p><small>この画面を閉じても公開処理は継続します。結果は「公開状況」タブにも記録します。確認は最大10分です。</small>' +
-    '<script>var count=0;function poll(){google.script.run.withSuccessHandler(function(r){document.getElementById("status").textContent=r.message;var a=document.getElementById("link");if(r.url){a.href=r.url;a.textContent="サイト・実行結果を開く";}if(!r.done&&++count<60)setTimeout(poll,10000);}).withFailureHandler(function(){document.getElementById("status").textContent="状況を確認できませんでした。再度メニューを開いてください。";}).cmsUnifiedPoll(' + JSON.stringify(kind) + ');}poll();</script></html>';
-  SpreadsheetApp.getUi().showModelessDialog(HtmlService.createHtmlOutput(html).setWidth(470).setHeight(300),'サイト更新');
+  var status = cmsUnifiedPoll(kind), ui = SpreadsheetApp.getUi();
+  var message = status.message + (status.url ? '\n\n' + status.url : '');
+  if (!status.done) message += '\n\n公開処理はGitHubで継続しています。プレビューの配信完了後に本番更新してください。次回の更新操作でも公開状況を再確認します。';
+  if (kind === 'preview' && !status.url) message += '\n\n' + CMS_PREVIEW_URL_;
+  // Native dialogs remain readable when the embedded Apps Script panel is unavailable.
+  ui.alert('サイト更新',message,ui.ButtonSet.OK);
+  return status;
 }
 
 /** First migration only. Persist each page before continuing in a later execution. */
