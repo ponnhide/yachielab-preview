@@ -15,8 +15,8 @@ function setup({id=TARGET.spreadsheetId, tab='research', token=true}={}) {
 }
 test('unified menu exposes exactly the two requested actions',()=>{
   const {context,calls}=setup();context.cmsUnifiedOnOpen_();
-  assert.equal(calls.menu,'サイト更新');
-  assert.deepEqual(calls.items,[['プレビュー更新','cmsPreviewAction'],['本番更新','cmsProductionAction']]);
+  assert.equal(calls.menu,'Website');
+  assert.deepEqual(calls.items,[['Update preview from current sheet','cmsPreviewAction'],['Publish entire preview to production','cmsProductionAction']]);
 });
 test('neither original spreadsheet may invoke unified controls',()=>{
   for(const id of ['1TRYhl0WmqhEykYCvFtZzJG4J17YChKiqausAxT8iwHk','1B8zqUodJlrqBv7hkLq8g-Gmb-o0fkkSkj6CfUza1ImI']){

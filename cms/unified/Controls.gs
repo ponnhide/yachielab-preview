@@ -9,20 +9,20 @@ function cmsUnifiedBook_() {
 
 function cmsUnifiedOnOpen_() {
   cmsUnifiedBook_();
-  SpreadsheetApp.getUi().createMenu('サイト更新')
-    .addItem('プレビュー更新', 'cmsPreviewAction')
-    .addItem('本番更新', 'cmsProductionAction')
+  SpreadsheetApp.getUi().createMenu('Website')
+    .addItem('Update preview from current sheet', 'cmsPreviewAction')
+    .addItem('Publish entire preview to production', 'cmsProductionAction')
     .addToUi();
 }
 
 function cmsPreviewAction() {
   var book = cmsUnifiedBook_(), name = book.getActiveSheet().getName();
   if (name === '公開状況' || name === 'item list' || name === 'parameters' || /^_cms/.test(name)) {
-    SpreadsheetApp.getUi().alert('プレビュー更新', '更新するコンテンツのタブ（例：research、software）を開いてから実行してください。', SpreadsheetApp.getUi().ButtonSet.OK);
+    SpreadsheetApp.getUi().alert('Update preview from current sheet', '更新するコンテンツのタブ（例：research、software）を開いてから実行してください。', SpreadsheetApp.getUi().ButtonSet.OK);
     return {changed: false, skipped: true};
   }
   if (!PropertiesService.getScriptProperties().getProperty('PREVIEW_GITHUB_TOKEN')) {
-    SpreadsheetApp.getUi().alert('プレビュー更新の初期設定', 'この統合CMSのApps Scriptに、preview専用のPREVIEW_GITHUB_TOKENを設定してください。既存Sheetとは別のプロジェクトです。', SpreadsheetApp.getUi().ButtonSet.OK);
+    SpreadsheetApp.getUi().alert('Preview setup required', 'この統合CMSのApps Scriptに、preview専用のPREVIEW_GITHUB_TOKENを設定してください。既存Sheetとは別のプロジェクトです。', SpreadsheetApp.getUi().ButtonSet.OK);
     return {changed: false, configured: false};
   }
   var result = update_webpage();

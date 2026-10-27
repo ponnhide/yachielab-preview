@@ -61,7 +61,7 @@ function cmsReleaseCandidate_() {
   var initialization = cmsReleaseRead_('UNIFIED_INITIALIZE_STATE');
   if (initialization && !initialization.complete) throw new Error('統合Sheetの初回生成がまだ完了していません。');
   var saved = cmsReleaseRead_('UNIFIED_PREVIEW_SAVE');
-  if (!saved) throw new Error('統合Sheetから先にプレビュー更新を実行してください。');
+  if (!saved) throw new Error('統合Sheetから先に「Update preview from current sheet」を実行してください。');
   var marker = cmsReleaseMarker_(CMS_PREVIEW_URL_);
   cmsReleaseValidateMarker_(marker);
   if (marker.commit !== saved.commit) throw new Error('最後に保存した変更は、まだプレビューへ公開されていません。プレビュー公開の完了を待ってください。');
@@ -132,12 +132,12 @@ function cmsProductionAction() {
     var pending = cmsReleasePending_(cmsReleaseRead_('UNIFIED_PRODUCTION_REQUEST'));
     if (pending && !pending.done) return cmsUnifiedShowStatus_('production');
     var candidate = cmsReleaseCandidate_();
-    var answer = ui.alert('確認済みプレビューを本番へ公開',
-      'プレビューで表示を確認しましたか？\n' + CMS_PREVIEW_URL_ + '\n\n公開する版：' + candidate.commit +
-      '\nプレビュー実行：' + candidate.runId + '\n\nこの版のサイト全体を本番に公開します。その後のSheet編集は含めません。', ui.ButtonSet.YES_NO);
+    var answer = ui.alert('Publish entire preview to production',
+      'Have you reviewed the preview site?\n' + CMS_PREVIEW_URL_ + '\n\nVersion to publish: ' + candidate.commit +
+      '\nPreview run: ' + candidate.runId + '\n\nThis publishes the entire preview site, including changes on other pages, not just the current sheet.\nSheet edits that have not been deployed to preview are excluded.\n\nPublish this version to production?', ui.ButtonSet.YES_NO);
     if (answer !== ui.Button.YES) return {published:false,cancelled:true};
     var record = cmsReleaseStart_(candidate, false); cmsUnifiedShowStatus_('production'); return record;
-  } catch (error) { ui.alert('本番更新を開始できません', error.message, ui.ButtonSet.OK); return {published:false,error:error.message}; }
+  } catch (error) { ui.alert('Unable to publish to production', error.message, ui.ButtonSet.OK); return {published:false,error:error.message}; }
 }
 /** Editor-only setup check. Does not add a third Sheet menu action or deploy production. */
 function cmsValidateProductionConnection() {
@@ -165,7 +165,7 @@ function cmsUnifiedPoll(kind) {
     var marker = cmsReleaseMarker_(CMS_PREVIEW_URL_);
     if (marker && marker.commit === saved.commit) {
       var candidate = cmsReleaseCandidate_();
-      cmsReleaseCell_('B7','プレビュー公開完了（本番更新可能）');
+      cmsReleaseCell_('B7','プレビュー公開完了（本番公開可能）');
       return {done:true,message:'プレビュー公開完了：' + candidate.commit.slice(0,12),url:CMS_PREVIEW_URL_ + '?release=' + candidate.commit};
     }
     var runs = cmsReleaseApi_(CMS_RELEASE_PREVIEW_,'/actions/workflows/checks.yml/runs?head_sha=' + saved.commit + '&per_page=30').workflow_runs || [];
@@ -181,10 +181,10 @@ function cmsUnifiedShowStatus_(kind) {
   if (['preview','production'].indexOf(kind) === -1) throw new Error('Unknown status.');
   var status = cmsUnifiedPoll(kind), ui = SpreadsheetApp.getUi();
   var message = status.message + (status.url ? '\n\n' + status.url : '');
-  if (!status.done) message += '\n\n公開処理はGitHubで継続しています。プレビューの配信完了後に本番更新してください。次回の更新操作でも公開状況を再確認します。';
+  if (!status.done) message += '\n\n公開処理はGitHubで継続しています。プレビューの配信完了後に本番公開してください。次回の更新操作でも公開状況を再確認します。';
   if (kind === 'preview' && !status.url) message += '\n\n' + CMS_PREVIEW_URL_;
   // Native dialogs remain readable when the embedded Apps Script panel is unavailable.
-  ui.alert('サイト更新',message,ui.ButtonSet.OK);
+  ui.alert('Website publication status',message,ui.ButtonSet.OK);
   return status;
 }
 

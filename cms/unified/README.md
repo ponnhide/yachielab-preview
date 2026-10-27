@@ -3,10 +3,10 @@
 [統合Sheet](https://docs.google.com/spreadsheets/d/1LI4jAHL-3825jNSIznGX3cp3r7Bad-_DTiH9Pcq53j8/edit) /
 [専用GAS](https://script.google.com/u/0/home/projects/1OXGZ7CPPLLYr1iYG7gUMFXUI5NuUAdHvmlKTZ5hIRK9kq1ZvN7NIQ-y8/edit)
 
-メニュー「サイト更新」には2つだけを置く。
+メニュー「Website」には、対象範囲を明記した2つの操作だけを置く。
 
-- **プレビュー更新**：開いているコンテンツタブを差分更新する。共有タブは全ページへ反映する。新規タブの自動登録も既存処理を使う。GitHub保存と配信完了を区別し、Google Sheets標準の確認画面に結果を表示する。
-- **本番更新**：直前に保存した版がプレビューで公開済みか調べ、表示確認を求める。その固定版の**サイト全体**を本番に公開する。Sheetは読み直さず、プレビュー更新後の未反映編集は含めない。
+- **Update preview from current sheet**：開いているコンテンツタブを差分更新する。共有タブ（header・footer・sidebar・mobilemenu）は全ページへ反映する。新規タブの自動登録も既存処理を使う。GitHub保存と配信完了を区別し、Google Sheets標準の確認画面に結果を表示する。
+- **Publish entire preview to production**：直前に保存した版がプレビューで公開済みか調べ、表示確認を求める。その固定版の**サイト全体**を本番に公開する。選択中のタブだけでなく、ほかのページのプレビュー反映済み変更も含むことを確認画面に明記する。Sheetは読み直さず、プレビュー更新後の未反映編集は含めない。
 
 ## 公開の検証
 

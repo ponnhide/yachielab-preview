@@ -24,6 +24,17 @@ test('confirmation pins a version and refuses a changed preview',()=>{
   const {c,data,requests}=setup();data.PRODUCTION_GITHUB_TOKEN='test-only';c.cmsReleaseCandidate_=()=>({...candidate(),commit:'c'.repeat(40)});
   assert.throws(()=>c.cmsReleaseStart_(candidate(),false),/プレビューが更新/);assert.equal(requests.length,0);
 });
+test('publication confirmation states whole-site scope and cancellation never dispatches',()=>{
+  const {c,data,requests}=setup(),alerts=[];data.PRODUCTION_GITHUB_TOKEN='test-only';
+  c.cmsReleaseCandidate_=candidate;
+  c.SpreadsheetApp={getUi:()=>({ButtonSet:{YES_NO:'yes-no',OK:'ok'},Button:{YES:'yes'},alert:(...args)=>{alerts.push(args);return 'no';}})};
+  assert.equal(c.cmsProductionAction().cancelled,true);
+  assert.equal(alerts[0][0],'Publish entire preview to production');
+  assert.match(alerts[0][1],/entire preview site, including changes on other pages, not just the current sheet/);
+  assert.match(alerts[0][1],/Sheet edits that have not been deployed to preview are excluded/);
+  assert.ok(alerts[0][1].includes(candidate().commit));
+  assert.equal(requests.length,0);assert.equal(data.UNIFIED_PRODUCTION_REQUEST,undefined);
+});
 test('dispatch contains only the fixed preview version and dry-run flag, no current Sheet content',()=>{
   const {c,data,requests}=setup();data.PRODUCTION_GITHUB_TOKEN='test-only';c.cmsReleaseCandidate_=candidate;
   const record=c.cmsReleaseStart_(candidate(),true);
