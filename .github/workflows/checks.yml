@@ -44,6 +44,9 @@ jobs:
         run: node scripts/asset_maintenance.cjs --check
       - name: Build only the public static files
         run: node scripts/build_site.cjs --output dist/site
+      - name: Stamp the exact preview revision and public file hashes
+        if: github.event_name == 'push' && github.ref == 'refs/heads/codex/preview'
+        run: node scripts/release_stamp.cjs dist/site
       - name: Upload the checked Pages artifact
         if: github.event_name == 'push' && github.ref == 'refs/heads/codex/preview'
         uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4
