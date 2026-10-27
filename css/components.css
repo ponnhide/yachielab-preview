@@ -135,10 +135,10 @@
   left: 0; 
 }
 
-/* The complete canvas scales by 1.1, including its existing artwork gap.
+/* The artwork gap is 1.1 times the previous spacing, without resizing the logos.
    Both color layers use the same coordinates to preserve the header boundary. */
 .logo-stack {
-  --header-logo-extra-gap: 28.41425;
+  --header-logo-extra-gap: 36.938525;
   display: inline-block;
   overflow: hidden;
   vertical-align: baseline;

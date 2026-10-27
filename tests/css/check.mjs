@@ -94,17 +94,17 @@ function nearlyEqual(actual, expected, message) {
   assert(Math.abs(actual - expected) < 1e-9, `${message}: ${actual} != ${expected}`);
 }
 const originalGap = 185.0048 - 128.1763;
-nearlyEqual(extraGap, originalGap / 2, 'Extra gap uses half the original drawn-artwork gap');
+nearlyEqual(extraGap, originalGap * (1.5 * 1.1 - 1), 'Extra gap widens the previous drawn spacing by 10 percent');
 for (const width of [35, 268.8, 400]) {
   const canvasHeight = calculateGeometry(paddingExpression, width);
   const osakaTop = calculateGeometry(topExpression, canvasHeight);
-  nearlyEqual(canvasHeight, width * 343.41425 / 772, 'Canvas grows at its original width');
-  nearlyEqual(osakaTop, width * 213.41425 / 772, 'Only the Osaka vertical offset changes');
+  nearlyEqual(canvasHeight, width * 351.938525 / 772, 'Canvas grows at its original width');
+  nearlyEqual(osakaTop, width * 221.938525 / 772, 'Only the Osaka vertical offset changes');
   nearlyEqual(calculateGeometry(ubcRule.match(/height:\s*([^;]+);/)[1], canvasHeight), width * 129 / 772, 'UBC button preserves the SVG height');
   nearlyEqual(calculateGeometry(osakaRule.match(/height:\s*([^;]+);/)[1], canvasHeight), width * 130 / 772, 'Osaka button preserves the SVG height');
   const upperDrawnBottom = 128.1763 * width / 772;
   const lowerDrawnTop = osakaTop + (185.0048 - 185) * width / 772;
-  nearlyEqual(lowerDrawnTop - upperDrawnBottom, 1.5 * originalGap * width / 772, 'Drawn gap is exactly 1.5 times the original');
+  nearlyEqual(lowerDrawnTop - upperDrawnBottom, 1.5 * 1.1 * originalGap * width / 772, 'Drawn gap is 1.1 times the previous spacing');
 }
 assert(compact.includes('#normal_header.logo-stack.logo-canvas>.logo-control>img{display:block;position:static;width:100%;height:100%;'), 'SVGs fill the buttons without a second positioning transform');
 assert(compact.includes('.logo-control{appearance:none;display:block;border:0;border-radius:0;padding:0;margin:0;'), 'Native button chrome must not change artwork geometry');

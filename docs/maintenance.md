@@ -84,7 +84,7 @@ CSS・JSとCSSのimportにはビルド時の内容ハッシュをURLへ付けま
 | `img/header-osaka-white.svg` | 下側の白ロゴ、`0 185 772 130`。 |
 | `img/header-osaka-teal.svg` | 下側の teal ロゴ、`0 185 772 130`。 |
 
-白と teal はそれぞれ `.logo-stack` / `.logo-canvas` にまとめ、JS は白の親レイヤーを切り取ります。子 SVG を個別に拡大・移動して色境界を作りません。間隔は `css/components.css` の `.logo-stack` にある `--header-logo-extra-gap: 28.41425`（SVG座標単位）で一括管理します。元の実描画範囲の隙間56.8285へ、その半分28.41425を加えています。キャンバスの高さと下側の開始位置はこの値から同時に計算し、白と teal に同じ間隔を適用します。この値を0に戻すと元の間隔になります。内部キャンバスは幅に比例した自然高を保持するため、スクロールで白の親レイヤーを切り取っても子 SVG の大きさや配置は変わりません。
+白と teal はそれぞれ `.logo-stack` / `.logo-canvas` にまとめ、JS は白の親レイヤーを切り取ります。子 SVG を個別に拡大・移動して色境界を作りません。間隔は `css/components.css` の `.logo-stack` にある `--header-logo-extra-gap: 36.938525`（SVG座標単位）で一括管理します。元の実描画範囲の隙間56.8285へ36.938525を加え、以前の間隔85.24275を1.1倍にした93.767025としています（2026-10-27）。ロゴ自体の大きさは変更しません。キャンバスの高さと下側の開始位置はこの値から同時に計算し、白と teal に同じ間隔を適用します。この値を0に戻すと元の間隔になります。内部キャンバスは幅に比例した自然高を保持するため、スクロールで白の親レイヤーを切り取っても子 SVG の大きさや配置は変わりません。
 
 Sheet のヘッダーで使っている `two_logos_on_white_on_black.svg` と `two_logos_teal_on_white.svg` の指定は維持します。生成時に `Renderer.gs` が対象を個別 SVG と `span.logo-control[data-affiliation]` に変換します。描画は `frontlogo` / `backlogo` の安定した1組とし、描画用の行は `All / Common` で両方の所属ロゴを表示します。以前の `frontlogo2` / `backlogo2` は重複して描画しません。その他の画像は従来の1画像として扱い、元の合成 SVG の公開 URL も残しています。
 
