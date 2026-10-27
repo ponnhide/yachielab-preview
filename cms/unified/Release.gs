@@ -58,6 +58,8 @@ function cmsReleaseValidateRun_(marker, run, jobs) {
   if (deploy.length !== 1 || deploy[0].conclusion !== 'success') throw new Error('プレビューの配信がまだ成功していません。');
 }
 function cmsReleaseCandidate_() {
+  var initialization = cmsReleaseRead_('UNIFIED_INITIALIZE_STATE');
+  if (initialization && !initialization.complete) throw new Error('統合Sheetの初回生成がまだ完了していません。');
   var saved = cmsReleaseRead_('UNIFIED_PREVIEW_SAVE');
   if (!saved) throw new Error('統合Sheetから先にプレビュー更新を実行してください。');
   var marker = cmsReleaseMarker_(CMS_PREVIEW_URL_);
@@ -172,12 +174,35 @@ function cmsUnifiedShowStatus_(kind) {
   SpreadsheetApp.getUi().showModelessDialog(HtmlService.createHtmlOutput(html).setWidth(470).setHeight(300),'サイト更新');
 }
 
-/** First migration only: regenerate all registered content and shared fragments in preview. */
+/** First migration only. Persist each page before continuing in a later execution. */
 function cmsInitializeUnifiedPreview() {
   cmsUnifiedBook_();
   if (!cmsReleaseProperties_().getProperty('PREVIEW_GITHUB_TOKEN')) throw new Error('PREVIEW_GITHUB_TOKENが必要です。');
-  update_all_webpages();
-  var result = update_shared_components();
-  cmsUnifiedShowStatus_('preview');
-  return result;
+  var lock = LockService.getDocumentLock();
+  if (!lock || !lock.tryLock(1000)) throw new Error('初回生成は既に実行中です。');
+  try {
+    var started = Date.now(), state = cmsReleaseRead_('UNIFIED_INITIALIZE_STATE');
+    if (!state) {
+      CMS_CONTEXT_ = null;
+      state = {pages:cmsContext_().pages.slice(),next:0,complete:false};
+      cmsReleaseProperties_().setProperty('UNIFIED_INITIALIZE_STATE',JSON.stringify(state));
+    }
+    while (!state.complete) {
+      var page = state.pages[state.next], result;
+      if (state.next < state.pages.length) {
+        result = cmsRun_(function() { return cmsUpdateTab_(page); }, 'initialize:' + page);
+      } else {
+        result = update_shared_components();
+      }
+      // Advance only after GitHub publication and cache persistence have returned.
+      state.next++;
+      state.complete = state.next > state.pages.length;
+      cmsReleaseProperties_().setProperty('UNIFIED_INITIALIZE_STATE',JSON.stringify(state));
+      console.info('CMS initialization: ' + JSON.stringify({completed:state.next,total:state.pages.length + 1,complete:state.complete}));
+      if (!state.complete && Date.now() - started >= 90000) break;
+    }
+    if (state.complete) cmsUnifiedShowStatus_('preview');
+    else cmsReleaseCell_('B7','初回生成中：' + state.next + '/' + (state.pages.length + 1) + '（保存済み・次回実行で続行）');
+    return {complete:state.complete,completed:state.next,total:state.pages.length + 1};
+  } finally { lock.releaseLock(); }
 }

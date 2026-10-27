@@ -44,3 +44,34 @@ test('run validation rejects skipped deploy, wrong workflow, failed checks and w
   for(const change of [{conclusion:'failure'},{path:'evil.yml'},{head_sha:'c'.repeat(40)},{event:'pull_request'}])assert.throws(()=>c.cmsReleaseValidateRun_(marker,{...run,...change},jobs));
   assert.throws(()=>c.cmsReleaseValidateRun_(marker,run,{jobs:[{name:'Deploy checked preview',conclusion:'skipped'}]}));
 });
+
+test('initialization checkpoints pages, retries a failure, and resumes through shared components',()=>{
+  const {c,data}=setup();data.PREVIEW_GITHUB_TOKEN='test-only';
+  let elapsed=0,fail=true,shown=0,released=0;const calls=[];
+  c.Date={now:()=>elapsed};
+  c.LockService.getDocumentLock=()=>({tryLock:()=>true,releaseLock:()=>released++});
+  c.cmsContext_=()=>({pages:['news','people']});
+  c.cmsRun_=work=>work();
+  c.cmsUpdateTab_=page=>{calls.push(page);if(page==='people'&&fail)throw new Error('source unavailable');elapsed+=95000;return {changed:true};};
+  c.update_shared_components=()=>{calls.push('shared');return {changed:true};};
+  c.cmsUnifiedShowStatus_=()=>shown++;
+  assert.equal(c.cmsInitializeUnifiedPreview().complete,false);
+  assert.equal(JSON.parse(data.UNIFIED_INITIALIZE_STATE).next,1);
+  assert.throws(()=>c.cmsReleaseCandidate_(),/初回生成/);
+  assert.throws(()=>c.cmsInitializeUnifiedPreview(),/source unavailable/);
+  assert.equal(JSON.parse(data.UNIFIED_INITIALIZE_STATE).next,1);
+  fail=false;
+  assert.equal(c.cmsInitializeUnifiedPreview().complete,false);
+  assert.equal(c.cmsInitializeUnifiedPreview().complete,true);
+  assert.deepEqual(calls,['news','people','people','shared']);
+  assert.equal(shown,1);assert.equal(released,4);
+  assert.equal(c.cmsInitializeUnifiedPreview().complete,true);
+  assert.deepEqual(calls,['news','people','people','shared']);
+});
+
+test('initialization rejects a second concurrent setup execution',()=>{
+  const {c,data}=setup();data.PREVIEW_GITHUB_TOKEN='test-only';
+  c.LockService.getDocumentLock=()=>({tryLock:()=>false,releaseLock(){}});
+  assert.throws(()=>c.cmsInitializeUnifiedPreview(),/既に実行中/);
+  assert.equal(data.UNIFIED_INITIALIZE_STATE,undefined);
+});
