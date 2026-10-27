@@ -89,7 +89,8 @@
         if (!entry.isIntersecting) return;
         processContainer(entry.target);
       });
-    }, { rootMargin: '0px', threshold: 0.1 });
+    // Start nearby embeds before they enter view, while keeping distant posts deferred.
+    }, { rootMargin: '400px 0px', threshold: 0 });
     containers.forEach(function (container) { observer.observe(container); });
   } else {
     containers.forEach(processContainer);
