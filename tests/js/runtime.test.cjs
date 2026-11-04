@@ -202,7 +202,7 @@ test('footer retreat is language-specific and a sudden Home fully restores logo/
   assert.equal(browser.frames.size, 0, 'No delayed stale geometry remains');
 });
 
-test('UBC People holds the sidebar until the original gap is reached, then moves both together and reverses', () => {
+test('UBC People pins the sidebar through the approach and ordinary scrolling after the gap matches', () => {
   const browser = createBrowser('people.html', {url:'https://example.org/people.html?affil=UBC'});
   browser.run('common.js');browser.flush();
   const front = controlledLogo(browser, 'frontlogo'), back = controlledLogo(browser, 'backlogo');
@@ -212,7 +212,7 @@ test('UBC People holds the sidebar until the original gap is reached, then moves
   const gap = initialTop - lower.getBoundingClientRect().bottom;
   const handoff = browser.metrics.headerHeight - browser.window.innerWidth * 0.0225 - lower.getBoundingClientRect().top + travel;
   const snapshots = new Map();
-  const forward = [0,20,60,100,handoff-0.1,handoff,handoff+0.1,handoff+25,handoff+75];
+  const forward = [0,20,60,100,handoff-0.1,handoff,handoff+0.1,handoff+25,handoff+75,500,1000,2000];
   for (const scroll of forward.concat(forward.slice().reverse())) {
     browser.metrics.mainTop = browser.metrics.headerHeight - scroll;
     browser.window.dispatch('scroll');browser.flush();
@@ -221,10 +221,10 @@ test('UBC People holds the sidebar until the original gap is reached, then moves
     const snapshot = [upperBottom,sidebarTop,Number.parseFloat(back.style.top)];
     if (snapshots.has(scroll)) snapshot.forEach((value,index)=>assert(Math.abs(value-snapshots.get(scroll)[index])<1e-9,'Reverse returns to the same state at '+scroll));
     else snapshots.set(scroll,snapshot);
-    if (scroll <= handoff) assert(Math.abs(sidebarTop-initialTop)<1e-9,'Sidebar stays fixed until the gap matches');
-    else {
-      assert(Math.abs(sidebarTop-initialTop-(scroll-handoff))<1e-9,'Sidebar continues by the remaining scroll distance');
-      assert(Math.abs(sidebarTop-upperBottom-gap)<1e-9,'The original gap remains constant while both move');
+    assert(Math.abs(sidebarTop-initialTop)<1e-9,'Sidebar keeps its initial viewport position throughout the approach and middle of the page');
+    assert.equal(back.style.top,'0px','Normal scrolling must not send the logo down the viewport');
+    if (scroll >= handoff) {
+      assert(Math.abs(sidebarTop-upperBottom-gap)<1e-9,'The original gap remains constant during ordinary scrolling');
     }
     assert.equal(front.querySelector('.logo-ubc').style.transform,upper.style.transform,'Both color layers move together');
     if (upper.style.transform) assert.equal(lower.getAttribute('aria-hidden'),'true','Inactive teal logo is never exposed');
@@ -232,6 +232,25 @@ test('UBC People holds the sidebar until the original gap is reached, then moves
   assert.equal(upper.style.transform,'');
   assert.equal(front.style.position,'relative');
   assert.equal(browser.element('normal_header').getAttribute('data-people-affiliation'),'UBC');
+});
+
+test('UBC approach pins the sidebar; completed approach uses the same offset as ordinary pages', () => {
+  const browser = createBrowser('people.html', {url:'https://example.org/people.html?affil=UBC'});
+  browser.run('common.js');browser.flush();
+  const geometry = browser.window.YachieSite.calculateInteriorGeometry;
+  const base = { mainTop: 110, mainBottom: 500, headerHeight: 192, viewportWidth: 1280, logoHeight: 110, sidebarHeight: 320, sidebarTop: 248, osakaTop: 70, ubcTravel: 70 };
+  for (const language of ['EN','JA','ZH']) {
+    const approach=geometry({...base,language,peopleAffiliation:'UBC'});
+    assert.equal(approach.sidebarTop,248,'Even a short page cannot move the sidebar before the logo has approached');
+    assert.equal(approach.logoTop,0);
+    for (const mainBottom of [5000,2000,1000,500,0]) {
+      const metrics={...base,mainTop:-300,mainBottom,language};
+      const ordinary=geometry(metrics),ubc=geometry({...metrics,peopleAffiliation:'UBC'});
+      assert.equal(ubc.logoTop,ordinary.logoTop);
+      assert.equal(ubc.sidebarTop,ordinary.sidebarTop);
+      assert.equal(ubc.ubcShift,70);
+    }
+  }
 });
 
 test('UBC logo and sidebar stay paired at the footer and return from a jump to the top', () => {

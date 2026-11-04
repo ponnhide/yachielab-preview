@@ -361,13 +361,16 @@
     // Wait until Osaka has cleared the white boundary before moving UBC into
     // its space. Position depends only on scroll, so reversing never jumps.
     const motionStart = Math.max(0, metrics.headerHeight - margin - (metrics.osakaTop || 0));
-    const progress = metrics.peopleAffiliation === 'UBC'
+    const ubcPage = metrics.peopleAffiliation === 'UBC';
+    const progress = ubcPage
       ? Math.max(0, metrics.headerHeight - metrics.mainTop - motionStart) : 0;
     const shift = Math.min(metrics.ubcTravel || 0, progress);
-    // Once UBC reaches the original Osaka-to-sidebar gap, both continue by
-    // the remaining scroll distance. The sidebar stays still before this point.
-    const together = progress - shift;
-    const offset = fixed ? Math.min(together, metrics.mainBottom - metrics.sidebarHeight * (metrics.language === 'JA' ? 1.7 : 2)) : 0;
+    // Keep the sidebar at its initial viewport coordinate while UBC approaches.
+    // After the gap matches, use exactly the ordinary page's footer retreat;
+    // further scrolling must never push the pair down and out of the viewport.
+    const approaching = ubcPage && shift < (metrics.ubcTravel || 0);
+    const offset = fixed && !approaching
+      ? Math.min(0, metrics.mainBottom - metrics.sidebarHeight * (metrics.language === 'JA' ? 1.7 : 2)) : 0;
     return {
       fixed: fixed,
       logoTop: offset,
