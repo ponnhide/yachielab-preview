@@ -202,28 +202,54 @@ test('footer retreat is language-specific and a sudden Home fully restores logo/
   assert.equal(browser.frames.size, 0, 'No delayed stale geometry remains');
 });
 
-test('UBC People motion waits for Osaka to clear, reverses exactly, and keeps the sidebar still', () => {
+test('UBC People holds the sidebar until the original gap is reached, then moves both together and reverses', () => {
   const browser = createBrowser('people.html', {url:'https://example.org/people.html?affil=UBC'});
   browser.run('common.js');browser.flush();
   const front = controlledLogo(browser, 'frontlogo'), back = controlledLogo(browser, 'backlogo');
   const upper = back.querySelector('.logo-ubc'), lower = back.querySelector('.logo-osaka');
-  const initialTop = browser.element('sidebar').style.top;
+  const initialTop = Number.parseFloat(browser.element('sidebar').style.top);
   const travel = lower.getBoundingClientRect().bottom - upper.getBoundingClientRect().bottom;
+  const gap = initialTop - lower.getBoundingClientRect().bottom;
+  const handoff = browser.metrics.headerHeight - browser.window.innerWidth * 0.0225 - lower.getBoundingClientRect().top + travel;
   const snapshots = new Map();
-  for (const scroll of [0,20,60,100,130,160,200,160,130,100,60,20,0]) {
+  const forward = [0,20,60,100,handoff-0.1,handoff,handoff+0.1,handoff+25,handoff+75];
+  for (const scroll of forward.concat(forward.slice().reverse())) {
     browser.metrics.mainTop = browser.metrics.headerHeight - scroll;
     browser.window.dispatch('scroll');browser.flush();
-    const snapshot = [upper.style.transform,front.style.height,back.style.clipPath,browser.element('sidebar').style.top];
-    if (snapshots.has(scroll)) assert.deepEqual(snapshot,snapshots.get(scroll),'Reverse returns to the same state at '+scroll);
+    const sidebarTop = Number.parseFloat(browser.element('sidebar').style.top);
+    const upperBottom = upper.getBoundingClientRect().bottom;
+    const snapshot = [upperBottom,sidebarTop,Number.parseFloat(back.style.top)];
+    if (snapshots.has(scroll)) snapshot.forEach((value,index)=>assert(Math.abs(value-snapshots.get(scroll)[index])<1e-9,'Reverse returns to the same state at '+scroll));
     else snapshots.set(scroll,snapshot);
-    assert.equal(browser.element('sidebar').style.top,initialTop);
+    if (scroll <= handoff) assert(Math.abs(sidebarTop-initialTop)<1e-9,'Sidebar stays fixed until the gap matches');
+    else {
+      assert(Math.abs(sidebarTop-initialTop-(scroll-handoff))<1e-9,'Sidebar continues by the remaining scroll distance');
+      assert(Math.abs(sidebarTop-upperBottom-gap)<1e-9,'The original gap remains constant while both move');
+    }
     assert.equal(front.querySelector('.logo-ubc').style.transform,upper.style.transform,'Both color layers move together');
     if (upper.style.transform) assert.equal(lower.getAttribute('aria-hidden'),'true','Inactive teal logo is never exposed');
-    if (scroll===200) assert(Math.abs(Number.parseFloat(upper.style.transform.slice(11))-travel)<0.001);
   }
   assert.equal(upper.style.transform,'');
   assert.equal(front.style.position,'relative');
   assert.equal(browser.element('normal_header').getAttribute('data-people-affiliation'),'UBC');
+});
+
+test('UBC logo and sidebar stay paired at the footer and return from a jump to the top', () => {
+  const browser = createBrowser('people.html', {url:'https://example.org/people.html?affil=UBC'});
+  browser.run('common.js');browser.flush();
+  const front = controlledLogo(browser,'frontlogo'), back = controlledLogo(browser,'backlogo');
+  const initialTop = Number.parseFloat(browser.element('sidebar').style.top);
+  const gap = initialTop - back.querySelector('.logo-osaka').getBoundingClientRect().bottom;
+  for (const mainTop of [-2500,-4500]) {
+    browser.metrics.mainTop=mainTop;browser.window.dispatch('scroll');browser.flush();
+    const sidebarTop=Number.parseFloat(browser.element('sidebar').style.top);
+    assert(Math.abs(sidebarTop-back.querySelector('.logo-ubc').getBoundingClientRect().bottom-gap)<1e-9);
+    assert(sidebarTop-initialTop<=mainTop+browser.metrics.mainHeight-browser.metrics.sidebarHeight*2,'Footer retreat bounds the shared movement');
+  }
+  browser.metrics.mainTop=browser.metrics.headerHeight;browser.window.dispatch('scroll');browser.flush();
+  assert.equal(front.style.top,'0px');
+  assert.equal(back.querySelector('.logo-ubc').style.transform,'');
+  assert.equal(Number.parseFloat(browser.element('sidebar').style.top),initialTop);
 });
 
 test('Osaka People retains its logo position and only its active rear layer is accessible',()=>{
