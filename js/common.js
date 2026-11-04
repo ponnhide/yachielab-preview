@@ -350,7 +350,6 @@
   let sidebarHomeTop = null;
   let layoutFrame = null;
   let recalculateSidebar = true;
-  let ubcShift = 0;
 
   /** Keep the original crop and language-dependent footer retreat constants.
    * The white SVG is cropped from the bottom; the teal SVG underneath stays whole.
@@ -358,24 +357,20 @@
   function calculateInteriorGeometry(metrics) {
     const fixed = metrics.mainTop < metrics.headerHeight;
     const margin = Math.min(metrics.viewportWidth, 1920) * 0.0225;
-    // Wait until Osaka has cleared the white boundary before moving UBC into
-    // its space. Position depends only on scroll, so reversing never jumps.
-    const motionStart = Math.max(0, metrics.headerHeight - margin - (metrics.osakaTop || 0));
     const ubcPage = metrics.peopleAffiliation === 'UBC';
-    const progress = ubcPage
-      ? Math.max(0, metrics.headerHeight - metrics.mainTop - motionStart) : 0;
-    const shift = Math.min(metrics.ubcTravel || 0, progress);
-    // Keep the sidebar at its initial viewport coordinate while UBC approaches.
-    // After the gap matches, use exactly the ordinary page's footer retreat;
-    // further scrolling must never push the pair down and out of the viewport.
-    const approaching = ubcPage && shift < (metrics.ubcTravel || 0);
+    const scroll = Math.max(0, metrics.headerHeight - metrics.mainTop);
+    // Both logos stay at their ordinary viewport coordinates: they descend
+    // relative to the scrolling header without any extra logo translation.
+    // UBC's sidebar follows the heading until its gap to UBC equals the initial
+    // gap to Osaka, then sticks. The same scroll-derived path works in reverse.
+    const sidebarLift = ubcPage ? Math.min(metrics.ubcTravel || 0, scroll) : 0;
+    const approaching = ubcPage && scroll < (metrics.ubcTravel || 0);
     const offset = fixed && !approaching
       ? Math.min(0, metrics.mainBottom - metrics.sidebarHeight * (metrics.language === 'JA' ? 1.7 : 2)) : 0;
     return {
       fixed: fixed,
       logoTop: offset,
-      sidebarTop: metrics.sidebarTop + offset,
-      ubcShift: shift,
+      sidebarTop: metrics.sidebarTop - sidebarLift + offset,
       frontHeight: fixed && metrics.mainTop - margin < metrics.logoHeight ? Math.max(0, metrics.mainTop - margin) : null
     };
   }
@@ -392,15 +387,6 @@
       setStyle(element, { position: 'relative', top: '0px', left: '0px' });
     });
     setStyle(front, { height: 'auto' });
-    moveUbcLogo(front, back, 0);
-  }
-
-  function moveUbcLogo(front, back, shift) {
-    [front, back].filter(Boolean).forEach(function (layer) {
-      const control = layer.querySelector('.logo-ubc');
-      if (control) control.style.transform = shift ? 'translateY(' + shift + 'px)' : '';
-    });
-    ubcShift = shift;
   }
 
   function layout() {
@@ -465,15 +451,13 @@
       const osaka = back.querySelector('.logo-osaka');
       const ubcRect = ubc && ubc.getBoundingClientRect();
       const osakaRect = osaka && osaka.getBoundingClientRect();
-      const origin = back.getBoundingClientRect().top;
       const geometry = calculateInteriorGeometry({
         mainTop: mainRect.top, mainBottom: mainRect.bottom, headerHeight: headerHeight,
         viewportWidth: window.innerWidth, logoHeight: back.getBoundingClientRect().height || back.height || 0,
         sidebarHeight: sidebar ? sidebar.clientHeight : 0, sidebarTop: sidebarHomeTop || 0,
         language: state.language,
         peopleAffiliation: peopleAffiliation(new URL(window.location.href)),
-        osakaTop: osakaRect ? osakaRect.top - origin : 0,
-        ubcTravel: ubcRect && osakaRect ? Math.max(0, osakaRect.bottom - ubcRect.bottom + ubcShift) : 0
+        ubcTravel: ubcRect && osakaRect ? Math.max(0, osakaRect.bottom - ubcRect.bottom) : 0
       });
       [front, back].forEach(function (element) {
         setStyle(element, {
@@ -483,7 +467,6 @@
         });
       });
       if (front.tagName === 'IMG') front.style.objectPosition = 'top';
-      moveUbcLogo(front, back, geometry.ubcShift);
       setStyle(front, { height: geometry.frontHeight === null ? 'auto' : geometry.frontHeight + 'px' });
       syncLogoLayers(front, back, geometry.frontHeight === null ? naturalLogoHeight : geometry.frontHeight, naturalLogoHeight);
       if (sidebar) sidebar.style.top = geometry.sidebarTop + 'px';

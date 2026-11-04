@@ -202,7 +202,7 @@ test('footer retreat is language-specific and a sudden Home fully restores logo/
   assert.equal(browser.frames.size, 0, 'No delayed stale geometry remains');
 });
 
-test('UBC People pins the sidebar through the approach and ordinary scrolling after the gap matches', () => {
+test('UBC People keeps the sidebar beside the heading until the original Osaka gap is reached', () => {
   const browser = createBrowser('people.html', {url:'https://example.org/people.html?affil=UBC'});
   browser.run('common.js');browser.flush();
   const front = controlledLogo(browser, 'frontlogo'), back = controlledLogo(browser, 'backlogo');
@@ -210,7 +210,8 @@ test('UBC People pins the sidebar through the approach and ordinary scrolling af
   const initialTop = Number.parseFloat(browser.element('sidebar').style.top);
   const travel = lower.getBoundingClientRect().bottom - upper.getBoundingClientRect().bottom;
   const gap = initialTop - lower.getBoundingClientRect().bottom;
-  const handoff = browser.metrics.headerHeight - browser.window.innerWidth * 0.0225 - lower.getBoundingClientRect().top + travel;
+  const initialUpperBottom = upper.getBoundingClientRect().bottom;
+  const handoff = travel;
   const snapshots = new Map();
   const forward = [0,20,60,100,handoff-0.1,handoff,handoff+0.1,handoff+25,handoff+75,500,1000,2000];
   for (const scroll of forward.concat(forward.slice().reverse())) {
@@ -221,34 +222,44 @@ test('UBC People pins the sidebar through the approach and ordinary scrolling af
     const snapshot = [upperBottom,sidebarTop,Number.parseFloat(back.style.top)];
     if (snapshots.has(scroll)) snapshot.forEach((value,index)=>assert(Math.abs(value-snapshots.get(scroll)[index])<1e-9,'Reverse returns to the same state at '+scroll));
     else snapshots.set(scroll,snapshot);
-    assert(Math.abs(sidebarTop-initialTop)<1e-9,'Sidebar keeps its initial viewport position throughout the approach and middle of the page');
-    assert.equal(back.style.top,'0px','Normal scrolling must not send the logo down the viewport');
+    assert(Math.abs(sidebarTop-(initialTop-Math.min(scroll,handoff)))<1e-9,
+      'Sidebar follows the heading until handoff, then stays at the reduced height');
+    assert.equal(back.style.top,'0px','Logos stay fixed in the viewport while the header scrolls behind them');
+    assert(Math.abs(upperBottom-initialUpperBottom)<1e-9,'UBC must not translate down the viewport');
+    if (scroll <= handoff) {
+      assert(Math.abs((sidebarTop-browser.metrics.mainTop)-(initialTop-browser.metrics.headerHeight))<1e-9,
+        'Sidebar and heading retain their initial vertical alignment');
+    }
     if (scroll >= handoff) {
       assert(Math.abs(sidebarTop-upperBottom-gap)<1e-9,'The original gap remains constant during ordinary scrolling');
     }
     assert.equal(front.querySelector('.logo-ubc').style.transform,upper.style.transform,'Both color layers move together');
-    if (upper.style.transform) assert.equal(lower.getAttribute('aria-hidden'),'true','Inactive teal logo is never exposed');
+    assert.equal(lower.getAttribute('aria-hidden'),'true','Inactive teal logo is never exposed');
   }
-  assert.equal(upper.style.transform,'');
+  assert.equal(upper.style.transform || '','');
   assert.equal(front.style.position,'relative');
   assert.equal(browser.element('normal_header').getAttribute('data-people-affiliation'),'UBC');
 });
 
-test('UBC approach pins the sidebar; completed approach uses the same offset as ordinary pages', () => {
+test('UBC sidebar handoff is continuous and its later motion matches ordinary pages', () => {
   const browser = createBrowser('people.html', {url:'https://example.org/people.html?affil=UBC'});
   browser.run('common.js');browser.flush();
   const geometry = browser.window.YachieSite.calculateInteriorGeometry;
-  const base = { mainTop: 110, mainBottom: 500, headerHeight: 192, viewportWidth: 1280, logoHeight: 110, sidebarHeight: 320, sidebarTop: 248, osakaTop: 70, ubcTravel: 70 };
+  const base = { mainTop: 162, mainBottom: 500, headerHeight: 192, viewportWidth: 1280, logoHeight: 110, sidebarHeight: 320, sidebarTop: 248, ubcTravel: 70 };
   for (const language of ['EN','JA','ZH']) {
     const approach=geometry({...base,language,peopleAffiliation:'UBC'});
-    assert.equal(approach.sidebarTop,248,'Even a short page cannot move the sidebar before the logo has approached');
+    assert.equal(approach.sidebarTop,218,'Sidebar follows the heading by the same 30px before handoff');
     assert.equal(approach.logoTop,0);
+    for (const scroll of [69.9,70,70.1]) {
+      const atHandoff=geometry({...base,mainTop:192-scroll,mainBottom:5000,language,peopleAffiliation:'UBC'});
+      assert.equal(atHandoff.sidebarTop,248-Math.min(scroll,70));
+      assert.equal(atHandoff.logoTop,0);
+    }
     for (const mainBottom of [5000,2000,1000,500,0]) {
       const metrics={...base,mainTop:-300,mainBottom,language};
       const ordinary=geometry(metrics),ubc=geometry({...metrics,peopleAffiliation:'UBC'});
       assert.equal(ubc.logoTop,ordinary.logoTop);
-      assert.equal(ubc.sidebarTop,ordinary.sidebarTop);
-      assert.equal(ubc.ubcShift,70);
+      assert.equal(ubc.sidebarTop,ordinary.sidebarTop-70);
     }
   }
 });
@@ -267,7 +278,7 @@ test('UBC logo and sidebar stay paired at the footer and return from a jump to t
   }
   browser.metrics.mainTop=browser.metrics.headerHeight;browser.window.dispatch('scroll');browser.flush();
   assert.equal(front.style.top,'0px');
-  assert.equal(back.querySelector('.logo-ubc').style.transform,'');
+  assert.equal(back.querySelector('.logo-ubc').style.transform || '','');
   assert.equal(Number.parseFloat(browser.element('sidebar').style.top),initialTop);
 });
 
@@ -276,7 +287,7 @@ test('Osaka People retains its logo position and only its active rear layer is a
   browser.run('common.js');browser.flush();
   browser.metrics.mainTop=-100;browser.window.dispatch('scroll');browser.flush();
   const back=controlledLogo(browser,'backlogo');
-  assert.equal(back.querySelector('.logo-ubc').style.transform,'');
+  assert.equal(back.querySelector('.logo-ubc').style.transform || '','');
   assert.equal(back.querySelector('.logo-ubc').getAttribute('aria-hidden'),'true');
   assert.equal(back.querySelector('.logo-osaka').getAttribute('aria-hidden'),'false');
   browser.metrics.mainTop=browser.metrics.headerHeight;browser.window.dispatch('scroll');browser.flush();
