@@ -191,7 +191,7 @@ test('rich text, relevant schema and renderer version invalidate output even whe
   state.newRun(); state.run.sandbox.CMS_CACHE_RENDERER_VERSION_ = 'next-version'; state.render(); assert.equal(counters(state).rowsRendered, 2);
 });
 
-test('real rendered text formatting invalidates its row while unrendered title/style formatting is ignored', () => {
+test('text and title formatting invalidate their own rows while style-cell formatting is ignored', () => {
   const state = fixture({page: [HEAD, ['All','Common','Content','Text','width: 300px'], ['All','Common','H1','Heading','width: 350px']]});
   state.parameters.Content = ['/* Text (Markdown)', '/* Style'];
   state.parameters.H1 = ['Lab','Language','Function','/* Title','/* Style'];
@@ -201,12 +201,18 @@ test('real rendered text formatting invalidates its row while unrendered title/s
   // These native cells cannot affect renderer output and must not incur runs/style reads.
   const unrendered = {getRuns() { throw new Error('Unrendered rich cell was inspected'); }};
   state.rich.page[1][4] = unrendered;
-  state.rich.page[2][3] = unrendered; state.rich.page[2][4] = unrendered;
+  state.rich.page[2][4] = unrendered;
   runReal(); assert.equal(state.render(), first); assert.equal(counters(state).rowsReused, 2); assert.equal(counters(state).rowsRendered, 0);
   state.rich.page[1][3] = rich('Text', true, false, '#ff0000');
   runReal(); const changed = state.render();
   assert.equal(counters(state).rowsRendered, 1); assert.equal(counters(state).rowsReused, 1);
   assert.match(changed, /<strong>/); assert.match(changed, /color:#ff0000/); assert.notEqual(changed, first);
+  state.publish(changed);
+  state.rich.page[2][3] = rich('Heading', true, false, '#0077ff');
+  runReal(); const titleChanged = state.render();
+  assert.equal(counters(state).rowsRendered, 1); assert.equal(counters(state).rowsReused, 1);
+  assert.match(titleChanged, /<h1[^>]*><strong><span style="color:#0077ff">Heading<\/span><\/strong><\/h1>/);
+  assert.doesNotMatch(titleChanged, /\*\*Heading/);
 });
 
 test('publication global aliases/journal changes invalidate citations but ordinary rows do not eagerly read them', () => {

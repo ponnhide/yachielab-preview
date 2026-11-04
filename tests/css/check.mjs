@@ -75,8 +75,7 @@ assert(compact.includes('width:var(--header-logo-width);'));
 assert(compact.includes('#backlogo,#backlogo2{width:100%;margin-top:0;position:absolute;z-index:1;'));
 // Read the actual CSS geometry: increasing the artwork gap must move Osaka
 // and grow the canvas without scaling either SVG or changing horizontal layout.
-const stackRule = common.match(/^\.logo-stack\s*\{([^}]+)\}/m)[1];
-const extraGap = Number(stackRule.match(/--header-logo-extra-gap:\s*([\d.]+)\s*;/)[1]);
+const extraGap = Number(common.match(/--header-logo-extra-gap:\s*([\d.]+)\s*;/)[1]);
 const canvasRule = common.match(/\.logo-stack\s+\.logo-canvas\s*\{([^}]+)\}/)[1];
 const ubcRule = common.match(/#normal_header\s+\.logo-stack\s+\.logo-canvas\s*>\s*\.logo-control\s*\{([^}]+)\}/)[1];
 const osakaRule = common.match(/#normal_header\s+\.logo-stack\s+\.logo-canvas\s*>\s*\.logo-osaka\s*\{([^}]+)\}/)[1];

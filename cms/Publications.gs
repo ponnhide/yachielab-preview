@@ -149,8 +149,15 @@ function publicationWrap_(body, image, style, equal, corresponding, related, aff
   return html + '</section>\n';
 }
 
-function pmid_html(result, members, pmid, paperUrl, pdf, image, style, equal, corresponding, related, affil, lang, id, imageStyle) {
-  var body = '<p class="author">' + publicationAuthors_(result.AU, members, equal, corresponding, false) + '</p>\n<p class="title">' + sheetString_(result.TI) + '</p>\n';
+function publicationTitleAttributes_(color) {
+  color = sheetString_(color).trim();
+  if (!color || color.indexOf('/*') === 0) return '';
+  if (!/^#(?:[a-f0-9]{3}|[a-f0-9]{6})$/i.test(color)) throw new Error('Publication title color must be a hex color, for example #0077ff.');
+  return sheetStyleAttributes_('color:' + color);
+}
+
+function pmid_html(result, members, pmid, paperUrl, pdf, image, style, equal, corresponding, related, affil, lang, id, imageStyle, titleColor) {
+  var body = '<p class="author">' + publicationAuthors_(result.AU, members, equal, corresponding, false) + '</p>\n<p class="title"' + publicationTitleAttributes_(titleColor) + '>' + sheetString_(result.TI) + '</p>\n';
   var year = sheetString_(result.DP).split(' ')[0];
   var details = [sheetString_(result.VI), sheetString_(result.PG), year].filter(function (value) { return !!value; }).join(', ');
   var journal = sheetString_(result.JT || result.TA);
@@ -159,8 +166,8 @@ function pmid_html(result, members, pmid, paperUrl, pdf, image, style, equal, co
   return publicationWrap_(body, image, style, equal || [], corresponding || [], related, affil, lang, id, imageStyle);
 }
 
-function biorxiv_html(result, members, identifier, paperUrl, pdf, image, style, equal, corresponding, related, affil, lang, id, imageStyle) {
-  var body = '<p class="author">' + publicationAuthors_(result.AU, members, equal, corresponding, true) + '</p>\n<p class="title">' + sheetString_(result.TI) + '</p>\n';
+function biorxiv_html(result, members, identifier, paperUrl, pdf, image, style, equal, corresponding, related, affil, lang, id, imageStyle, titleColor) {
+  var body = '<p class="author">' + publicationAuthors_(result.AU, members, equal, corresponding, true) + '</p>\n<p class="title"' + publicationTitleAttributes_(titleColor) + '>' + sheetString_(result.TI) + '</p>\n';
   body += '<p class="info"><a class="JT" href="' + sheetAttribute_(paperUrl) + '">bioRxiv</a> ' + sheetString_(identifier) + (pdf ? ' <a class="pdf-link" href="' + sheetAttribute_(pdf) + '">PDF</a>' : '') + '</p>';
   return publicationWrap_(body, image, style, equal || [], corresponding || [], related, affil, lang, id, imageStyle);
 }
@@ -174,7 +181,7 @@ function appendPublication(adict) {
   var pdf = sheetValue_(adict, '/* PDF link'), image = sheetValue_(adict, '/* img url');
   pdf = pdf ? uploadImg(pdf) : ''; image = image ? uploadImg(image) : '';
   var pmid = sheetValue_(adict, '/* Pubmed ID'), url = sheetValue_(adict, '/* Journal link');
-  var args = [members, pmid, url, pdf, image, sheetMargins_(adict), equal, corresponding, sheetValue_(adict, '/* Related info'), sheetValue_(adict, 'Lab'), sheetValue_(adict, 'Language').replace(/,/g, ''), sheetValue_(adict, '/* ID'), sheetImageStyle_(adict)];
+  var args = [members, pmid, url, pdf, image, sheetMargins_(adict), equal, corresponding, sheetValue_(adict, '/* Related info'), sheetValue_(adict, 'Lab'), sheetValue_(adict, 'Language').replace(/,/g, ''), sheetValue_(adict, '/* ID'), sheetImageStyle_(adict), sheetValue_(adict, '/* Title color')];
   if (pmid) {
     if (!/^\d+$/.test(pmid.trim())) throw new Error('Publication row has an invalid PubMed ID');
     var fetchUrl = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=' + encodeURIComponent(pmid.trim()) + '&rettype=medline&retmode=text&tool=yachielab_preview_cms';
@@ -196,7 +203,8 @@ function appendCustomPublication(adict) {
   var highlighted = publicationList_(sheetValue_(adict, '/* Highlighted authors'));
   highlighted.forEach(function (member) { authors = authors.replace(member, '<span class="member">' + member + '</span>'); });
   var title = sheetValue_(adict, '/* Title');
-  var body = '<p class="author">' + authors + '</p>\n<p class="title">' + title + (/[.!?]$/.test(title) ? '' : '.') + '</p>\n';
+  var titleHtml = rendererMarkdown_(title).replace(/^<p>|<\/p>$/g, '');
+  var body = '<p class="author">' + authors + '</p>\n<p class="title"' + publicationTitleAttributes_(sheetValue_(adict, '/* Title color')) + '>' + titleHtml + (/[.!?]$/.test(titleHtml.replace(/<[^>]*>/g, '')) ? '' : '.') + '</p>\n';
   var details = ['/* Vol', '/* Page', '/* Year, Date'].map(function (key) { return sheetValue_(adict, key); }).filter(function (value) { return !!value; }).join(', ');
   var pdf = sheetValue_(adict, '/* PDF link'), image = sheetValue_(adict, '/* img url');
   pdf = pdf ? uploadImg(pdf) : ''; image = image ? uploadImg(image) : '';

@@ -8,6 +8,11 @@
   --font-weight-heading: 800;
   --header-logo-scale: 1.1;
   --header-logo-width: calc(clamp(35px, 21vw, 400px) * var(--header-logo-scale));
+  --header-logo-extra-gap: 36.938525;
+  --header-logo-top: calc(0.15 * clamp(37.5px, 15vw, 288px));
+  /* Same visible spacing between the SVG artwork and below the Osaka artwork. */
+  --header-logo-gap: calc(var(--header-logo-width) * (56.8285 + var(--header-logo-extra-gap)) / 772);
+  --header-height: calc(var(--header-logo-top) + var(--header-logo-width) * (314.1 + var(--header-logo-extra-gap)) / 772 + var(--header-logo-gap));
   --mobile-header-logo-height: calc(44px * var(--header-logo-scale));
   --site-sidebar-ratio: 0.275;
   --site-gutter: clamp(5px, 2vw, 38.4px);

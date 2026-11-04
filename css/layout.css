@@ -11,7 +11,7 @@
 
 #normal_header {
   width: 100%;
-  height: clamp(37.5px, 15vw, calc(300px * 0.96));
+  height: var(--header-height);
   display: flex;
   z-index: 10;
   justify-content: center;

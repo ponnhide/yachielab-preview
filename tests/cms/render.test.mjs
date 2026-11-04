@@ -101,6 +101,16 @@ check('Content image dimensions and explicit custom style render on the correct 
   assert(html.includes('data-sheet-style="width height object-fit"'));
   assert(html.includes('id="photo" style="color: red !important;" data-sheet-style="color"'));
 });
+check('Sheet publication title color applies only to the retrieved title and validates CSS input', () => {
+  const {runtime:r}=setup();
+  const row={'Lab':'All','Language':'Common','/* Pubmed ID':'123','/* Title color':'#0077ff'};
+  const html=r.appendPublication(row);
+  assert(html.includes('<p class="title" style="color: #0077ff !important;" data-sheet-style="color">A title - with a hyphen continued title</p>'));
+  assert(html.includes('<p class="author">'));assert(html.includes('<p class="info">'));
+  assert.equal((html.match(/#0077ff/g)||[]).length,1);
+  assert.throws(()=>r.publicationTitleAttributes_('red;display:none'),/hex color/);
+  assert.equal(r.publicationTitleAttributes_('/* Title color'), '');
+});
 check('Header pair presets produce independent static lab logos without a home-link wrapper', () => {
   const { runtime: r, uploads } = setup();
   for (const id of ['frontlogo', 'frontlogo2', 'backlogo', 'backlogo2']) {

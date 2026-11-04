@@ -273,6 +273,8 @@
   }
 
   function paintLogos() {
+    const header = document.getElementById('normal_header');
+    if (header) header.setAttribute('data-people-affiliation', peopleAffiliation(new URL(window.location.href)) || '');
     const settings = remoteLogoSettings || initialLogoSettings();
     const variables = {
       '--lab-logo-active-opacity': String(settings.logoActiveOpacity),
@@ -310,6 +312,7 @@
     // Partially transparent white artwork must never stack over teal artwork.
     back.style.clipPath = 'inset(' + visibleHeight + 'px 0px 0px)';
     const chosen = new Map();
+    const focusedLab = peopleAffiliation(new URL(window.location.href));
     const setVisible = function (control, visible) {
       const affiliation = control.getAttribute('data-affiliation');
       const accessible = visible && !isMobile() && !chosen.has(affiliation);
@@ -322,7 +325,8 @@
         const rectangle = control.getBoundingClientRect();
         const top = rectangle.top - origin;
         const bottom = top + rectangle.height;
-        setVisible(control, index === 0 ? top < visibleHeight && bottom > 0 : bottom > visibleHeight && top < naturalHeight);
+        const allowed = index === 0 || !focusedLab || control.getAttribute('data-affiliation') === focusedLab;
+        setVisible(control, allowed && (index === 0 ? top < visibleHeight && bottom > 0 : bottom > visibleHeight && top < naturalHeight));
       });
     });
     // Old duplicate pairs stay in the DOM until their Sheet rows are migrated.
@@ -346,6 +350,7 @@
   let sidebarHomeTop = null;
   let layoutFrame = null;
   let recalculateSidebar = true;
+  let ubcShift = 0;
 
   /** Keep the original crop and language-dependent footer retreat constants.
    * The white SVG is cropped from the bottom; the teal SVG underneath stays whole.
@@ -354,10 +359,16 @@
     const fixed = metrics.mainTop < metrics.headerHeight;
     const margin = Math.min(metrics.viewportWidth, 1920) * 0.0225;
     const retreat = fixed ? Math.min(0, metrics.mainBottom - metrics.sidebarHeight * (metrics.language === 'JA' ? 1.7 : 2)) : 0;
+    // Wait until Osaka has cleared the white boundary before moving UBC into
+    // its space. Position depends only on scroll, so reversing never jumps.
+    const motionStart = Math.max(0, metrics.headerHeight - margin - (metrics.osakaTop || 0));
+    const shift = metrics.peopleAffiliation === 'UBC'
+      ? Math.min(metrics.ubcTravel || 0, Math.max(0, metrics.headerHeight - metrics.mainTop - motionStart)) : 0;
     return {
       fixed: fixed,
       logoTop: retreat,
       sidebarTop: metrics.sidebarTop + retreat,
+      ubcShift: shift,
       frontHeight: fixed && metrics.mainTop - margin < metrics.logoHeight ? Math.max(0, metrics.mainTop - margin) : null
     };
   }
@@ -374,6 +385,15 @@
       setStyle(element, { position: 'relative', top: '0px', left: '0px' });
     });
     setStyle(front, { height: 'auto' });
+    moveUbcLogo(front, back, 0);
+  }
+
+  function moveUbcLogo(front, back, shift) {
+    [front, back].filter(Boolean).forEach(function (layer) {
+      const control = layer.querySelector('.logo-ubc');
+      if (control) control.style.transform = shift ? 'translateY(' + shift + 'px)' : '';
+    });
+    ubcShift = shift;
   }
 
   function layout() {
@@ -434,11 +454,19 @@
       recalculateSidebar = false;
     }
     if (front && back) {
+      const ubc = back.querySelector('.logo-ubc');
+      const osaka = back.querySelector('.logo-osaka');
+      const ubcRect = ubc && ubc.getBoundingClientRect();
+      const osakaRect = osaka && osaka.getBoundingClientRect();
+      const origin = back.getBoundingClientRect().top;
       const geometry = calculateInteriorGeometry({
         mainTop: mainRect.top, mainBottom: mainRect.bottom, headerHeight: headerHeight,
         viewportWidth: window.innerWidth, logoHeight: back.getBoundingClientRect().height || back.height || 0,
         sidebarHeight: sidebar ? sidebar.clientHeight : 0, sidebarTop: sidebarHomeTop || 0,
-        language: state.language
+        language: state.language,
+        peopleAffiliation: peopleAffiliation(new URL(window.location.href)),
+        osakaTop: osakaRect ? osakaRect.top - origin : 0,
+        ubcTravel: ubcRect && osakaRect ? Math.max(0, osakaRect.bottom - ubcRect.bottom + ubcShift) : 0
       });
       [front, back].forEach(function (element) {
         setStyle(element, {
@@ -448,6 +476,7 @@
         });
       });
       if (front.tagName === 'IMG') front.style.objectPosition = 'top';
+      moveUbcLogo(front, back, geometry.ubcShift);
       setStyle(front, { height: geometry.frontHeight === null ? 'auto' : geometry.frontHeight + 'px' });
       syncLogoLayers(front, back, geometry.frontHeight === null ? naturalLogoHeight : geometry.frontHeight, naturalLogoHeight);
       if (sidebar) sidebar.style.top = geometry.sidebarTop + 'px';

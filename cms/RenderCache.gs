@@ -3,7 +3,7 @@
  * Synced builds use the generated source fingerprint; this version is the fallback
  * for a manual deployment without BuildInfo.gs.
  */
-var CMS_CACHE_RENDERER_VERSION_ = '2026-10-27.1';
+var CMS_CACHE_RENDERER_VERSION_ = '2026-11-04.1';
 function cmsRendererVersion_() {
   return typeof CMS_SOURCE_FINGERPRINT_ === 'string' && /^[a-f0-9]{64}$/.test(CMS_SOURCE_FINGERPRINT_) ? 'source:' + CMS_SOURCE_FINGERPRINT_ : CMS_CACHE_RENDERER_VERSION_;
 }
@@ -171,7 +171,7 @@ function cmsCacheFingerprint_(context, sourceId, row, richrow) {
   if (header[0] !== 'Lab') header = ['Lab', 'Language', 'Function'].concat(header);
   // Keep this list aligned with appendSingle: only these cells consume native
   // rich-text formatting. Other cells still participate through display values.
-  var richKeys = ['/* Text', '/* Name', '/* Related info', '/* Biosketch', '/* Former affiliation', '/* Start date', '/* End date', '/* Current position'];
+  var richKeys = ['/* Text', '/* Title', '/* Name', '/* Related info', '/* Biosketch', '/* Former affiliation', '/* Start date', '/* End date', '/* Current position'];
   var rich = {};
   header.forEach(function(key, index) {
     key = String(key || '').replace(/ \(.+\)/, '');

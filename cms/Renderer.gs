@@ -65,7 +65,7 @@ function appendSingle(row, richrow) {
   var header = cmsContext_().parameters[functionName];
   if (!header) throw new Error('Unknown row function: ' + functionName);
   if (header[0] !== 'Lab') header = ['Lab', 'Language', 'Function'].concat(header);
-  var richKeys = ['/* Text', '/* Name', '/* Related info', '/* Biosketch', '/* Former affiliation', '/* Start date', '/* End date', '/* Current position'];
+  var richKeys = ['/* Text', '/* Title', '/* Name', '/* Related info', '/* Biosketch', '/* Former affiliation', '/* Start date', '/* End date', '/* Current position'];
   var adict = {};
   header.forEach(function (key, index) {
     key = sheetString_(key).replace(/ \(.+\)/, '');
@@ -81,7 +81,7 @@ function appendSingle(row, richrow) {
 
 function appendH(adict, level) {
   return '<h' + level + ' class="page_title ' + rendererClasses_(adict) + '"' + rendererId_(adict) +
-    sheetStyleAttributes_(sheetValue_(adict, '/* Style')) + '>' + sheetValue_(adict, '/* Title') + '</h' + level + '>';
+    sheetStyleAttributes_(sheetValue_(adict, '/* Style')) + '>' + rendererMarkdown_(sheetValue_(adict, '/* Title')).replace(/^<p>|<\/p>$/g, '') + '</h' + level + '>';
 }
 function appendH1(adict) { return appendH(adict, '1'); }
 function appendH2(adict) { return appendH(adict, '2'); }

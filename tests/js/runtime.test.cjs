@@ -27,8 +27,9 @@ function createBrowser(page, options) {
         while (stack && !stack.classList.contains('logo-stack')) stack = stack.parentElement;
         if (stack) {
           const isOsaka = element.getAttribute('data-affiliation') === 'Osaka';
-          const top = stack.getBoundingClientRect().top + (isOsaka ? 213.41425 : 0) / 343.41425 * browser.metrics.logoHeight;
-          const height = (isOsaka ? 130 : 129) / 343.41425 * browser.metrics.logoHeight;
+          const shift = Number.parseFloat((element.style.transform || '').replace('translateY(', '')) || 0;
+          const top = stack.getBoundingClientRect().top + (isOsaka ? 221.938525 : 0) / 351.938525 * browser.metrics.logoHeight + shift;
+          const height = (isOsaka ? 130 : 129) / 351.938525 * browser.metrics.logoHeight;
           return {top, bottom: top + height, height};
         }
       }
@@ -199,6 +200,42 @@ test('footer retreat is language-specific and a sudden Home fully restores logo/
   assert.equal(front.style.height, 'auto');
   assert.equal(browser.element('sidebar').style.top, '248px');
   assert.equal(browser.frames.size, 0, 'No delayed stale geometry remains');
+});
+
+test('UBC People motion waits for Osaka to clear, reverses exactly, and keeps the sidebar still', () => {
+  const browser = createBrowser('people.html', {url:'https://example.org/people.html?affil=UBC'});
+  browser.run('common.js');browser.flush();
+  const front = controlledLogo(browser, 'frontlogo'), back = controlledLogo(browser, 'backlogo');
+  const upper = back.querySelector('.logo-ubc'), lower = back.querySelector('.logo-osaka');
+  const initialTop = browser.element('sidebar').style.top;
+  const travel = lower.getBoundingClientRect().bottom - upper.getBoundingClientRect().bottom;
+  const snapshots = new Map();
+  for (const scroll of [0,20,60,100,130,160,200,160,130,100,60,20,0]) {
+    browser.metrics.mainTop = browser.metrics.headerHeight - scroll;
+    browser.window.dispatch('scroll');browser.flush();
+    const snapshot = [upper.style.transform,front.style.height,back.style.clipPath,browser.element('sidebar').style.top];
+    if (snapshots.has(scroll)) assert.deepEqual(snapshot,snapshots.get(scroll),'Reverse returns to the same state at '+scroll);
+    else snapshots.set(scroll,snapshot);
+    assert.equal(browser.element('sidebar').style.top,initialTop);
+    assert.equal(front.querySelector('.logo-ubc').style.transform,upper.style.transform,'Both color layers move together');
+    if (upper.style.transform) assert.equal(lower.getAttribute('aria-hidden'),'true','Inactive teal logo is never exposed');
+    if (scroll===200) assert(Math.abs(Number.parseFloat(upper.style.transform.slice(11))-travel)<0.001);
+  }
+  assert.equal(upper.style.transform,'');
+  assert.equal(front.style.position,'relative');
+  assert.equal(browser.element('normal_header').getAttribute('data-people-affiliation'),'UBC');
+});
+
+test('Osaka People retains its logo position and only its active rear layer is accessible',()=>{
+  const browser=createBrowser('people.html',{url:'https://example.org/people.html?affil=Osaka'});
+  browser.run('common.js');browser.flush();
+  browser.metrics.mainTop=-100;browser.window.dispatch('scroll');browser.flush();
+  const back=controlledLogo(browser,'backlogo');
+  assert.equal(back.querySelector('.logo-ubc').style.transform,'');
+  assert.equal(back.querySelector('.logo-ubc').getAttribute('aria-hidden'),'true');
+  assert.equal(back.querySelector('.logo-osaka').getAttribute('aria-hidden'),'false');
+  browser.metrics.mainTop=browser.metrics.headerHeight;browser.window.dispatch('scroll');browser.flush();
+  assert.equal(controlledLogo(browser,'frontlogo').style.height,'auto');
 });
 
 test('homepage hover uses correct matching assets and pauses/restores animation without toggling races', () => {
