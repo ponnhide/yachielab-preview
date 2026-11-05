@@ -156,8 +156,9 @@
   }
 
 
-  function makeLogoDisplay(affiliation, image) {
-    const control = document.createElement('span');
+  function makeLogoLink(affiliation, image) {
+    const control = document.createElement('a');
+    control.setAttribute('href', './index.html');
     control.classList.add('logo-control');
     control.classList.add(affiliation === 'UBC' ? 'logo-ubc' : 'logo-osaka');
     control.setAttribute('data-affiliation', affiliation);
@@ -176,7 +177,7 @@
       const image = document.createElement('img');
       image.src = assetUrl('./img/header-' + affiliation.toLowerCase() + '-' + color + '.svg');
       image.alt = affiliation === 'UBC' ? 'Yachie Laboratory at UBC' : 'Yachie Laboratory at The University of Osaka';
-      canvas.appendChild(makeLogoDisplay(affiliation, image));
+      canvas.appendChild(makeLogoLink(affiliation, image));
     });
     stack.appendChild(canvas);
     return stack;
@@ -202,7 +203,7 @@
           const affiliation = image.classList.contains('logo-ubc') || /header-ubc-/.test(image.src) ? 'UBC' :
             image.classList.contains('logo-osaka') || /header-osaka-/.test(image.src) ? 'Osaka' : null;
           if (!affiliation) return;
-          const control = makeLogoDisplay(affiliation);
+          const control = makeLogoLink(affiliation);
           canvas.replaceChild(control, image);
           image.classList.remove('logo-ubc');
           image.classList.remove('logo-osaka');
@@ -235,16 +236,20 @@
         const image = document.createElement('img');
         image.src = assetUrl('./img/header-' + affiliation.toLowerCase() + '-white.svg');
         image.alt = affiliation === 'UBC' ? 'Yachie Laboratory at UBC' : 'Yachie Laboratory at The University of Osaka';
-        const control = makeLogoDisplay(affiliation, image);
+        const control = makeLogoLink(affiliation, image);
         control.setAttribute('id', affiliation === 'UBC' ? 'mobile-ubc-lab' : 'mobile-osaka-lab');
         group.appendChild(control);
       });
       mobileContent.appendChild(group);
     }
-    // Convert previously generated buttons too, preserving Sheet sizes and IDs.
+    // Upgrade saved spans/buttons to native home links, preserving Sheet sizes
+    // and IDs. updateLinks adds the current language without a People filter.
     document.querySelectorAll('.logo-control[data-affiliation]').forEach(function (control) {
-      if (control.tagName !== 'BUTTON') return;
-      const display = makeLogoDisplay(control.getAttribute('data-affiliation'));
+      if (control.tagName === 'A') {
+        control.setAttribute('href', './index.html');
+        return;
+      }
+      const display = makeLogoLink(control.getAttribute('data-affiliation'));
       ['id', 'class', 'style', 'data-sheet-style'].forEach(function (name) {
         const value = control.getAttribute(name);
         if (value !== null) display.setAttribute(name, value);
@@ -317,6 +322,7 @@
       const affiliation = control.getAttribute('data-affiliation');
       const accessible = visible && !isMobile() && !chosen.has(affiliation);
       control.setAttribute('aria-hidden', String(!accessible));
+      control.setAttribute('tabindex', accessible ? '0' : '-1');
       if (accessible) chosen.set(affiliation, control);
     };
     [front, back].forEach(function (layer, index) {

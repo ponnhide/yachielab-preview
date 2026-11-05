@@ -90,7 +90,7 @@ CSS・JSとCSSのimportにはビルド時の内容ハッシュをURLへ付けま
 
 Sheet のヘッダーで使っている `two_logos_on_white_on_black.svg` と `two_logos_teal_on_white.svg` の指定は維持します。生成時に `Renderer.gs` が対象を個別 SVG と `span.logo-control[data-affiliation]` に変換します。描画は `frontlogo` / `backlogo` の安定した1組とし、描画用の行は `All / Common` で両方の所属ロゴを表示します。以前の `frontlogo2` / `backlogo2` は重複して描画しません。その他の画像は従来の1画像として扱い、元の合成 SVG の公開 URL も残しています。
 
-ロゴは表示専用です。クリック・Enter・Spaceで所属や本文は変わりません。生成時は `span.logo-control[data-affiliation]` を出力し、既存HTMLの旧buttonも共通JSでspanへ置き換えます。クリック用のカーソル、ボタンのARIA状態、Tab移動対象は持ちません。
+両方のヘッダーロゴはトップページへのリンクです。共通JSが生成済みのspanや旧buttonを通常の `a.logo-control[data-affiliation]` に変換し、選択中の言語を保った `./index.html?lang=…` へ移動します。Peopleの所属指定はトップへ引き継ぎません。白／tealの重複レイヤーは、表示中のリンクだけをTab移動対象にします。クリックによる所属・本文の切り替えは行いません。
 
 People Osaka／UBCへのリンク（`people.html?affil=Osaka`／`people.html?affil=UBC`）では、指定した所属の本文を表示し、そのロゴを不透明、もう片方を半透明にします。通常ページと所属指定なしのPeopleでは両所属の本文・ロゴを表示します。通常ページに残る旧 `affil` 指定は無視してURLから取り除きます。所属は言語変更・スクロール・設定再取得で変わりません。
 
@@ -134,7 +134,7 @@ Peopleの表示対象は Sheet の Lab セルを基準にします。`UBC` は U
 
 Join us の UBC 向け本文は Lab=`UBC`、大阪向け本文は Lab=`Osaka`、共通タイトルは Lab=`All` です。冒頭の所属へのジャンプリンクとそのラッパー行は、Sheet に内容を残したまま Function=`Pass` として出力対象から外しています。両所属の内容を続けて表示し、ロゴ操作による切り替えは行いません。
 
-モバイルの所属ロゴは、`mobilemenu` タブの `mobile-lab-switch` ラッパー内にある2つの Content 行で管理します。ID は `mobile-ubc-lab` / `mobile-osaka-lab`、Lab / Language は `All / Common` です。生成処理は表示専用のspanに変換し、Peopleの所属に応じて濃淡を付けます。大学の外部リンクやホームへのリンクは別に維持します。
+モバイルの所属ロゴは、`mobilemenu` タブの `mobile-lab-switch` ラッパー内にある2つの Content 行で管理します。ID は `mobile-ubc-lab` / `mobile-osaka-lab`、Lab / Language は `All / Common` です。生成処理のspanは共通JSでトップページへのリンクに変換し、Peopleの所属に応じて濃淡を付けます。大学の外部リンクは別に維持します。
 
 ## 安全に GAS を更新する
 

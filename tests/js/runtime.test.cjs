@@ -580,10 +580,10 @@ function assertLabs(browser, ubc, osaka) {
   for (const [lab, active] of [['UBC', ubc], ['Osaka', osaka]]) {
     for (const control of browser.document.querySelectorAll('.logo-control[data-affiliation="' + lab + '"]')) {
       assert.equal(control.getAttribute('data-lab-active'), String(active));
-      assert.equal(control.tagName, 'SPAN');
+      assert.equal(control.tagName, 'A');
+      assert.equal(control.getAttribute('href'), './index.html?lang=' + browser.window.YachieSite.getState().language);
       assert.equal(control.getAttribute('aria-pressed'), null);
       assert.equal(control.getAttribute('role'), null);
-      assert.equal(control.getAttribute('tabindex'), null);
     }
   }
 }
@@ -620,7 +620,7 @@ test('every page starts with both labs on except explicitly named People entries
   }
 });
 
-test('desktop and mobile logo clicks and keys never change page contents or affiliation', () => {
+test('native home links preserve language without custom content or affiliation toggles', () => {
   for (const page of ['index.html', 'joinus.html', 'people.html', 'cms-new-page-demo.html', 'contact.html', 'yuka.html']) {
     for (const width of [1280, 390]) for (const entry of ['', '?affil=UBC', '?affil=Osaka']) {
       const browser = createBrowser(page, {width, url:'https://ponnhide.github.io/yachielab-preview/' + page + entry});
@@ -633,6 +633,8 @@ test('desktop and mobile logo clicks and keys never change page contents or affi
         if (['joinus.html', 'people.html', 'cms-new-page-demo.html'].includes(page)) assertBodyLabs(browser, ubc, osaka);
       };
       check();
+      // Synthetic harness events do not perform the browser's native navigation.
+      // Check destinations here; actual clicks are verified in the public preview.
       const originalUrl = browser.window.location.href;
       for (const control of browser.document.querySelectorAll('.logo-control[data-affiliation]')) {
         control.dispatch('click');
@@ -680,7 +682,7 @@ test('People filtering retains common rows and either-lab rows; returned state c
   }
 });
 
-test('logo clicks preserve the current location while navigation resets labs and retains explicit People destinations', () => {
+test('home logo destinations preserve language and clear People filters while other navigation retains explicit destinations', () => {
   const browser = createBrowser('contact.html', {url: 'https://ponnhide.github.io/yachielab-preview/contact.html?lang=ZH&affil=UBC&campaign=lab#address'});
   const links = {};
   for (const [name, href] of Object.entries({ordinary:'./research.html?affil=UBC&campaign=link#project', general:'./people.html', ubc:'./people.html?affil=UBC', osaka:'./people.html?affil=Osaka'})) {
@@ -769,7 +771,7 @@ test('white crop and teal exclusion remain synchronized through scroll, Home, re
   assert.equal(front.style.top, '0px');
 });
 
-test('static logos expose each visible lab once across white and teal layers without keyboard stops', () => {
+test('home links expose one keyboard target per visible lab across white and teal layers', () => {
   const browser = createBrowser('research.html');
   browser.run('common.js'); browser.flush();
   const frontUbc = logoControl(browser, 'frontlogo', 'UBC');
@@ -781,8 +783,9 @@ test('static logos expose each visible lab once across white and teal layers wit
   assert.equal(frontUbc.getAttribute('aria-hidden'), 'true');
   assert.equal(backUbc.getAttribute('aria-hidden'), 'false');
   browser.document.querySelectorAll('.logo-control').forEach(control => {
-    assert.equal(control.getAttribute('tabindex'), null);
-    assert.equal(control.tagName, 'SPAN');
+    assert.equal(control.getAttribute('tabindex'), control.getAttribute('aria-hidden') === null ? null : control.getAttribute('aria-hidden') === 'false' ? '0' : '-1');
+    assert.equal(control.tagName, 'A');
+    assert.equal(control.getAttribute('href'), './index.html?lang=' + browser.window.YachieSite.getState().language);
   });
 });
 
@@ -848,7 +851,7 @@ test('invalid or offline settings JSON retains the valid head settings as one co
   }
 });
 
-test('legacy mobile menus gain one static logo group without changing page contents', () => {
+test('legacy mobile menus gain one home-link logo group without changing page contents', () => {
   const browser = createBrowser('yuka.html', {width: 390, url: 'https://ponnhide.github.io/yachielab-preview/yuka.html?lang=JA'});
   const bodyPosts = browser.document.querySelector('.posts');
   const bodyChildren = bodyPosts.children.slice();
@@ -867,12 +870,12 @@ test('legacy mobile menus gain one static logo group without changing page conte
   assert.equal(mobileLogoControl(browser, 'UBC').getAttribute('data-lab-active'), 'true');
   assert.equal(browser.element('mobile-menu').style.visibility, 'visible');
   for (const layer of ['frontlogo', 'backlogo']) {
-    assert.equal(logoControl(browser, layer, 'UBC').getAttribute('tabindex'), null, 'Static logos are not keyboard targets');
+    assert.equal(logoControl(browser, layer, 'UBC').getAttribute('tabindex'), '-1', 'Hidden desktop links are not mobile keyboard targets');
   }
 });
 
 
-test('homepage without .posts exposes two static logos and keeps the clipped back layer hidden', () => {
+test('homepage without .posts exposes two home links and keeps the clipped back layer hidden', () => {
   const browser = createBrowser('index.html');
   // Some saved snapshots retain an empty .posts node; the actual homepage
   // can omit it. Remove only fixture DOM nodes to exercise that variant.
@@ -887,9 +890,9 @@ test('homepage without .posts exposes two static logos and keeps the clipped bac
     assert.equal(front.style.height, 'auto');
     assert.equal(back.style.clipPath, 'inset(' + height + 'px 0px 0px)');
     for (const affiliation of ['UBC', 'Osaka']) {
-      assert.equal(logoControl(browser, 'frontlogo', affiliation).getAttribute('tabindex'), null);
+      assert.equal(logoControl(browser, 'frontlogo', affiliation).getAttribute('tabindex'), '0');
       assert.equal(logoControl(browser, 'frontlogo', affiliation).getAttribute('aria-hidden'), 'false');
-      assert.equal(logoControl(browser, 'backlogo', affiliation).getAttribute('tabindex'), null);
+      assert.equal(logoControl(browser, 'backlogo', affiliation).getAttribute('tabindex'), '-1');
       assert.equal(logoControl(browser, 'backlogo', affiliation).getAttribute('aria-hidden'), 'true');
     }
     assert.notEqual(browser.document.querySelector('aside').style.display, 'flex');
@@ -927,8 +930,8 @@ test('homepage with its empty .posts retains language sticking and desktop setup
   assert.equal(front.style.top, '0px');
   assert.equal(back.style.clipPath, 'inset(110px 0px 0px)');
   for (const affiliation of ['UBC', 'Osaka']) {
-    assert.equal(logoControl(browser, 'frontlogo', affiliation).getAttribute('tabindex'), null);
-    assert.equal(logoControl(browser, 'backlogo', affiliation).getAttribute('tabindex'), null);
+    assert.equal(logoControl(browser, 'frontlogo', affiliation).getAttribute('tabindex'), '0');
+    assert.equal(logoControl(browser, 'backlogo', affiliation).getAttribute('tabindex'), '-1');
   }
   browser.metrics.mainTop = -4500;
   browser.window.dispatch('scroll');
