@@ -354,6 +354,7 @@
   const originalContainerPosition = container ? container.style.backgroundPosition : '';
   const originalFooterPosition = footer ? footer.style.backgroundPosition : '';
   let sidebarHomeTop = null;
+  let osakaLogoLift = 0;
   let layoutFrame = null;
   let recalculateSidebar = true;
 
@@ -364,18 +365,26 @@
     const fixed = metrics.mainTop < metrics.headerHeight;
     const margin = Math.min(metrics.viewportWidth, 1920) * 0.0225;
     const ubcPage = metrics.peopleAffiliation === 'UBC';
+    const osakaPage = metrics.peopleAffiliation === 'Osaka';
     const scroll = Math.max(0, metrics.headerHeight - metrics.mainTop);
-    // Both logos stay at their ordinary viewport coordinates: they descend
-    // relative to the scrolling header without any extra logo translation.
+    // On UBC and ordinary pages, both logos keep their viewport coordinates.
     // UBC's sidebar follows the heading until its gap to UBC equals the initial
     // gap to Osaka, then sticks. The same scroll-derived path works in reverse.
-    const sidebarLift = ubcPage ? Math.min(metrics.ubcTravel || 0, scroll) : 0;
-    const approaching = ubcPage && scroll < (metrics.ubcTravel || 0);
+    // Osaka first enters the white body at its ordinary viewport position.
+    // Once it has the same body-relative top inset as UBC on an ordinary page,
+    // hold Osaka and the sidebar relative to the body while UBC catches up.
+    // At header exit their tops meet; Osaka then occupies UBC's fixed slot.
+    const osakaTravel = Math.max(0, metrics.osakaTravel || 0);
+    const osakaLift = osakaPage ? Math.min(osakaTravel, Math.max(0, scroll - (metrics.headerHeight - osakaTravel))) : 0;
+    const sidebarLift = ubcPage ? Math.min(metrics.ubcTravel || 0, scroll) : osakaLift;
+    const approaching = (ubcPage && scroll < (metrics.ubcTravel || 0)) ||
+      (osakaPage && scroll < metrics.headerHeight);
     const offset = fixed && !approaching
       ? Math.min(0, metrics.mainBottom - metrics.sidebarHeight * (metrics.language === 'JA' ? 1.7 : 2)) : 0;
     return {
       fixed: fixed,
       logoTop: offset,
+      osakaLift: osakaLift,
       sidebarTop: metrics.sidebarTop - sidebarLift + offset,
       frontHeight: fixed && metrics.mainTop - margin < metrics.logoHeight ? Math.max(0, metrics.mainTop - margin) : null
     };
@@ -389,10 +398,19 @@
   }
 
   function resetLogo(front, back) {
+    liftOsakaLogo(front, back, 0);
     [front, back].forEach(function (element) {
       setStyle(element, { position: 'relative', top: '0px', left: '0px' });
     });
     setStyle(front, { height: 'auto' });
+  }
+
+  function liftOsakaLogo(front, back, lift) {
+    [front, back].forEach(function (layer) {
+      const osaka = layer && layer.querySelector('.logo-osaka');
+      if (osaka) osaka.style.transform = lift ? 'translateY(' + (-lift) + 'px)' : '';
+    });
+    osakaLogoLift = lift;
   }
 
   function layout() {
@@ -463,8 +481,12 @@
         sidebarHeight: sidebar ? sidebar.clientHeight : 0, sidebarTop: sidebarHomeTop || 0,
         language: state.language,
         peopleAffiliation: peopleAffiliation(new URL(window.location.href)),
-        ubcTravel: ubcRect && osakaRect ? Math.max(0, osakaRect.bottom - ubcRect.bottom) : 0
+        // Undo our previous translation when measuring the authored separation.
+        // This also keeps resize, language changes and reverse scrolling stable.
+        ubcTravel: ubcRect && osakaRect ? Math.max(0, osakaRect.bottom - ubcRect.bottom + osakaLogoLift) : 0,
+        osakaTravel: ubcRect && osakaRect ? Math.max(0, osakaRect.top - ubcRect.top + osakaLogoLift) : 0
       });
+      liftOsakaLogo(front, back, geometry.osakaLift);
       [front, back].forEach(function (element) {
         setStyle(element, {
           position: geometry.fixed ? 'fixed' : 'relative',

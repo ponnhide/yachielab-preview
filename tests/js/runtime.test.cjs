@@ -282,15 +282,64 @@ test('UBC logo and sidebar stay paired at the footer and return from a jump to t
   assert.equal(Number.parseFloat(browser.element('sidebar').style.top),initialTop);
 });
 
-test('Osaka People retains its logo position and only its active rear layer is accessible',()=>{
+test('Osaka waits in the white body for UBC, keeps its sidebar gap, and retraces every scroll position',()=>{
   const browser=createBrowser('people.html',{url:'https://example.org/people.html?affil=Osaka'});
   browser.run('common.js');browser.flush();
-  browser.metrics.mainTop=-100;browser.window.dispatch('scroll');browser.flush();
-  const back=controlledLogo(browser,'backlogo');
-  assert.equal(back.querySelector('.logo-ubc').style.transform || '','');
-  assert.equal(back.querySelector('.logo-ubc').getAttribute('aria-hidden'),'true');
-  assert.equal(back.querySelector('.logo-osaka').getAttribute('aria-hidden'),'false');
+  const front=controlledLogo(browser,'frontlogo'),back=controlledLogo(browser,'backlogo');
+  const ubc=back.querySelector('.logo-ubc'),osaka=back.querySelector('.logo-osaka');
+  const home=Number.parseFloat(browser.element('sidebar').style.top);
+  const initial= osaka.getBoundingClientRect(),upper=ubc.getBoundingClientRect();
+  const distance=initial.top-upper.top, start=browser.metrics.headerHeight-distance;
+  const gap=home-initial.bottom, snapshots=new Map();
+  const points=[0,40,start-.01,start,start+.01,start+20,191.99,192,192.01,300,800];
+  for(const scroll of points.concat([160,130,190,60,300],points.slice().reverse())){
+    browser.metrics.mainTop=browser.metrics.headerHeight-scroll;
+    browser.window.dispatch('scroll');browser.flush();
+    const lower=osaka.getBoundingClientRect(),side=Number.parseFloat(browser.element('sidebar').style.top);
+    const snapshot=[lower.top,side,Number.parseFloat(front.style.height)||0];
+    if(snapshots.has(scroll))snapshot.forEach((n,i)=>assert(Math.abs(n-snapshots.get(scroll)[i])<1e-8,'No hysteresis at '+scroll));
+    else snapshots.set(scroll,snapshot);
+    assert(Math.abs(side-lower.bottom-gap)<1e-8,'Osaka/sidebar gap remains constant');
+    assert.equal(ubc.getBoundingClientRect().top,upper.top,'UBC follows the ordinary fixed path');
+    assert.equal(front.querySelector('.logo-osaka').style.transform,osaka.style.transform);
+    if(scroll<=start)assert.equal(lower.top,initial.top,'Do not compact before Osaka enters the white body');
+    else if(scroll<192)assert(Math.abs(lower.top-browser.metrics.mainTop-upper.top)<1e-8,'Osaka holds its body-relative inset while UBC catches up');
+    else {
+      assert(Math.abs(lower.top-upper.top)<1e-8,'Osaka occupies the normal UBC slot');
+      assert.equal(ubc.getAttribute('aria-hidden'),'true');
+      assert.equal(osaka.getAttribute('aria-hidden'),'false');
+      assert.equal(osaka.getAttribute('tabindex'),'0','The visible home link remains keyboard-accessible');
+    }
+    // Another layout at the same position must not compound the translation.
+    browser.window.dispatch('scroll');browser.flush();
+    assert(Math.abs(osaka.getBoundingClientRect().top-lower.top)<1e-8);
+  }
+  assert.equal(osaka.style.transform,'');
+  assert.equal(Number.parseFloat(browser.element('sidebar').style.top),home);
+  assert.equal(front.style.height,'auto');
+});
+
+test('Osaka compaction survives resize and language changes, retreats at the footer and resets on mobile',()=>{
+  const browser=createBrowser('people.html',{url:'https://example.org/people.html?affil=Osaka'});
+  browser.run('common.js');browser.flush();
+  const back=controlledLogo(browser,'backlogo'),osaka=back.querySelector('.logo-osaka');
+  browser.metrics.mainTop=20;browser.window.dispatch('scroll');browser.flush();
+  browser.metrics.logoHeight=140;browser.window.dispatch('resize');browser.flush();
+  const distance=221.938525/351.938525*140;
+  assert(Math.abs(osaka.getBoundingClientRect().top-20)<1e-8,'Resized logo retains the body inset mid-handoff');
+  browser.window.YachieSite.setLanguage('JA');browser.flush();
+  assert(Math.abs(osaka.getBoundingClientRect().top-20)<1e-8);
+  browser.metrics.mainTop=-4500;browser.window.dispatch('scroll');browser.flush();
+  assert.equal(back.style.top,'-44px');
+  assert(Math.abs(osaka.getBoundingClientRect().top+44)<1e-8);
+  assert(Math.abs(Number.parseFloat(browser.element('sidebar').style.top)-(248-distance-44))<1e-8);
+  browser.window.innerWidth=390;browser.window.dispatch('resize');browser.flush();
+  assert.equal(osaka.style.transform,'','Desktop compaction must not leak into mobile');
+  browser.window.innerWidth=1280;browser.window.dispatch('resize');browser.flush();
+  assert(Math.abs(osaka.getBoundingClientRect().top+44)<1e-8);
   browser.metrics.mainTop=browser.metrics.headerHeight;browser.window.dispatch('scroll');browser.flush();
+  assert.equal(osaka.style.transform,'');
+  assert.equal(Number.parseFloat(browser.element('sidebar').style.top),248);
   assert.equal(controlledLogo(browser,'frontlogo').style.height,'auto');
 });
 
